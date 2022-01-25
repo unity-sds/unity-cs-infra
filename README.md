@@ -6,3 +6,5 @@ Framework code which allows for configuration of an AWS environment necessary to
  * deploy
  * etc..
 
+This repo also houses the GitHub actions (push-button for now) that can trigger builds, tests, etc..
+
