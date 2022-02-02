@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 OUTPUT_FILE=report.xml
 TEST_SUITE_STATUS=PASS
