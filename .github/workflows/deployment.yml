@@ -31,12 +31,5 @@ jobs:
         run: echo Hello, world!
 
       # Runs a set of commands using the runners shell
-      - name: Run integrated tests
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-          cd build
-          cd tests
-          sh run.sh
-          cat report.xml
-          
+      - name: Only run this if the test running script exists
+        run: '(test -f build/tests/run.sh && sh build/tests/run.sh && cat build/tests/report.xml) || echo No test script, skipping step'
