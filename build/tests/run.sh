@@ -42,7 +42,7 @@ echo "  </testsuite>" >>$OUTPUT_FILE
 echo "</testsuites>" >>$OUTPUT_FILE
 
 
-if [ $TEST_SUITE_STATUS == "FAIL" ]; then
+if [ "$TEST_SUITE_STATUS" == "FAIL" ]; then
   exit 1
 fi
 
