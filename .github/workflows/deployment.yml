@@ -78,6 +78,10 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+
       # Runs a set of commands using the runners shell
 #      - name: Only run this if the test running script exists
 #        run: '(test -f build/tests/run.sh && sh build/tests/run.sh && cat build/tests/report.xml) || echo No test script, skipping step'
