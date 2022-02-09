@@ -35,7 +35,7 @@ jobs:
       #   - it clones the repo into the given `path`
       #   - it checks out the branch defined at `ref`
       - name: Clone the service repository for deployment
-        uses: actions/checkout@smolenski_tf_test
+        uses: actions/checkout@v2
         with:
           repository: unity-sds/unity-cs-sps-demo
           path: resources/deployable
