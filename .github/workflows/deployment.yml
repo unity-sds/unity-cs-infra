@@ -54,7 +54,7 @@ jobs:
       - name: Terraform Format
         working-directory: ./resources/deployable
         id: fmt
-        run: terraform fmt -check
+        run: ls -al && terraform fmt -check
 
       - name: Terraform Init
         working-directory: ./resources/deployable
