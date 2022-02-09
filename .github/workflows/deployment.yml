@@ -54,7 +54,7 @@ jobs:
       - name: Terraform Format
         working-directory: ./resources/deployable/terraform-unity
         id: fmt
-        run: terraform fmt -check
+        run: terraform fmt -diff
 
       - name: Terraform Init
         working-directory: ./resources/deployable/terraform-unity
