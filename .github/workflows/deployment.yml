@@ -44,7 +44,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: ls -al
+        run: ls -al resources/deployable
 
       # Runs a set of commands using the runners shell
 #      - name: Only run this if the test running script exists
