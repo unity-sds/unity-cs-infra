@@ -79,6 +79,7 @@ jobs:
 
       - name: Terraform Apply
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
+        run: terraform init -migrate-state
         run: terraform apply -auto-approve
 
       # Runs a set of commands using the runners shell
