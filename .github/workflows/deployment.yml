@@ -30,21 +30,21 @@ jobs:
       - name: Run a one-line script
         run: ls -al
 
-    # Checks-out the repo to deploy
-    # While cloning the repository:
-    #   - it clones the repo into the given `path`
-    #   - it checks out the branch defined at `ref`
-    - name: Clone the service repository for deployment
-      uses: actions/checkout@smolenski_tf_test
-      with:
-        repository: unity-sds/unity-cs-sps-demo
-        path: resources/deployable
-        ref: smolenski_tf_test
+      # Checks-out the repo to deploy
+      # While cloning the repository:
+      #   - it clones the repo into the given `path`
+      #   - it checks out the branch defined at `ref`
+      - name: Clone the service repository for deployment
+        uses: actions/checkout@smolenski_tf_test
+        with:
+          repository: unity-sds/unity-cs-sps-demo
+          path: resources/deployable
+          ref: smolenski_tf_test
 
 
-    # Runs a single command using the runners shell
-    - name: Run a one-line script
-      run: ls -al
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: ls -al
 
       # Runs a set of commands using the runners shell
 #      - name: Only run this if the test running script exists
