@@ -89,9 +89,14 @@ jobs:
           architecture: 'x64'
       - run: |
           cd ./resources/deployable/smoketest
-          ls -al
           pip install -r requirements.txt
           python3 smokekube.py
+
+      - name: Negative Smoke Test Check
+      - run: |
+          cd ./resources/deployable/smoketest
+          sh smokefail.sh
+
 
 
       # Runs a set of commands using the runners shell
