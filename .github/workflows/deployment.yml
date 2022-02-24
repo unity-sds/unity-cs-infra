@@ -88,7 +88,7 @@ jobs:
           python-version: '3.x'
           architecture: 'x64'
           path: resources/deployable/smoketest
-      - run: pip install requirements.txt
+      - run: pip install -r requirements.txt
       - run: python3 smokekube.py
 
 
