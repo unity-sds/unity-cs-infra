@@ -84,13 +84,14 @@ jobs:
 
       - name: Post-Deployment Smoke Test
         uses: actions/setup-python@v2
-        working-directory: ./resources/deployable/smoketest
         with: 
           python-version: '3.x'
           architecture: 'x64'
-      - run: ls -al
-      - run: pip install -r requirements.txt
-      - run: python3 smokekube.py
+      - run: |
+          cd ./resources/deployable/smoketest
+          ls -al
+          pip install -r requirements.txt
+          python3 smokekube.py
 
 
       # Runs a set of commands using the runners shell
