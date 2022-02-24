@@ -93,7 +93,7 @@ jobs:
           python3 smokekube.py
 
       - name: Negative Smoke Test Check
-      - run: |
+        run: |
           cd ./resources/deployable/smoketest
           sh smokefail.sh
 
