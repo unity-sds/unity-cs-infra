@@ -82,6 +82,16 @@ jobs:
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
         run: terraform apply -auto-approve
 
+      - name: Post-Deployment Smoke Test
+        uses: actions/setup-python@v2
+        path: resources/deployable/smoketest
+        with: 
+          python-version: '3.x'
+          architecture: 'x64'
+      - run: pip install requirements.txt
+      - run: python3 smokekube.py
+
+
       # Runs a set of commands using the runners shell
 #      - name: Only run this if the test running script exists
 #        run: '(test -f build/tests/run.sh && sh build/tests/run.sh && cat build/tests/report.xml) || echo No test script, skipping step'
