@@ -84,10 +84,10 @@ jobs:
 
       - name: Post-Deployment Smoke Test
         uses: actions/setup-python@v2
-        path: resources/deployable/smoketest
         with: 
           python-version: '3.x'
           architecture: 'x64'
+          path: resources/deployable/smoketest
       - run: pip install requirements.txt
       - run: python3 smokekube.py
 
