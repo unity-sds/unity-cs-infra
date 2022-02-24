@@ -83,11 +83,11 @@ jobs:
         run: terraform apply -auto-approve
 
       - name: Post-Deployment Smoke Test
+        working-directory: ./resources/deployable/smoketest
         uses: actions/setup-python@v2
         with: 
           python-version: '3.x'
           architecture: 'x64'
-          path: resources/deployable/smoketest
       - run: ls -al
       - run: pip install -r requirements.txt
       - run: python3 smokekube.py
