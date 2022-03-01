@@ -120,10 +120,10 @@ jobs:
           pip install -r requirements.txt
           python3 smoketest.py
 
-      - name: Negative Smoke Test Check
-        run: |
-          cd ./resources/deployable/smoketest
-          sh smokefail.sh
+      # - name: Negative Smoke Test Check
+      #   run: |
+      #     cd ./resources/deployable/smoketest
+      #     sh smokefail.sh
 
 
 
