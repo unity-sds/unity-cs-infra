@@ -104,7 +104,7 @@ jobs:
         id: smoke_test_file
         uses: andstor/file-existence-action@v1
         with:
-          files: "terraform-unity/smoketest/smoketest.py"
+          files: "./resources/deployable/terraform-unity/smoketest/smoketest.py"
       - name: Smoke Test Exists
         if: steps.smoke_test_file.outputs.files_exists != 'true'
         run: exit 1
