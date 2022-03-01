@@ -23,6 +23,18 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+
+      # Checks-out the repo to deploy
+      # While cloning the repository:
+      #   - it clones the repo into the given `path`
+      #   - it checks out the branch defined at `ref`
+      - name: Clone the service repository for deployment
+        uses: actions/checkout@v2
+        with:
+          repository: unity-sds/unity-cs-sps-demo
+          path: resources/deployable
+          ref: smolenski_tf_test
+
       # Creates a terraform destroy plan
       - name: Terraform Teardown Plan
         working-directory: ./resources/deployable/terraform-unity
