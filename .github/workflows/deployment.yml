@@ -118,7 +118,7 @@ jobs:
       - run: |
           cd ./resources/deployable/smoketest
           pip install -r requirements.txt
-          python3 smokekube.py
+          python3 smoketest.py
 
       - name: Negative Smoke Test Check
         run: |
