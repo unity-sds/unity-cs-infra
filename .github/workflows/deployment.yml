@@ -57,7 +57,7 @@ jobs:
         id: terraform_directory
         uses: andstor/file-existence-action@v1
         with:
-          files: "terraform-unity"
+          files: "./resources/deployable/terraform-unity"
       - name: Terraform Directory Exists
         if: steps.terraform_directory.outputs.files_exists != 'true'
         run: exit 1
