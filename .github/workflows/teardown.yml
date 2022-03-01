@@ -59,6 +59,10 @@ jobs:
       # Creates a terraform destroy plan
       - name: Terraform Teardown Plan
         working-directory: ./resources/deployable/terraform-unity
-#        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
         run: terraform plan -destroy
+
+      # Apply the terraform destroy steps
+      - name: Terraform Teardown Apply
+        working-directory: ./resources/deployable/terraform-unity
+        run: terraform apply -destroy
 
