@@ -25,7 +25,7 @@ module "eks" {
   subnet_ids = []
 
   # Self Managed Node Group(s)
-/*  self_managed_node_group_defaults = {
+  /*  self_managed_node_group_defaults = {
     instance_type                          = "m6i.large"
     update_launch_template_default_version = true
     iam_role_additional_policies           = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
@@ -76,7 +76,7 @@ module "eks" {
   }*/
 
   # EKS Managed Node Group(s)
-/*  eks_managed_node_group_defaults = {
+  /*  eks_managed_node_group_defaults = {
     ami_type               = "AL2_x86_64"
     disk_size              = 50
     instance_types         = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
