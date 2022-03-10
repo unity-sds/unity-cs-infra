@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI Deployment
+name: AWS EKS Deployment
 
 # Controls when the workflow will run
 on:
@@ -26,116 +26,39 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: ls -al
-
-      # Checks-out the repo to deploy
-      # While cloning the repository:
-      #   - it clones the repo into the given `path`
-      #   - it checks out the branch defined at `ref`
-      - name: Clone the service repository for deployment
-        uses: actions/checkout@v2
-        with:
-          repository: unity-sds/unity-cs-sps-demo
-          path: resources/deployable
-          ref: smolenski_tf_test
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: ls -al resources/deployable
-
       - name: Setup Terraform
+      - name: Setup EKS via Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           # terraform_version: 0.13.0
           cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
-
-      ## Verify that the Terraform directory exists in the remote repo
-      - name: Check for Terraform Directory
-        id: terraform_directory
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "./resources/deployable/terraform-unity"
-      - name: Terraform Directory Exists
-        if: steps.terraform_directory.outputs.files_exists != 'true'
-        run: exit 1
-
       ## Check Terraform formatting
       - name: Terraform Format
-        working-directory: ./resources/deployable/terraform-unity
         id: fmt
         run: terraform fmt -check
 
       ## Init terraform
       - name: Terraform Init
-        working-directory: ./resources/deployable/terraform-unity
         id: init
         run: terraform init
 
       ## Validate Terraform
       - name: Terraform Validate
-        working-directory: ./resources/deployable/terraform-unity
         id: validate
         run: terraform validate -no-color
 
       ## Plan Terraform
       - name: Terraform Plan
-        working-directory: ./resources/deployable/terraform-unity
         id: plan
         run: terraform plan -no-color
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
       - name: Terraform Plan Status
-        working-directory: ./resources/deployable/terraform-unity
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
       - name: Terraform Apply
-        working-directory: ./resources/deployable/terraform-unity
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
         run: terraform apply -auto-approve
-
-
-      ## Verify that the smoke test exists
-      - name: Check for Smoke Tests
-        id: smoke_test_file
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "./resources/deployable/smoketest/smoketest.py"
-      - name: Smoke Test Exists
-        if: steps.smoke_test_file.outputs.files_exists != 'true'
-        run: exit 1
-
-
-      - name: Post-Deployment Smoke Test
-        uses: actions/setup-python@v2
-        with: 
-          python-version: '3.x'
-          architecture: 'x64'
-      - run: |
-          cd ./resources/deployable/smoketest
-          pip install -r requirements.txt
-          python3 smoketest.py
-
-      # - name: Negative Smoke Test Check
-      #   run: |
-      #     cd ./resources/deployable/smoketest
-      #     sh smokefail.sh
-
-
-
-      # Runs a set of commands using the runners shell
-#      - name: Only run this if the test running script exists
-#        run: '(test -f build/tests/run.sh && sh build/tests/run.sh && cat build/tests/report.xml) || echo No test script, skipping step'
-
-      # Run terraform scripts
-#      - name: Run terraform scripts in a docker container
-#        run: docker run --rm --privileged aptman/qus -s -- -p
-
-#      - name: build
-#        uses: docker://hashicorp/terraform:latest
-#        with:
-#          args: make
