@@ -23,6 +23,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Determine contents of working directory
+      - name: Display contents of working directory
+        run: ls -al
+
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
