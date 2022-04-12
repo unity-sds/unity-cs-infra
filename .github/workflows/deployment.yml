@@ -25,9 +25,9 @@ on:
         description: 'Repository Branch'
         required: true 
         type: choice
-        default: 'smolenski_tf_test'
+        default: 'smolenski_tf_test_mcp'
         options:
-        - smolenski_tf_test
+        - smolenski_tf_test_mcp
         - smolenski_tf_test_jpl_aws
 
 
