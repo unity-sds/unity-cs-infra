@@ -13,6 +13,23 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     branches: [ ucs-template ]
+    inputs:
+      sourceRepository:
+        description: 'Repository Source'
+        required: true 
+        type: choice
+        default: 'unity-sds/unity-cs-sps-demo'
+        options: 
+        - unity-sds/unity-cs-sps-demo
+      sourceBranch:
+        description: 'Repository Branch'
+        required: true 
+        type: choice
+        default: 'smolenski_tf_test'
+        options:
+        - smolenski_tf_test
+        - smolenski_tf_test_jpl_aws
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -37,9 +54,9 @@ jobs:
       - name: Clone the service repository for deployment
         uses: actions/checkout@v2
         with:
-          repository: unity-sds/unity-cs-sps-demo
+          repository: ${{ github.event.inputs.sourceRepository }}
           path: resources/deployable
-          ref: smolenski_tf_test
+          ref: ${{ github.event.inputs.sourceBranch }}
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
