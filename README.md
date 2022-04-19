@@ -33,7 +33,9 @@ standardized paths and filenames must be utilized so that Unity knows where
 to find them.
 
 ### Automated Builds
-TBD
+Automated builds rely on a common build entry point such as a build.sh script 
+and a set of credentials plus a destination for publishing.  These credentials 
+are stored in environment variables for security and accessed at runtime.
 
 ### Unit Testing
 TBD
