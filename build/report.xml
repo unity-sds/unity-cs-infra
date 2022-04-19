@@ -1,0 +1,15 @@
+<testsuites>
+  <testsuite name="template">
+    <testcase name="tests_were_run">
+    </testcase>
+    <testcase name="tests_dir_exists">
+      <failure message="tests directory does not exist">tests directory does not exist</failure>
+    </testcase>
+    <testcase name="terraform_dir_exists">
+      <failure message="terraform directory does not exist">terraform directory does not exist</failure>
+    </testcase>
+    <testcase name="terraform/tfvars_dir_exists">
+      <failure message="terraform/tfvars directory does not exist">terraform/tfvars directory does not exist</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

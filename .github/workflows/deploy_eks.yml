@@ -23,30 +23,42 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Setup EKS via Terraform
+      # Set up current working directory with the repo contents
+      - uses: actions/checkout@v2
+
+      # Determine contents of working directory
+      - name: Display contents of working directory
+        run: ls -al
+
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           # terraform_version: 0.13.0
           cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
-
       ## Check Terraform formatting
       - name: Terraform Format
+        working-directory: ./terraform-unity
         id: fmt
         run: terraform fmt -check
 
       ## Init terraform
       - name: Terraform Init
+        working-directory: ./terraform-unity
         id: init
         run: terraform init
 
       ## Validate Terraform
       - name: Terraform Validate
+        working-directory: ./terraform-unity
         id: validate
         run: terraform validate -no-color
 
       ## Plan Terraform
       - name: Terraform Plan
+        working-directory: ./terraform-unity
         id: plan
         run: terraform plan -no-color
         continue-on-error: true
@@ -57,5 +69,6 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
+        working-directory: ./terraform-unity
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
         run: terraform apply -auto-approve
