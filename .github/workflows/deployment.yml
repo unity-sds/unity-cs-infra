@@ -68,7 +68,9 @@ jobs:
 
       # Copy the appropriate TF files, depending on the deployment target
       - name: Apply target-specific Terraform Configs
-        run: cp terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/main.tf
+        run: |
+          cp terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/main.tf
+          cp terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/variables.tf
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
