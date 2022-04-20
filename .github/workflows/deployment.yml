@@ -51,10 +51,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: ls -al
-
       # Checks-out the repo to deploy
       # While cloning the repository:
       #   - it clones the repo into the given `path`
@@ -69,11 +65,11 @@ jobs:
       # Copy the appropriate TF files, depending on the deployment target
       - name: Apply target-specific Terraform Configs
         run: |
-          cp terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/main.tf
-          cp terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/variables.tf
+          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
+          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables.tf
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Display state of working directory root
         run: ls -al resources/deployable
 
       - name: Setup Terraform
