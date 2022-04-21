@@ -13,3 +13,11 @@ data "aws_vpc" "unity-test-env" {
   cidr_block = "10.52.8.0/22"
 }
 
+// Use existing subnets from MCP
+data "aws_subnet" "subnet-uno" {
+  id         = "subnet-059bc4f467275b59d"
+}
+
+data "aws_subnet" "subnet-two" {
+  id         = "subnet-0ebdd997cc3ebe58d"
+}

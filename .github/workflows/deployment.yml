@@ -68,6 +68,12 @@ jobs:
           cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
           cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables.tf
 
+      # Apply special env-specific configs (mostly used for MCP limitations)
+      - name: Apply target-specific configurations
+        # Remove dynamic networking configurations if this is MCP
+        if: ${{ github.event.inputs.deploymentTarget == 'mcp' }}
+        run: rm resources/deployable/terraform-unity/networking.tf
+
       # Runs a single command using the runners shell
       - name: Display state of working directory root
         run: ls -al resources/deployable
