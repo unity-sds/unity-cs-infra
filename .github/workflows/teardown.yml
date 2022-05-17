@@ -6,7 +6,7 @@ name: CI Teardown
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    branches: [ ucs-template ]
+    branches: [ ucs-template, smolensk_0.2_mcp ]
     inputs:
       sourceRepository:
         description: 'Repository Source'
