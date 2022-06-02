@@ -39,6 +39,9 @@ are stored in environment variables for security and accessed at runtime.
 
 ### Unit Testing
 TBD
+```
+test.sh
+```
 
 ### Automated Deployments
 Deployments are handled through Terraform.  Terraform scripts are stored in the 
