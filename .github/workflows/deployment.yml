@@ -12,8 +12,16 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    branches: [ ucs-template ]
+    branches: [ smolensk_0.2_mcp ]
     inputs:
+      deploymentTarget:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'jpl'
+        options: 
+        - jpl
+        - mcp
       sourceRepository:
         description: 'Repository Source'
         required: true 
@@ -43,10 +51,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: ls -al
-
       # Checks-out the repo to deploy
       # While cloning the repository:
       #   - it clones the repo into the given `path`
@@ -58,8 +62,20 @@ jobs:
           path: resources/deployable
           ref: ${{ github.event.inputs.sourceBranch }}
 
+      # Copy the appropriate TF files, depending on the deployment target
+      - name: Apply target-specific Terraform Configs
+        run: |
+          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
+          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables.tf
+
+      # Apply special env-specific configs (mostly used for MCP limitations)
+      - name: Apply target-specific configurations
+        # Remove dynamic networking configurations if this is MCP
+        if: ${{ github.event.inputs.deploymentTarget == 'mcp' }}
+        run: rm resources/deployable/terraform-unity/networking.tf
+
       # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Display state of working directory root
         run: ls -al resources/deployable
 
       - name: Setup Terraform
@@ -121,7 +137,7 @@ jobs:
         id: smoke_test_file
         uses: andstor/file-existence-action@v1
         with:
-          files: "./resources/deployable/smoketest/smoketest.py"
+          files: "./resources/deployable/smoketest/smoketest.sh"
       - name: Smoke Test Exists
         if: steps.smoke_test_file.outputs.files_exists != 'true'
         run: exit 1
@@ -134,8 +150,7 @@ jobs:
           architecture: 'x64'
       - run: |
           cd ./resources/deployable/smoketest
-          pip install -r requirements.txt
-          python3 smoketest.py
+          python3 smoketest.sh
 
       # - name: Negative Smoke Test Check
       #   run: |
