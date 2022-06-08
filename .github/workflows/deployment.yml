@@ -137,7 +137,7 @@ jobs:
         id: smoke_test_file
         uses: andstor/file-existence-action@v1
         with:
-          files: "./resources/deployable/smoketest/smoketest.py"
+          files: "./resources/deployable/smoketest/smoketest.sh"
       - name: Smoke Test Exists
         if: steps.smoke_test_file.outputs.files_exists != 'true'
         run: exit 1
@@ -150,8 +150,7 @@ jobs:
           architecture: 'x64'
       - run: |
           cd ./resources/deployable/smoketest
-          pip install -r requirements.txt
-          python3 smoketest.py
+          python3 smoketest.sh
 
       # - name: Negative Smoke Test Check
       #   run: |
