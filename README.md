@@ -67,6 +67,7 @@ the terraform scripts are validated and
 
 
 ### Smoke Testing
+<a name="smoke-testing"></a>
 Smoke tests are a simple test to validate a successful deployment.  While they 
 may not test all the functionality of a system, they should be comprehensive 
 enough to fail if the deployment has failed.
