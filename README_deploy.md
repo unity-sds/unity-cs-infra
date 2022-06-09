@@ -77,12 +77,12 @@ Variables can also be stored in sets for use across multiple workspaces.
 Automated Deployments are kicked off via Github Actions in the github.com/unity-sds/unity-cs-infra repository.  The `CI Deployment` workflow in particular is designed to look for and run each of the common entry points in sequence.  
 
 1) Go to the [unity-cs-infra GitHub Actions page](https://github.com/unity-sds/unity-cs-infra/actions)
-2) select "CI Deployment"
-3) click "Run workflow"
-4) select "deployment Target"
-5) select "Repository Source"
-6) select "Repository Branch"
-7) click "Run Workflow"
+2) Select the "CI Deployment" Workflow
+3) Click "Run workflow" (NOTE: if you don't see this link, contact the U-CS team, as you may need permissions)
+4) Select "deployment Target"
+5) Select "Repository Source"
+6) Select "Repository Branch"
+7) Click "Run Workflow"
 
 # Smoke Testing
 
