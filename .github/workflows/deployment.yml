@@ -25,18 +25,13 @@ on:
       sourceRepository:
         description: 'Repository Source'
         required: true 
-        type: choice
+        type: string
         default: 'unity-sds/unity-cs-sps-demo'
-        options: 
-        - unity-sds/unity-cs-sps-demo
       sourceBranch:
         description: 'Repository Branch'
         required: true 
-        type: choice
+        type: string
         default: 'smolenski_tf_test_mcp'
-        options:
-        - smolenski_tf_test_mcp
-        - smolenski_tf_test_jpl_aws
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
