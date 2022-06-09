@@ -76,6 +76,15 @@ Variables can also be stored in sets for use across multiple workspaces.
 
 Automated Deployments are kicked off via Github Actions in the github.com/unity-sds/unity-cs-infra repository.  The `CI Deployment` workflow in particular is designed to look for and run each of the common entry points in sequence.  
 
+1) go to unity-cs-infra
+2) Go to Actions
+3) select "CI Deployment"
+4) click "Run workflow"
+5) select "deployment Target"
+6) select "Repository Source"
+7) select "Repository Branch"
+8) click "Run Workflow"
+
 # Smoke Testing
 
 Smoke Tests are short and simple tests that detect whether a service is up and running.  This is the final step in a deployment and can be used to influence the next steps, whether it be a notification of success or kicking off regression tests, or even a teardown/rollback in the event of failure.  The deployment workflow will look for a smoke test execution script in a common entry point and run it.  
