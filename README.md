@@ -37,8 +37,20 @@ Automated builds rely on a common build entry point such as a build.sh script
 and a set of credentials plus a destination for publishing.  These credentials 
 are stored in environment variables for security and accessed at runtime.
 
+### Testing
+- Build-time
+  - unit tests
+- Deploy-time
+  - smoketests
+- After deployment
+  - system/integration tests
+
+
 ### Unit Testing
 TBD
+```
+test.sh
+```
 
 ### Automated Deployments
 Deployments are handled through Terraform.  Terraform scripts are stored in the 
@@ -55,6 +67,7 @@ the terraform scripts are validated and
 
 
 ### Smoke Testing
+<a name="smoke-testing"></a>
 Smoke tests are a simple test to validate a successful deployment.  While they 
 may not test all the functionality of a system, they should be comprehensive 
 enough to fail if the deployment has failed.
