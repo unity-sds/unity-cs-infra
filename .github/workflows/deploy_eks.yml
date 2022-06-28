@@ -56,4 +56,4 @@ jobs:
 
       # Launch EKS
       - name: Launch EKS cluster
-        run: ./build/eksctl/deploy.sh
+        run: env && ./build/eksctl/deploy.sh
