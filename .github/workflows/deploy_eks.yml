@@ -12,8 +12,23 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    branches: [ ucs-template ]
-
+    branches: [ main ]
+    inputs:
+      AWS_ACCESS_KEY_ID:
+        description: 'Access Key ID'
+        required: true
+        type: string
+        default: ''
+      AWS_ACCESS_KEY_SECRET:
+        description: 'Access Key ID'
+        required: true
+        type: string
+        default: ''
+      AWS_SESSION_TOKEN:
+        description: 'AWS Session Token'
+        required: true
+        type: string
+        default: ''
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "deployment"
@@ -30,45 +45,15 @@ jobs:
       - name: Display contents of working directory
         run: ls -al
 
+     # Install eksctl to launch EKS
+     - name: Install eksctl
+       run: |
+         curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && \
+         sudo mv /tmp/eksctl /usr/local/bin && \
+         eksctl version
 
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          # terraform_version: 0.13.0
-          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+     # Render template
 
-      ## Check Terraform formatting
-      - name: Terraform Format
-        working-directory: ./terraform-unity
-        id: fmt
-        run: terraform fmt -check
-
-      ## Init terraform
-      - name: Terraform Init
-        working-directory: ./terraform-unity
-        id: init
-        run: terraform init
-
-      ## Validate Terraform
-      - name: Terraform Validate
-        working-directory: ./terraform-unity
-        id: validate
-        run: terraform validate -no-color
-
-      ## Plan Terraform
-      - name: Terraform Plan
-        working-directory: ./terraform-unity
-        id: plan
-        run: terraform plan -no-color
-        continue-on-error: true
-
-      ## Fail the job if terraform plan doesn't succeed
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
-
-      - name: Terraform Apply
-        working-directory: ./terraform-unity
-#        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+     # Launch EKS
+     - name: Launch EKS cluster
+       run: eksctl create cluster -f eksctl-config.yaml

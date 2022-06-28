@@ -1,0 +1,38 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+iam:
+  serviceRoleARN: arn:aws:iam::237868187491:role/Unity-UCS-development-EKSClusterRole
+
+metadata:
+  name: ucstestcluster1
+  region: us-west-2
+  version: "1.21"
+
+managedNodeGroups:
+  - name: defaultgroup
+    minSize: 1
+    maxSize: 3
+    desiredCapacity: 1
+    ami: ami-01fe93a8bc6cb9bef
+    iam:
+      instanceRoleARN: arn:aws:iam::237868187491:role/Unity-ADS-development-EKSNodeRole
+    privateNetworking: true
+    overrideBootstrapCommand: |
+      #!/bin/bash
+      /etc/eks/bootstrap.sh ucstestcluster1
+addons:
+  - name: kube-proxy
+    version: v1.21.2-eksbuild.2
+  - name: coredns
+    version: v1.8.4-eksbuild.1
+
+
+vpc:
+  subnets:
+    private:
+      us-west-2b: { id: subnet-092597c48cfec3f04 }
+      us-west-2a: { id: subnet-00db2965967acb6b1 }
+  securityGroup: sg-09bd8de0af1c3c99a
+  sharedNodeSecurityGroup: sg-09bd8de0af1c3c99a
+  manageSharedNodeSecurityGroupRules: false
