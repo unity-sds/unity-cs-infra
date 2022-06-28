@@ -20,7 +20,7 @@ on:
         type: string
         default: ''
       AWS_ACCESS_KEY_SECRET:
-        description: 'Access Key ID'
+        description: 'Access Secret Key ID'
         required: true
         type: string
         default: ''
@@ -56,4 +56,4 @@ jobs:
 
       # Launch EKS
       - name: Launch EKS cluster
-        run: eksctl create cluster -f eksctl-config.yaml
+        run: eksctl create cluster -f build/eksctl/eksctl-config.yaml
