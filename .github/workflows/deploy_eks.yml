@@ -56,4 +56,4 @@ jobs:
 
       # Launch EKS
       - name: Launch EKS cluster
-        run: export AWS_ACCESS_KEY_ID="${{ github.event.inputs.AWS_ACCESS_KEY_ID }}" && export AWS_ACCESS_KEY_SECRET="${{ github.event.inputs.AWS_ACCESS_KEY_SECRET }}" && export AWS_SESSION_TOKEN="${{ github.event.inputs.AWS_SESSION_TOKEN }}" && eksctl create cluster -f build/eksctl/eksctl-config.yaml
+        run: ./build/eksctl/deploy.sh &>/dev/null && eksctl create cluster -f build/eksctl/eksctl-config.yaml
