@@ -56,4 +56,4 @@ jobs:
 
       # Launch EKS
       - name: Launch EKS cluster
-        run: ./build/eksctl/deploy.sh &>/dev/null && eksctl create cluster -f build/eksctl/eksctl-config.yaml
+        run: ./build/eksctl/deploy.sh && eksctl create cluster -f build/eksctl/eksctl-config.yaml
