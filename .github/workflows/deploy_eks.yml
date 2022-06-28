@@ -56,4 +56,8 @@ jobs:
 
       # Launch EKS
       - name: Launch EKS cluster
-        run: env && export AWS_ACCESS_KEY_ID=$KEY && export AWS_SECRET_ACCESS_KEY=$SECRET && export AWS_SESSION_TOKEN=$TOKEN && env && eksctl create cluster -f build/eksctl/eksctl-config.yaml
+        env:
+          AWS_ACCESS_KEY_ID: ${{ inputs.KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ inputs.SECRET }}
+          AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
+        run: env && eksctl create cluster -f build/eksctl/eksctl-config.yaml
