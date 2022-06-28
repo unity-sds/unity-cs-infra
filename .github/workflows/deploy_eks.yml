@@ -14,17 +14,17 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
-      AWS_ACCESS_KEY_ID:
+      KEY:
         description: 'Access Key ID'
         required: true
         type: string
         default: ''
-      AWS_ACCESS_KEY_SECRET:
+      SECRET:
         description: 'Access Secret Key ID'
         required: true
         type: string
         default: ''
-      AWS_SESSION_TOKEN:
+      TOKEN:
         description: 'AWS Session Token'
         required: true
         type: string
@@ -56,4 +56,4 @@ jobs:
 
       # Launch EKS
       - name: Launch EKS cluster
-        run: env && export AWS_ACCESS_KEY_ID=$INPUT_AWS_ACCESS_KEY_ID && export AWS_SECRET_ACCESS_KEY=$INPUT_AWS_ACCESS_KEY_SECRET && export AWS_SESSION_TOKEN=$INPUT_AWS_SESSION_TOKEN && env && eksctl create cluster -f build/eksctl/eksctl-config.yaml
+        run: env && export AWS_ACCESS_KEY_ID=$KEY && export AWS_SECRET_ACCESS_KEY=$SECRET && export AWS_SESSION_TOKEN=$TOKEN && env && eksctl create cluster -f build/eksctl/eksctl-config.yaml
