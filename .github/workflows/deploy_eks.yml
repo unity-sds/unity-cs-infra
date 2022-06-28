@@ -45,15 +45,15 @@ jobs:
       - name: Display contents of working directory
         run: ls -al
 
-     # Install eksctl to launch EKS
-     - name: Install eksctl
-       run: |
+      # Install eksctl to launch EKS
+      - name: Install eksctl
+        run: |
          curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && \
          sudo mv /tmp/eksctl /usr/local/bin && \
          eksctl version
 
-     # Render template
+      # Render template
 
-     # Launch EKS
-     - name: Launch EKS cluster
-       run: eksctl create cluster -f eksctl-config.yaml
+      # Launch EKS
+      - name: Launch EKS cluster
+        run: eksctl create cluster -f eksctl-config.yaml
