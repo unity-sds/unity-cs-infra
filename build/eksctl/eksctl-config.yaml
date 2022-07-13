@@ -5,7 +5,7 @@ iam:
   serviceRoleARN: arn:aws:iam::237868187491:role/Unity-UCS-development-EKSClusterRole
 
 metadata:
-  name: ucstestcluster2
+  name: ucstestcluster3
   region: us-west-2
   version: "1.21"
 
@@ -16,11 +16,11 @@ managedNodeGroups:
     desiredCapacity: 1
     ami: ami-01fe93a8bc6cb9bef
     iam:
-      instanceRoleARN: arn:aws:iam::237868187491:role/Unity-ADS-development-EKSNodeRole
+      instanceRoleARN: arn:aws:iam::237868187491:role/U-CS-AmazonEKSNodeRole
     privateNetworking: true
     overrideBootstrapCommand: |
       #!/bin/bash
-      /etc/eks/bootstrap.sh ucstestcluster2
+      /etc/eks/bootstrap.sh ucstestcluster3
 addons:
   - name: kube-proxy
     version: v1.21.2-eksbuild.2
