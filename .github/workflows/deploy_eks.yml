@@ -52,8 +52,15 @@ jobs:
          sudo mv /tmp/eksctl /usr/local/bin && \
          eksctl version
 
-      # Render template
+      - name: Install Unity Transformer
+        run: |
+          curl --silent --location https://github.com/unity-sds/unity-cs-terraform-transformer/releases/download/0.1.5-ALPHA/unity-cs-terraform-transformer-0.1.5-ALPHA-linux-amd64.tar.gz | tar xz -C /tmp
+          sudo mv /tmp/unity-cs-terraform-transformer /usr/local/bin
 
+      # Render template
+      - name: Render Template
+        run: |
+          unity-cs-terraform-transformer eks --clustername TestCluster > build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
         env:
