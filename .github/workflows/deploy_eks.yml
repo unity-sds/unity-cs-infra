@@ -46,20 +46,24 @@ on:
         type: string
       MINNODES:
         description: 'Minimum Cluster Nodes'
-        required: false
+        required: true
         type: string
+        default: '1'
       MAXNODES:
         description: 'Max Cluster Nodes'
-        required: false
+        required: true
         type: string
+        default: '3'
       DESIREDNODES:
         description: 'Desired Cluster Nodes'
-        required: false
+        required: true
         type: string
+        default: '1'
       INSTANCETYPE:
         description: 'EC2 Instance Type'
         type: string
-        required: false
+        required: true
+        default: 'm5.xlarge'
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "deployment"
