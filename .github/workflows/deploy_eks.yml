@@ -1,7 +1,18 @@
 # This is a basic workflow to help you get started with Actions
 
 name: AWS EKS Deployment
-
+env:
+  EKSClusterRegion: us-west-2
+  EKSClusterVersion: 1.21
+  EKSClusterAMI: ami-01fe93a8bc6cb9bef
+  EKSKubeProxyVersion: v1.21.2-eksbuild.2
+  EKSCoreDNSVersion: v1.8.4-eksbuild.1
+  EKSSubnetConfigA: "us-west-2a: { id: subnet-00db2965967acb6b1 }"
+  EKSSubnetConfigB: "us-west-2b: { id: subnet-092597c48cfec3f04 }"
+  EKSSecurityGroup: "sg-09bd8de0af1c3c99a"
+  EKSSharedNodeSecurityGroup: "sg-09bd8de0af1c3c99a"
+  ServiceArn: ${{ secrets.EKSSERVICEARN }}
+  InstanceRoleArn: ${{ secrets.EKSINSTANCEROLEARN }}
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -29,6 +40,26 @@ on:
         required: true
         type: string
         default: ''
+      CLUSTERNAME:
+        description: 'EKS Cluster Name'
+        required: true
+        type: string
+      MINNODES:
+        description: 'Minimum Cluster Nodes'
+        required: false
+        type: string
+      MAXNODES:
+        description: 'Max Cluster Nodes'
+        required: false
+        type: string
+      DESIREDNODES:
+        description: 'Desired Cluster Nodes'
+        required: false
+        type: string
+      INSTANCETYPE:
+        description: 'EC2 Instance Type'
+        type: string
+        required: false
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "deployment"
