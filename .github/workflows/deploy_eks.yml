@@ -91,7 +91,7 @@ jobs:
       # Render template
       - name: Render Template
         run: |
-          unity-cs-terraform-transformer eks --clustername ${{ CLUSTERNAME }} > build/eksctl/eksctl-config.yaml
+          unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} > build/eksctl/eksctl-config.yaml
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
