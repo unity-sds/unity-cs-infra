@@ -92,6 +92,7 @@ jobs:
       - name: Render Template
         run: |
           unity-cs-terraform-transformer eks --clustername TestCluster > build/eksctl/eksctl-config.yaml
+          cat build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
         env:
