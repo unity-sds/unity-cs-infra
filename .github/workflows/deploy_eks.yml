@@ -103,4 +103,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ inputs.KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ inputs.SECRET }}
           AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
-        run: eksctl create cluster -f build/eksctl/eksctl-config.yaml
+        run: eksctl create cluster --tags service=u-cs -f build/eksctl/eksctl-config.yaml
