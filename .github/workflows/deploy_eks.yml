@@ -40,6 +40,11 @@ on:
         required: true
         type: string
         default: ''
+      OWNER:
+        description: 'Service Owner'
+        required: true
+        type: string
+        default: 'U-CS'
       CLUSTERNAME:
         description: 'EKS Cluster Name'
         required: true
