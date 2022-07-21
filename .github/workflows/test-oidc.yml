@@ -11,6 +11,5 @@ uses: aws-actions/configure-aws-credentials@v1
 with:
 role-to-assume: arn:aws:iam::237868187491:role/mcp-Unity-Github-OIDC-Role
 role-duration-seconds: 600
-aws-region: us-west-2
 - name: Test AWS Creds
 run: aws sts get-caller-identity
