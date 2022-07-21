@@ -1,15 +1,16 @@
 name: test-oidc
 permissions:
-id-token: write # required to use OIDC authentication
-contents: read # required to checkout the code from the repo
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
 jobs:
 build:
 runs-on: ubuntu-latest
 steps:
-- name: configure AWS credentials
-uses: aws-actions/configure-aws-credentials@v1
-with:
-role-to-assume: arn:aws:iam::237868187491:role/mcp-Unity-Github-OIDC-Role
-role-duration-seconds: 600
-- name: Test AWS Creds
-run: aws sts get-caller-identity
+  - name: configure AWS credentials
+    uses: aws-actions/configure-aws-credentials@v1
+    with:
+      role-to-assume: arn:aws:iam::237868187491:role/mcp-Unity-Github-OIDC-Role
+      role-duration-seconds: 600
+  - name: Test AWS Creds
+    run: aws sts get-caller-identity
