@@ -14,4 +14,3 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::237868187491:role/mcp-Unity-Github-OIDC-Role
           aws-region: us-west-2
-          run: aws sts get-caller-identity
