@@ -46,8 +46,6 @@ jobs:
           role-to-assume: ${{ secrets.OIDC_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-
-
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: SCM CHeckout
         uses: actions/checkout@v2
@@ -79,12 +77,12 @@ jobs:
       - name: Display state of working directory root
         run: ls -al resources/deployable
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          # terraform_version: 0.13.0
-          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
+#      - name: Setup Terraform
+#        uses: hashicorp/setup-terraform@v1
+#        with:
+#          # terraform_version: 0.13.0
+#          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
       ## Verify that the Terraform directory exists in the remote repo
       - name: Check for Terraform Directory
@@ -96,26 +94,31 @@ jobs:
         if: steps.terraform_directory.outputs.files_exists != 'true'
         run: exit 1
 
+
       ## Check Terraform formatting
       - name: Terraform Format
+        uses: hashicorp/setup-terraform@v2
         working-directory: ./resources/deployable/terraform-unity
         id: fmt
         run: terraform fmt -check
 
       ## Init terraform
       - name: Terraform Init
+        uses: hashicorp/setup-terraform@v2
         working-directory: ./resources/deployable/terraform-unity
         id: init
         run: terraform init
 
       ## Validate Terraform
       - name: Terraform Validate
+        uses: hashicorp/setup-terraform@v2
         working-directory: ./resources/deployable/terraform-unity
         id: validate
         run: terraform validate -no-color
 
       ## Plan Terraform
       - name: Terraform Plan
+        uses: hashicorp/setup-terraform@v2
         working-directory: ./resources/deployable/terraform-unity
         id: plan
         run: terraform plan -no-color
@@ -123,11 +126,13 @@ jobs:
 
       ## Fail the job if terraform plan doesn't succeed
       - name: Terraform Plan Status
+        uses: hashicorp/setup-terraform@v2
         working-directory: ./resources/deployable/terraform-unity
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
       - name: Terraform Apply
+        uses: hashicorp/setup-terraform@v2
         working-directory: ./resources/deployable/terraform-unity
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
         run: terraform apply -auto-approve
