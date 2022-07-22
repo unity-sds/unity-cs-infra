@@ -14,14 +14,6 @@ on:
   workflow_dispatch:
     branches: [ smolensk_0.2_mcp ]
     inputs:
-      deploymentTarget:
-        description: 'Deployment Target'
-        required: true 
-        type: choice
-        default: 'jpl'
-        options: 
-        - jpl
-        - mcp
       sourceRepository:
         description: 'Repository Source'
         required: true 
