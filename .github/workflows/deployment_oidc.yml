@@ -14,6 +14,13 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
+      deploymentTarget:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'mcp'
+        options: 
+        - mcp
       sourceRepository:
         description: 'Repository Source'
         required: true 
