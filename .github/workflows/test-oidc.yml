@@ -1,5 +1,5 @@
 name: test-oidc
-on: push
+on:
   workflow_dispatch:
     branches: [ main ]
 
