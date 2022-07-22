@@ -1,5 +1,7 @@
 name: test-oidc
 on: push
+  workflow_dispatch:
+    branches: [ main ]
 
 permissions:
   id-token: write # required to use OIDC authentication

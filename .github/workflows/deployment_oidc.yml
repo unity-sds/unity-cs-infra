@@ -12,7 +12,7 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    branches: [ smolensk_0.2_mcp ]
+    branches: [ main ]
     inputs:
       sourceRepository:
         description: 'Repository Source'
@@ -24,6 +24,11 @@ on:
         required: true 
         type: string
         default: 'smolenski_tf_test_mcp'
+
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
