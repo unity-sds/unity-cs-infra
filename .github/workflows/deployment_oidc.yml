@@ -69,9 +69,9 @@ jobs:
           ref: ${{ github.event.inputs.sourceBranch }}
 
       # Copy the appropriate TF files, depending on the deployment target
+#          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
       - name: Apply target-specific Terraform Configs
         run: |
-#          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main-unity.tf
           cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
           cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables-unity.tf
 
