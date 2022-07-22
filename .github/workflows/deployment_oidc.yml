@@ -53,6 +53,9 @@ jobs:
           role-to-assume: ${{ secrets.OIDC_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Get AWS Caller Identity
+        run: aws sts get-caller-identity
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: SCM CHeckout
         uses: actions/checkout@v2
