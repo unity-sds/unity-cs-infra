@@ -26,13 +26,6 @@ terraform {
   }
 
   required_version = ">= 0.14.9"
-  cloud {
-    organization = "JPL-UNITY"
-
-    workspaces {
-      name = "unity-cs-mcp"
-    }
-  }
 }
 
 provider "aws" {
