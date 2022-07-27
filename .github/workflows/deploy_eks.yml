@@ -108,4 +108,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ inputs.KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ inputs.SECRET }}
           AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
-        run: eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          AWS_PAGER: ""
+        run: | 
+          eksctl create cluster -f build/eksctl/eksctl-config.yaml && \
+          aws cli ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
