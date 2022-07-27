@@ -92,6 +92,12 @@ jobs:
          sudo mv /tmp/eksctl /usr/local/bin && \
          eksctl version
 
+      - name: Install aws cli
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
       - name: Install Unity Transformer
         run: |
           curl --silent --location https://github.com/unity-sds/unity-cs-terraform-transformer/releases/download/0.1.9-Alpha/unity-cs-terraform-transformer-0.1.9-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
