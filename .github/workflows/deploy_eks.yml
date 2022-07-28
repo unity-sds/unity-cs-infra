@@ -110,5 +110,5 @@ jobs:
           AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
           AWS_PAGER: ""
         run: | 
-          eksctl create cluster -f build/eksctl/eksctl-config.yaml && \
-          aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
+          eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
