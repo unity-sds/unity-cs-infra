@@ -7,6 +7,7 @@ variable "ami_id" { default = "ami-0688ba7eeeeefe3cd" }
 #variable "ami_id" { default = "ami-04505e74c0741db8d" }
 variable "ami_key_pair_name" { default = "unity-cs-mcp-smolensk" }
 variable "vpc_id" { default = "vpc-0106218dbddd3a753" }
+variable "igw_id" { default = "igw-0622379cb99c03649" }
 
 data "aws_vpc" "unity-test-env" {
   id         = var.vpc_id
@@ -20,4 +21,8 @@ data "aws_subnet" "subnet-uno" {
 
 data "aws_subnet" "subnet-two" {
   id = "subnet-0ebdd997cc3ebe58d"
+}
+
+data "aws_internet_gateway" "infra-env-gw" {
+  id = var.igw_id
 }
