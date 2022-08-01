@@ -11,8 +11,8 @@ env:
   EKSSubnetConfigB: "us-west-2b: { id: subnet-030bf5e7eab6f2323 }"
   EKSSecurityGroup: "sg-08221a3ecfbe387d8"
   EKSSharedNodeSecurityGroup: "sg-08221a3ecfbe387d8"
-  EKSServiceArn: ${{ secrets.EKSSERVICEARN }}
-  EKSInstanceRoleArn: ${{ secrets.EKSINSTANCEROLEARN }}
+  EKSServiceArn: ${{ secrets.MCP_TEST_CLUSTER_ROLE }}
+  EKSInstanceRoleArn: ${{ secrets.MCP_TEST_NODE_ROLE }}
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
