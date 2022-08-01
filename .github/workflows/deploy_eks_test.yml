@@ -4,7 +4,7 @@ name: MCP Test - EKS Deployment
 env:
   EKSClusterRegion: us-west-2
   EKSClusterVersion: 1.21
-  EKSClusterAMI: ami-004f3a4de91417ba5
+  EKSClusterAMI: ami-01fe93a8bc6cb9bef
   EKSKubeProxyVersion: v1.21.2-eksbuild.2
   EKSCoreDNSVersion: v1.8.4-eksbuild.1
   EKSSubnetConfigA: "us-west-2a: { id: subnet-0ca61daf80bc568d9 }"
