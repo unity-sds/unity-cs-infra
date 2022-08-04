@@ -24,7 +24,6 @@ data "aws_subnet" "subnet-two" {
 
 data "aws_internet_gateway" "infra-env-gw" {
   filter {
-    name   = "attachment.vpc_id"
     values = [var.vpc_id]
   }
 }
