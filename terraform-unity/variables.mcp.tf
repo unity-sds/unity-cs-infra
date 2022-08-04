@@ -23,7 +23,5 @@ data "aws_subnet" "subnet-two" {
 }
 
 data "aws_internet_gateway" "infra-env-gw" {
-  filter {
-    values = [var.vpc_id]
-  }
+  internet_gateway_id = "igw-0622379cb99c03649"
 }
