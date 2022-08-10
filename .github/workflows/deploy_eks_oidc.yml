@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: MCP Dev - EKS Deployment
+name: MCP Dev - EKS Deployment via OIDC
 env:
   EKSClusterRegion: us-west-2
   EKSClusterVersion: 1.21
@@ -25,21 +25,6 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
-      KEY:
-        description: 'Access Key ID'
-        required: true
-        type: string
-        default: ''
-      SECRET:
-        description: 'Access Secret Key ID'
-        required: true
-        type: string
-        default: ''
-      TOKEN:
-        description: 'AWS Session Token'
-        required: true
-        type: string
-        default: ''
       OWNER:
         description: 'Service Owner'
         required: true
@@ -78,6 +63,14 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Configure AWS Credentials through OIDC
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.OIDC_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+
       # Set up current working directory with the repo contents
       - uses: actions/checkout@v2
 
