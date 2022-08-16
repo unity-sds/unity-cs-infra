@@ -13,6 +13,24 @@ on:
   # Nightly Deployments
   schedule:
     - cron: '0 2 * * *' # run at 2 AM UTC
+      inputs:
+        deploymentTarget:
+          description: 'Deployment Target'
+          required: true 
+          type: choice
+          default: 'mcp'
+          options: 
+          - mcp
+        sourceRepository:
+          description: 'Repository Source'
+          required: true 
+          type: string
+          default: 'unity-sds/unity-cs-sps-demo'
+        sourceBranch:
+          description: 'Repository Branch'
+          required: true 
+          type: string
+          default: 'smolenski_tf_test_mcp'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
