@@ -46,5 +46,5 @@ jobs:
 
       - name: Decode Error Message
         run: |
-          aws sts decode-authorization --encoded-message '${{ github.event.inputs.encodedMessage }}'
+          aws sts decode-authorization-message --encoded-message '${{ github.event.inputs.encodedMessage }}'
 
