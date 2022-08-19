@@ -78,17 +78,17 @@ jobs:
       - name: Clone the service repository for deployment
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.inputs.sourceRepository || $DEFAULT_REPO }}
+          repository: ${{ github.event.inputs.sourceRepository || env.DEFAULT_REPO }}
           path: resources/deployable
-          ref: ${{ github.event.inputs.sourceBranch || $DEFAULT_COMMIT }}
+          ref: ${{ github.event.inputs.sourceBranch || env.DEFAULT_COMMIT }}
 
       # Copy the appropriate TF files, depending on the deployment target
 #          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
 #          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables-unity.tf
       - name: Apply target-specific Terraform Configs
         run: |
-          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET}}.tf resources/deployable/terraform-unity/main.tf
-          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET}}.tf resources/deployable/terraform-unity/variables.tf
+          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}.tf resources/deployable/terraform-unity/main.tf
+          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}.tf resources/deployable/terraform-unity/variables.tf
           rm -f resources/deployable/terraform-unity/gateway.tf
 
       # Apply special env-specific configs (mostly used for MCP limitations)
