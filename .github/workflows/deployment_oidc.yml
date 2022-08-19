@@ -104,11 +104,11 @@ jobs:
           rm -f resources/deployable/terraform-unity/gateway.tf
 
       # Apply special env-specific configs (mostly used for MCP limitations)
-#      - name: Apply target-specific configurations
-#        # Remove dynamic networking configurations if this is MCP
-#        if: ${{ env.DEFAULT_TARGET == 'mcp' }}
-#          run: | 
-#            rm resources/deployable/terraform-unity/networking.tf
+      - name: Apply target-specific configurations
+         # Remove dynamic networking configurations if this is MCP
+        if: ${{ env.TARGET_ENV == 'mcp' }}
+          run: | 
+            rm resources/deployable/terraform-unity/networking.tf
 
       # Runs a single command using the runners shell
       - name: Display state of working directory root
