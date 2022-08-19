@@ -13,24 +13,6 @@ on:
   # Nightly Deployments
   schedule:
     - cron: '0 2 * * *' # run at 2 AM UTC
-      inputs:Yeah
-        deploymentTarget:
-          description: 'Deployment Target'
-          required: true 
-          type: choice
-          default: 'mcp'
-          options: 
-          - mcp
-        sourceRepository:
-          description: 'Repository Source'
-          required: true 
-          type: string
-          default: 'unity-sds/unity-cs-sps-demo'
-        sourceBranch:
-          description: 'Repository Branch'
-          required: true 
-          type: string
-          default: 'smolenski_tf_test_mcp'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -69,6 +51,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Configure default variables
+        env:
+          DEFAULT_TARGET: 'mcp'
+          DEFAULT_REPO: 'unity-sds/unity-cs-sps-demo'
+          DEFAULT_COMMIT: 'smolenski_tf_test_mcp'
+
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -89,17 +78,17 @@ jobs:
       - name: Clone the service repository for deployment
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.inputs.sourceRepository }}
+          repository: ${{ github.event.inputs.sourceRepository || $DEFAULT_REPO }}
           path: resources/deployable
-          ref: ${{ github.event.inputs.sourceBranch }}
+          ref: ${{ github.event.inputs.sourceBranch || $DEFAULT_COMMIT }}
 
       # Copy the appropriate TF files, depending on the deployment target
 #          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
 #          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables-unity.tf
       - name: Apply target-specific Terraform Configs
         run: |
-          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
-          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables.tf
+          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET}}.tf resources/deployable/terraform-unity/main.tf
+          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET}}.tf resources/deployable/terraform-unity/variables.tf
           rm -f resources/deployable/terraform-unity/gateway.tf
 
       # Apply special env-specific configs (mostly used for MCP limitations)
