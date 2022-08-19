@@ -58,9 +58,7 @@ jobs:
           DEFAULT_COMMIT: 'smolenski_tf_test_mcp'
         run :
           echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
-        run :
           echo "REPO_NAME=${{ github.event.inputs.sourceRepository || env.DEFAULT_REPO }}" >> $GITHUB_ENV
-        run :
           echo "COMMIT_HASH=${{ github.event.inputs.sourceBranch || env.DEFAULT_COMMIT }}" >> $GITHUB_ENV
           echo "Target ENV ${{ env.TARGET_ENV }}"
           echo "Repo Name ${{ env.REPO_NAME }}"
