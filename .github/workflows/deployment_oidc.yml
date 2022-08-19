@@ -13,7 +13,7 @@ on:
   # Nightly Deployments
   schedule:
     - cron: '0 2 * * *' # run at 2 AM UTC
-      inputs:
+      inputs:Yeah
         deploymentTarget:
           description: 'Deployment Target'
           required: true 
@@ -186,7 +186,7 @@ jobs:
           architecture: 'x64'
       - run: |
           cd ./resources/deployable/smoketest
-          python3 smoketest.sh
+          sh smoketest.sh
 
       # - name: Negative Smoke Test Check
       #   run: |
