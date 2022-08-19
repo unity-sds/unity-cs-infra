@@ -60,6 +60,8 @@ jobs:
         if: ${{ github.event.inputs.deploymentTarget == '' }}
           run: echo "empty target"
 
+
+      - name: Display deployment configuration
         run :
           echo "Target ENV ${{ env.DEFAULT_TARGET }}"
           echo "Repo Name ${{ env.DEFAULT_REPO }}"
