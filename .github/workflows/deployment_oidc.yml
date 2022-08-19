@@ -56,6 +56,11 @@ jobs:
           DEFAULT_TARGET: 'mcp'
           DEFAULT_REPO: 'unity-sds/unity-cs-sps-demo'
           DEFAULT_COMMIT: 'smolenski_tf_test_mcp'
+        run :
+          echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+          echo "REPO_NAME=${{ github.event.inputs.sourceRepository || env.DEFAULT_REPO }}" >> $GITHUB_ENV
+          echo "COMMIT_HASH=${{ github.event.inputs.sourceBranch || env.DEFAULT_COMMIT }}" >> $GITHUB_ENV
+          
 
 
       - name: Configure AWS credentials
@@ -78,23 +83,23 @@ jobs:
       - name: Clone the service repository for deployment
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.inputs.sourceRepository || env.DEFAULT_REPO }}
+          repository: $REPO_NAME
           path: resources/deployable
-          ref: ${{ github.event.inputs.sourceBranch || env.DEFAULT_COMMIT }}
+          ref: $COMMIT_HASH
 
       # Copy the appropriate TF files, depending on the deployment target
 #          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
 #          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables-unity.tf
       - name: Apply target-specific Terraform Configs
         run: |
-          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}.tf resources/deployable/terraform-unity/main.tf
-          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}.tf resources/deployable/terraform-unity/variables.tf
+          cp -f terraform-unity/main.$TARGET_ENV.tf resources/deployable/terraform-unity/main.tf
+          cp -f terraform-unity/variables.$TARGET_ENV.tf resources/deployable/terraform-unity/variables.tf
           rm -f resources/deployable/terraform-unity/gateway.tf
 
       # Apply special env-specific configs (mostly used for MCP limitations)
       - name: Apply target-specific configurations
         # Remove dynamic networking configurations if this is MCP
-        if: ${{ github.event.inputs.deploymentTarget == 'mcp' }}
+        if: ${{ $TARGET_EMV == 'mcp' }}
         run: rm resources/deployable/terraform-unity/networking.tf
 
       # Runs a single command using the runners shell
