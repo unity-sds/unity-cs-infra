@@ -99,7 +99,7 @@ jobs:
       # Apply special env-specific configs (mostly used for MCP limitations)
       - name: Apply target-specific configurations
         # Remove dynamic networking configurations if this is MCP
-        if: ${{ $TARGET_EMV == 'mcp' }}
+        if: ${{ $TARGET_ENV == 'mcp' }}
         run: rm resources/deployable/terraform-unity/networking.tf
 
       # Runs a single command using the runners shell
