@@ -58,6 +58,7 @@ jobs:
           DEFAULT_COMMIT: 'smolenski_tf_test_mcp'
 
         if: ${{ github.event.inputs.deploymentTarget != '' }}
+        env:
           DEFAULT_TARGET: ${{ github.event.inputs.deploymentTarget }}
           DEFAULT_REPO: ${{ github.event.inputs.sourceRepository }}
           DEFAULT_COMMIT: ${{ github.event.inputs.sourceBranch }}
