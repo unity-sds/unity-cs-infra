@@ -57,6 +57,9 @@ jobs:
           DEFAULT_REPO: 'unity-sds/unity-cs-sps-demo'
           DEFAULT_COMMIT: 'smolenski_tf_test_mcp'
 
+        if: ${{ github.event.inputs.deploymentTarget == '' }}
+          run: echo "empty target"
+
         run :
           echo "Target ENV ${{ env.DEFAULT_TARGET }}"
           echo "Repo Name ${{ env.DEFAULT_REPO }}"
