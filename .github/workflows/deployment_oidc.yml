@@ -107,7 +107,7 @@ jobs:
       - name: Apply target-specific configurations
          # Remove dynamic networking configurations if this is MCP
         if: ${{ env.TARGET_ENV == 'mcp' }}
-          run: rm resources/deployable/terraform-unity/networking.tf
+        run: rm resources/deployable/terraform-unity/networking.tf
 
       # Runs a single command using the runners shell
       - name: Display state of working directory root
