@@ -37,7 +37,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "status": ${{ steps.resources_by_service_area.outputs.stdout }},
+              "status": "Result: ${{ steps.resources_by_service_area.outputs.stdout }}",
               "blocks": [
                 {
                   "type": "section",
