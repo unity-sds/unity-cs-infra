@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # =================================================
 # Displays AWS resource ARNs for a service area,
