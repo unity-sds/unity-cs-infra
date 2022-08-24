@@ -28,7 +28,7 @@ jobs:
         id: resources_by_service_area
         run: |
           cd utils
-          resources-by-service-area.sh | awk '{printf "%s\\n", $0}'
+          bash resources-by-service-area.sh | awk '{printf "%s\\n", $0}'
 
       - name: Send custom JSON data to Slack workflow
         id: slack
