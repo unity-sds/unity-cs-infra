@@ -28,7 +28,10 @@ jobs:
         id: resources_by_service_area
         run: |
           cd utils
-          bash resources-by-service-area.sh
+          RESOURCES_SUMMARY=$(bash resources-by-service-area.sh)
+          echo "RESOURCES_SUMMARY<<EOF" >> $GITHUB_ENV
+          echo "$RESOURCES_SUMMARY" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Send custom JSON data to Slack workflow
         id: slack
@@ -37,7 +40,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "status": "Result: ${{ steps.resources_by_service_area.outputs.stdout }}",
+              "status": "Result: ${{ env.RESOURCES_SUMMARY }}",
               "blocks": [
                 {
                   "type": "section",
