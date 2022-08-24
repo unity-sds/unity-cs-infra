@@ -1,4 +1,4 @@
-name: test-oidc
+name: test-slack-notify
 on:
   workflow_dispatch:
     branches: [ main ]
