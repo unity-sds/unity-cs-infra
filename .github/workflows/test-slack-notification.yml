@@ -40,7 +40,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "status": "Result: ${{ env.RESOURCES_SUMMARY }}",
+              "status": "Result: ${{join(env.RESOURCES_SUMMARY, '\n')}}",
               "blocks": [
                 {
                   "type": "section",
