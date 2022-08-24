@@ -16,6 +16,17 @@ jobs:
         with:
           role-to-assume: ${{ secrets.OIDC_ROLE }}
           aws-region: us-west-2
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: SCM Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Resources by Service Area script
+        id: resources_by_service_area
+        run: |
+          cd utils
+          sh resources-by-service-area.sh
+
       - name: Send custom JSON data to Slack workflow
         id: slack
         uses: slackapi/slack-github-action@v1.19.0
@@ -23,13 +34,13 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "status": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "status": "GitHub Action build result: ${{ job.status }} -- {{steps.resources_by_service_area.outputs}} \n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                    "text": "GitHub Action build result2: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                   }
                 }
               ]
