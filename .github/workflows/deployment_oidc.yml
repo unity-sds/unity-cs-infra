@@ -178,7 +178,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ./resources/deployable/terraform-unity
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var-file="cicd.tfvars"
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
@@ -190,7 +190,7 @@ jobs:
       - name: Terraform Apply
         working-directory: ./resources/deployable/terraform-unity
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var-file="cicd.tfvars"
 
 
       ## Verify that the smoke test exists
