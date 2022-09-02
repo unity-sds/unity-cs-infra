@@ -123,7 +123,7 @@ jobs:
       - name: Create TFVARS file
         run: |
           rm -f resources/deployable/terraform-unity/cicd.tfvars
-          cp -f terraform-unity/${{ secrets[format('{0}_{1}', env.TARGET_ENV, env.TARGET_STAGE)] }}.tfvars resources/deployable/terraform-unity/cicd.tfvars
+          cp -f terraform-unity/TFVARS/${{ secrets[format('{0}', env.TARGET_STAGE)] }}/${{ secrets[format('{0}', env.TARGET_ENV)] }}.tfvars resources/deployable/terraform-unity/cicd.tfvars
           cat resources/deployable/terraform-unity/cicd.tfvars
 
       # Runs a single command using the runners shell
