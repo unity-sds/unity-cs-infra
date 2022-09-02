@@ -4,14 +4,10 @@ name: End to End Deployment
 # Controls when the workflow will run
 on:
   workflow_dispatch:
-    inputs:
-      metadata:
-        description: 'Metadata Descriptor'
-        required: true
-        type: string
-        default: ''
+
 
 
 jobs:
     deploy-eks:
       uses: ./.github/workflows/deploy_eks_callable.yml
+      secrets: inherit
