@@ -120,10 +120,16 @@ jobs:
         if: ${{ env.TARGET_ENV == 'mcp' }}
         run: rm resources/deployable/terraform-unity/networking.tf
 
+      # Create tfvars file for environment-specific values
+      - name: Create TFVARS file
+        run: |
+          rm -f resources/deployable/terraform-unity/cicd.tfvars
+          cp -f terraform-unity/TFVARS/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars resources/deployable/terraform-unity/cicd.tfvars
+          cat resources/deployable/terraform-unity/cicd.tfvars
+
       # Runs a single command using the runners shell
       - name: Display state of working directory root
         run: ls -al resources/deployable
-
 
 #      - name: Setup Terraform
 #        uses: hashicorp/setup-terraform@v1
