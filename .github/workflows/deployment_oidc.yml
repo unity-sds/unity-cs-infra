@@ -128,7 +128,7 @@ jobs:
         run: |
           rm -f resources/deployable/terraform-unity/cicd.tfvars
           touch resources/deployable/terraform-unity/cicd.tfvars
-          echo "TF_VAR_AMI_ID = \"${{ env.AMI_ID }}\"" >> resources/deployable/terraform-unity/cicd.tfvars
+          echo "TF_VAR_AMI_ID = \"${{ secrets[format('TF_VAR_{0}_{1}_AMI_ID_CENTOS', env.TARGET_ENV, env.TARGET_STAGE)] }}\"" >> resources/deployable/terraform-unity/cicd.tfvars
           echo "TF_VAR_VPC_ID = \"${{ env.VPC_ID }}\"" >> resources/deployable/terraform-unity/cicd.tfvars
           cat resources/deployable/terraform-unity/cicd.tfvars
 
