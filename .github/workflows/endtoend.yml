@@ -1,0 +1,29 @@
+name: End to End Deployment
+env:
+  EKSClusterRegion: us-west-2
+  EKSClusterVersion: 1.21
+  EKSClusterAMI: ami-01fe93a8bc6cb9bef
+  EKSKubeProxyVersion: v1.21.2-eksbuild.2
+  EKSCoreDNSVersion: v1.8.4-eksbuild.1
+  EKSSubnetConfigA: "us-west-2a: { id: subnet-00db2965967acb6b1 }"
+  EKSSubnetConfigB: "us-west-2b: { id: subnet-092597c48cfec3f04 }"
+  EKSSecurityGroup: "sg-09bd8de0af1c3c99a"
+  EKSSharedNodeSecurityGroup: "sg-09bd8de0af1c3c99a"
+  EKSServiceArn: ${{ secrets.EKSSERVICEARN }}
+  EKSInstanceRoleArn: ${{ secrets.EKSINSTANCEROLEARN }}
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      KEY:
+        description: 'Metadata Descriptor'
+        required: true
+        type: string
+        default: ''
+
+
+  jobs:
+    deploy-eks:
+      uses: ./.github/workflows/deploy_eks_callable.yml
