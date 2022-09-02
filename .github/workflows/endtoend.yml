@@ -24,6 +24,6 @@ on:
         default: ''
 
 
-  jobs:
+jobs:
     deploy-eks:
       uses: ./.github/workflows/deploy_eks_callable.yml
