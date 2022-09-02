@@ -165,4 +165,4 @@ jobs:
       - name: Terraform Destroy
         working-directory: ./resources/deployable/terraform-unity
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
-        run: terraform destroy -auto-approve
+        run: terraform destroy -auto-approve -var-file="cicd.tfvars"
