@@ -10,14 +10,14 @@ variable "ami_name" { default = "unity-ubuntu" }
 #variable "vpc_id" { default = var.vpc_id }
 variable "ami_key_pair_name" { default = "unity-cs-mcp-smolensk" }
 #variable "vpc_id" { default = "vpc-0106218dbddd3a753" }
-
-locals {
-  ami_id = var.ami_id
-  vpc_id = var.vpc_id
-}
+variable "ami_id" { default = "" }
+variable "vpc_id" { default = "" }
+variable "subnet_one_id" { default = "" }
+variable "subnet_two_id" { default = "" }
+variable "igw_id" { default = "" }
 
 data "aws_vpc" "unity-test-env" {
-  id         = locals.vpc_id
+  id         = var.vpc_id
   cidr_block = "10.52.8.0/22"
 }
 
