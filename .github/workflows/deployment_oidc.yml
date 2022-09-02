@@ -127,16 +127,12 @@ jobs:
       - name: Create TFVARS file
         run: |
           rm -f resources/deployable/terraform-unity/cicd.tfvars
-          touch resources/deployable/terraform-unity/cicd.tfvars
-          echo "TF_VAR_AMI_ID = \"${{ secrets[format('TF_VAR_{0}_{1}_AMI_ID_CENTOS', env.TARGET_ENV, env.TARGET_STAGE)] }}\"" >> resources/deployable/terraform-unity/cicd.tfvars
-          echo "TF_VAR_VPC_ID = \"${{ env.VPC_ID }}\"" >> resources/deployable/terraform-unity/cicd.tfvars
+          cp -f terraform-unity/${{ secrets[format('{0}_{1}.tfvars', env.TARGET_ENV, env.TARGET_STAGE)] }} resources/deployable/terraform-unity/cicd.tfvars
           cat resources/deployable/terraform-unity/cicd.tfvars
-
 
       # Runs a single command using the runners shell
       - name: Display state of working directory root
         run: ls -al resources/deployable
-
 
 #      - name: Setup Terraform
 #        uses: hashicorp/setup-terraform@v1
