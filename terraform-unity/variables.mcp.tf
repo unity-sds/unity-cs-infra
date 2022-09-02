@@ -6,15 +6,18 @@ variable "ami_name" { default = "unity-ubuntu" }
 #variable "ami_id" { default = "ami-0688ba7eeeeefe3cd" }
 #variable "ami_id" { default = "ami-0966013e814042b23" }
 #variable "ami_id" { default = "ami-04505e74c0741db8d" }
-variable "ami_id" { default = var.ami_id }
-variable "vpc_id" { default = var.vpc_id }
+#variable "ami_id" { default = var.ami_id }
+#variable "vpc_id" { default = var.vpc_id }
 variable "ami_key_pair_name" { default = "unity-cs-mcp-smolensk" }
 #variable "vpc_id" { default = "vpc-0106218dbddd3a753" }
 
-
+locals {
+  ami_id = var.ami_id
+  vpc_id = var.vpc_id
+}
 
 data "aws_vpc" "unity-test-env" {
-  id         = var.vpc_id
+  id         = locals.vpc_id
   cidr_block = "10.52.8.0/22"
 }
 
