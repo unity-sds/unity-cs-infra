@@ -1,7 +1,5 @@
-
 name: End to End Deployment
 
-# Controls when the workflow will run
 on:
   workflow_dispatch:
     inputs:
@@ -13,10 +11,6 @@ on:
 
 
 jobs:
-    deploy-eks:
-      uses: ./.github/workflows/deploy_eks_callable.yml
-      secrets: inherit
-
     deployment:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
