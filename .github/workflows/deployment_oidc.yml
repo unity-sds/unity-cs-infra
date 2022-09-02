@@ -164,7 +164,7 @@ jobs:
       - name: Terraform Validate
         working-directory: ./resources/deployable/terraform-unity
         id: validate
-        run: terraform validate -no-color -var-file="cicd.tfvars"
+        run: terraform validate -no-color
 
       ## Plan Terraform
       - name: Terraform Plan
