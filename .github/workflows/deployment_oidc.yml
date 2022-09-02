@@ -29,9 +29,10 @@ on:
         description: 'Deployment Stage'
         required: true 
         type: choice
-        default: 'dev'
+        default: 'DEV'
         options: 
-        - dev
+        - DEV
+        - TEST
       sourceRepository:
         description: 'Repository Source'
         required: true 
@@ -56,9 +57,6 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    env:
-      ENVIRONMENT: DEV
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Configure default variables
@@ -66,7 +64,7 @@ jobs:
           DEFAULT_TARGET: 'mcp'
           DEFAULT_REPO: 'unity-sds/unity-cs-sps-demo'
           DEFAULT_COMMIT: 'smolenski_tf_test_mcp'
-          DEFAULT_STAGE: 'dev'
+          DEFAULT_STAGE: 'DEV'
           DEFAULT_AMI_ID: ${{ secrets.TF_VAR_MCP_DEV_AMI_ID_CENTOS }}
           DEFAULT_VPC_ID: ${{ secrets.TF_VAR_MCP_DEV_VPC_ID }}
         run: |
@@ -84,13 +82,11 @@ jobs:
           echo "Target STAGE ${{ env.TARGET_STAGE }}"
           echo "Repo Name ${{ env.REPO_NAME }}"
           echo "Commit Hash ${{ env.COMMIT_HASH }}"
-          
-
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.ENVIRONMENT)] }}
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
 #          role-to-assume: ${{ secrets.OIDC_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
