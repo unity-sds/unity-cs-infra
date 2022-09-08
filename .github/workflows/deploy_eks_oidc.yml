@@ -76,8 +76,11 @@ jobs:
           role-to-assume: ${{ secrets.OIDC_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      # Use the OIDC Client package
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
+
+      # Generate a token to use with eksctl
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
