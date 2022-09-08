@@ -95,7 +95,8 @@ jobs:
         run: aws sts get-caller-identity
 
       # Set up current working directory with the repo contents
-      - uses: actions/checkout@v2
+      - name: SCM CHeckout
+        uses: actions/checkout@v2
 
       # Determine contents of working directory
       - name: Display contents of working directory
