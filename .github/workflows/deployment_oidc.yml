@@ -205,6 +205,18 @@ jobs:
           cd ./resources/deployable/smoketest
           sh smoketest.sh
 
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+        if: always()
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+            {
+              "status": "Smoke Test Exists = ${{ steps.smoke_test_file.outputs.files_exists }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CI_DEPLOY }}
       # - name: Negative Smoke Test Check
       #   run: |
       #     cd ./resources/deployable/smoketest
