@@ -65,7 +65,8 @@ module "eks" {
   vpc_id                   = "vpc-0106218dbddd3a753"
   subnet_ids               = ["subnet-059bc4f467275b59d", "subnet-0ebdd997cc3ebe58d"]
   cluster_security_group_id = "sg-09bd8de0af1c3c99a"
-  
+
+
   #control_plane_subnet_ids = module.vpc.intra_subnets
 
   # Extend cluster security group rules
@@ -174,41 +175,41 @@ module "eks" {
   }
 
   # Fargate Profile(s)
-  fargate_profiles = {
-    default = {
-      name = "default"
-      selectors = [
-        {
-          namespace = "kube-system"
-          labels = {
-            k8s-app = "kube-dns"
-          }
-        },
-        {
-          namespace = "default"
-        }
-      ]
-
-      tags = {
-        Owner = "test"
-      }
-
-      timeouts = {
-        create = "20m"
-        delete = "20m"
-      }
-    }
-  }
+#  fargate_profiles = {
+#    default = {
+#      name = "default"
+#      selectors = [
+#        {
+#          namespace = "kube-system"
+#          labels = {
+#            k8s-app = "kube-dns"
+#          }
+#        },
+#        {
+#          namespace = "default"
+#        }
+#      ]
+#
+#      tags = {
+#        Owner = "test"
+#      }
+#
+#      timeouts = {
+#        create = "20m"
+#        delete = "20m"
+#      }
+#    }
+#  }
 
   # OIDC Identity provider
-  cluster_identity_providers = {
-    sts = {
-      client_id = "sts.amazonaws.com"
-    }
-  }
+#  cluster_identity_providers = {
+#    sts = {
+#      client_id = "sts.amazonaws.com"
+#    }
+#  }
 
   # aws-auth configmap
-  manage_aws_auth_configmap = true
+  manage_aws_auth_configmap = false
 
 #  aws_auth_node_iam_role_arns_non_windows = [
 #    module.eks_managed_node_group.iam_role_arn,
