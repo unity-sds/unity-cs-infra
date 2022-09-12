@@ -146,11 +146,6 @@ jobs:
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
-        env:
-          AWS_ACCESS_KEY_ID: ${{ inputs.KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ inputs.SECRET }}
-          AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
-          AWS_PAGER: ""
         run: | 
           eksctl create cluster --with-oidc -f build/eksctl/eksctl-config.yaml
           #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
