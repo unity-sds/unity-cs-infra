@@ -1,11 +1,11 @@
 provider "aws" {
   region = local.region
 
-  default_tags {
-    tags = {
-      ExampleDefaultTag = "ExampleDefaultValue"
-    }
-  }
+#  default_tags {
+#    tags = {
+#      ExampleDefaultTag = "ExampleDefaultValue"
+#    }
+#  }
 }
 
 #provider "kubernetes" {
@@ -57,6 +57,7 @@ module "eks" {
   create_node_security_group = false
   create_cluster_security_group = false
   create_cluster_primary_security_group_tags = false
+
   # Encryption key
   create_kms_key = false
 #  cluster_encryption_config = [{
@@ -251,7 +252,7 @@ module "eks" {
 #    "888888888888",
 #  ]
 
-  tags = local.tags
+ # tags = local.tags
 }
 
 ################################################################################
