@@ -52,6 +52,7 @@ module "eks" {
     }
   }
 
+
   # Encryption key
   create_kms_key = true
   cluster_encryption_config = [{
@@ -60,8 +61,11 @@ module "eks" {
   kms_key_deletion_window_in_days = 7
   enable_kms_key_rotation         = true
 
+  iam_role_arn = "arn:aws:iam::237868187491:role/Unity-UCS-development-EKSClusterRole"
   vpc_id                   = "vpc-0106218dbddd3a753"
   subnet_ids               = ["subnet-059bc4f467275b59d", "subnet-0ebdd997cc3ebe58d"]
+  cluster_security_group_id = "sg-09bd8de0af1c3c99a"
+  
   #control_plane_subnet_ids = module.vpc.intra_subnets
 
   # Extend cluster security group rules
