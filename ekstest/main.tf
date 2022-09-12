@@ -61,6 +61,8 @@ module "eks" {
   kms_key_deletion_window_in_days = 7
   enable_kms_key_rotation         = true
 
+  create_iam_role = false
+
   iam_role_arn = "arn:aws:iam::237868187491:role/Unity-UCS-development-EKSClusterRole"
   vpc_id                   = "vpc-0106218dbddd3a753"
   subnet_ids               = ["subnet-059bc4f467275b59d", "subnet-0ebdd997cc3ebe58d"]
@@ -110,26 +112,26 @@ module "eks" {
 #  }
 
   self_managed_node_groups = {
-    spot = {
-      instance_type = "m5.large"
-      instance_market_options = {
-        market_type = "spot"
-      }
-
-      pre_bootstrap_user_data = <<-EOT
-      echo "foo"
-      export FOO=bar
-      EOT
-
-      bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
-
-      post_bootstrap_user_data = <<-EOT
-      cd /tmp
-      sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
-      sudo systemctl enable amazon-ssm-agent
-      sudo systemctl start amazon-ssm-agent
-      EOT
-    }
+#    spot = {
+#      instance_type = "m5.large"
+#      instance_market_options = {
+#        market_type = "spot"
+#      }
+#
+#      pre_bootstrap_user_data = <<-EOT
+#      echo "foo"
+#      export FOO=bar
+#      EOT
+#
+#      bootstrap_extra_args = "--kubelet-extra-args '--node-labels=node.kubernetes.io/lifecycle=spot'"
+#
+#      post_bootstrap_user_data = <<-EOT
+#      cd /tmp
+#      sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+#      sudo systemctl enable amazon-ssm-agent
+#      sudo systemctl start amazon-ssm-agent
+#      EOT
+#    }
   }
 
   # EKS Managed Node Group(s)
@@ -143,35 +145,35 @@ module "eks" {
 
   eks_managed_node_groups = {
     blue = {}
-    green = {
-      min_size     = 1
-      max_size     = 10
-      desired_size = 1
-
-      instance_types = ["t3.large"]
-      capacity_type  = "SPOT"
-      labels = {
-        Environment = "test"
-        GithubRepo  = "terraform-aws-eks"
-        GithubOrg   = "terraform-aws-modules"
-      }
-
-      taints = {
-        dedicated = {
-          key    = "dedicated"
-          value  = "gpuGroup"
-          effect = "NO_SCHEDULE"
-        }
-      }
-
-      update_config = {
-        max_unavailable_percentage = 50 # or set `max_unavailable`
-      }
-
-      tags = {
-        ExtraTag = "example"
-      }
-    }
+#    green = {
+#      min_size     = 1
+#      max_size     = 10
+#      desired_size = 1
+#
+#      instance_types = ["t3.large"]
+#      capacity_type  = "SPOT"
+#      labels = {
+#        Environment = "test"
+#        GithubRepo  = "terraform-aws-eks"
+#        GithubOrg   = "terraform-aws-modules"
+#      }
+#
+#      taints = {
+#        dedicated = {
+#          key    = "dedicated"
+#          value  = "gpuGroup"
+#          effect = "NO_SCHEDULE"
+#        }
+#      }
+#
+#      update_config = {
+#        max_unavailable_percentage = 50 # or set `max_unavailable`
+#      }
+#
+#      tags = {
+#        ExtraTag = "example"
+#      }
+#    }
   }
 
   # Fargate Profile(s)
