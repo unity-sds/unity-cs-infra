@@ -56,6 +56,7 @@ module "eks" {
   create_cloudwatch_log_group = false
   create_node_security_group = false
   create_cluster_security_group = false
+  create_cluster_primary_security_group_tags = false
   # Encryption key
   create_kms_key = false
 #  cluster_encryption_config = [{
