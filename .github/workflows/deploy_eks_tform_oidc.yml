@@ -116,6 +116,7 @@ jobs:
 
       # Launch EKS
       - name: Launch EKS cluster
+        working-directory: ekstest
         env:
           AWS_ACCESS_KEY_ID: ${{ inputs.KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ inputs.SECRET }}
