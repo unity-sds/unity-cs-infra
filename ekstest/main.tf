@@ -30,7 +30,6 @@ terraform {
 }
 
 provider "aws" {
-  profile = "jpl-unity-cs"
   region  = "us-west-2"
 
   # default_tags {
