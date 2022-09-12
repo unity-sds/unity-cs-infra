@@ -55,11 +55,11 @@ module "eks" {
 
   # Encryption key
   create_kms_key = false
-  cluster_encryption_config = [{
-    resources = ["secrets"]
-  }]
-  kms_key_deletion_window_in_days = 7
-  enable_kms_key_rotation         = true
+#  cluster_encryption_config = [{
+#    resources = ["secrets"]
+#  }]
+#  kms_key_deletion_window_in_days = 7
+#  enable_kms_key_rotation         = true
 
   create_iam_role = false
 
