@@ -54,7 +54,7 @@ module "eks" {
 
 
   # Encryption key
-  create_kms_key = true
+  create_kms_key = false
   cluster_encryption_config = [{
     resources = ["secrets"]
   }]
