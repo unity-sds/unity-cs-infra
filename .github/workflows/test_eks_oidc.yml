@@ -1,18 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 
 name: Test EKS connection via OIDC
-env:
-  EKSClusterRegion: us-west-2
-  EKSClusterVersion: 1.21
-  EKSClusterAMI: ami-01fe93a8bc6cb9bef
-  EKSKubeProxyVersion: v1.21.2-eksbuild.2
-  EKSCoreDNSVersion: v1.8.4-eksbuild.1
-  EKSSubnetConfigA: "us-west-2a: { id: subnet-00db2965967acb6b1 }"
-  EKSSubnetConfigB: "us-west-2b: { id: subnet-092597c48cfec3f04 }"
-  EKSSecurityGroup: "sg-09bd8de0af1c3c99a"
-  EKSSharedNodeSecurityGroup: "sg-09bd8de0af1c3c99a"
-  EKSServiceArn: ${{ secrets.EKSSERVICEARN }}
-  EKSInstanceRoleArn: ${{ secrets.EKSINSTANCEROLEARN }}
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -25,35 +14,6 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
-      OWNER:
-        description: 'Service Owner'
-        required: true
-        type: string
-        default: 'U-CS'
-      CLUSTERNAME:
-        description: 'EKS Cluster Name'
-        required: true
-        type: string
-      MINNODES:
-        description: 'Minimum Cluster Nodes'
-        required: true
-        type: string
-        default: '1'
-      MAXNODES:
-        description: 'Max Cluster Nodes'
-        required: true
-        type: string
-        default: '3'
-      DESIREDNODES:
-        description: 'Desired Cluster Nodes'
-        required: true
-        type: string
-        default: '1'
-      INSTANCETYPE:
-        description: 'EC2 Instance Type'
-        type: string
-        required: true
-        default: 'm5.xlarge'
 
 
 permissions:
@@ -123,9 +83,6 @@ jobs:
       - name: SCM CHeckout
         uses: actions/checkout@v2
 
-      # Determine contents of working directory
-      - name: Display contents of working directory
-        run: ls -al
 
       # Install eksctl to launch EKS
       - name: Install eksctl
