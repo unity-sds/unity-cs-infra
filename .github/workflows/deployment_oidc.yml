@@ -181,6 +181,7 @@ jobs:
           cd resources/deployable/terraform-unity
           cat terraform.tfvars > gh_actions.tfvars
           echo 'kubeconfig_filepath = "~/.kube/config"' >> gh_actions.tfvars
+          echo 'counter = 1' >> gh_actions.tfvars
           cat cicd.tfvars >> gh_actions.tfvars
           ls -al
           echo "-- TFVARS FILE --"
