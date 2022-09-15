@@ -175,13 +175,13 @@ jobs:
         run: |
           cd resources/deployable/terraform-unity
           ../../../terraform-docs tfvars hcl . >terraform.tfvars
-          ls -al 
-          cat terraform.tfvars
 
       - name: Merge tfvars files
         run: |
-          echo 'kubeconfig_filepath = "~/.kube/config"' >>cicd.tfvars
-          cat cicd.tfvars >>terraform.tfvars
+          echo 'kubeconfig_filepath = "~/.kube/config"' >> cicd.tfvars
+          cat cicd.tfvars >> terraform.tfvars
+          ls -al
+          echo "-- TFVARS FILE --"
           cat terraform.tfvars
 
       ## Init terraform
