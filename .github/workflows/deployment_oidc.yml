@@ -125,7 +125,7 @@ jobs:
       - name: Apply target-specific configurations
          # Remove dynamic networking configurations if this is MCP
         if: ${{ env.TARGET_ENV == 'mcp' }}
-        run: rm resources/deployable/terraform-unity/networking.tf
+        run: rm -rf resources/deployable/terraform-unity/networking.tf
 
       # Create tfvars file for environment-specific values
       - name: Create TFVARS file
