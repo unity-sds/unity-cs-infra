@@ -156,7 +156,11 @@ jobs:
         if: steps.terraform_directory.outputs.files_exists != 'true'
         run: exit 1
 
-      # Generate tfvars file for the deployable repository
+      ## Install Terraform docs
+      - name: Install Terraform-Docs
+        run: |
+          sudo apt-get install -y terraform-docs
+
       - name: Auto-generate tfvars file for the deployable repository
         run: |
           cd terraform-unity
