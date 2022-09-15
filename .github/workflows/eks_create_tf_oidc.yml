@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI Deployment OIDC
+name: OIDC Create EKS via TF
 
 # Controls when the workflow will run
 on:
@@ -11,8 +11,8 @@ on:
   #   branches: [ ucs-template ]
 
   # Nightly Deployments
-  schedule:
-    - cron: '0 2 * * *' # run at 2 AM UTC
+#  schedule:
+#    - cron: '0 2 * * *' # run at 2 AM UTC
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -96,47 +96,17 @@ jobs:
         run: |
           aws eks --region us-west-2 update-kubeconfig --name hackathoncluster && \
           kubectl version
-          
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: SCM CHeckout
-        uses: actions/checkout@v2
-
-      # Checks-out the repo to deploy
-      # While cloning the repository:
-      #   - it clones the repo into the given `path`
-      #   - it checks out the branch defined at `ref`
-      - name: Clone the service repository for deployment
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ env.REPO_NAME }}
-          path: resources/deployable
-          ref: ${{ env.COMMIT_HASH }}
-
-      # Copy the appropriate TF files, depending on the deployment target
-#          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
-#          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables-unity.tf
-      - name: Apply target-specific Terraform Configs
-        run: |
-          cp -f terraform-unity/main.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/main.tf
-          cp -f terraform-unity/variables.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/variables.tf
-          rm -f resources/deployable/terraform-unity/gateway.tf
-
-      # Apply special env-specific configs (mostly used for MCP limitations)
-      - name: Apply target-specific configurations
-         # Remove dynamic networking configurations if this is MCP
-        if: ${{ env.TARGET_ENV == 'mcp' }}
-        run: rm resources/deployable/terraform-unity/networking.tf
 
       # Create tfvars file for environment-specific values
       - name: Create TFVARS file
         run: |
-          rm -f resources/deployable/terraform-unity/cicd.tfvars
-          cp -f terraform-unity/TFVARS/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars resources/deployable/terraform-unity/cicd.tfvars
+          rm -f terraform-unity-eks_module/cicd.tfvars
+          cp -f terraform-unity/TFVARS/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars terraform-unity-eks_module/cicd.tfvars
           cat resources/deployable/terraform-unity/cicd.tfvars
 
       # Runs a single command using the runners shell
       - name: Display state of working directory root
-        run: ls -al resources/deployable
+        run: ls -al terraform-unity-eks_module
 
 #      - name: Setup Terraform
 #        uses: hashicorp/setup-terraform@v1
@@ -144,51 +114,39 @@ jobs:
 #          # terraform_version: 0.13.0
 #          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
-      ## Verify that the Terraform directory exists in the remote repo
-      - name: Check for Terraform Directory
-        id: terraform_directory
-        uses: andstor/file-existence-action@v1
-        with:
-          files: "./resources/deployable/terraform-unity"
-
-      - name: Terraform Directory Exists
-        if: steps.terraform_directory.outputs.files_exists != 'true'
-        run: exit 1
-
-
       ## Check Terraform formatting
       - name: Terraform Format
-        working-directory: ./resources/deployable/terraform-unity
+        working-directory: ./terraform-unity-eks_module
         id: fmt
         run: terraform fmt -check
 
       ## Init terraform
       - name: Terraform Init
-        working-directory: ./resources/deployable/terraform-unity
+        working-directory: ./terraform-unity-eks_module
         id: init
         run: terraform init
 
       ## Validate Terraform
       - name: Terraform Validate
-        working-directory: ./resources/deployable/terraform-unity
+        working-directory: ./terraform-unity-eks_module
         id: validate
         run: terraform validate -no-color
 
       ## Plan Terraform
       - name: Terraform Plan
-        working-directory: ./resources/deployable/terraform-unity
+        working-directory: ./terraform-unity-eks_module
         id: plan
         run: terraform plan -no-color -var-file="cicd.tfvars"
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
       - name: Terraform Plan Status
-        working-directory: ./resources/deployable/terraform-unity
+        working-directory: ./terraform-unity-eks_module
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
       - name: Terraform Apply
-        working-directory: ./resources/deployable/terraform-unity
+        working-directory: ./terraform-unity-eks_module
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
         run: terraform apply -auto-approve -var-file="cicd.tfvars"
 
