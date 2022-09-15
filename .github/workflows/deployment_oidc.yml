@@ -168,6 +168,8 @@ jobs:
         run: |
           cd terraform-unity
           ../terraform-docs tfvars hcl . >terraform.tfvars
+          ls -al
+          cat terraform.tfvars
 
       ## Check Terraform formatting
       - name: Terraform Format
