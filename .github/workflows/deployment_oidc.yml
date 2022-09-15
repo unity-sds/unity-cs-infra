@@ -96,9 +96,6 @@ jobs:
       - name: Temporary Connect to EKS
         run: |
           aws eks --region us-west-2 update-kubeconfig --name hackathoncluster && \
-          kubectl version
-          echo $KUBECONFIG
-          ls -al ~/.kube/
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: SCM CHeckout
@@ -178,6 +175,12 @@ jobs:
           cd resources/deployable/terraform-unity
           ../../../terraform-docs tfvars hcl . >terraform.tfvars
           ls -al 
+          cat terraform.tfvars
+
+      - name: Merge tfvars files
+        run: |
+          echo 'kubeconfig_filepath = "~/.kube/config"' >>cicd.tfvars
+          cat cicd.tfvars >>terraform.tfvars
           cat terraform.tfvars
 
       ## Init terraform
