@@ -201,7 +201,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ./resources/deployable/terraform-unity
         id: plan
-        run: terraform plan -no-color -var-file="cicd.tfvars" -var-file="terraform.tfvars"
+        run: terraform plan -no-color -var-file="terraform.tfvars"
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
