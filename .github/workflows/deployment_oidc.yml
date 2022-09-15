@@ -159,12 +159,15 @@ jobs:
       ## Install Terraform docs
       - name: Install Terraform-Docs
         run: |
-          sudo apt-get install -y terraform-docs
+          curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+        # mv terraform-docs /some-dir-in-your-PATH/terraform-docs
 
       - name: Auto-generate tfvars file for the deployable repository
         run: |
           cd terraform-unity
-          terraform-docs tfvars hcl .
+          ../terraform-docs tfvars hcl .
 
       ## Check Terraform formatting
       - name: Terraform Format
