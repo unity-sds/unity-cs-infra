@@ -88,7 +88,15 @@ jobs:
 
       - name: Get AWS Caller Identity
         run: aws sts get-caller-identity
-
+      # Install eksctl to launch EKS
+      - name: Temporary Install kubectl
+        run: |
+         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - name: Temporary Connect to EKS
+        run: |
+          aws eks --region us-west-2 update-kubeconfig --name hackathoncluster && \
+          kubectl version
+          
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: SCM CHeckout
         uses: actions/checkout@v2
