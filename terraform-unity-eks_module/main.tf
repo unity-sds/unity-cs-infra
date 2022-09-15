@@ -1,6 +1,14 @@
 provider "aws" {
   region = "us-west-2"
+  default_tags {
+    tags = {
+      ServiceArea = "UCS"
+      Project     = "Nightly"
+    }
+  }
 }
+
+
 
 data "aws_eks_cluster" "cluster" {
   name = module.eks.cluster_id
@@ -29,9 +37,9 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "12.2.0"
 
-  cluster_name    = "${local.cluster_name}"
+  cluster_name    = local.cluster_name
   cluster_version = "1.17"
-  subnet_id = aws_subnet.subnet-uno.id
+  subnet_id       = aws_subnet.subnet-uno.id
 
   vpc_id = data.aws_vpc.id
 
