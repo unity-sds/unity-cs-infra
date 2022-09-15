@@ -169,6 +169,12 @@ jobs:
         id: init
         run: terraform init
 
+      ## Init terraform
+      - name: Terraform Init Upgrade
+        working-directory: ./resources/deployable/terraform-unity
+        id: init-upgrade
+        run: terraform init -upgrade
+
       ## Validate Terraform
       - name: Terraform Validate
         working-directory: ./resources/deployable/terraform-unity
