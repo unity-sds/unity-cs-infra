@@ -119,7 +119,7 @@ jobs:
       - name: Apply target-specific Terraform Configs
         run: |
           cp -f terraform-unity/main.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/main-cs.tf
-          cp -f terraform-unity/variables.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/variables.tf
+          cp -f terraform-unity/variables.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/variables-cs.tf
           rm -f resources/deployable/terraform-unity/gateway.tf
 
       # Apply special env-specific configs (mostly used for MCP limitations)
