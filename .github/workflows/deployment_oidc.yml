@@ -166,10 +166,10 @@ jobs:
 
       - name: Auto-generate tfvars file for the deployable repository
         run: |
-          cd terraform-unity
-          ../terraform-docs tfvars hcl . >../resources/deployable/terraform-unity/terraform.tfvars
-          ls -al ../resources/deployable/terraform-unity/
-          cat ../resources/deployable/terraform-unity/terraform.tfvars
+          cd resources/deployable/terraform-unity
+          ../../../terraform-docs tfvars hcl . >terraform.tfvars
+          ls -al 
+          cat terraform.tfvars
 
       ## Check Terraform formatting
       - name: Terraform Format
