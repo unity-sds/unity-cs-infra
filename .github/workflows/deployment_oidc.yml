@@ -178,11 +178,12 @@ jobs:
 
       - name: Merge tfvars files
         run: |
-          echo 'kubeconfig_filepath = "~/.kube/config"' >> cicd.tfvars
-          cat cicd.tfvars >> terraform.tfvars
+          cat terraform.tfvars > gh_actions.tfvars
+          echo 'kubeconfig_filepath = "~/.kube/config"' >> gh_actions.tfvars
+          cat cicd.tfvars >> gh_actions.tfvars
           ls -al
           echo "-- TFVARS FILE --"
-          cat terraform.tfvars
+          cat gh_actions.tfvars
 
       ## Init terraform
       - name: Terraform Init
