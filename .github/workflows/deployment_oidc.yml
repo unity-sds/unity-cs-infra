@@ -156,6 +156,13 @@ jobs:
         if: steps.terraform_directory.outputs.files_exists != 'true'
         run: exit 1
 
+      ## Check Terraform formatting
+      - name: Terraform Format
+        working-directory: ./resources/deployable/terraform-unity
+        id: fmt
+        run: terraform fmt -check
+
+
       ## Install Terraform docs
       - name: Install Terraform-Docs
         run: |
@@ -170,12 +177,6 @@ jobs:
           ../../../terraform-docs tfvars hcl . >terraform.tfvars
           ls -al 
           cat terraform.tfvars
-
-      ## Check Terraform formatting
-#      - name: Terraform Format
-#        working-directory: ./resources/deployable/terraform-unity
-#        id: fmt
-#        run: terraform fmt -check
 
       ## Init terraform
       - name: Terraform Init
