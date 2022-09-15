@@ -37,12 +37,13 @@ on:
         description: 'Repository Source'
         required: true 
         type: string
-        default: 'unity-sds/unity-cs-sps-demo'
+        default: 'unity-sds/unity-sps-demo'
       sourceBranch:
         description: 'Repository Branch'
         required: true 
         type: string
-        default: 'smolenski_tf_test_mcp'
+        default: 'main'
+#        default: 'smolenski_tf_test_mcp'
 
 
 permissions:
