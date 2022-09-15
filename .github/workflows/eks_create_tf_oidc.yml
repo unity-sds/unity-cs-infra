@@ -100,6 +100,7 @@ jobs:
       # Create tfvars file for environment-specific values
       - name: Create TFVARS file
         run: |
+          ls -al
           rm -f terraform-unity-eks_module/cicd.tfvars
           cp -f terraform-unity/TFVARS/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars terraform-unity-eks_module/cicd.tfvars
           cat resources/deployable/terraform-unity/cicd.tfvars
