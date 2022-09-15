@@ -216,7 +216,7 @@ jobs:
       - name: Terraform Apply
         working-directory: ./resources/deployable/terraform-unity
 #        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
-        run: terraform apply -auto-approve -var-file="cicd.tfvars"
+        run: terraform apply -auto-approve -var-file="gh_actions.tfvars"
 
 
       ## Verify that the smoke test exists
