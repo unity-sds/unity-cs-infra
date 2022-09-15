@@ -185,7 +185,9 @@ jobs:
       - name: Terraform Validate
         working-directory: ./resources/deployable/terraform-unity
         id: validate
-        run: terraform validate -no-color
+        run: |
+          ls -al
+          terraform validate -no-color
 
       ## Plan Terraform
       - name: Terraform Plan
