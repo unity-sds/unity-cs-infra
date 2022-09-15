@@ -100,7 +100,7 @@ jobs:
           ls -al
           rm -f terraform-unity-eks_module/cicd.tfvars
           cp -f terraform-unity/TFVARS/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars terraform-unity-eks_module/cicd.tfvars
-          cat resources/deployable/terraform-unity/cicd.tfvars
+          cat terraform-unity-eks_module/cicd.tfvars
 
       # Runs a single command using the runners shell
       - name: Display state of working directory root
