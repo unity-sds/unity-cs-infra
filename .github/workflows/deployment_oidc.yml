@@ -156,6 +156,11 @@ jobs:
         if: steps.terraform_directory.outputs.files_exists != 'true'
         run: exit 1
 
+      # Generate tfvars file for the deployable repository
+      - name: Auto-generate tfvars file for the deployable repository
+        run: |
+          cd terraform-unity
+          terraform-docs tfvars hcl .
 
       ## Check Terraform formatting
       - name: Terraform Format
@@ -169,12 +174,6 @@ jobs:
         id: init
         run: terraform init
 
-      ## Init terraform
-      - name: Terraform Init Upgrade
-        working-directory: ./resources/deployable/terraform-unity
-        id: init-upgrade
-        run: terraform init -upgrade
-
       ## Validate Terraform
       - name: Terraform Validate
         working-directory: ./resources/deployable/terraform-unity
@@ -185,7 +184,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ./resources/deployable/terraform-unity
         id: plan
-        run: terraform plan -no-color -var-file="cicd.tfvars"
+        run: terraform plan -no-color -var-file="cicd.tfvars" -var-file="terraform.tfvars"
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
