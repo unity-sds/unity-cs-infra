@@ -97,7 +97,9 @@ jobs:
         run: |
           aws eks --region us-west-2 update-kubeconfig --name hackathoncluster && \
           kubectl version
-          
+          echo $KUBECONFIG
+          ls -al ~/.kube/
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: SCM CHeckout
         uses: actions/checkout@v2
