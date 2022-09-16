@@ -182,7 +182,7 @@ jobs:
           cat terraform.tfvars |grep -v '""' > gh_actions.tfvars
           echo 'kubeconfig_filepath = "~/.kube/config"' >> gh_actions.tfvars
           echo 'counter = 1' >> gh_actions.tfvars
-          echo 'namespace = "ucs-nightly-namespace"' >> gh_actions.tfvars
+          echo 'namespace = "hackathoncluster"' >> gh_actions.tfvars
           cat cicd.tfvars |grep -v '""' >> gh_actions.tfvars
           ls -al
           echo "-- TFVARS FILE --"
