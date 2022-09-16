@@ -187,6 +187,9 @@ jobs:
           ls -al
           echo "-- TFVARS FILE --"
           cat gh_actions.tfvars
+          echo "-- KUBECONFIG FILE --"
+          cat ~/.kube/config
+          echo "-- END --"
 
       ## Init terraform
       - name: Terraform Init
