@@ -179,10 +179,10 @@ jobs:
       - name: Merge tfvars files
         run: |
           cd resources/deployable/terraform-unity
-          cat terraform.tfvars > gh_actions.tfvars
+          cat terraform.tfvars |grep -v '""' > gh_actions.tfvars
           echo 'kubeconfig_filepath = "~/.kube/config"' >> gh_actions.tfvars
           echo 'counter = 1' >> gh_actions.tfvars
-          cat cicd.tfvars >> gh_actions.tfvars
+          cat cicd.tfvars |grep -v '""' >> gh_actions.tfvars
           ls -al
           echo "-- TFVARS FILE --"
           cat gh_actions.tfvars
