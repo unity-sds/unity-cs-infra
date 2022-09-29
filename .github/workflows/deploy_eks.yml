@@ -45,6 +45,10 @@ on:
         required: true
         type: string
         default: 'U-CS'
+      PROJECTNAME:
+        description: 'Name of the project'
+        required: true
+        type: string
       CLUSTERNAME:
         description: 'EKS Cluster Name'
         required: true
@@ -100,7 +104,7 @@ jobs:
       # Render template
       - name: Render Template
         run: |
-          unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --minnodes ${{ INPUTS.MINNODES }} --maxnodes ${{ INPUTS.MAXNODES }} --desirednodes ${{ INPUTS.DESIREDNODES }} --instancetype ${{ INPUTS.INSTANCETYPE }} > build/eksctl/eksctl-config.yaml
+          unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --minnodes ${{ INPUTS.MINNODES }} --maxnodes ${{ INPUTS.MAXNODES }} --desirednodes ${{ INPUTS.DESIREDNODES }} --instancetype ${{ INPUTS.INSTANCETYPE }} --projectname ${{ INPUTS.PROJECTNAME }} --servicename ${{ INPUTS.OWNER }} > build/eksctl/eksctl-config.yaml
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
