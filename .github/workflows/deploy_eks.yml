@@ -98,7 +98,7 @@ jobs:
 
       - name: Install Unity Transformer
         run: |
-          curl --silent --location https://github.com/unity-sds/unity-cs-terraform-transformer/releases/download/0.1.9-Alpha/unity-cs-terraform-transformer-0.1.9-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
+          curl --silent --location https://github.com/unity-sds/unity-cs-terraform-transformer/releases/download/0.1.10-Alpha/unity-cs-terraform-transformer-0.1.10-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
           sudo mv /tmp/unity-cs-terraform-transformer /usr/local/bin
 
       # Render template
