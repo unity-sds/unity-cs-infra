@@ -1,0 +1,50 @@
+name: deployment-destroy-api-gateway-and-cognito
+on:
+  workflow_dispatch:
+    branches: [ main ]
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      ## Check Terraform formatting
+      - name: Terraform Format
+        working-directory: ./terraform-api-gateway-cognito
+        id: fmt
+        run: terraform fmt -check
+
+      ## Init Terraform
+      - name: Terraform Init
+        working-directory: ./terraform-api-gateway-cognito
+        id: init
+        run: terraform init
+
+      ## Validate Terraform
+      - name: Terraform Validate
+        working-directory: ./terraform-api-gateway-cognito
+        id: validate
+        run: terraform validate -no-color
+
+      ## Plan Terraform
+      - name: Terraform Plan
+        working-directory: ./terraform-api-gateway-cognito
+        id: plan
+        run: terraform plan -no-color
+        continue-on-error: true
+
+      ## Fail the job if terraform plan doesn't succeed
+      - name: Terraform Plan Status
+        working-directory: ./terraform-api-gateway-cognito
+        id: plan_status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      ## Destroy Terraform
+      - name: Terraform Destroy
+        working-directory: ./terraform-api-gateway-cognito
+        id: destroy
+        run: terraform destroy -auto-approve
