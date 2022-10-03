@@ -147,5 +147,5 @@ jobs:
       # Launch EKS
       - name: Launch EKS cluster
         run: | 
-          eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          eksctl create cluster --force -f build/eksctl/eksctl-config.yaml
           #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
