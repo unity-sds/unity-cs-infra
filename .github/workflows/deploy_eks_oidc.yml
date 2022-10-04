@@ -142,7 +142,7 @@ jobs:
       # Render template
       - name: Render Template
         run: |
-          unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --managenodegroups dafaultgroup,${{ INPUTS.MINNODES }},${{ INPUTS.MAXNODES }},${{ INPUTS.DESIREDNODES }},m5.xlarge --instancetype ${{ INPUTS.INSTANCETYPE }} --projectname ${{ INPUTS.CLUSTERNAME }} --servicename ${{ INPUTS.OWNER }} > build/eksctl/eksctl-config.yaml
+          unity-cs-manager eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --managenodegroups dafaultgroup,${{ INPUTS.MINNODES }},${{ INPUTS.MAXNODES }},${{ INPUTS.DESIREDNODES }},m5.xlarge --instancetype ${{ INPUTS.INSTANCETYPE }} --projectname ${{ INPUTS.CLUSTERNAME }} --servicename ${{ INPUTS.OWNER }} > build/eksctl/eksctl-config.yaml
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
