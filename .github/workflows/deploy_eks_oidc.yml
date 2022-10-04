@@ -136,13 +136,13 @@ jobs:
 
       - name: Install Unity Transformer
         run: |
-          curl --silent --location https://github.com/unity-sds/unity-cs-terraform-transformer/releases/download/0.1.9-Alpha/unity-cs-terraform-transformer-0.1.9-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
-          sudo mv /tmp/unity-cs-terraform-transformer /usr/local/bin
+          curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.13-Alpha/unity-cs-manager-0.1.13-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
+          sudo mv /tmp/unity-cs-manager /usr/local/bin
 
       # Render template
       - name: Render Template
         run: |
-          unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --minnodes ${{ INPUTS.MINNODES }} --maxnodes ${{ INPUTS.MAXNODES }} --desirednodes ${{ INPUTS.DESIREDNODES }} --instancetype ${{ INPUTS.INSTANCETYPE }} > build/eksctl/eksctl-config.yaml
+          unity-cs-manager eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --minnodes ${{ INPUTS.MINNODES }} --maxnodes ${{ INPUTS.MAXNODES }} --desirednodes ${{ INPUTS.DESIREDNODES }} --instancetype ${{ INPUTS.INSTANCETYPE }} > build/eksctl/eksctl-config.yaml
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
