@@ -10,6 +10,12 @@ variable "rest_api_description" {
   default     = "Primary Unity REST API Gateway - Do Not Update Manually - Terraform Created - Contact Unity CS Team"
 }
 
+variable "rest_api_stage" {
+  type        = string
+  description = "REST API Stage"
+  default     = "test"
+}
+
 # -----------------------------------------------------------------
 # SSM Params
 # -----------------------------------------------------------------

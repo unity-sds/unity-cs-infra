@@ -41,7 +41,7 @@ data "template_file" "api_template" {
 
 resource "aws_api_gateway_deployment" "api-gateway-deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  stage_name  = "test"
+  stage_name  = var.rest_api_stage
 
   variables = {
     adesWpstUrl      = "-",
