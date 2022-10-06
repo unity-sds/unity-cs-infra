@@ -1,7 +1,13 @@
 variable "rest_api_name" {
   type        = string
   description = "REST API Name"
-  default     = "Unity CS Experimental REST API Gateway"
+  default     = "Unity REST API Gateway - Do Not Update Manually"
+}
+
+variable "rest_api_description" {
+  type        = string
+  description = "REST API Description"
+  default     = "Primary Unity REST API Gateway - Do Not Update Manually - Terraform Created - Contact Unity CS Team"
 }
 
 # -----------------------------------------------------------------
