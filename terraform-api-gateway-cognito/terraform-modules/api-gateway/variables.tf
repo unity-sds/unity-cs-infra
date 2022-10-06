@@ -13,7 +13,7 @@ variable "rest_api_description" {
 variable "rest_api_stage" {
   type        = string
   description = "REST API Stage"
-  default     = "test"
+  default     = "dev"
 }
 
 # -----------------------------------------------------------------
