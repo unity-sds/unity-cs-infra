@@ -22,9 +22,7 @@ jobs:
         - name: test
           id: test
           run: echo ::set-output name=runeks::true
-
-
-    deploy-eks:
-      if: steps.test.outputs.runeks == 'true'
-      uses: ./.github/workflows/deploy_eks_callable.yml
-      secrets: inherit
+        - name: eks
+          if: steps.test.outputs.runeks == 'true'
+          uses: ./.github/workflows/deploy_eks_callable.yml
+          secrets: inherit
