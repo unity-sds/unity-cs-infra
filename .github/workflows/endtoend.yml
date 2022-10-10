@@ -19,3 +19,12 @@ jobs:
       steps:
         # Set up current working directory with the repo contents
         - uses: actions/checkout@v2
+        - name: test
+          id: test
+          run: echo ::set-output name=runeks::true
+
+
+    deploy-eks:
+      if: steps.test.outputs.runeks == 'true'
+      uses: ./.github/workflows/deploy_eks_callable.yml
+      secrets: inherit
