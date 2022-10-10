@@ -21,7 +21,7 @@ jobs:
         - uses: actions/checkout@v2
         - name: test
           id: test
-          run: echo ::set-output name=runeks::true
+          run: echo ::set-output name=runeks::false
         - name: eks
           if: steps.test.outputs.runeks == 'true'
           uses: ./.github/workflows/deploy_eks_callable.yml
