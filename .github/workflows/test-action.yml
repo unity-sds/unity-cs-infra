@@ -1,0 +1,58 @@
+on:
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      KEY:
+        description: 'Access Key ID'
+        required: true
+        type: string
+        default: ''
+      SECRET:
+        description: 'Access Secret Key ID'
+        required: true
+        type: string
+        default: ''
+      TOKEN:
+        description: 'AWS Session Token'
+        required: true
+        type: string
+        default: ''
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Hello world action step
+        uses: ./ # Uses an action in the root directory
+        id: hello
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ucsmetadata: '{
+  "metadataVersion": "unity-cs-0.1",
+  "deploymentName": "some name for the deployment of services",
+  "services": [
+    {
+        "name": "xxx",
+        "source": "git repo",
+        "version": "xxx",
+        "branch": "xxx"
+    }
+  ],
+  "extensions": {
+    "kubernetes": {
+      "nodegroups": {
+        "group1": {
+          "instancetype": "xxx",
+          "nodecount": "xxx"
+        }
+      }
+    }
+  }
+}'
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.eksmeta }}"
