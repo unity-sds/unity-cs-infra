@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Hello world action step
-        uses: ./ # Uses an action in the root directory
+        uses: unity-sds/unity-cs-action@2cd6c95501c57c799e152dc3213d8087d0b60fa1
         id: hello
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
