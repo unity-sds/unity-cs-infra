@@ -72,6 +72,11 @@ on:
         default: 'm5.xlarge'
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}
   # This workflow contains a single job called "deployment"
   deployment:
     # The type of runner that the job will run on
