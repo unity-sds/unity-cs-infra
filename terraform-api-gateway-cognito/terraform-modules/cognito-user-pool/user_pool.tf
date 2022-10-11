@@ -1,5 +1,13 @@
 resource "aws_cognito_user_pool" "pool" {
   name = "unity-experimental-user-pool"
+
+  admin_create_user_config {
+    invite_message_template {
+      email_subject = "Your temporary password for Unity Test"
+      email_message = "Your username is {username} and temporary password is {####}"
+      sms_message = "Your username is {username} and temporary password is {####}"
+    }
+  }
 }
 
 # Configurations for unity-uds-distribution Cognito app client
