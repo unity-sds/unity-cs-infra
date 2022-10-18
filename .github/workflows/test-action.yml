@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Hello world action step
-        uses: unity-sds/unity-cs-action@4643386ffc1475acecb62539557ab66f3073ee2f
+        uses: unity-sds/unity-cs-action@968105cf45d4b32a22fa623c7ede66d9e4b96358
         id: hello
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

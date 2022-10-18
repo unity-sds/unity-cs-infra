@@ -1,7 +1,7 @@
 openapi: "3.0.1"
 info:
-  title: "unity-rest-api-gateway"
-  description: "Unity CS Experimental REST API Gateway"
+  title: "unity-rest-api-gateway-terraform"
+  description: "Primary Unity REST API Gateway - Do Not Update Manually - Terraform Created - Contact Unity CS Team"
   version: "2022-05-04T20:23:33Z"
 paths:
   /mozart:

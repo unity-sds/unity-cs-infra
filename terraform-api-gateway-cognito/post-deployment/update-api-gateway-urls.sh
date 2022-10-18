@@ -2,9 +2,12 @@
 
 AWS_DEFAULT_REGION='us-west-2'
 NAMESPACE='unity-sps'
-COUNTER=3
+COUNTER=1
 STAGE='dev'
-REST_API_ID='<ADD REST API ID>'
+
+REST_API_ID=$(aws ssm get-parameter --name "/unity/dev/${NAMESPACE}-${COUNTER}/api-gateway/rest-api-id" --query Parameter.Value --region "${AWS_DEFAULT_REGION}")
+temp="${REST_API_ID%\"}"
+REST_API_ID="${temp#\"}"
 
 ADES_WPST_URL=$(aws ssm get-parameter --name "/unity/dev/${NAMESPACE}-${COUNTER}/api-gateway/stage-variables/ades-wpst-url" --query Parameter.Value --region "${AWS_DEFAULT_REGION}")
 GRQ_ES_URL=$(aws ssm get-parameter --name "/unity/dev/${NAMESPACE}-${COUNTER}/api-gateway/stage-variables/grq-es-url" --query Parameter.Value --region "${AWS_DEFAULT_REGION}")
