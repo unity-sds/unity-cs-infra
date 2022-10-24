@@ -19,12 +19,20 @@ data "aws_ssm_parameter" "api_gateway_integration_uads_dockstore_link_2_vpc_link
   name = var.ssm_param_api_gateway_integration_uads_dockstore_link_2_vpc_link_id
 }
 
-data "aws_ssm_parameter" "api_gateway_integration_uds_dev_cumulus_cumulus_granules_dapa_function_uri" {
-  name = var.ssm_param_api_gateway_integration_uds_dev_cumulus_cumulus_granules_dapa_function_uri
+data "aws_ssm_parameter" "api_gateway_integration_uds_granules_dapa_function_uri" {
+  name = var.ssm_param_api_gateway_integration_uds_granules_dapa_function_uri
 }
 
-data "aws_ssm_parameter" "api_gateway_integration_uds_dev_cumulus_cumulus_collections_dapa_function_uri" {
-  name = var.ssm_param_api_gateway_integration_uds_dev_cumulus_cumulus_collections_dapa_function_uri
+data "aws_ssm_parameter" "api_gateway_integration_uds_collections_dapa_function_uri" {
+  name = var.ssm_param_api_gateway_integration_uds_collections_dapa_function_uri
+}
+
+data "aws_ssm_parameter" "api_gateway_integration_uds_collections_ingest_dapa_function_uri" {
+  name = var.ssm_param_api_gateway_integration_uds_collections_ingest_dapa_function_uri
+}
+
+data "aws_ssm_parameter" "api_gateway_integration_uds_collections_create_dapa_function_uri" {
+  name = var.ssm_param_api_gateway_integration_uds_collections_create_dapa_function_uri
 }
 
 data "template_file" "api_template" {
@@ -34,8 +42,10 @@ data "template_file" "api_template" {
     csLambdaAuthorizerUri = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_uri.value
     uadsDockstoreNlbUri = data.aws_ssm_parameter.api_gateway_integration_uads_dockstore_nlb_uri.value
     uadsDockstoreLink2VpcLinkId = data.aws_ssm_parameter.api_gateway_integration_uads_dockstore_link_2_vpc_link_id.value
-    udsDevCumulusCumulusGranulesDapaFunctionUri = data.aws_ssm_parameter.api_gateway_integration_uds_dev_cumulus_cumulus_granules_dapa_function_uri.value
-    udsDevCumulusCumulusCumulusCollectionsDapaFunctionUri = data.aws_ssm_parameter.api_gateway_integration_uds_dev_cumulus_cumulus_collections_dapa_function_uri.value
+    udsGranulesDapaFunctionUri = data.aws_ssm_parameter.api_gateway_integration_uds_granules_dapa_function_uri.value
+    udsCollectionsDapaFunctionUri = data.aws_ssm_parameter.api_gateway_integration_uds_collections_dapa_function_uri.value
+    udsCollectionsIngestDapaFunctionUri = data.aws_ssm_parameter.api_gateway_integration_uds_collections_ingest_dapa_function_uri.value
+    udsCollectionsCreateDapaFunctionUri = data.aws_ssm_parameter.api_gateway_integration_uds_collections_create_dapa_function_uri.value
   }
 }
 
