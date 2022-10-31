@@ -38,14 +38,26 @@ variable "ssm_param_api_gateway_integration_uads_dockstore_link_2_vpc_link_id" {
   default     = "/unity/dev/unity-sps-1/api-gateway/integrations/uads-dev-dockstore-link-2-vpc-link-id"
 }
 
-variable "ssm_param_api_gateway_integration_uds_dev_cumulus_cumulus_granules_dapa_function_uri" {
+variable "ssm_param_api_gateway_integration_uds_granules_dapa_function_name" {
   type        = string
-  description = "SSM Param for UDS Dev Cumulus Cumulus Granules DAPA Function URI"
-  default     = "/unity/dev/unity-sps-1/api-gateway/integrations/uds-dev-cumulus-cumulus_granules_dapa-function-uri"
+  description = "SSM Param for UDS Granules DAPA Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/granules-dapa-function-name"
 }
 
-variable "ssm_param_api_gateway_integration_uds_dev_cumulus_cumulus_collections_dapa_function_uri" {
+variable "ssm_param_api_gateway_integration_uds_collections_dapa_function_name" {
   type        = string
-  description = "SSM Param for UDS Dev Cumulus Cumulus Collections DAPA Function URI"
-  default     = "/unity/dev/unity-sps-1/api-gateway/integrations/uds-dev-cumulus-cumulus_collections_dapa-function-uri"
+  description = "SSM Param for UDS Collections DAPA Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/collections-dapa-function-name"
+}
+
+variable "ssm_param_api_gateway_integration_uds_collections_ingest_dapa_function_name" {
+  type        = string
+  description = "SSM Param for UDS Collections Ingestion DAPA Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/collections-ingest-dapa-function-name"
+}
+
+variable "ssm_param_api_gateway_integration_uds_collections_create_dapa_function_name" {
+  type        = string
+  description = "SSM Param for UDS Collections Creation DAPA Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/collections-create-dapa-function-name"
 }
