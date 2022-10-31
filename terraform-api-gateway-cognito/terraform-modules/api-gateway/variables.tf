@@ -40,24 +40,24 @@ variable "ssm_param_api_gateway_integration_uads_dockstore_link_2_vpc_link_id" {
 
 variable "ssm_param_api_gateway_integration_uds_granules_dapa_function_name" {
   type        = string
-  description = "SSM Param for UDS Granules DAPA Function URI"
+  description = "SSM Param for UDS Granules DAPA Function Name"
   default     = "/unity/unity-ds/api-gateway/integrations/granules-dapa-function-name"
 }
 
 variable "ssm_param_api_gateway_integration_uds_collections_dapa_function_name" {
   type        = string
-  description = "SSM Param for UDS Collections DAPA Function URI"
+  description = "SSM Param for UDS Collections DAPA Function Name"
   default     = "/unity/unity-ds/api-gateway/integrations/collections-dapa-function-name"
 }
 
 variable "ssm_param_api_gateway_integration_uds_collections_ingest_dapa_function_name" {
   type        = string
-  description = "SSM Param for UDS Collections Ingestion DAPA Function URI"
+  description = "SSM Param for UDS Collections Ingestion DAPA Function Name"
   default     = "/unity/unity-ds/api-gateway/integrations/collections-ingest-dapa-function-name"
 }
 
 variable "ssm_param_api_gateway_integration_uds_collections_create_dapa_function_name" {
   type        = string
-  description = "SSM Param for UDS Collections Creation DAPA Function URI"
+  description = "SSM Param for UDS Collections Creation DAPA Function Name"
   default     = "/unity/unity-ds/api-gateway/integrations/collections-create-dapa-function-name"
 }
