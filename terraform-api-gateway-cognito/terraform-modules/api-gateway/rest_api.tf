@@ -14,6 +14,10 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_uri" {
   name = var.ssm_param_api_gateway_function_cs_lambda_authorizer_uri
 }
 
+data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_invoke_role_arn" {
+  name = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
+}
+
 data "aws_ssm_parameter" "api_gateway_integration_uads_dockstore_nlb_uri" {
   name = var.ssm_param_api_gateway_integration_uads_dockstore_nlb_uri
 }
@@ -43,6 +47,7 @@ data "template_file" "api_template" {
 
   vars = {
     csLambdaAuthorizerUri = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_uri.value
+    csLambdaAuthorizerInvokeRole = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_invoke_role_arn.value
     uadsDockstoreNlbUri = data.aws_ssm_parameter.api_gateway_integration_uads_dockstore_nlb_uri.value
     uadsDockstoreLink2VpcLinkId = data.aws_ssm_parameter.api_gateway_integration_uads_dockstore_link_2_vpc_link_id.value
     udsGranulesDapaFunctionUri = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${data.aws_ssm_parameter.api_gateway_integration_uds_granules_dapa_function_name.value}/invocations"

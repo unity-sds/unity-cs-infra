@@ -26,6 +26,12 @@ variable "ssm_param_api_gateway_function_cs_lambda_authorizer_uri" {
   default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-uri"
 }
 
+variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
+  type        = string
+  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
+  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-invoke-role-arn"
+}
+
 variable "ssm_param_api_gateway_integration_uads_dockstore_nlb_uri" {
   type        = string
   description = "SSM Param for UADS Dockstore NLB URI"

@@ -22,6 +22,7 @@ as a result of a previous deployment (E.g.: A lambda function deployment) or can
 
 ```shell
 /unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-uri
+/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-invoke-role-arn
 /unity/dev/unity-sps-1/api-gateway/integrations/uads-dockstore-nlb-uri
 /unity/dev/unity-sps-1/api-gateway/integrations/uads-dev-dockstore-link-2-vpc-link-id
 /unity/dev/unity-sps-1/api-gateway/integrations/uds-dev-cumulus-cumulus_granules_dapa-function-uri
@@ -49,6 +50,11 @@ In this example, the account number is purposefully set to 1234567890 and also a
 
 aws ssm put-parameter --name "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-uri" \
     --value "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:1234567890:function:cs-lambda-authorizer/invocations" \
+    --type String
+
+# ARN of the execution role of cs-lambda-authorizer lambda function (check this under the permissions of cs-lambda-authorizer in AWS Console) 
+aws ssm put-parameter --name "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-invoke-role-arn" \
+    --value "arn:aws:iam::1234567890:role/Unity-UCS-APIGW-AssumeRole" \
     --type String
     
 aws ssm put-parameter --name "/unity/dev/unity-sps-1/api-gateway/integrations/uads-dockstore-nlb-uri" \
