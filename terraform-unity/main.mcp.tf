@@ -29,7 +29,7 @@ terraform {
 
   backend "s3" {
     bucket = "unity-cs-tf-state-dev"
-    key    = "tf/state/dev/sps"
+    key    = "tf/state/${var.deployment_project}/${var.deployment_target}/${var.deployment_owner}/${var.deployment_stage}/sps"
     region = "us-west-2"
   }
 }
