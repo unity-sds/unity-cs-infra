@@ -109,19 +109,24 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
+#          role-to-assume: ${{ secrets.OIDC_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Get AWS Caller Identity
         run: aws sts get-caller-identity
 
+      - name: Temporary Install kubectl
+        run: |
+         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - name: Temporary Connect to EKS
+        run: |
+          aws eks --region us-west-2 update-kubeconfig --name ${{ env.TARGET_CLUSTER }} && \
+          kubectl version
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: SCM CHeckout
         uses: actions/checkout@v2
 
-      # Checks-out the repo to deploy
-      # While cloning the repository:
-      #   - it clones the repo into the given `path`
-      #   - it checks out the branch defined at `ref`
       - name: Clone the service repository for deployment
         uses: actions/checkout@v2
         with:
@@ -129,22 +134,16 @@ jobs:
           path: resources/deployable
           ref: ${{ env.COMMIT_HASH }}
 
-      # Copy the appropriate TF files, depending on the deployment target
-#          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main.tf
-#          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables-unity.tf
       - name: Apply target-specific Terraform Configs
         run: |
-          cp -f terraform-unity/main.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/main.tf
-          cp -f terraform-unity/variables.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/variables.tf
+          cp -f terraform-unity/main.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/main-cs.tf
+          cp -f terraform-unity/variables.${{ env.TARGET_ENV }}.tf resources/deployable/terraform-unity/variables-cs.tf
           rm -f resources/deployable/terraform-unity/gateway.tf
 
-      # Apply special env-specific configs (mostly used for MCP limitations)
       - name: Apply target-specific configurations
-         # Remove dynamic networking configurations if this is MCP
         if: ${{ env.TARGET_ENV == 'mcp' }}
-        run: rm resources/deployable/terraform-unity/networking.tf
+        run: rm -rf resources/deployable/terraform-unity/networking.tf
 
-      # Create tfvars file for environment-specific values
       - name: Create TFVARS file
         run: |
           rm -f resources/deployable/terraform-unity/cicd.tfvars
@@ -154,12 +153,6 @@ jobs:
       # Runs a single command using the runners shell
       - name: Display state of working directory root
         run: ls -al resources/deployable
-
-#      - name: Setup Terraform
-#        uses: hashicorp/setup-terraform@v1
-#        with:
-#          # terraform_version: 0.13.0
-#          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
       ## Verify that the Terraform directory exists in the remote repo
       - name: Check for Terraform Directory
@@ -172,12 +165,38 @@ jobs:
         if: steps.terraform_directory.outputs.files_exists != 'true'
         run: exit 1
 
-
       ## Check Terraform formatting
       - name: Terraform Format
         working-directory: ./resources/deployable/terraform-unity
         id: fmt
         run: terraform fmt -check
+
+      ## Install Terraform docs
+      - name: Install Terraform-Docs
+        run: |
+          curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+
+      - name: Auto-generate tfvars file for the deployable repository
+        run: |
+          cd resources/deployable/terraform-unity
+          ../../../terraform-docs tfvars hcl . >terraform.tfvars
+
+      - name: Merge tfvars files
+        run: |
+          cd resources/deployable/terraform-unity
+          cat terraform.tfvars |grep -v '""' > gh_actions.tfvars
+          echo 'kubeconfig_filepath = "~/.kube/config"' >> gh_actions.tfvars
+          echo 'counter = 1' >> gh_actions.tfvars
+          echo 'namespace = "${{ env.TARGET_CLUSTER }}"' >> gh_actions.tfvars
+          cat cicd.tfvars |grep -v '""' >> gh_actions.tfvars
+          ls -al
+          echo "-- TFVARS FILE --"
+          cat gh_actions.tfvars
+          echo "-- KUBECONFIG FILE --"
+          cat ~/.kube/config
+          echo "-- END --"
 
       ## Init terraform
       - name: Terraform Init
@@ -189,10 +208,10 @@ jobs:
       - name: Terraform Validate
         working-directory: ./resources/deployable/terraform-unity
         id: validate
-        run: terraform validate -no-color
-
+        run: |
+          ls -al
+          terraform validate -no-color
 
       - name: Terraform Destroy
         working-directory: ./resources/deployable/terraform-unity
-#        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
         run: terraform destroy -auto-approve -var-file="cicd.tfvars"
