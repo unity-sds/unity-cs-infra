@@ -57,6 +57,11 @@ on:
         required: true 
         type: string
         default: 'main'
+      eksClusterName:
+        description: 'EKS Cluster Name'
+        required: true 
+        type: string
+        default: 'testtommon6'
 #        default: 'smolenski_tf_test_mcp'
 
 
@@ -82,6 +87,7 @@ jobs:
           DEFAULT_STAGE: 'DEV'
           DEFAULT_PROJECT: 'UNITY'
           DEFAULT_OWNER: 'nightly'
+          DEFAULT_EKSCLUSTERNAME: 'testtommon6'
         run: |
           echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
           echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
@@ -89,6 +95,7 @@ jobs:
           echo "COMMIT_HASH=${{ github.event.inputs.sourceBranch || env.DEFAULT_COMMIT }}" >> $GITHUB_ENV
           echo "TARGET_PROJECT=${{ github.event.inputs.deploymentProject || env.DEFAULT_PROJECT }}" >> $GITHUB_ENV
           echo "TARGET_OWNER=${{ github.event.inputs.deploymentOwner || env.DEFAULT_OWNER }}" >> $GITHUB_ENV
+          echo "TARGET_CLUSTER=${{ github.event.inputs.eksClusterName || env.DEFAULT_EKSCLUSTERNAME }}" >> $GITHUB_ENV
 
 
       - name: Display deployment configuration
@@ -97,6 +104,7 @@ jobs:
           echo "Target STAGE ${{ env.TARGET_STAGE }}"
           echo "Target PROJECT ${{ env.TARGET_PROJECT }}"
           echo "Target OWNER ${{ env.TARGET_OWNER }}"
+          echo "Target EKS Cluster ${{ env.TARGET_CLUSTER }}"
           echo "Repo Name ${{ env.REPO_NAME }}"
           echo "Commit Hash ${{ env.COMMIT_HASH }}"
 
@@ -115,7 +123,7 @@ jobs:
          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
       - name: Temporary Connect to EKS
         run: |
-          aws eks --region us-west-2 update-kubeconfig --name hackathoncluster && \
+          aws eks --region us-west-2 update-kubeconfig --name ${{ env.TARGET_CLUSTER }} && \
           kubectl version
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -202,7 +210,7 @@ jobs:
           cat terraform.tfvars |grep -v '""' > gh_actions.tfvars
           echo 'kubeconfig_filepath = "~/.kube/config"' >> gh_actions.tfvars
           echo 'counter = 1' >> gh_actions.tfvars
-          echo 'namespace = "hackathoncluster"' >> gh_actions.tfvars
+          echo 'namespace = "${{ env.TARGET_CLUSTER }}"' >> gh_actions.tfvars
           echo 'deployment_project = "${{ env.TARGET_PROJECT }}"' >> gh_actions.tfvars
           echo 'deployment_target = "${{ env.TARGET_ENV }}"' >> gh_actions.tfvars
           echo 'deployment_owner = "${{ env.TARGET_OWNER }}"' >> gh_actions.tfvars
