@@ -214,10 +214,6 @@ jobs:
           echo 'kubeconfig_filepath = "~/.kube/config"' >> gh_actions.tfvars
           echo 'counter = 1' >> gh_actions.tfvars
           echo 'namespace = "${{ env.TARGET_CLUSTER }}"' >> gh_actions.tfvars
-          echo 'deployment_project = "${{ env.TARGET_PROJECT }}"' >> gh_actions.tfvars
-          echo 'deployment_target = "${{ env.TARGET_ENV }}"' >> gh_actions.tfvars
-          echo 'deployment_owner = "${{ env.TARGET_OWNER }}"' >> gh_actions.tfvars
-          echo 'deployment_stage = "${{ env.TARGET_STAGE }}"' >> gh_actions.tfvars
           cat cicd.tfvars |grep -v '""' >> gh_actions.tfvars
           ls -al
           echo "-- TFVARS FILE --"
