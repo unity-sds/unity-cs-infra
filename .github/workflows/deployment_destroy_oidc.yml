@@ -181,7 +181,7 @@ jobs:
       - name: Auto-generate tfvars file for the deployable repository
         run: |
           cd resources/deployable/terraform-unity
-          ../../../terraform-docs tfvars hcl . >terraform.tfvars
+          echo '' >terraform.tfvars
 
       - name: Merge tfvars files
         run: |
