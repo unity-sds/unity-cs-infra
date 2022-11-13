@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Hello world action step
-        uses: unity-sds/unity-cs-action@80f2b6446c5e498b5c1ead73642eeb259434656d
+        uses: unity-sds/unity-cs-action@392227770a850a1127d97bd1151674ccf357158a
         id: hello
         with:
           awskey: ${{ inputs.KEY }}
@@ -39,10 +39,10 @@ jobs:
   "deploymentName": "some name for the deployment of services",
   "services": [
     {
-        "name": "xxx",
-        "source": "git repo",
+        "name": "unity-sps-prototype",
+        "source": "unity-sds/unity-sps-prototype",
         "version": "xxx",
-        "branch": "xxx"
+        "branch": "main"
     }
   ],
   "extensions": {
