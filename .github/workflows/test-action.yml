@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Hello world action step
-        uses: unity-sds/unity-cs-action@96407e23e88591a666f94167ecaf48da43f8d0b9
+        uses: unity-sds/unity-cs-action@2df75b91ece719979037a4e7734540e637860299
         id: hello
         with:
           awskey: ${{ inputs.KEY }}
