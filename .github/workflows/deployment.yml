@@ -14,6 +14,7 @@ on:
   workflow_dispatch:
     branches: [ smolensk_0.2_mcp ]
     inputs:
+      distinct_id:
       deploymentTarget:
         description: 'Deployment Target'
         required: true 
@@ -43,6 +44,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}    
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
