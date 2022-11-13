@@ -101,4 +101,5 @@ jobs:
           AWS_PAGER: ""
         run: |
           eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          eksctl create iamidentitymapping --cluster ${{ fromJson(inputs.META).clustername }} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantDeveloper --group system:masters --username admin
           #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
