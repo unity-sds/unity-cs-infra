@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Hello world action step
-        uses: unity-sds/unity-cs-action@227f894ac5f9a929b7418b8bb90a3b7ac5df7c6c
+        uses: unity-sds/unity-cs-action@80f2b6446c5e498b5c1ead73642eeb259434656d
         id: hello
         with:
           awskey: ${{ inputs.KEY }}
@@ -47,7 +47,7 @@ jobs:
   ],
   "extensions": {
     "kubernetes": {
-      "clustername": "testclustertomsun",
+      "clustername": "testclustertomsun2",
       "owner": "tom",
       "projectname": "testproject",
       "nodegroups": {
