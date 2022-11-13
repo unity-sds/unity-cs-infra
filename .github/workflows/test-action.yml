@@ -47,10 +47,13 @@ jobs:
   ],
   "extensions": {
     "kubernetes": {
+      "clustername": "testclustertomsun",
+      "owner": "tom",
+      "projectname": "testproject",
       "nodegroups": {
         "group1": {
-          "instancetype": "xxx",
-          "nodecount": "xxx"
+          "instancetype": "m5.xlarge",
+          "nodecount": "3"
         }
       }
     }
