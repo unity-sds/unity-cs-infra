@@ -91,7 +91,7 @@ jobs:
       # Render template
       - name: Render Template
         run: |
-          unity-cs-terraform-transformer eks --clustername ${{ fromJson(META).clustername }} --owner ${{ fromJson(META).owner }} --managenodegroups defaultgroup,${{ fromJson(META).nodegroups.group1.nodecount }},${{ fromJson(META).nodegroups.group1.nodecount }},${{ fromJson(META).nodegroups.group1.nodecount }},m5.xlarge --instancetype m5.xlarge --projectname ${{ fromJson(META).projectname }} --servicename ${{ fromJson(META).owner }} > build/eksctl/eksctl-config.yaml
+          unity-cs-terraform-transformer eks --clustername ${{ fromJson(inputs.META).clustername }} --owner ${{ fromJson(inputs.META).owner }} --managenodegroups defaultgroup,${{ fromJson(inputs.META).nodegroups.group1.nodecount }},${{ fromJson(inputs.META).nodegroups.group1.nodecount }},${{ fromJson(inputs.META).nodegroups.group1.nodecount }},m5.xlarge --instancetype m5.xlarge --projectname ${{ fromJson(inputs.META).projectname }} --servicename ${{ fromJson(inputs.META).owner }} > build/eksctl/eksctl-config.yaml
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
