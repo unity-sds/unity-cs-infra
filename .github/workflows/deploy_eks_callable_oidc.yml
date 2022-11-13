@@ -91,14 +91,12 @@ jobs:
       # Render template
       - name: Render Template
         run: |
-          unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --managenodegroups dafaultgroup,${{ INPUTS.MINNODES }},${{ INPUTS.MAXNODES }},${{ INPUTS.DESIREDNODES }},m5.xlarge --instancetype ${{ INPUTS.INSTANCETYPE }} --projectname ${{ INPUTS.PROJECTNAME }} --servicename ${{ INPUTS.OWNER }} > build/eksctl/eksctl-config.yaml
+          j = fromJson(META)
+          unity-cs-terraform-transformer eks --clustername ${{ j.clustername }} --owner ${{ j.owner }} --managenodegroups defaultgroup,${{ j.nodegroups.group1.nodecount }},${{ j.nodegroups.group1.nodecount }},${{ j.nodegroups.group1.nodecount }},m5.xlarge --instancetype m5.xlarge --projectname ${{ j.projectname }} --servicename ${{ j.owner }} > build/eksctl/eksctl-config.yaml
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
         env:
-          AWS_ACCESS_KEY_ID: ${{ inputs.KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ inputs.SECRET }}
-          AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
           AWS_PAGER: ""
         run: |
           eksctl create cluster -f build/eksctl/eksctl-config.yaml
