@@ -18,16 +18,16 @@ on:
         type: string
         default: ''
 jobs:
-  hello_world_job:
+  run_unity_job:
     runs-on: ubuntu-latest
-    name: A job to say hello1
+    name: Parse Metadata and Execute
     steps:
       # To use this repository's private action,
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
       - name: Hello world action step
-        uses: unity-sds/unity-cs-action@e746dad4fe1a626034c3402fce8cd7cd7c6d78e2
+        uses: unity-sds/unity-cs-action@fb98a6da3f3175b771fab2ef728b0d96646334f2
         id: hello
         with:
           awskey: ${{ inputs.KEY }}
@@ -47,7 +47,7 @@ jobs:
   ],
   "extensions": {
     "kubernetes": {
-      "clustername": "testclustertomsun5",
+      "clustername": "testclustertomsun6",
       "owner": "tom",
       "projectname": "testproject",
       "nodegroups": {
