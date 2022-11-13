@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@fb98a6da3f3175b771fab2ef728b0d96646334f2
+        uses: unity-sds/unity-cs-action@76239051f5b2b0504fde80dff5591b2afd35b60e
         id: hello
         with:
           awskey: ${{ inputs.KEY }}
@@ -42,12 +42,12 @@ jobs:
         "name": "unity-sps-prototype",
         "source": "unity-sds/unity-sps-prototype",
         "version": "xxx",
-        "branch": "main"
+        "branch": "fa5e8485c0e990e6dbdf83064189fa803c62498a"
     }
   ],
   "extensions": {
     "kubernetes": {
-      "clustername": "testclustertomsun6",
+      "clustername": "testclustertomsun7",
       "owner": "tom",
       "projectname": "testproject",
       "nodegroups": {
