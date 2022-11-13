@@ -26,7 +26,7 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Hello world action step
+      - name: Unity custom action step
         uses: unity-sds/unity-cs-action@fb98a6da3f3175b771fab2ef728b0d96646334f2
         id: hello
         with:
