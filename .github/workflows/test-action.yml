@@ -47,7 +47,7 @@ jobs:
   ],
   "extensions": {
     "kubernetes": {
-      "clustername": "testclustertomsun2",
+      "clustername": "testclustertomsun3",
       "owner": "tom",
       "projectname": "testproject",
       "nodegroups": {
