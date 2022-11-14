@@ -5,7 +5,5 @@ igw_id = "igw-0622379cb99c03649"
 
 subnet_one_id = "subnet-059bc4f467275b59d"
 subnet_two_id = "subnet-0ebdd997cc3ebe58d"
-
-## testing for demo
-project = "unity-sps-demo"
-venue = "DEV"
+project       = "unity-sps-demo"
+venue         = "DEV"
