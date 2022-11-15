@@ -2,26 +2,22 @@ name: deployment-api-gateway-and-cognito
 on:
   workflow_dispatch:
     branches: [ main ]
+    inputs:
+      distinct_id:
+      deploymentStage:
+        description: 'Deployment Stage'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
 
 permissions:
   id-token: write # required to use OIDC authentication
   contents: read # required to checkout the code from the repo
   
-# Allows you to run this workflow manually from the Actions tab
-workflow_dispatch:
-  branches: [ main ]
-  inputs:
-    distinct_id:
-    deploymentStage:
-      description: 'Deployment Stage'
-      required: true 
-      type: choice
-      default: 'DEV'
-      options: 
-      - DEV
-      - TEST
-      - OPS
-
 jobs: 
   build:
     runs-on: ubuntu-latest
