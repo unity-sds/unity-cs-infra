@@ -11,6 +11,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      ## Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        uses: actions/checkout@v2
+
       ## Check Terraform formatting
       - name: Terraform Format
         working-directory: ./terraform-api-gateway-cognito
