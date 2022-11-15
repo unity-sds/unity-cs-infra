@@ -23,7 +23,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Display state of working directory root
-        run: ls -al resources/deployable
+        run: ls -al
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
