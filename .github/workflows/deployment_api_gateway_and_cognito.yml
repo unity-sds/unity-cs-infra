@@ -21,6 +21,16 @@ jobs:
 #        id: fmt
 #        run: terraform fmt -check
 
+      # Runs a single command using the runners shell
+      - name: Display state of working directory root
+        run: ls -al resources/deployable
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+
       ## Init Terraform
       - name: Terraform Init
         working-directory: ./terraform-api-gateway-cognito
