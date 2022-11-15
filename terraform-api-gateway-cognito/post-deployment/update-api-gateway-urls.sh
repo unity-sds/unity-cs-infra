@@ -3,7 +3,7 @@
 AWS_DEFAULT_REGION='us-west-2'
 NAMESPACE='unity-sps'
 COUNTER=1
-STAGE='dev'
+STAGE='test'
 
 REST_API_ID=$(aws ssm get-parameter --name "/unity/dev/${NAMESPACE}-${COUNTER}/api-gateway/rest-api-id" --query Parameter.Value --region "${AWS_DEFAULT_REGION}")
 temp="${REST_API_ID%\"}"
