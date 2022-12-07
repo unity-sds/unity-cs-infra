@@ -1,6 +1,6 @@
 FROM ubuntu:jammy
 
-RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 ubuntu && apt update && apt install -y curl && usermod -aG docker ubuntu
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 ubuntu && apt update && apt install -y curl
 USER ubuntu
 WORKDIR /home/ubuntu
 
