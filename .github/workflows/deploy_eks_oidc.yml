@@ -74,6 +74,7 @@ jobs:
     steps:
       # Configure AWS Credentials through OIDC
       - name: Configure AWS credentials
+        if: ${{ secrets.OIDC_ROLE  != '' }}
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.OIDC_ROLE }}
