@@ -85,3 +85,14 @@ will be supported in the future.
 Teardowns are managed in the same way as deployments, through Terraform.  The
 teardown workflow is supplied by Unity and requires no additional files in the 
 target repository as long as the terraform-unity directory is set up correctly.
+
+## Running Unity workflows outside of Github
+
+Our workflows are wrapped in Github actions to allow us to run them inside Github easily. But we also want to be able to run them locally.
+As such we have a docker image that allows you to trigger actions using the Act project to bootstrap the actions. Act also makes use of docker so you need to pass the docker sock into the platform to be able to run it, as follows on a linux host:
+
+```
+docker pull ghcr.io/unity-sds/unity-cs-infra:main 
+docker run -it -v //var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker ghcr.io/unity-sds/unity-cs-infra:main
+```
+You can also check the workflows out of this repo and run them outside of docker.
