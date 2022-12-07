@@ -231,6 +231,12 @@ jobs:
         id: init
         run: terraform init
 
+      ## Set terraform log level
+      - name: Set Terraform Log Level
+        working-directory: ./resources/deployable/terraform-unity
+        id: log_level
+        run: export TF_LOG="DEBUG"
+
       ## Validate Terraform
       - name: Terraform Validate
         working-directory: ./resources/deployable/terraform-unity
