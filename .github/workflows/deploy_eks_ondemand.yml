@@ -30,6 +30,7 @@ on:
         description: 'Privileged (admin-level) IAM policy name'
         type: string
         required: true
+        default: 'mcp-tenantOperator'
       CLUSTERNAME:
         description: 'EKS Cluster Name'
         required: false
@@ -60,8 +61,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
-        run: echo ${{ github.event.inputs.distinct_id }}
+      - name: echo distinct ID ${{ inputs.distinct_id }}
+        run: echo ${{ inputs.distinct_id }}
   # This workflow contains a single job called "deployment"
   deployment:
     # The type of runner that the job will run on
@@ -88,33 +89,33 @@ jobs:
           curl --silent --location https://github.com/unity-sds/unity-cs-terraform-transformer/releases/download/0.1.12-Alpha/unity-cs-terraform-transformer-0.1.12-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
           sudo mv /tmp/unity-cs-terraform-transformer /usr/local/bin
 
-      # Render template 
-      - name: Render Template
+      # Deploy EKS
+      - name: Deploy EKS
         # TODO: utilize unity-cs-terraform-transformer; for now we write a known-working eksctl-config.yaml
         #run: |
-        #  unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --managenodegroups dafaultgroup,${{ INPUTS.MINNODES }},${{ INPUTS.MAXNODES }},${{ INPUTS.DESIREDNODES }},m5.xlarge --instancetype ${{ INPUTS.INSTANCETYPE }} --projectname ${{ INPUTS.OWNER }} --servicename ${{ INPUTS.OWNER }} > build/eksctl/eksctl-config.yaml
+        #  unity-cs-terraform-transformer eks --clustername ${{ inputs.CLUSTERNAME }} --owner ${{ inputs.OWNER }} --managenodegroups dafaultgroup,${{ inputs.MINNODES }},${{ inputs.MAXNODES }},${{ inputs.DESIREDNODES }},m5.xlarge --instancetype ${{ inputs.INSTANCETYPE }} --projectname ${{ inputs.OWNER }} --servicename ${{ inputs.OWNER }} > build/eksctl/eksctl-config.yaml
         #  cat build/eksctl/eksctl-config.yaml
         run: |
           cat <<EOF > build/eksctl/eksctl-config.yaml
           apiVersion: eksctl.io/v1alpha5
           kind: ClusterConfig
-          
+           
           iam:
             serviceRoleARN:
-            serviceRolePermissionsBoundary: arn:aws:iam::${{ INPUTS.ACCOUNTID }}:policy/${{ INPUTS.PRIVILEGEDPOLICYNAME }}
+            serviceRolePermissionsBoundary: arn:aws:iam::${{ inputs.ACCOUNTID }}:policy/${{ inputs.PRIVILEGEDPOLICYNAME }}
             withOIDC: false
-          
+           
           metadata:
             # TODO: make this a parameter
-            name: ${{ INPUTS.CLUSTERNAME }}
-            region: ${{ INPUTS.REGION }}
+            name: ${{ inputs.CLUSTERNAME }}
+            region: ${{ inputs.REGION }}
             # TODO: make this a parameter
-            version: ${{ EKSClusterVersion }}
+            version: "${EKSClusterVersion}"
             tags:
               # TODO: make these parameters
               service: "MAAP-HEC"
               project: "MAAP-HEC"
-          
+           
           vpc:
             subnets:
               private:
@@ -128,15 +129,15 @@ jobs:
             securityGroup:
             sharedNodeSecurityGroup:
             manageSharedNodeSecurityGroupRules: true
-          
+           
           managedNodeGroups:
             - name: defaultgroupNodeGroup
-              minSize: ${{ INPUTS.MINNODES }}
-              maxSize: ${{ INPUTS.MAXNODES }}
-              desiredCapacity: ${{ INPUTS.DESIREDNODES }}
+              minSize: ${{ inputs.MINNODES }}
+              maxSize: ${{ inputs.MAXNODES }}
+              desiredCapacity: ${{ inputs.DESIREDNODES }}
               # TODO: make this a parameter
-              instanceType: ${{ INPUTS.INSTANCETYPE }}
-              ami: ${{ EKSClusterAMI }}
+              instanceType: ${{ inputs.INSTANCETYPE }}
+              ami: ${EKSClusterAMI}
               spot: true
               tags:
                 # TODO: make these parameters
@@ -144,8 +145,8 @@ jobs:
                 project: "MAAP-HEC"
               iam:
                 attachPolicyARNs:
-                  - arn:aws:iam::${{ INPUTS.ACCOUNTID }}:policy/DatalakeKinesisPolicy
-                  - arn:aws:iam::${{ INPUTS.ACCOUNTID }}:policy/McpToolsAccessPolicy
+                  - arn:aws:iam::${{ inputs.ACCOUNTID }}:policy/DatalakeKinesisPolicy
+                  - arn:aws:iam::${{ inputs.ACCOUNTID }}:policy/McpToolsAccessPolicy
                   - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
                   - arn:aws:iam::aws:policy/AmazonS3FullAccess
                   - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
@@ -155,23 +156,15 @@ jobs:
                   - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
                   - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
                 instanceRoleARN:
-                instanceRolePermissionsBoundary: arn:aws:iam::${{ INPUTS.ACCOUNTID }}:policy/${{ INPUTS.PRIVILEGEDPOLICYNAME }}
+                instanceRolePermissionsBoundary: arn:aws:iam::${{ inputs.ACCOUNTID }}:policy/${{ inputs.PRIVILEGEDPOLICYNAME }}
                 withAddonPolicies:
                   autoScaler: true
               privateNetworking: true
               overrideBootstrapCommand: |
                 #!/bin/bash
-                /etc/eks/bootstrap.sh ${{ INPUTS.CLUSTERNAME }}
+                /etc/eks/bootstrap.sh ${{ inputs.CLUSTERNAME }}
           EOF
-
+            
+          echo "pwd: $(pwd)"
           cat build/eksctl/eksctl-config.yaml
-      # Launch EKS
-      - name: Launch EKS cluster
-        env:
-          AWS_ACCESS_KEY_ID: ${{ inputs.KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ inputs.SECRET }}
-          AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
-          AWS_PAGER: ""
-        run: | 
           eksctl create cluster -f build/eksctl/eksctl-config.yaml
-          #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
