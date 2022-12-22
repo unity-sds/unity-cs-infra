@@ -89,8 +89,8 @@ jobs:
           curl --silent --location https://github.com/unity-sds/unity-cs-terraform-transformer/releases/download/0.1.12-Alpha/unity-cs-terraform-transformer-0.1.12-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
           sudo mv /tmp/unity-cs-terraform-transformer /usr/local/bin
 
-      # Deploy EKS
-      - name: Deploy EKS
+      # Render template
+      - name: Render eksctl configuration from template
         # TODO: utilize unity-cs-terraform-transformer; for now we write a known-working eksctl-config.yaml
         #run: |
         #  unity-cs-terraform-transformer eks --clustername ${{ inputs.CLUSTERNAME }} --owner ${{ inputs.OWNER }} --managenodegroups dafaultgroup,${{ inputs.MINNODES }},${{ inputs.MAXNODES }},${{ inputs.DESIREDNODES }},m5.xlarge --instancetype ${{ inputs.INSTANCETYPE }} --projectname ${{ inputs.OWNER }} --servicename ${{ inputs.OWNER }} > build/eksctl/eksctl-config.yaml
@@ -167,4 +167,11 @@ jobs:
             
           echo "pwd: $(pwd)"
           cat build/eksctl/eksctl-config.yaml
+          #eksctl create cluster -f build/eksctl/eksctl-config.yaml
+      # Launch EKS
+      - name: Launch EKS cluster
+        run: | 
+          echo "pwd: $(pwd)"
+          cat build/eksctl/eksctl-config.yaml
           eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
