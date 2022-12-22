@@ -1,0 +1,177 @@
+# This is a workflow to deploy an EKS cluster via On-demand
+
+name: MCP Dev - On-demand EKS Deployment
+env:
+  EKSClusterVersion: 1.24
+  EKSClusterAMI: ami-0886544fa915698f0
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  # push:
+  #   branches: [ ucs-template ]
+  # pull_request:
+  #   branches: [ ucs-template ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      distinct_id:
+      ACCOUNTID:
+        description: 'AWS Account ID'
+        type: string
+        required: true
+      REGION:
+        description: 'AWS Region'
+        type: string
+        required: true
+        default: 'us-west-2'
+      PRIVILEGEDPOLICYNAME:
+        description: 'Privileged (admin-level) IAM policy name'
+        type: string
+        required: true
+      CLUSTERNAME:
+        description: 'EKS Cluster Name'
+        required: false
+        type: string
+        default: 'unity-sps-on-demand'
+      MINNODES:
+        description: 'Minimum Cluster Nodes'
+        required: false
+        type: string
+        default: '1'
+      MAXNODES:
+        description: 'Max Cluster Nodes'
+        required: false
+        type: string
+        default: '3'
+      DESIREDNODES:
+        description: 'Desired Cluster Nodes'
+        required: false
+        type: string
+        default: '1'
+      INSTANCETYPE:
+        description: 'EC2 Instance Type'
+        type: string
+        required: false
+        default: 'm6i.xlarge'
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}
+  # This workflow contains a single job called "deployment"
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Set up current working directory with the repo contents
+      - uses: actions/checkout@v2
+
+      # Determine contents of working directory
+      - name: Display contents of working directory
+        run: ls -al && sleep 60s
+
+      # Install eksctl to launch EKS
+      - name: Install eksctl
+        run: |
+         curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && \
+         sudo mv /tmp/eksctl /usr/local/bin && \
+         eksctl version
+
+      - name: Install Unity Transformer
+        run: |
+          curl --silent --location https://github.com/unity-sds/unity-cs-terraform-transformer/releases/download/0.1.12-Alpha/unity-cs-terraform-transformer-0.1.12-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
+          sudo mv /tmp/unity-cs-terraform-transformer /usr/local/bin
+
+      # Render template 
+      - name: Render Template
+        # TODO: utilize unity-cs-terraform-transformer; for now we write a known-working eksctl-config.yaml
+        #run: |
+        #  unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --managenodegroups dafaultgroup,${{ INPUTS.MINNODES }},${{ INPUTS.MAXNODES }},${{ INPUTS.DESIREDNODES }},m5.xlarge --instancetype ${{ INPUTS.INSTANCETYPE }} --projectname ${{ INPUTS.OWNER }} --servicename ${{ INPUTS.OWNER }} > build/eksctl/eksctl-config.yaml
+        #  cat build/eksctl/eksctl-config.yaml
+        run: |
+          cat <<EOF > build/eksctl/eksctl-config.yaml
+          apiVersion: eksctl.io/v1alpha5
+          kind: ClusterConfig
+          
+          iam:
+            serviceRoleARN:
+            serviceRolePermissionsBoundary: arn:aws:iam::${{ INPUTS.ACCOUNTID }}:policy/${{ INPUTS.PRIVILEGEDPOLICYNAME }}
+            withOIDC: false
+          
+          metadata:
+            # TODO: make this a parameter
+            name: ${{ INPUTS.CLUSTERNAME }}
+            region: ${{ INPUTS.REGION }}
+            # TODO: make this a parameter
+            version: ${{ EKSClusterVersion }}
+            tags:
+              # TODO: make these parameters
+              service: "MAAP-HEC"
+              project: "MAAP-HEC"
+          
+          vpc:
+            subnets:
+              private:
+                # TODO: make these parameters
+                us-west-2b: { id: subnet-01dd01ca997ebc233 }
+                us-west-2a: { id: subnet-0379747e5833aa2c5 }
+              public:
+                # TODO: make these parameters
+                us-west-2b: { id: subnet-047ca90901d826d96 }
+                us-west-2a: { id: subnet-0bb48585d511aaf74 }
+            securityGroup:
+            sharedNodeSecurityGroup:
+            manageSharedNodeSecurityGroupRules: true
+          
+          managedNodeGroups:
+            - name: defaultgroupNodeGroup
+              minSize: ${{ INPUTS.MINNODES }}
+              maxSize: ${{ INPUTS.MAXNODES }}
+              desiredCapacity: ${{ INPUTS.DESIREDNODES }}
+              # TODO: make this a parameter
+              instanceType: ${{ INPUTS.INSTANCETYPE }}
+              ami: ${{ EKSClusterAMI }}
+              spot: true
+              tags:
+                # TODO: make these parameters
+                service: "MAAP-HEC"
+                project: "MAAP-HEC"
+              iam:
+                attachPolicyARNs:
+                  - arn:aws:iam::${{ INPUTS.ACCOUNTID }}:policy/DatalakeKinesisPolicy
+                  - arn:aws:iam::${{ INPUTS.ACCOUNTID }}:policy/McpToolsAccessPolicy
+                  - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+                  - arn:aws:iam::aws:policy/AmazonS3FullAccess
+                  - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+                  - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+                  - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+                  - arn:aws:iam::aws:policy/AmazonSSMFullAccess
+                  - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+                  - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+                instanceRoleARN:
+                instanceRolePermissionsBoundary: arn:aws:iam::${{ INPUTS.ACCOUNTID }}:policy/${{ INPUTS.PRIVILEGEDPOLICYNAME }}
+                withAddonPolicies:
+                  autoScaler: true
+              privateNetworking: true
+              overrideBootstrapCommand: |
+                #!/bin/bash
+                /etc/eks/bootstrap.sh ${{ INPUTS.CLUSTERNAME }}
+          EOF
+
+          cat build/eksctl/eksctl-config.yaml
+      # Launch EKS
+      - name: Launch EKS cluster
+        env:
+          AWS_ACCESS_KEY_ID: ${{ inputs.KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ inputs.SECRET }}
+          AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
+          AWS_PAGER: ""
+        run: | 
+          eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
