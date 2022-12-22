@@ -89,7 +89,7 @@ target repository as long as the terraform-unity directory is set up correctly.
 ## Running Unity workflows outside of Github
 
 Our workflows are wrapped in Github actions to allow us to run them inside Github easily. But we also want to be able to run them locally.
-As such we have a docker image that allows you to trigger actions using the Act project to bootstrap the actions. Act also makes use of docker so you need to pass the docker sock into the platform to be able to run it, as follows on a linux host:
+As such we have a docker image that allows you to trigger actions using the [Act](https://github.com/nektos/act) project to bootstrap the actions. Act also makes use of docker so you need to pass the [docker sock](https://betterprogramming.pub/about-var-run-docker-sock-3bfd276e12fd) into the platform to be able to run it, as follows on a linux host:
 
 ```
 docker pull ghcr.io/unity-sds/unity-cs-infra:main 
