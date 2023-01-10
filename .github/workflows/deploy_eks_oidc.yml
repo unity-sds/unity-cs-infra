@@ -65,16 +65,40 @@ permissions:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  check-secret:
+    runs-on: ubuntu-latest
+    outputs:
+      my-key-exists: ${{ steps.my-key-check.outputs.defined }}
+    steps:
+      - name: Check for Secret availability
+        id: my-key-check
+        # perform secret check & put boolean result as an output
+        shell: bash
+        run: |
+          if [ "${{ secrets.OIDC_ROLE }}" != '' ]; then
+            echo "defined=true" >> $GITHUB_OUTPUT;
+          else
+            echo "defined=false" >> $GITHUB_OUTPUT;
+          fi
   # This workflow contains a single job called "deployment"
   deployment:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Check for Secret availability
+        id: secret-check
+        # perform secret check & put boolean result as an output
+        shell: bash
+        run: |
+          if [ "${{ secrets.OIDC_ROLE }}" != '' ]; then
+            echo "available=true" >> $GITHUB_OUTPUT;
+          else
+            echo "available=false" >> $GITHUB_OUTPUT;
+          fi
       # Configure AWS Credentials through OIDC
       - name: Configure AWS credentials
-        if: ${{ secrets.OIDC_ROLE  != '' }}
+        if: ${{ steps.secret-check.outputs.available == 'true' }}
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.OIDC_ROLE }}
