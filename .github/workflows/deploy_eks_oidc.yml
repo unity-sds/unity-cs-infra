@@ -3,8 +3,8 @@
 name: MCP Dev - EKS Deployment via OIDC
 env:
   EKSClusterRegion: us-west-2
-  EKSClusterVersion: 1.21
-  EKSClusterAMI: ami-01fe93a8bc6cb9bef
+  EKSClusterVersion: 1.24
+  EKSClusterAMI: ami-0886544fa915698f0
 #  EKSClusterAMI: ami-06b4f03f7dd146e31
   EKSKubeProxyVersion: v1.21.2-eksbuild.2
   EKSCoreDNSVersion: v1.8.4-eksbuild.1
