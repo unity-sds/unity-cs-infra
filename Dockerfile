@@ -5,4 +5,9 @@ RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 ubuntu && a
 WORKDIR /home/ubuntu
 
 RUN curl https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
+RUN echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest
+-P ubuntu-22.04=catthehacker/ubuntu:act-22.04
+-P ubuntu-20.04=catthehacker/ubuntu:act-20.04
+-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" > /root/.actrc
+
 COPY . /home/ubuntu/unity-cs
