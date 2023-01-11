@@ -6,8 +6,9 @@ env:
   EKSClusterVersion: 1.24
   EKSClusterAMI: ami-0886544fa915698f0
 #  EKSClusterAMI: ami-06b4f03f7dd146e31
-  EKSKubeProxyVersion: v1.24.7-eksbuild.2
-  EKSCoreDNSVersion: v1.8.7-eksbuild.3
+  EKSKubeProxyVersion: latest
+  EKSCoreDNSVersion: latest
+  EKSEBSCSIVersion: latest
   EKSSubnetConfigA: "us-west-2a: { id: subnet-087b54673c7549e2d }"
   EKSSubnetConfigB: "us-west-2b: { id: subnet-009c32904a8bf3b92 }"
 #  EKSSubnetConfigA: "us-west-2a: { id: subnet-00db2965967acb6b1 }"
