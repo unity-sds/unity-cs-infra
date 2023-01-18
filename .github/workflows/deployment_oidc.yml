@@ -28,7 +28,7 @@ on:
         - UNITY
         - SIPS
       deploymentStage:
-        description: 'Deployment Stage'
+        description: 'Deployment Target'
         required: true 
         type: choice
         default: 'DEV'
@@ -36,6 +36,7 @@ on:
         - DEV
         - TEST
         - OPS
+        - SIPS
       deploymentOwner:
         description: 'Deployment Owner'
         required: true 
