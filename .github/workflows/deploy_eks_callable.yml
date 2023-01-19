@@ -79,12 +79,12 @@ jobs:
         run: |
           echo ${{ inputs.META }}
           export testjson=${{ inputs.META }}
-          export owner=$(echo $testjson | jq -r .kubernetes.owner)
-          export cluster=$(echo $testjson | jq -r .kubernetes.clustername)
-          export minnodes=$(echo $testjson | jq -r .kubernetes.nodegroups.group1.nodecount)
-          export maxnodes=$(echo $testjson | jq -r .kubernetes.nodegroups.group1.nodecount)
-          export desirednodes=$(echo $testjson | jq -r .kubernetes.nodegroups.group1.nodecount)
-          export instancetype=$(echo $testjson | jq -r .kubernetes.nodegroups.group1.instancetype)
+          export owner=$(echo $testjson | jq -r .owner)
+          export cluster=$(echo $testjson | jq -r .clustername)
+          export minnodes=$(echo $testjson | jq -r .nodegroups.group1.nodecount)
+          export maxnodes=$(echo $testjson | jq -r .nodegroups.group1.nodecount)
+          export desirednodes=$(echo $testjson | jq -r .nodegroups.group1.nodecount)
+          export instancetype=$(echo $testjson | jq -r .nodegroups.group1.instancetype)
           unity-cs-terraform-transformer eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > build/eksctl/eksctl-config.yaml
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
