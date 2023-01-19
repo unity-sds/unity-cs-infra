@@ -78,12 +78,12 @@ jobs:
       - name: Render Template
         run: |
           echo ${{ inputs.META }}
-          export owner=$(echo ${{ inputs.META }} | jq -r .owner)
-          export cluster=$(echo ${{ inputs.META }} | jq -r .clustername)
-          export minnodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
-          export maxnodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
-          export desirednodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
-          export instancetype=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.instancetype)
+          export owner=$(echo '${{ inputs.META }}' | jq -r .owner)
+          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
+          export minnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
+          export maxnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
+          export desirednodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
+          export instancetype=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.instancetype)
           unity-cs-terraform-transformer eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > build/eksctl/eksctl-config.yaml
           cat build/eksctl/eksctl-config.yaml
       # Launch EKS
