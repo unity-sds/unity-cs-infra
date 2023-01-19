@@ -117,4 +117,5 @@ jobs:
           AWS_PAGER: ""
         run: | 
           eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
           #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
