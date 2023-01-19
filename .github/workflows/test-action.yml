@@ -21,7 +21,7 @@ on:
         description: 'UCS Metadata Definition'
         required: true
         type: string
-        default: '{"metadataVersion":"unity-cs-0.1","deploymentName":"some name for the deployment of services","services":[{"name":"unity-sps-prototype","source":"unity-sds/unity-sps-prototype","version":"xxx","branch":"fa5e8485c0e990e6dbdf83064189fa803c62498a"}],"extensions":{"kubernetes":{"clustername":"testclustertomsun7","owner":"tom","projectname":"testproject","nodegroups":{"group1":{"instancetype":"m5.xlarge","nodecount":"3"}}}}}'
+        default: '{"metadataVersion":"unity-cs-0.1","deploymentName":"some name for the deployment of services","services":[{"name":"unity-sps-prototype","source":"unity-sds/unity-sps-prototype","version":"xxx","branch":"main"}],"extensions":{"kubernetes":{"clustername":"testclustertomthurs","owner":"tom","projectname":"testproject","nodegroups":{"group1":{"instancetype":"m5.xlarge","nodecount":"1"}}}}}'
 jobs:
   run_unity_job:
     runs-on: ubuntu-latest
