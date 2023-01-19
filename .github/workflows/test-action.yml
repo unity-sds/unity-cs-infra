@@ -21,7 +21,7 @@ on:
         description: 'UCS Metadata Definition'
         required: true
         type: string
-        default: '{"metadataVersion":"unity-cs-0.1","deploymentName":"some name for the deployment of services","services":[{"name":"unity-sps-prototype","source":"unity-sds/unity-sps-prototype","version":"xxx","branch":"fa5e8485c0e990e6dbdf83064189fa803c62498a"}],"extensions":{"kubernetes":{"clustername":"testclustertomsun7","owner":"tom","projectname":"testproject","nodegroups":{"group1":{"instancetype":"m5.xlarge","nodecount":"3"}}}}}'
+        default: '{"metadataVersion":"unity-cs-0.1","deploymentName":"some name for the deployment of services","services":[{"name":"unity-sps-prototype","source":"unity-sds/unity-sps-prototype","version":"xxx","branch":"main"}],"extensions":{"kubernetes":{"clustername":"testclustertomthurs","owner":"tom","projectname":"testproject","nodegroups":{"group1":{"instancetype":"m5.xlarge","nodecount":"1"}}}}}'
 jobs:
   run_unity_job:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@76239051f5b2b0504fde80dff5591b2afd35b60e
+        uses: unity-sds/unity-cs-action@7d5c883e6326aa98e314a9eb074dc86a0af23220
         id: hello
         with:
           awskey: ${{ inputs.KEY }}
