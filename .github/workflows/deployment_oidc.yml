@@ -65,6 +65,14 @@ on:
         type: string
         default: 'testtommon6'
 #        default: 'smolenski_tf_test_mcp'
+      useOIDC:
+        description: 'Use OIDC to connect'
+        required: true
+        type: choice
+        default: 'true'
+        options:
+        - true
+        - false
 
 
 permissions:
@@ -92,6 +100,7 @@ jobs:
           DEFAULT_PROJECT: 'UNITY'
           DEFAULT_OWNER: 'nightly'
           DEFAULT_EKSCLUSTERNAME: 'testtommon6'
+          OIDC_SECRET: ${{ secrets.OIDC_SECRET }}
         run: |
           echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
           echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
@@ -117,6 +126,7 @@ jobs:
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
+        if: ${{ env.OIDC_SECRET == 'true' }}
         with:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
 #          role-to-assume: ${{ secrets.OIDC_ROLE }}
