@@ -65,14 +65,15 @@ on:
         type: string
         default: 'testtommon6'
 #        default: 'smolenski_tf_test_mcp'
-      useOIDC:
-        description: 'Use OIDC to connect'
+      awsConnection:
+        description: 'Method of AWS connection'
         required: true
         type: choice
-        default: 'true'
+        default: 'oidc'
         options:
-        - true
-        - false
+        - oidc
+        - keys
+        - iam
 
 
 permissions:
@@ -125,7 +126,7 @@ jobs:
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
-        if: ${{ env.OIDC_SECRET == 'true' }}
+        if: ${{ INPUTS.awsConnection == 'true' }}
         with:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
 #          role-to-assume: ${{ secrets.OIDC_ROLE }}
