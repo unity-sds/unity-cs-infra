@@ -98,7 +98,8 @@ jobs:
           AWS_PAGER: ""
         run: |
           eksctl create cluster -f /tmp/eksctl-config.yaml
-          aws eks update-kubeconfig --region us-west-2 --name ${{ inputs.CLUSTERNAME }}
+          export cluster=$(echo ${{ inputs.META }} | jq -r .clustername)
+          aws eks update-kubeconfig --region us-west-2 --name $cluster
           kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
           
           #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
