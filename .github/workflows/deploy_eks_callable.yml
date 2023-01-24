@@ -78,14 +78,14 @@ jobs:
       - name: Render Template
         run: |
           echo ${{ inputs.META }}
-          export owner=$(echo '${{ inputs.META }}' | jq -r .owner)
-          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
-          export minnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
-          export maxnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
-          export desirednodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
-          export instancetype=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.instancetype)
-          unity-cs-terraform-transformer eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > build/eksctl/eksctl-config.yaml
-          cat build/eksctl/eksctl-config.yaml
+          export owner=$(echo ${{ inputs.META }} | jq -r .owner)
+          export cluster=$(echo ${{ inputs.META }} | jq -r .clustername)
+          export minnodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
+          export maxnodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
+          export desirednodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
+          export instancetype=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.instancetype)
+          unity-cs-terraform-transformer eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > /tmp/eksctl-config.yaml
+          cat /tmp/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
         env:
@@ -94,5 +94,8 @@ jobs:
           AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
           AWS_PAGER: ""
         run: |
-          eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          eksctl create cluster -f /tmp/eksctl-config.yaml
+          aws eks update-kubeconfig --region us-west-2 --name ${{ inputs.CLUSTERNAME }}
+          kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+          
           #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
