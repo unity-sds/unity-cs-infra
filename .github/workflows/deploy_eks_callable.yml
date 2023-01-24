@@ -7,8 +7,8 @@ env:
   EKSClusterAMI: ami-01fe93a8bc6cb9bef
   EKSKubeProxyVersion: v1.21.2-eksbuild.2
   EKSCoreDNSVersion: v1.8.4-eksbuild.1
-  EKSSubnetConfigA: "us-west-2a: { id: subnet-00db2965967acb6b1 }"
-  EKSSubnetConfigB: "us-west-2b: { id: subnet-092597c48cfec3f04 }"
+  EKSSubnetConfigA: "us-west-2a: { id: subnet-087b54673c7549e2d }"
+  EKSSubnetConfigB: "us-west-2b: { id: subnet-009c32904a8bf3b92 }"
   EKSSecurityGroup: "sg-09bd8de0af1c3c99a"
   EKSSharedNodeSecurityGroup: "sg-09bd8de0af1c3c99a"
   EKSServiceArn: ${{ secrets.EKSSERVICEARN }}
