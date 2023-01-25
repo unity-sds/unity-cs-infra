@@ -1,19 +1,9 @@
 name: EKS Deployment
 env:
   EKSClusterRegion: us-west-2
-  EKSClusterVersion: 1.24
   EKSKubeProxyVersion: latest
   EKSCoreDNSVersion: latest
   EKSEBSCSIVersion: latest
-  EKSClusterAMI: ami-0886544fa915698f0
-  EKSKubeProxyVersion: v1.21.2-eksbuild.2
-  EKSCoreDNSVersion: v1.8.4-eksbuild.1
-  EKSSubnetConfigA: "us-west-2a: { id: subnet-087b54673c7549e2d }"
-  EKSSubnetConfigB: "us-west-2b: { id: subnet-009c32904a8bf3b92 }"
-  EKSSecurityGroup: "sg-09bd8de0af1c3c99a"
-  EKSSharedNodeSecurityGroup: "sg-09bd8de0af1c3c99a"
-  EKSServiceArn: ${{ secrets.EKSSERVICEARN }}
-  EKSInstanceRoleArn: ${{ secrets.EKSINSTANCEROLEARN }}
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
