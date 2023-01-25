@@ -31,6 +31,8 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
+      - name: test
+        run: echo ${{ secrets.TOKEN }}
       - name: Unity custom action step
         uses: unity-sds/unity-cs-action@c8fb168bfca2ae3d481360a47a4f68285018c39d
         id: hello
