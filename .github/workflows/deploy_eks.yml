@@ -131,12 +131,12 @@ jobs:
       # Render template
       - name: Render Template
         run: |
-          export owner=$(echo ${{ inputs.META }} | jq -r .owner)
-          export cluster=$(echo ${{ inputs.META }} | jq -r .clustername)
-          export minnodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
-          export maxnodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
-          export desirednodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
-          export instancetype=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.instancetype)
+          export owner=$(echo '${{ inputs.META }}' | jq -r .owner)
+          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
+          export minnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
+          export maxnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
+          export desirednodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
+          export instancetype=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.instancetype)
           unity-cs-terraform-transformer eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > /tmp/eksctl-config.yaml
           cat /tmp/eksctl-config.yaml
       # Launch EKS
@@ -149,7 +149,7 @@ jobs:
               export AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
               export AWS_PAGER: ""
           fi
-          export cluster=$(echo ${{ inputs.META }} | jq -r .clustername)
+          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
           eksctl create cluster -f /tmp/eksctl-config.yaml
           aws eks update-kubeconfig --region us-west-2 --name $cluster
           kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
