@@ -86,7 +86,7 @@ jobs:
       
       - name: Set env vars
         run: |
-          if [ ${{ INPUTS.DEPLOYMENTSTAGE }} == "DEV" ];
+          if [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "DEV" ];
           then
             echo "EKSClusterVersion=${{ env.MCP_DEV_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
             echo "EKSClusterAMI=${{ env.MCP_DEV_EKSCLUSTERAMI }}" >> $GITHUB_ENV
@@ -96,7 +96,7 @@ jobs:
             echo "EKSSubnetConfigB=${{ env.MCP_DEV_EKSSUBNETCONFIGB }}" >> $GITHUB_ENV
             echo "EKSInstanceRoleArn=${{ env.MCP_DEV_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
             echo "EKSServiceArn=${{ env.MCP_DEV_EKSSERVICEARN }}" >> $GITHUB_ENV
-          elif [ ${{ INPUTS.DEPLOYMENTSTAGE }} == "TEST" ];
+          elif [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "TEST" ];
           then
             echo "EKSClusterVersion=${{ env.MCP_TEST_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
             echo "EKSClusterAMI=${{ env.MCP_TEST_EKSCLUSTERAMI }}" >> $GITHUB_ENV
