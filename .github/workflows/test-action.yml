@@ -35,9 +35,6 @@ jobs:
         uses: unity-sds/unity-cs-action@c8fb168bfca2ae3d481360a47a4f68285018c39d
         id: hello
         with:
-          awskey: ${{ inputs.KEY }}
-          awssecret: ${{ inputs.SECRET }}
-          awstoken: ${{ inputs.TOKEN }}
           token: ${{ secrets.TOKEN }}
           ucsmetadata: ${{ inputs.METADATA }}
       # Use the output from the `hello` step
