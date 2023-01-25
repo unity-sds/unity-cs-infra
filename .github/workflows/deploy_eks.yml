@@ -88,7 +88,7 @@ jobs:
         run: |
           if [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "DEV" ];
           then
-            echo "EKSClusterVersion=${{ env.MCP_DEV_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
+            echo "EKSClusterVersion=${{ vars.MCP_DEV_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
             echo "EKSClusterAMI=${{ env.MCP_DEV_EKSCLUSTERAMI }}" >> $GITHUB_ENV
             echo "EKSSecurityGroup=${{ env.MCP_DEV_EKSSECURITYGROUP }}" >> $GITHUB_ENV
             echo "EKSSharedNodeSecurityGroup=${{ env.MCP_DEV_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
