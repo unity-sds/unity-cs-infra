@@ -1,14 +1,12 @@
-# This is a basic workflow to help you get started with Actions
-
-name: MCP Dev - EKS Deployment
+name: EKS Deployment
 env:
   EKSClusterRegion: us-west-2
   EKSClusterVersion: 1.21
   EKSClusterAMI: ami-01fe93a8bc6cb9bef
   EKSKubeProxyVersion: v1.21.2-eksbuild.2
   EKSCoreDNSVersion: v1.8.4-eksbuild.1
-  EKSSubnetConfigA: "us-west-2a: { id: subnet-00db2965967acb6b1 }"
-  EKSSubnetConfigB: "us-west-2b: { id: subnet-092597c48cfec3f04 }"
+  EKSSubnetConfigA: "us-west-2a: { id: subnet-087b54673c7549e2d }"
+  EKSSubnetConfigB: "us-west-2b: { id: subnet-009c32904a8bf3b92 }"
   EKSSecurityGroup: "sg-09bd8de0af1c3c99a"
   EKSSharedNodeSecurityGroup: "sg-09bd8de0af1c3c99a"
   EKSServiceArn: ${{ secrets.EKSSERVICEARN }}
@@ -70,9 +68,44 @@ on:
         type: string
         required: false
         default: 'm5.xlarge'
+      META:
+        description: 'metadata description'
+        required: false
+        type: string
+      AWSCONNECTION:
+        description: 'Method of AWS connection'
+        required: true
+        type: choice
+        default: 'oidc'
+        options:
+        - oidc
+        - keys
+        - iam
+      DEPLOYMENTPROJECT:
+        description: 'Deployment Project'
+        required: true 
+        type: choice
+        default: 'UNITY'
+        options: 
+        - UNITY
+        - SIPS
+      DEPLOYMENTSTAGE:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  test:
+  workflow:
     runs-on: ubuntu-latest
     steps:
       - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
@@ -85,11 +118,16 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Set up current working directory with the repo contents
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      # Determine contents of working directory
-      - name: Display contents of working directory
-        run: ls -al && sleep 60s
+      # Configure AWS Credentials through OIDC
+      - name: Configure AWS credentials
+        if: ${{ INPUTS.AWSCONNECTION == 'oidc' }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          #role-to-assume: ${{ secrets.OIDC_ROLE }}
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', INPUTS.DEPLOYMENTSTAGE)] }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       # Install eksctl to launch EKS
       - name: Install eksctl
@@ -106,8 +144,25 @@ jobs:
       # Render template
       - name: Render Template
         run: |
-          unity-cs-terraform-transformer eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --managenodegroups dafaultgroup,${{ INPUTS.MINNODES }},${{ INPUTS.MAXNODES }},${{ INPUTS.DESIREDNODES }},m5.xlarge --instancetype ${{ INPUTS.INSTANCETYPE }} --projectname ${{ INPUTS.OWNER }} --servicename ${{ INPUTS.OWNER }} > build/eksctl/eksctl-config.yaml
-          cat build/eksctl/eksctl-config.yaml
+          if ${{ INPUTS.META }}
+          if [ -z "${INPUTS.META}" ]
+          then
+              export owner=$(echo ${{ inputs.META }} | jq -r .owner)
+              export cluster=$(echo ${{ inputs.META }} | jq -r .clustername)
+              export minnodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
+              export maxnodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
+              export desirednodes=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.nodecount)
+              export instancetype=$(echo ${{ inputs.META }} | jq -r .nodegroups.group1.instancetype)
+          else
+              export owner=${{ INPUTS.OWNER }}
+              export cluster=${{ INPUTS.CLUSTERNAME }}
+              export minnodes=${{ INPUTS.MINNODES }}
+              export maxnodes=${{ INPUTS.MAXNODES }}
+              export desirednodes=${{ INPUTS.DESIREDNODES }}
+              export instancetype=${{ INPUTS.INSTANCETYPE }}
+          fi
+          unity-cs-terraform-transformer eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > /tmp/eksctl-config.yaml
+          cat /tmp/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
         env:
@@ -116,7 +171,13 @@ jobs:
           AWS_SESSION_TOKEN: ${{ inputs.TOKEN }}
           AWS_PAGER: ""
         run: | 
-          eksctl create cluster -f build/eksctl/eksctl-config.yaml
-          aws eks update-kubeconfig --region us-west-2 --name ${{ inputs.CLUSTERNAME }}
+          if [ -z "${INPUTS.META}" ]
+          then
+              export cluster=$(echo ${{ inputs.META }} | jq -r .clustername)
+          else
+              export cluster=${{ INPUTS.CLUSTERNAME }}
+          fi
+          eksctl create cluster -f /tmp/eksctl-config.yaml
+          aws eks update-kubeconfig --region us-west-2 --name $cluster
           kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
           #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
