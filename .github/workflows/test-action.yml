@@ -32,7 +32,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@9f9e8551895c4c613b34213718af4bc798adfb15
+        uses: unity-sds/unity-cs-action@af0ebbbc677209c6c5842b510ccc3928b63ac480
         id: hello
         with:
           awskey: ${{ inputs.KEY }}
