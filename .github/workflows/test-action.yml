@@ -38,7 +38,7 @@ jobs:
           awskey: ${{ inputs.KEY }}
           awssecret: ${{ inputs.SECRET }}
           awstoken: ${{ inputs.TOKEN }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.TOKEN }}
           ucsmetadata: ${{ inputs.METADATA }}
       # Use the output from the `hello` step
       - name: Get the output time
