@@ -114,7 +114,7 @@ jobs:
         with:
           #role-to-assume: ${{ secrets.OIDC_ROLE }}
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', INPUTS.DEPLOYMENTSTAGE)] }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       # Install eksctl to launch EKS
       - name: Install eksctl
