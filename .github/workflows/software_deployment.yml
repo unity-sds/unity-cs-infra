@@ -146,7 +146,7 @@ jobs:
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
-        if: ${{ INPUTS.awsConnection == 'true' }}
+        if: ${{ INPUTS.awsConnection == 'oidc' }}
         with:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
 #          role-to-assume: ${{ secrets.OIDC_ROLE }}
