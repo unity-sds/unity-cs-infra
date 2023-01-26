@@ -150,7 +150,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
 #          role-to-assume: ${{ secrets.OIDC_ROLE }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Get AWS Caller Identity
         run: aws sts get-caller-identity
