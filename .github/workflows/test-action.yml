@@ -34,7 +34,7 @@ jobs:
       - name: test
         run: echo ${{ secrets.TOKEN }}
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@7fe13e1899f2444b6827cfde36402d5f4ebf196b
+        uses: unity-sds/unity-cs-action@ccf7e912e20a2d77ab0bbe0d18a3bee4331d8a47
         id: hello
         with:
           token: ${{ secrets.TOKEN }}
