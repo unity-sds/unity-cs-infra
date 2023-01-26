@@ -133,7 +133,7 @@ jobs:
           export maxnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
           export desirednodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
           export instancetype=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.instancetype)
-          unity-cs-terraform-transformer eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > /tmp/eksctl-config.yaml
+          unity-cs-manager eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > /tmp/eksctl-config.yaml
           cat /tmp/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
