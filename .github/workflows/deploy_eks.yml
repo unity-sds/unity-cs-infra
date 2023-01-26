@@ -149,5 +149,5 @@ jobs:
           eksctl create cluster -f /tmp/eksctl-config.yaml
           aws eks update-kubeconfig --region us-west-2 --name $cluster
           kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-          eksctl create iamidentitymapping --cluster ${{ inputs.CLUSTERNAME }} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantDeveloper --group system:masters --username admin
-          eksctl create iamidentitymapping --cluster ${{ inputs.CLUSTERNAME }} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantOperator --group system:masters --username adminOp
+          eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantDeveloper --group system:masters --username admin
+          eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantOperator --group system:masters --username adminOp
