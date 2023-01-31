@@ -744,6 +744,92 @@ paths:
         cacheKeyParameters:
           - "method.request.path.proxy"
         type: "http_proxy"
+  /am-uds-dapa/auth/admin:
+    get:
+      responses:
+        "200":
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      security:
+        - Unity_API_Gateway_Lambda_Authorizer: [ ]
+      x-amazon-apigateway-request-validator: "Validate body, query string parameters,\
+       \ and headers"
+      x-amazon-apigateway-integration:
+        httpMethod: "GET"
+        uri: ${udsCollectionsDapaFunctionUri}
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+    put:
+      responses:
+        "200":
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      security:
+        - Unity_API_Gateway_Lambda_Authorizer: [ ]
+      x-amazon-apigateway-request-validator: "Validate body, query string parameters,\
+       \ and headers"
+      x-amazon-apigateway-integration:
+        httpMethod: "PUT"
+        uri: ${udsCollectionsDapaFunctionUri}
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+    delete:
+      responses:
+        "200":
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      security:
+        - Unity_API_Gateway_Lambda_Authorizer: [ ]
+      x-amazon-apigateway-request-validator: "Validate body, query string parameters,\
+       \ and headers"
+      x-amazon-apigateway-integration:
+        httpMethod: "DELETE"
+        uri: ${udsCollectionsDapaFunctionUri}
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
+  /am-uds-dapa/auth/setup_es:
+    put:
+      responses:
+        "200":
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      security:
+        - Unity_API_Gateway_Lambda_Authorizer: [ ]
+      x-amazon-apigateway-request-validator: "Validate body, query string parameters,\
+       \ and headers"
+      x-amazon-apigateway-integration:
+        httpMethod: "GET"
+        uri: ${udsCollectionsDapaFunctionUri}
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws_proxy"
   /am-uds-dapa/collections:
     get:
       parameters:

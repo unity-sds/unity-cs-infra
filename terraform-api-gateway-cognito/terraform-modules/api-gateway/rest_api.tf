@@ -42,6 +42,19 @@ data "aws_ssm_parameter" "api_gateway_integration_uds_collections_create_dapa_fu
   name = var.ssm_param_api_gateway_integration_uds_collections_create_dapa_function_name
 }
 
+data "aws_ssm_parameter" "api_gateway_integration_uds_auth_add_function_name" {
+  name = var.ssm_param_api_gateway_integration_uds_auth_add_function_name_function_name
+}
+data "aws_ssm_parameter" "api_gateway_integration_uds_auth_list_function_name" {
+  name = var.ssm_param_api_gateway_integration_uds_auth_list_function_name_function_name
+}
+data "aws_ssm_parameter" "api_gateway_integration_uds_auth_delete_function_name" {
+  name = var.ssm_param_api_gateway_integration_uds_auth_delete_function_name_function_name
+}
+data "aws_ssm_parameter" "api_gateway_integration_uds_setup_es_function_name" {
+  name = var.ssm_param_api_gateway_integration_uds_setup_es_function_name_function_name
+}
+
 data "template_file" "api_template" {
   template = file("./terraform-modules/api-gateway/unity-rest-api-gateway-oas30.yaml")
 
@@ -101,6 +114,32 @@ resource "aws_lambda_permission" "uds_collections_ingest_dapa_lambda_permission"
   function_name = data.aws_ssm_parameter.api_gateway_integration_uds_collections_ingest_dapa_function_name.value
   principal     = "apigateway.amazonaws.com"
   source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/PUT/am-uds-dapa/collections"
+}
+
+
+
+resource "aws_lambda_permission" "uds_setup_es_lambda_permission" {
+  statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = data.aws_ssm_parameter.api_gateway_integration_uds_setup_es_function_name.value
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/PUT/am-uds-dapa/collections/auth/setup_es"
+}
+
+resource "aws_lambda_permission" "uds_auth_list_lambda_permission" {
+  statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = data.aws_ssm_parameter.api_gateway_integration_uds_auth_list_function_name.value
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/GET/am-uds-dapa/collections/auth/admin"
+}
+
+resource "aws_lambda_permission" "uds_auth_delete_lambda_permission" {
+  statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = data.aws_ssm_parameter.api_gateway_integration_uds_auth_delete_function_name.value
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/DELETE/am-uds-dapa/collections/auth/admin"
 }
 
 resource "aws_lambda_permission" "uds_collections_create_dapa_lambda_permission" {
