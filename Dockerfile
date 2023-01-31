@@ -9,7 +9,7 @@ RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1001 ubuntu && a
 WORKDIR /home/ubuntu
 
 RUN curl https://raw.githubusercontent.com/nektos/act/master/install.sh | bash
-RUN curl -L -s https://github.com/unity-sds/unity-control-plane/releases/download/0.1.6-Alpha/unity-control-plane-0.1.6-Alpha-linux-amd64.tar.gz | tar -xz
+RUN curl -L -s https://github.com/unity-sds/unity-control-plane/releases/download/0.1.7-Alpha/unity-control-plane-0.1.7-Alpha-linux-amd64.tar.gz | tar -xz
 RUN chmod +x /home/ubuntu/unity-control-plane
 RUN echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest\n \
 -P ubuntu-22.04=catthehacker/ubuntu:act-22.04\n \
