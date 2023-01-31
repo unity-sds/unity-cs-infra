@@ -79,7 +79,18 @@ jobs:
         run: echo ${{ github.event.inputs.distinct_id }}
       # Set up current working directory with the repo contents
       - uses: actions/checkout@v3
-      
+      - name: Install aws
+        if: ${{ github.event.act }}
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
+      - name: Install kubectl
+        if: ${{ github.event.act }}
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl      
       - name: Set env vars
         run: |
           if [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "DEV" ];
