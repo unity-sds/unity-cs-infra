@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Unity Common Services Infrastructure
+  description: |
+    The Unity Common Services Infrastructure repository contains various codebases to run Unity applications inside of MCP and JPL AWS accounts.
+    Github actions exist to deploy terraform scripts via OIDC and Act. Dockerfiles exist to build containers to manage deployment for end users.
+  links:
+    - title: Github
+      url: https://github.com/unity-sds
+    - title: Documentation
+      url: https://unity-sds.gitbook.io/docs/developer-docs/common-services
+  annotations:
+    github.com/project-slug: unity-sds/unity-cs-infra
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: service
+  owner: guests
+  lifecycle: experimental
