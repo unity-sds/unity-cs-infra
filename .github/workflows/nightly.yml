@@ -36,6 +36,8 @@ jobs:
           separator: '_'
           length: '4'
           style: 'lowerCase'
+
+      - name: display test generator output 
         run: echo "latest,${{ steps.generator.outputs.name }}"
 
 
