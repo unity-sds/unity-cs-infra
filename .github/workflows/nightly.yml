@@ -136,7 +136,7 @@ jobs:
         env: 
           NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
         with:
-          token: ${{ secrets.TOKEN }}
+#          token: ${{ secrets.TOKEN }}
           ucsmetadata: ${{ env.NEW_NEW_METADATA }}
 
       # Use the output from the `hello` step
