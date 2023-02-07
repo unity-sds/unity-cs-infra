@@ -117,6 +117,9 @@ jobs:
       - name: Output new inputs
         run: echo '${{ steps.nightly_build_metadata.outputs.contents }}'
 
+      - name: Output new new inputs
+        run: echo '${{ fromJson(steps.nightly_build_metadata.outputs.contents) }}'
+
       # - name: test
       #   run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
       #        echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc &&
