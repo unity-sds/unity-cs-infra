@@ -124,21 +124,21 @@ jobs:
       - name: Output new new inputs
         run: echo '${{ env.NEW_NEW_METADATA }}'
 
-      # - name: test
-      #   run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
-      #        echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc &&
-      #        echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc &&
-      #        echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
+      - name: test
+        run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
+             echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc &&
+             echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc &&
+             echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
 
-      # - name: Unity custom action step
-      #   uses: unity-sds/unity-cs-action@0de7e4a8b3786fd603b69d91a6cf520283dbc48a
-      #   id: hello
-      #   env: 
-      #     NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
-      #   with:
-      #     token: ${{ secrets.TOKEN }}
-      #     ucsmetadata: $NIGHTLY_METADATA
+      - name: Unity custom action step
+        uses: unity-sds/unity-cs-action@0de7e4a8b3786fd603b69d91a6cf520283dbc48a
+        id: hello
+        env: 
+          NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
+        with:
+          token: ${{ secrets.TOKEN }}
+          ucsmetadata: ${{ env.NEW_NEW_METADATA }}
 
-      # # Use the output from the `hello` step
-      # - name: Get the output time
-      #   run: echo "The time was ${{ steps.hello.outputs.eksmeta }}"
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.eksmeta }}"
