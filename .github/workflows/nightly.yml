@@ -54,10 +54,11 @@ jobs:
       metadata: ''
     runs-on: ubuntu-latest
     steps:
-      # - name: Convert METADATA to machine-readable JSON
-      #   run: |
-      #     INPUTS.METADATA="${INPUTS.METADATA//$'\n'/'%0A'}"
-      #     INPUTS.METADATA="${INPUTS.METADATA//$'\r'/'%0D'}"
+      - name: Write METADATA to fil
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "nightly_metadata.json"
+          json: ${{ INPUTS.METADATA }}
 
       - name: Generate Nightly ID
         uses: TGPSKI/name-generator-node-action@v2
@@ -68,10 +69,14 @@ jobs:
           style: 'lowerCase'
 
       - name: Update METADATA with nightly values
-        run: INPUTS.METADATA.exectarget='nightly_github'
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: nightly_metadata.json
+          field: UPDATED VALUE
+          value: exectarget
 
       - name: Display Metadata
-        run: echo "${{ INPUTS.METADATA }}"
+        run: cat nightly_metadata.json 
 
 
 
