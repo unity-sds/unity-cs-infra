@@ -49,7 +49,7 @@ on:
                   }'
 
 jobs:
-  run_unity_job:
+  configure_unity_job:
     env: 
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       metadata: ''
@@ -100,8 +100,7 @@ jobs:
       - name: Display Metadata
         run: cat nightly_metadata.json 
 
-
-
+  run_unity_job:
     name: Parse Metadata and Execute
     steps:
       # To use this repository's private action,
