@@ -99,9 +99,12 @@ jobs:
 
       - name: Read Nightly Metadata
         id: nightly_build_metadata
-        uses: andstor/file-reader-action@v1
-        with:
-          path: "nightly_metadata.json"
+        run: jq -c nightly_metadata.json
+      # - name: Read Nightly Metadata
+      #   id: nightly_build_metadata
+      #   uses: andstor/file-reader-action@v1
+      #   with:
+      #     path: "nightly_metadata.json"
 
       # To use this repository's private action,
       # you must check out the repository
