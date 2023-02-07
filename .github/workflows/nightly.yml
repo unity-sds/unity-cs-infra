@@ -99,7 +99,7 @@ jobs:
 
       - name: Read Nightly Metadata
         id: nightly_build_metadata
-        run: jq -c nightly_metadata.json
+        run: cat nightly_metadata.json | jq --compact-output
       # - name: Read Nightly Metadata
       #   id: nightly_build_metadata
       #   uses: andstor/file-reader-action@v1
