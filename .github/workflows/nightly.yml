@@ -54,7 +54,7 @@ jobs:
       metadata: ''
     runs-on: ubuntu-latest
     steps:
-      - name: Write METADATA to fil
+      - name: Write METADATA to file
         uses: jsdaniell/create-json@v1.2.2
         with:
           name: "nightly_metadata.json"
@@ -72,8 +72,8 @@ jobs:
         uses: jossef/action-set-json-field@v2.1
         with:
           file: nightly_metadata.json
-          field: UPDATED VALUE
-          value: exectarget
+          field: exectarget
+          value: UPDATED VALUE
 
       - name: Display Metadata
         run: cat nightly_metadata.json 
