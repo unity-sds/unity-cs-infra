@@ -74,7 +74,14 @@ jobs:
         with:
           file: nightly_metadata.json
           field: extensions.kubernetes.owner
-          value: ucs-nightly
+          value: uc-s-nightly
+
+      - name: Update METADATA with nightly values
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: nightly_metadata.json
+          field: extensions.kubernetes.clustername
+          value: ucsnightlycluster
 
       - name: Update METADATA with nightly values
         uses: jossef/action-set-json-field@v2.1
