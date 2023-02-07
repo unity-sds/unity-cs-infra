@@ -100,8 +100,7 @@ jobs:
       - name: Read Nightly Metadata
         id: nightly_build_metadata
         run: |
-          NEW_NEW_METADATA=$( cat nightly_metadata.json | jq --compact-output )
-          echo "::set-env name=NEW_NEW_METADATA::${{ NEW_NEW_METADATA }}""
+          echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq --compact-output )"
       # - name: Read Nightly Metadata
       #   id: nightly_build_metadata
       #   uses: andstor/file-reader-action@v1
