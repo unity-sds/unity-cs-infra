@@ -3,21 +3,21 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
-      # KEY:
-      #   description: 'Access Key ID'
-      #   required: false
-      #   type: string
-      #   default: ''
-      # SECRET:
-      #   description: 'Access Secret Key ID'
-      #   required: false
-      #   type: string
-      #   default: ''
-      # TOKEN:
-      #   description: 'AWS Session Token'
-      #   required: false
-      #   type: string
-      #   default: ''
+      KEY:
+        description: 'Access Key ID'
+        required: false
+        type: string
+        default: ''
+      SECRET:
+        description: 'Access Secret Key ID'
+        required: false
+        type: string
+        default: ''
+      TOKEN:
+        description: 'AWS Session Token'
+        required: false
+        type: string
+        default: ''
       METADATA:
         description: 'UCS Metadata Definition'
         required: true
@@ -136,7 +136,7 @@ jobs:
         env: 
           NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
         with:
-#          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.TOKEN }}
           ucsmetadata: ${{ env.NEW_NEW_METADATA }}
 
       # Use the output from the `hello` step
