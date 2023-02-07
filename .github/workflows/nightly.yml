@@ -67,7 +67,9 @@ jobs:
           separator: '_'
           length: '2'
           style: 'lowerCase'
+
       - name: Update METADATA with nightly values
+        run: metadata.exectarget='nightly_github'
 
       - name: Display Metadata
         run: echo "${{ metadata }}"
