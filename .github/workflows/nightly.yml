@@ -54,10 +54,10 @@ jobs:
       metadata: ''
     runs-on: ubuntu-latest
     steps:
-      - name: Convert METADATA to machine-readable JSON
-        run: |
-          INPUTS.METADATA="${INPUTS.METADATA//$'\n'/'%0A'}"
-          INPUTS.METADATA="${INPUTS.METADATA//$'\r'/'%0D'}"
+      # - name: Convert METADATA to machine-readable JSON
+      #   run: |
+      #     INPUTS.METADATA="${INPUTS.METADATA//$'\n'/'%0A'}"
+      #     INPUTS.METADATA="${INPUTS.METADATA//$'\r'/'%0D'}"
 
       - name: Generate Nightly ID
         uses: TGPSKI/name-generator-node-action@v2
