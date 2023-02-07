@@ -102,7 +102,7 @@ jobs:
         uses: andstor/file-reader-action@v1
         with:
           path: "nightly_metadata.json"
-          
+
       # To use this repository's private action,
       # you must check out the repository
       - name: Checkout
@@ -122,7 +122,7 @@ jobs:
         id: hello
         with:
           token: ${{ secrets.TOKEN }}
-          ucsmetadata: ${ steps.nightly_build_metadata.outputs.contents }
+          ucsmetadata: "${ steps.nightly_build_metadata.outputs.contents }"
 
       # Use the output from the `hello` step
       - name: Get the output time
