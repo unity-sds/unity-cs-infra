@@ -122,7 +122,7 @@ jobs:
         run: echo '${{ steps.nightly_build_metadata.outputs.contents }}'
 
       - name: Output new new inputs
-        run: echo '${{ NEW_NEW_METADATA }}'
+        run: echo '${{ env.NEW_NEW_METADATA }}'
 
       # - name: test
       #   run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
