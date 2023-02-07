@@ -36,7 +36,7 @@ jobs:
           separator: '_'
           length: '4'
           style: 'lowerCase'
-          run: echo "latest,${{ steps.generator.outputs.name }}"
+        run: echo "latest,${{ steps.generator.outputs.name }}"
 
 
 
