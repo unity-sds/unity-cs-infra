@@ -102,6 +102,7 @@ jobs:
 
   run_unity_job:
     name: Parse Metadata and Execute
+    runs-on: ubuntu-latest
     steps:
       # To use this repository's private action,
       # you must check out the repository
