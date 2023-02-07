@@ -87,7 +87,7 @@ jobs:
         uses: jossef/action-set-json-field@v2.1
         with:
           file: nightly_metadata.json
-          field: services[1].name
+          field: services.0.name
           value: unity-sps-prototype-nightly
 
       - name: Display Metadata
