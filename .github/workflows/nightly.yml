@@ -120,9 +120,11 @@ jobs:
       - name: Unity custom action step
         uses: unity-sds/unity-cs-action@0de7e4a8b3786fd603b69d91a6cf520283dbc48a
         id: hello
+        env: 
+          NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
         with:
           token: ${{ secrets.TOKEN }}
-          ucsmetadata: "${ steps.nightly_build_metadata.outputs.contents }"
+          ucsmetadata: ${{ NIGHTLY_METADATA }}
 
       # Use the output from the `hello` step
       - name: Get the output time
