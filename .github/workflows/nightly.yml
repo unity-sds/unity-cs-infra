@@ -99,7 +99,9 @@ jobs:
 
       - name: Read Nightly Metadata
         id: nightly_build_metadata
-        run: NEW_NEW_METADATA=$( cat nightly_metadata.json | jq --compact-output )
+        run: |
+          NEW_NEW_METADATA=$( cat nightly_metadata.json | jq --compact-output )
+          echo "::set-env name=NEW_NEW_METADATA::${{ NEW_NEW_METADATA }}""
       # - name: Read Nightly Metadata
       #   id: nightly_build_metadata
       #   uses: andstor/file-reader-action@v1
@@ -121,7 +123,7 @@ jobs:
         run: echo '${{ steps.nightly_build_metadata.outputs.contents }}'
 
       - name: Output new new inputs
-        run: echo "::set-env name=NEW_NEW_METADATA::${{ NEW_NEW_METADATA }}""
+        run: echo '${{ NEW_NEW_METADATA }}'
 
       # - name: test
       #   run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
