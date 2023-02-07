@@ -51,8 +51,15 @@ jobs:
   run_unity_job:
     env: 
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      metadata: ''
     runs-on: ubuntu-latest
     steps:
+      - name: Convert METADATA to machine-readable JSON
+        run: |
+          metadata="${INPUTS.METADATA//'%'/'%25'}"
+          metadata="${metadata//$'\n'/'%0A'}"
+          metadata="${metadata//$'\r'/'%0D'}"
+
       - name: Generate Nightly ID
         uses: TGPSKI/name-generator-node-action@v2
         id: generator
@@ -60,9 +67,10 @@ jobs:
           separator: '_'
           length: '2'
           style: 'lowerCase'
+      - name: Update METADATA with nightly values
 
-      - name: display test generator output 
-        run: echo "latest, ${{ steps.generator.outputs.name }} \n ${{ INPUTS.METADATA }}"
+      - name: Display Metadata
+        run: echo "${{ metadata }}"
 
 
 
