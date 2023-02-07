@@ -124,7 +124,7 @@ jobs:
           NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
         with:
           token: ${{ secrets.TOKEN }}
-          ucsmetadata: ${{ NIGHTLY_METADATA }}
+          ucsmetadata: $NIGHTLY_METADATA
 
       # Use the output from the `hello` step
       - name: Get the output time
