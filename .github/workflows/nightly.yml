@@ -22,14 +22,38 @@ on:
         description: 'UCS Metadata Definition'
         required: true
         type: string
-        default: '{"metadataVersion":"unity-cs-0.1","exectarget": "github","deploymentName":"some name for the deployment of services","services":[{"name":"unity-sps-prototype","source":"unity-sds/unity-sps-prototype","version":"xxx","branch":"main"}],"extensions":{"kubernetes":{"clustername":"testclustertomthurs","owner":"tom","projectname":"testproject","nodegroups":{"group1":{"instancetype":"m5.xlarge","nodecount":"1"}}}}}'
+        default: '{ 
+                    "metadataVersion":"unity-cs-0.1", 
+                    "exectarget": "github", 
+                    "deploymentName":"some name for the deployment of services", 
+                    "services":[ 
+                      { 
+                        "name":"unity-sps-prototype", 
+                        "source":"unity-sds/unity-sps-prototype", 
+                        "version":"xxx","branch":"main" 
+                      } 
+                    ], 
+                    "extensions":{ 
+                      "kubernetes":{ 
+                        "clustername":"testclustertomthurs", 
+                        "owner":"tom", 
+                        "projectname":"testproject", 
+                        "nodegroups":{ 
+                          "group1":{
+                            "instancetype":"m5.xlarge", 
+                            "nodecount":"1" 
+                          } 
+                        } 
+                      } 
+                    } 
+                  }'
 jobs:
   run_unity_job:
     env: 
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     runs-on: ubuntu-latest
     steps:
-      - name: test generator output
+      - name: Generate Nightly ID
         uses: TGPSKI/name-generator-node-action@v2
         id: generator
         with:
@@ -38,7 +62,7 @@ jobs:
           style: 'lowerCase'
 
       - name: display test generator output 
-        run: echo "latest, ${{ steps.generator.outputs.name }}"
+        run: echo "latest, ${{ steps.generator.outputs.name }} \n ${{ INPUTS.METADATA }}"
 
 
 
