@@ -25,7 +25,6 @@ on:
         default: '{"metadataVersion":"unity-cs-0.1","exectarget": "github","deploymentName":"some name for the deployment of services","services":[{"name":"unity-sps-prototype","source":"unity-sds/unity-sps-prototype","version":"xxx","branch":"main"}],"extensions":{"kubernetes":{"clustername":"testclustertomthurs","owner":"tom","projectname":"testproject","nodegroups":{"group1":{"instancetype":"m5.xlarge","nodecount":"1"}}}}}'
 jobs:
   run_unity_job:
-    runs-on: ubuntu-latest
 
     name: Generate Metadata
     steps:
@@ -34,7 +33,7 @@ jobs:
         id: generator
         with:
           separator: '_'
-          length: '4'
+          length: '2'
           style: 'lowerCase'
 
       - name: display test generator output 
