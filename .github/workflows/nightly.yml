@@ -112,10 +112,10 @@ jobs:
         run: curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash && echo "/home/ubuntu/unity-cs/bin" >> $GITHUB_PATH        
 
       - name: Output original inputs
-        run: cat ${{ inputs.METADATA }}
+        run: echo '${{ inputs.METADATA }}'
 
       - name: Output new inputs
-        run: cat ${{ steps.nightly_build_metadata.outputs.contents }}
+        run: echo '${{ steps.nightly_build_metadata.outputs.contents }}'
 
       # - name: test
       #   run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
