@@ -3,21 +3,21 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
-      KEY:
-        description: 'Access Key ID'
-        required: false
-        type: string
-        default: ''
-      SECRET:
-        description: 'Access Secret Key ID'
-        required: false
-        type: string
-        default: ''
-      TOKEN:
-        description: 'AWS Session Token'
-        required: false
-        type: string
-        default: ''
+      # KEY:
+      #   description: 'Access Key ID'
+      #   required: false
+      #   type: string
+      #   default: ''
+      # SECRET:
+      #   description: 'Access Secret Key ID'
+      #   required: false
+      #   type: string
+      #   default: ''
+      # TOKEN:
+      #   description: 'AWS Session Token'
+      #   required: false
+      #   type: string
+      #   default: ''
       METADATA:
         description: 'UCS Metadata Definition'
         required: true
@@ -47,6 +47,7 @@ on:
                       } 
                     } 
                   }'
+
 jobs:
   run_unity_job:
     env: 
@@ -58,7 +59,7 @@ jobs:
         uses: jsdaniell/create-json@v1.2.2
         with:
           name: "nightly_metadata.json"
-          json: ${{ INPUTS.METADATA }}
+          json: ${{ inputs.METADATA }}
 
       - name: Generate Nightly ID
         uses: TGPSKI/name-generator-node-action@v2
@@ -72,8 +73,22 @@ jobs:
         uses: jossef/action-set-json-field@v2.1
         with:
           file: nightly_metadata.json
-          field: exectarget
-          value: UPDATED VALUE
+          field: extensions.kubernetes.owner
+          value: ucs-nightly
+
+      - name: Update METADATA with nightly values
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: nightly_metadata.json
+          field: deploymentName
+          value: Unity CS Nightly Build
+
+      - name: Update METADATA with nightly values
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: nightly_metadata.json
+          field: services[1].name
+          value: unity-sps-prototype-nightly
 
       - name: Display Metadata
         run: cat nightly_metadata.json 
