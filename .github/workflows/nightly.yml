@@ -56,9 +56,9 @@ jobs:
     steps:
       - name: Convert METADATA to machine-readable JSON
         run: |
-          metadata="${INPUTS.METADATA//'%'/'%25'}"
-          metadata="${metadata//$'\n'/'%0A'}"
-          metadata="${metadata//$'\r'/'%0D'}"
+          INPUTS.METADATA="${INPUTS.METADATA//'%'/'%25'}"
+          INPUTS.METADATA="${INPUTS.METADATA//$'\n'/'%0A'}"
+          INPUTS.METADATA="${INPUTS.METADATA//$'\r'/'%0D'}"
 
       - name: Generate Nightly ID
         uses: TGPSKI/name-generator-node-action@v2
@@ -69,10 +69,10 @@ jobs:
           style: 'lowerCase'
 
       - name: Update METADATA with nightly values
-        run: metadata.exectarget='nightly_github'
+        run: INPUTS.METADATA.exectarget='nightly_github'
 
       - name: Display Metadata
-        run: echo "${{ metadata }}"
+        run: echo "${{ INPUTS.METADATA }}"
 
 
 
