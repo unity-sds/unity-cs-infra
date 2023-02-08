@@ -149,7 +149,7 @@ jobs:
       # Launch EKS
       - name: Launch EKS cluster
         run: |
-          if [ -n "$inputs.KEY" ]
+          if [ "${{inputs.AWSCONNECTION}}" == "keys" ]
           then
               export AWS_ACCESS_KEY_ID=${{ inputs.KEY }}
               export AWS_SECRET_ACCESS_KEY=${{ inputs.SECRET }}
