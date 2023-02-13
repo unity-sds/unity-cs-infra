@@ -17,9 +17,9 @@ variable "subnet_two_id" { default = "" }
 variable "igw_id" { default = "" }
 
 variable "default_tags" {
-  default     = {
-     Owner       = "Unity CS"
-     Project     = "Unity CS"
+  default = {
+    Owner   = "Unity CS"
+    Project = "Unity CS"
   }
   description = "Default Tags"
   type        = map(string)
