@@ -17,7 +17,7 @@ variable "subnet_two_id" { default = "" }
 variable "igw_id" { default = "" }
 
 variable "default_tags" {
-  tags     = {
+  default     = {
      Owner       = "Unity CS"
      Project     = "Unity CS"
   }
