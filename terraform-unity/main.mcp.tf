@@ -35,7 +35,13 @@ terraform {
 }
 
 provider "aws" {
-  region       = "us-west-2"
-  default_tags = var.default_tags
+  region = "us-west-2"
+  default_tags = merge(
+    var.default_tags,
+    {
+      runner = "github"
+    },
+  )
+
 }
 
