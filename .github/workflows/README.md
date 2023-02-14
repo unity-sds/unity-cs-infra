@@ -1,4 +1,4 @@
-This readme has information pertaining to the various workflows.  These can be invoked either directly from the GitHub Actions web page, or via `act` on the Unity Control Plane EC2 server inside AWS.
+This readme has information pertaining to the various workflows.  These can be invoked either directly from the GitHub Actions web page, or via [`act`](https://github.com/nektos/act) on the Unity Control Plane EC2 server inside AWS.
 
 ## General Flow of the Prototype
 The general idea, in the short-term, is to support the deployment of the SPS service area, by chaining together an EKS deployment, then a SPS software stack.  The below workflows support this use case.  
