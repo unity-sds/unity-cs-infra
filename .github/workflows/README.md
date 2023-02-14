@@ -9,6 +9,13 @@ This workflow uses a metadata-driven approach to run the [unity-cs-action plugin
  * ```deploy_eks``` (see below)
  * ```software_deployment``` (see below)
 
+#### To Test:
+ 1)  Click Run workflow
+ 2) Modify the `clustername` variable to be something unique (e.g. your name)
+ 3) Click Go
+ NOTE:  by default, this will deploy to the MCP DEV AWS account
+ 4) Go to the MCP DEV account (via Kion) and view what is deploying
+
 ### ```deploy_eks```
 This workflow deploys EKS into the various environments.
 
@@ -26,3 +33,7 @@ documentation coming soon...
 
 ### ```nightly```
 documentation coming soon...
+
+
+# TESTING
+
