@@ -56,14 +56,41 @@ variable "ssm_param_api_gateway_integration_uds_collections_dapa_function_name" 
   default     = "/unity/unity-ds/api-gateway/integrations/collections-dapa-function-name"
 }
 
+variable "ssm_param_api_gateway_integration_uds_collections_create_dapa_function_name" {
+  type        = string
+  description = "SSM Param for UDS Collections Creation DAPA Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/collections-create-dapa-function-name"
+}
+
+variable "api_gateway_integration_cumulus_auth_add_function_name" {
+  type        = string
+  description = "SSM Param for UDS Collections Ingestion DAPA Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/collections-ingest-dapa-function-name"
+}
+
 variable "ssm_param_api_gateway_integration_uds_collections_ingest_dapa_function_name" {
   type        = string
   description = "SSM Param for UDS Collections Ingestion DAPA Function Name"
   default     = "/unity/unity-ds/api-gateway/integrations/collections-ingest-dapa-function-name"
 }
 
-variable "ssm_param_api_gateway_integration_uds_collections_create_dapa_function_name" {
+variable "ssm_param_api_gateway_integration_uds_setup_es_function_name_function_name" {
   type        = string
-  description = "SSM Param for UDS Collections Creation DAPA Function Name"
-  default     = "/unity/unity-ds/api-gateway/integrations/collections-create-dapa-function-name"
+  description = "SSM Param for UDS Setup ES Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/cumulus_es_setup_index_alias-function-name"
+}
+variable "ssm_param_api_gateway_integration_uds_auth_add_function_name_function_name" {
+  type        = string
+  description = "SSM Param for UDS Authorization Record Addition Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/cumulus_auth_add-function-name"
+}
+variable "ssm_param_api_gateway_integration_uds_auth_list_function_name_function_name" {
+  type        = string
+  description = "SSM Param for UDS Authorization Record Listing Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/cumulus_auth_list-function-name"
+}
+variable "ssm_param_api_gateway_integration_uds_auth_delete_function_name_function_name" {
+  type        = string
+  description = "SSM Param for Authorization Record Deletion Function Name"
+  default     = "/unity/unity-ds/api-gateway/integrations/cumulus_auth_delete-function-name"
 }
