@@ -11,10 +11,11 @@ This workflow uses a metadata-driven approach to run the [unity-cs-action plugin
 
 #### To Test:
  1)  Click Run workflow
- 2) Modify the `clustername` variable to be something unique (e.g. your name)
- 3) Click Go
+ 2)  Get the access key, secret access key, and session token from Kion, and paste into corresponding fields.
+ 3)  Modify the `clustername` variable to be something unique (e.g. your name)
+ 4)  Click `Run workflow`
  NOTE:  by default, this will deploy to the MCP DEV AWS account
- 4) Go to the MCP DEV account (via Kion) and view what is deploying
+ 5) Go to the MCP DEV account (via Kion) and view what is deploying
 
 ### ```deploy_eks```
 This workflow deploys EKS into the various environments.
