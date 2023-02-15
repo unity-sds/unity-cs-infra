@@ -21,6 +21,9 @@ This workflow uses a metadata-driven approach to run the [unity-cs-action plugin
  7) Destroy the deployed resources (manual procedure until a better automated one exists)
     - Delete the EKS Cluster Node group (will also delete the nodes (EC2 instances in this case))
     - Delete the EKS Cluster
+    - Delete the CloudFormation stacks.  For example:
+      - `eksctl-testclustergalen-nodegroup-defaultgroupNodeGroup`
+      - `eksctl-testclustergalen-cluster`
 
 ### ```deploy_eks```
 This workflow deploys EKS into the various environments.
