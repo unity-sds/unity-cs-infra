@@ -18,8 +18,9 @@ This workflow uses a metadata-driven approach to run the [unity-cs-action plugin
  NOTE:  by default, this will deploy to the MCP DEV AWS account
  5) Go to the MCP DEV account (via Kion) and view what is deploying
  6) Do any necessary testing
- 7) Destroy the deployed resources
-    - instructions TBD..
+ 7) Destroy the deployed resources (manual procedure until a better automated one exists)
+    - Delete the EKS Cluster Node group (will also delete the nodes (EC2 instances in this case))
+    - Delete the EKS Cluster
 
 ### ```deploy_eks```
 This workflow deploys EKS into the various environments.
