@@ -132,7 +132,7 @@ jobs:
 
       - name: Install Unity Transformer
         run: |
-          curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.20-Alpha/unity-cs-manager-0.1.20-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
+          curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.21-Alpha/unity-cs-manager-0.1.21-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
           sudo mv /tmp/unity-cs-manager /usr/local/bin
 
       # Render template
