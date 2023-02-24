@@ -83,7 +83,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ${{ inputs.TEMPLATE_REPO }}
-          path: resources/deployable
           ref: ${{ inputs.TEMPLATE_REPO_BRANCH }}
 
       # Create the cloudformation stack using the template
@@ -92,7 +91,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: ${{ inputs.STACK_NAME }}
-          template: ${{ inputs.TEMPLATE_PATH }}
+          template: $GITHUB_WORKSPACE/${{ inputs.TEMPLATE_PATH }}
           parameter-overrides: >-
             VPCID=${{ inputs.VPC_ID }}
             PublicSubnetID=${{ vars.MCP_DEV_EKSSUBNETCONFIGB }}
