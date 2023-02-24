@@ -92,7 +92,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: ${{ inputs.STACK_NAME }}
-          template: resources/deployable/${{ inputs.TEMPLATE_PATH }}
+          template: ${{ inputs.TEMPLATE_PATH }}
           parameter-overrides: >-
             VPCID=${{ inputs.VPC_ID }}
             PublicSubnetID=${{ vars.MCP_DEV_EKSSUBNETCONFIGB }}
