@@ -1,0 +1,100 @@
+name: Deploy Control Plane
+on:
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      distinct_id:
+      AWSCONNECTION:
+        description: 'Method of AWS connection'
+        required: true
+        type: choice
+        default: 'oidc'
+        options:
+        - oidc
+        - keys
+        - iam
+      DEPLOYMENTSTAGE:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+      TEMPLATE_REPO:
+        description: 'Repository containing CloudFormation template to use for deploying control plane'
+        required: true 
+        type: string
+        default: 'unity-sds/unity-on-demand-cloudformation'
+      TEMPLATE_REPO_BRANCH:
+        description: 'Template repository Branch'
+        required: true 
+        type: string
+        default: 'main'
+      TEMPLATE_PATH:
+        descritption: 'Full relative path to template in template repo'
+        required: true
+        type: string
+        default: 'templates/unity_deployer_instance-control_plane.yaml'
+      STACK_NAME:
+        description: 'Unique Stack name used to deploy control plane CloudFormation stack'
+        required: true
+        type: string
+        default: ''
+      VPC_ID:
+        description: 'ID of VPC already in AWS account'
+        required: true
+        type: string
+        default: ''
+      PUBLIC_SUBNET_ID:
+        description: 'ID of public subnet already in AWS account'
+        required: true
+        type: string
+      KEY_PAIR_NAME:
+        description: 'ID of public subnet already in AWS account'
+        required: true
+        type: string
+        default: ''
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # Configure AWS Credentials through OIDC
+      - name: Configure AWS credentials
+        if: ${{ inputs.AWSCONNECTION == 'oidc' }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          #role-to-assume: ${{ secrets.OIDC_ROLE }}
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', inputs.DEPLOYMENTSTAGE)] }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Clone Control Plane CloudFormation Template Repo
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ inputs.TEMPLATE_REPO }}
+          path: resources/deployable
+          ref: ${{ inputs.TEMPLATE_REPO_BRANCH }}
+
+      # Create the cloudformation stack using the template
+      # Leaves all default parameters as defaults
+      - name: Create Stack
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: ${{ inputs.STACK_NAME }}
+          template: resources/deployable/${{ inputs.TEMPLATE_PATH }}
+          parameter-overrides: >-
+            VPCID=${{ inputs.VPC_ID }}
+            PublicSubnetID=${{ inputs.PUBLIC_SUBNET_ID }}
+            KeyPairName=${{ inputs.KEY_PAIR_NAME }}
+            GithubToken=${{ secrets.UNITY_GITHUB_READ_ACCESS_TOKEN }}
+
