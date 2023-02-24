@@ -3,12 +3,26 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
-      distinct_id:
+      KEY:
+        description: 'Access Key ID'
+        required: false
+        type: string
+        default: ''
+      SECRET:
+        description: 'Access Secret Key ID'
+        required: false
+        type: string
+        default: ''
+      TOKEN:
+        description: 'AWS Session Token'
+        required: false
+        type: string
+        default: ''
       AWSCONNECTION:
         description: 'Method of AWS connection'
         required: true
         type: choice
-        default: 'oidc'
+        default: 'keys'
         options:
         - oidc
         - keys
@@ -20,9 +34,6 @@ on:
         default: 'DEV'
         options: 
         - DEV
-        - TEST
-        - OPS
-        - SIPS
       TEMPLATE_REPO:
         description: 'Repository containing CloudFormation template to use for deploying control plane'
         required: true 
@@ -44,20 +55,18 @@ on:
         type: string
         default: ''
       VPC_ID:
-        description: 'ID of VPC already in AWS account'
+        description: 'VPC ID in AWS'
         required: true
         type: string
         default: ''
-      PUBLIC_SUBNET_ID:
-        description: 'ID of public subnet already in AWS account'
-        required: true
-        type: string
       KEY_PAIR_NAME:
-        description: 'ID of public subnet already in AWS account'
+        description: 'Key pair name in AWS'
         required: true
         type: string
         default: ''
-
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   deployment:
@@ -78,6 +87,15 @@ jobs:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', inputs.DEPLOYMENTSTAGE)] }}
           aws-region: ${{ vars.AWS_REGION }}
 
+      # Configure AWS Credentials through keys
+      - name: Configure AWS credentials
+        if: ${{ inputs.AWSCONNECTION == 'keys' }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ inputs.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ github.event.inputs.region}}
+
       - name: Clone Control Plane CloudFormation Template Repo
         uses: actions/checkout@v2
         with:
@@ -94,7 +112,7 @@ jobs:
           template: resources/deployable/${{ inputs.TEMPLATE_PATH }}
           parameter-overrides: >-
             VPCID=${{ inputs.VPC_ID }}
-            PublicSubnetID=${{ inputs.PUBLIC_SUBNET_ID }}
+            PublicSubnetID=${{ vars.MCP_DEV_EKSSUBNETCONFIGB }}
             KeyPairName=${{ inputs.KEY_PAIR_NAME }}
             GithubToken=${{ secrets.UNITY_GITHUB_READ_ACCESS_TOKEN }}
 
