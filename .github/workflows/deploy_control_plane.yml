@@ -20,23 +20,28 @@ on:
         default: 'DEV'
         options: 
         - DEV
-      TEMPLATE_REPO:
-        description: 'Repository containing CloudFormation template to use for deploying control plane'
+      TEMPLATE_REPO_OWNER:
+        description: 'Template Repo Owner (ex. unity-sds)'
         required: true 
         type: string
         default: 'unity-sds/unity-on-demand-cloudformation'
+      TEMPLATE_REPO:
+        description: 'Template Repo'
+        required: true 
+        type: string
+        default: 'unity-on-demand-cloudformation'
       TEMPLATE_REPO_BRANCH:
-        description: 'Template repository Branch'
+        description: 'Template Repo Branch'
         required: true 
         type: string
         default: 'main'
       TEMPLATE_PATH:
-        descritption: 'Full relative path to template in template repo'
+        description: 'Relative Path to Template in Template Repo'
         required: true
         type: string
         default: 'templates/unity_deployer_instance-control_plane.yaml'
       STACK_NAME:
-        description: 'Unique Stack name used to deploy control plane CloudFormation stack'
+        description: 'Unique Stack Name'
         required: true
         type: string
         default: ''
@@ -82,7 +87,7 @@ jobs:
       - name: Clone Control Plane CloudFormation Template Repo
         uses: actions/checkout@v2
         with:
-          repository: ${{ inputs.TEMPLATE_REPO }}
+          repository: ${{ inputs.TEMPLATE_REPO_OWNER }}/${{ inputs.TEMPLATE_REPO }}
           ref: ${{ inputs.TEMPLATE_REPO_BRANCH }}
 
       # Create the cloudformation stack using the template
@@ -91,7 +96,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: ${{ inputs.STACK_NAME }}
-          template: ${{ github.workspace }}/${{ inputs.TEMPLATE_PATH }}
+          template: ${{ github.workspace }}/${{ inputs.TEMPLATE_REPO }}/${{ inputs.TEMPLATE_PATH }}
           parameter-overrides: >-
             VPCID=${{ inputs.VPC_ID }}
             PublicSubnetID=${{ vars.MCP_DEV_EKSSUBNETCONFIGB }}
