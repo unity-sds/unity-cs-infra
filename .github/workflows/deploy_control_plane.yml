@@ -24,7 +24,7 @@ on:
         description: 'Template Repo Owner (ex. unity-sds)'
         required: true 
         type: string
-        default: 'unity-sds/unity-on-demand-cloudformation'
+        default: 'unity-sds'
       TEMPLATE_REPO:
         description: 'Template Repo'
         required: true 
@@ -88,6 +88,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: ${{ inputs.TEMPLATE_REPO_OWNER }}/${{ inputs.TEMPLATE_REPO }}
+          path: ./${{ inputs.TEMPLATE_REPO }}
           ref: ${{ inputs.TEMPLATE_REPO_BRANCH }}
 
       # Create the cloudformation stack using the template
@@ -96,7 +97,7 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: ${{ inputs.STACK_NAME }}
-          template: ${{ github.workspace }}/${{ inputs.TEMPLATE_REPO }}/${{ inputs.TEMPLATE_PATH }}
+          template: ./${{ inputs.TEMPLATE_REPO }}/${{ inputs.TEMPLATE_PATH }}
           parameter-overrides: >-
             VPCID=${{ inputs.VPC_ID }}
             PublicSubnetID=${{ vars.MCP_DEV_EKSSUBNETCONFIGB }}
