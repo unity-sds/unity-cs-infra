@@ -34,7 +34,7 @@ on:
         description: 'Template Repo Branch'
         required: true 
         type: string
-        default: 'main'
+        default: 'develop'
       TEMPLATE_PATH:
         description: 'Relative Path to Template in Template Repo'
         required: true
@@ -99,8 +99,8 @@ jobs:
           name: ${{ inputs.STACK_NAME }}
           template: ./${{ inputs.TEMPLATE_REPO }}/${{ inputs.TEMPLATE_PATH }}
           parameter-overrides: >-
-            VPCID=${{ inputs.VPC_ID }}
-            PublicSubnetID=${{ vars.MCP_DEV_EKSSUBNETCONFIGB }}
-            KeyPairName=${{ inputs.KEY_PAIR_NAME }}
+            VPCID=${{ inputs.VPC_ID }},
+            PublicSubnetID=${{ vars.MCP_DEV_EKSSUBNETCONFIGB }},
+            KeyPairName=${{ inputs.KEY_PAIR_NAME }},
             GithubToken=${{ secrets.UNITY_GITHUB_READ_ACCESS_TOKEN }}
 
