@@ -113,6 +113,10 @@ jobs:
             echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_TEST_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
             echo "EKSSubnetConfigA=${{ vars.MCP_TEST_EKSSUBNETCONFIGA }}" >> $GITHUB_ENV
             echo "EKSSubnetConfigB=${{ vars.MCP_TEST_EKSSUBNETCONFIGB }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetA=${{ vars.MCP_TEST_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetB=${{ vars.MCP_TEST_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetA=${{ vars.MCP_TEST_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetB=${{ vars.MCP_TEST_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
             echo "EKSInstanceRoleArn=${{ vars.MCP_TEST_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
             echo "EKSServiceArn=${{ vars.MCP_TEST_EKSSERVICEARN }}" >> $GITHUB_ENV
           fi
