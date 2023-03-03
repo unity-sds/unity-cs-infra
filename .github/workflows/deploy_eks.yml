@@ -99,8 +99,8 @@ jobs:
             echo "EKSClusterAMI=${{ vars.MCP_DEV_EKSCLUSTERAMI }}" >> $GITHUB_ENV
             echo "EKSSecurityGroup=${{ vars.MCP_DEV_EKSSECURITYGROUP }}" >> $GITHUB_ENV
             echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_DEV_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
-            echo "EKSPublicSubnetA=${{ vars.MCP_DEV_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
-            echo "EKSPublicSubnetB=${{ vars.MCP_DEV_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
+            #echo "EKSPublicSubnetA=${{ vars.MCP_DEV_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
+            #echo "EKSPublicSubnetB=${{ vars.MCP_DEV_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
             echo "EKSPrivateSubnetA=${{ vars.MCP_DEV_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
             echo "EKSPrivateSubnetB=${{ vars.MCP_DEV_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
             echo "EKSInstanceRoleArn=${{ vars.MCP_DEV_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
