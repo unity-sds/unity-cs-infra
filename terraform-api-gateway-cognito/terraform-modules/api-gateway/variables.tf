@@ -16,6 +16,18 @@ variable "rest_api_stage" {
   default     = "dev"
 }
 
+variable "namespace" {
+  description = "Namespace for the Unity SPS HySDS-related Kubernetes resources"
+  type        = string
+  default     = "unity-sps"
+}
+
+variable "counter" {
+  description = "value"
+  type        = number
+  default     = 1
+}
+
 # -----------------------------------------------------------------
 # SSM Params
 # -----------------------------------------------------------------

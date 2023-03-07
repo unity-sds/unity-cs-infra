@@ -42,6 +42,34 @@ data "aws_ssm_parameter" "api_gateway_integration_uds_collections_create_dapa_fu
   name = var.ssm_param_api_gateway_integration_uds_collections_create_dapa_function_name
 }
 
+module "api_gateway_integration_uds_auth_add_function_name"{
+  source = "BardiaN/terraform-aws-ssm-parameter-with-default-value"
+  version = "0.1.0"
+  ssm_key = var.ssm_param_api_gateway_integration_uds_auth_add_function_name_function_name
+  default = "dummy_uds_auth_add_function_name"
+}
+
+module "api_gateway_integration_uds_auth_list_function_name"{
+  source = "BardiaN/terraform-aws-ssm-parameter-with-default-value"
+  version = "0.1.0"
+  ssm_key = var.ssm_param_api_gateway_integration_uds_auth_list_function_name_function_name
+  default = "dummy_uds_auth_list_function_name"
+}
+
+module "api_gateway_integration_uds_auth_delete_function_name"{
+  source = "BardiaN/terraform-aws-ssm-parameter-with-default-value"
+  version = "0.1.0"
+  ssm_key = var.ssm_param_api_gateway_integration_uds_auth_delete_function_name_function_name
+  default = "dummy_uds_auth_delete_function_name"
+}
+
+module "api_gateway_integration_uds_setup_es_function_name"{
+  source = "BardiaN/terraform-aws-ssm-parameter-with-default-value"
+  version = "0.1.0"
+  ssm_key = var.ssm_param_api_gateway_integration_uds_setup_es_function_name_function_name
+  default = "dummy_uds_setup_es_function_name"
+}
+/*
 data "aws_ssm_parameter" "api_gateway_integration_uds_auth_add_function_name" {
   name = var.ssm_param_api_gateway_integration_uds_auth_add_function_name_function_name
 }
@@ -54,6 +82,7 @@ data "aws_ssm_parameter" "api_gateway_integration_uds_auth_delete_function_name"
 data "aws_ssm_parameter" "api_gateway_integration_uds_setup_es_function_name" {
   name = var.ssm_param_api_gateway_integration_uds_setup_es_function_name_function_name
 }
+*/
 
 data "template_file" "api_template" {
   template = file("./terraform-modules/api-gateway/unity-rest-api-gateway-oas30.yaml")
@@ -82,6 +111,14 @@ resource "aws_api_gateway_deployment" "api-gateway-deployment" {
     mozartEsUrl      = "-",
     mozartRestApiUrl = "-"
   }
+}
+
+resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter"{
+  name       = format("/unity/%s/%s-%s/api-gateway/rest-api-id", var.project, var.rest_api_stage, var.namespace, var.counter)
+  type       = "String"
+  value      = "${aws_api_gateway_rest_api.rest_api.id}"
+  overwrite  = true
+  depends_on = [kubernetes_service.ades-wpst-api-service]
 }
 
 resource "aws_lambda_permission" "uds_granules_dapa_lambda_permission" {
