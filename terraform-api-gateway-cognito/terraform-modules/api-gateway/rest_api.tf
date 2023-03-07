@@ -114,7 +114,7 @@ resource "aws_api_gateway_deployment" "api-gateway-deployment" {
 }
 
 resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter"{
-  name       = format("/unity/%s/%s-%s/api-gateway/rest-api-id", var.project, var.rest_api_stage, var.namespace, var.counter)
+  name       = format("/unity/%s/%s-%s/api-gateway/rest-api-id", var.rest_api_stage, var.namespace, var.counter)
   type       = "String"
   value      = "${aws_api_gateway_rest_api.rest_api.id}"
   overwrite  = true
