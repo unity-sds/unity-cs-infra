@@ -46,28 +46,28 @@ module "api_gateway_integration_uds_auth_add_function_name"{
   source = "BardiaN/ssm-parameter-with-default-value/aws"
   version = "0.1.1"
   ssm_key = var.ssm_param_api_gateway_integration_uds_auth_add_function_name_function_name
-  ssm_default_value = "dummy_uds_auth_add_function_name"
+  ssm_default_value = ""
 }
 
 module "api_gateway_integration_uds_auth_list_function_name"{
   source = "BardiaN/ssm-parameter-with-default-value/aws"
   version = "0.1.1"
   ssm_key = var.ssm_param_api_gateway_integration_uds_auth_list_function_name_function_name
-  ssm_default_value = "dummy_uds_auth_list_function_name"
+  ssm_default_value = ""
 }
 
 module "api_gateway_integration_uds_auth_delete_function_name"{
   source = "BardiaN/ssm-parameter-with-default-value/aws"
   version = "0.1.1"
   ssm_key = var.ssm_param_api_gateway_integration_uds_auth_delete_function_name_function_name
-  ssm_default_value = "dummy_uds_auth_delete_function_name"
+  ssm_default_value = ""
 }
 
 module "api_gateway_integration_uds_setup_es_function_name"{
   source = "BardiaN/ssm-parameter-with-default-value/aws"
   version = "0.1.1"
   ssm_key = var.ssm_param_api_gateway_integration_uds_setup_es_function_name_function_name
-  ssm_default_value = "dummy_uds_setup_es_function_name"
+  ssm_default_value = ""
 }
 /*
 data "aws_ssm_parameter" "api_gateway_integration_uds_auth_add_function_name" {
@@ -156,6 +156,7 @@ resource "aws_lambda_permission" "uds_collections_ingest_dapa_lambda_permission"
 
 
 resource "aws_lambda_permission" "uds_setup_es_lambda_permission" {
+  count         = module.api_gateway_integration_uds_setup_es_function_name.value != "" ? 1 : 0
   statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
   action        = "lambda:InvokeFunction"
   function_name = module.api_gateway_integration_uds_setup_es_function_name.value
@@ -164,6 +165,7 @@ resource "aws_lambda_permission" "uds_setup_es_lambda_permission" {
 }
 
 resource "aws_lambda_permission" "uds_auth_list_lambda_permission" {
+  count         = module.api_gateway_integration_uds_auth_list_function_name.value != "" ? 1 : 0
   statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
   action        = "lambda:InvokeFunction"
   function_name = module.api_gateway_integration_uds_auth_list_function_name.value
@@ -172,6 +174,7 @@ resource "aws_lambda_permission" "uds_auth_list_lambda_permission" {
 }
 
 resource "aws_lambda_permission" "uds_auth_delete_lambda_permission" {
+  count         = module.api_gateway_integration_uds_auth_delete_function_name.value != "" ? 1 : 0
   statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
   action        = "lambda:InvokeFunction"
   function_name = module.api_gateway_integration_uds_auth_delete_function_name.value
