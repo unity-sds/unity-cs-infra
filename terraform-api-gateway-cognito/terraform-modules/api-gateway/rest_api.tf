@@ -43,31 +43,31 @@ data "aws_ssm_parameter" "api_gateway_integration_uds_collections_create_dapa_fu
 }
 
 module "api_gateway_integration_uds_auth_add_function_name"{
-  source = "BardiaN/terraform-aws-ssm-parameter-with-default-value"
-  version = "0.1.0"
+  source = "BardiaN/ssm-parameter-with-default-value/aws"
+  version = "0.1.1"
   ssm_key = var.ssm_param_api_gateway_integration_uds_auth_add_function_name_function_name
-  default = "dummy_uds_auth_add_function_name"
+  ssm_default_value = "dummy_uds_auth_add_function_name"
 }
 
 module "api_gateway_integration_uds_auth_list_function_name"{
-  source = "BardiaN/terraform-aws-ssm-parameter-with-default-value"
-  version = "0.1.0"
+  source = "BardiaN/ssm-parameter-with-default-value/aws"
+  version = "0.1.1"
   ssm_key = var.ssm_param_api_gateway_integration_uds_auth_list_function_name_function_name
-  default = "dummy_uds_auth_list_function_name"
+  ssm_default_value = "dummy_uds_auth_list_function_name"
 }
 
 module "api_gateway_integration_uds_auth_delete_function_name"{
-  source = "BardiaN/terraform-aws-ssm-parameter-with-default-value"
-  version = "0.1.0"
+  source = "BardiaN/ssm-parameter-with-default-value/aws"
+  version = "0.1.1"
   ssm_key = var.ssm_param_api_gateway_integration_uds_auth_delete_function_name_function_name
-  default = "dummy_uds_auth_delete_function_name"
+  ssm_default_value = "dummy_uds_auth_delete_function_name"
 }
 
 module "api_gateway_integration_uds_setup_es_function_name"{
-  source = "BardiaN/terraform-aws-ssm-parameter-with-default-value"
-  version = "0.1.0"
+  source = "BardiaN/ssm-parameter-with-default-value/aws"
+  version = "0.1.1"
   ssm_key = var.ssm_param_api_gateway_integration_uds_setup_es_function_name_function_name
-  default = "dummy_uds_setup_es_function_name"
+  ssm_default_value = "dummy_uds_setup_es_function_name"
 }
 /*
 data "aws_ssm_parameter" "api_gateway_integration_uds_auth_add_function_name" {
@@ -118,7 +118,7 @@ resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter"{
   type       = "String"
   value      = "${aws_api_gateway_rest_api.rest_api.id}"
   overwrite  = true
-  depends_on = [kubernetes_service.ades-wpst-api-service]
+  depends_on = [aws_api_gateway_rest_api.rest_api]
 }
 
 resource "aws_lambda_permission" "uds_granules_dapa_lambda_permission" {
@@ -158,7 +158,7 @@ resource "aws_lambda_permission" "uds_collections_ingest_dapa_lambda_permission"
 resource "aws_lambda_permission" "uds_setup_es_lambda_permission" {
   statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = data.aws_ssm_parameter.api_gateway_integration_uds_setup_es_function_name.value
+  function_name = module.api_gateway_integration_uds_setup_es_function_name.value
   principal     = "apigateway.amazonaws.com"
   source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/PUT/am-uds-dapa/collections/auth/setup_es"
 }
@@ -166,7 +166,7 @@ resource "aws_lambda_permission" "uds_setup_es_lambda_permission" {
 resource "aws_lambda_permission" "uds_auth_list_lambda_permission" {
   statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = data.aws_ssm_parameter.api_gateway_integration_uds_auth_list_function_name.value
+  function_name = module.api_gateway_integration_uds_auth_list_function_name.value
   principal     = "apigateway.amazonaws.com"
   source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/GET/am-uds-dapa/collections/auth/admin"
 }
@@ -174,7 +174,7 @@ resource "aws_lambda_permission" "uds_auth_list_lambda_permission" {
 resource "aws_lambda_permission" "uds_auth_delete_lambda_permission" {
   statement_id  = "AllowUDSCollectionsIngestDapaInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = data.aws_ssm_parameter.api_gateway_integration_uds_auth_delete_function_name.value
+  function_name = module.api_gateway_integration_uds_auth_delete_function_name.value
   principal     = "apigateway.amazonaws.com"
   source_arn = "${aws_api_gateway_rest_api.rest_api.execution_arn}/*/DELETE/am-uds-dapa/collections/auth/admin"
 }

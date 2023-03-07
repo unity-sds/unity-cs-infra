@@ -28,6 +28,12 @@ variable "counter" {
   default     = 1
 }
 
+variable "project" {
+  description = "value"
+  type        = string
+  default     = "unity"
+}
+
 # -----------------------------------------------------------------
 # SSM Params
 # -----------------------------------------------------------------
