@@ -16,6 +16,15 @@ variable "subnet_one_id" { default = "" }
 variable "subnet_two_id" { default = "" }
 variable "igw_id" { default = "" }
 
+variable "default_tags" {
+  default = {
+    Owner   = "Unity CS"
+    Project = "Unity CS"
+  }
+  description = "Default Tags"
+  type        = map(string)
+}
+
 data "aws_vpc" "unity-test-env" {
   id         = var.vpc_id
   cidr_block = "10.52.8.0/22"
@@ -36,3 +45,4 @@ data "aws_internet_gateway" "infra-env-gw" {
   #  internet_gateway_id = "igw-0622379cb99c03649"
   internet_gateway_id = var.igw_id
 }
+

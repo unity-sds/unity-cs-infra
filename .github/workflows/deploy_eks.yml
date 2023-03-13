@@ -99,8 +99,10 @@ jobs:
             echo "EKSClusterAMI=${{ vars.MCP_DEV_EKSCLUSTERAMI }}" >> $GITHUB_ENV
             echo "EKSSecurityGroup=${{ vars.MCP_DEV_EKSSECURITYGROUP }}" >> $GITHUB_ENV
             echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_DEV_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
-            echo "EKSSubnetConfigA=${{ vars.MCP_DEV_EKSSUBNETCONFIGA }}" >> $GITHUB_ENV
-            echo "EKSSubnetConfigB=${{ vars.MCP_DEV_EKSSUBNETCONFIGB }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetA=${{ vars.MCP_DEV_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetB=${{ vars.MCP_DEV_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
+            #echo "EKSPrivateSubnetA=${{ vars.MCP_DEV_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
+            #echo "EKSPrivateSubnetB=${{ vars.MCP_DEV_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
             echo "EKSInstanceRoleArn=${{ vars.MCP_DEV_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
             echo "EKSServiceArn=${{ vars.MCP_DEV_EKSSERVICEARN }}" >> $GITHUB_ENV
           elif [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "TEST" ];
@@ -111,6 +113,10 @@ jobs:
             echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_TEST_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
             echo "EKSSubnetConfigA=${{ vars.MCP_TEST_EKSSUBNETCONFIGA }}" >> $GITHUB_ENV
             echo "EKSSubnetConfigB=${{ vars.MCP_TEST_EKSSUBNETCONFIGB }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetA=${{ vars.MCP_TEST_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetB=${{ vars.MCP_TEST_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetA=${{ vars.MCP_TEST_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetB=${{ vars.MCP_TEST_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
             echo "EKSInstanceRoleArn=${{ vars.MCP_TEST_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
             echo "EKSServiceArn=${{ vars.MCP_TEST_EKSSERVICEARN }}" >> $GITHUB_ENV
           fi
@@ -126,13 +132,13 @@ jobs:
       # Install eksctl to launch EKS
       - name: Install eksctl
         run: |
-         curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && \
+         curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.132.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp && \
          sudo mv /tmp/eksctl /usr/local/bin && \
          eksctl version
 
       - name: Install Unity Transformer
         run: |
-          curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.15-Alpha/unity-cs-manager-0.1.15-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
+          curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.26-Alpha/unity-cs-manager-0.1.26-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
           sudo mv /tmp/unity-cs-manager /usr/local/bin
 
       # Render template
@@ -144,12 +150,18 @@ jobs:
           export maxnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
           export desirednodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
           export instancetype=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.instancetype)
-          unity-cs-manager eks --clustername ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner} > /tmp/eksctl-config.yaml
+          export private=$(echo '${{ inputs.META }}' | jq -r .private)
+          if [ $private == "true" ]
+          then
+            unset EKSPublicSubnetA
+            unset EKSPublicSubnetB
+          fi
+          unity-cs-manager eks --name ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner}  --capability unset --capversion unset --component unset --creator unset --critinfra unset --experimental unset --exposed unset --pocs test --release unset --securityplan unset --sourcecontrol unset --userfacing unset --venue unset --servicearea unset --resourcename=${cluster} --applicationname unset --applicationversion unset > /tmp/eksctl-config.yaml
           cat /tmp/eksctl-config.yaml
       # Launch EKS
       - name: Launch EKS cluster
         run: |
-          if [ -n "$inputs.KEY" ]
+          if [ "${{inputs.AWSCONNECTION}}" == "keys" ]
           then
               export AWS_ACCESS_KEY_ID=${{ inputs.KEY }}
               export AWS_SECRET_ACCESS_KEY=${{ inputs.SECRET }}
