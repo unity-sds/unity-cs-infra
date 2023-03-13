@@ -132,7 +132,7 @@ jobs:
              echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
 
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@3334884f54d00276544b48d4886de5c09e1ca98f 
+        uses: unity-sds/unity-cs-action@dca21c2358c4c5d697d3aa10437a6439c2228645 
 #        uses: unity-sds/unity-cs-action@0de7e4a8b3786fd603b69d91a6cf520283dbc48a
         id: hello
         env: 
