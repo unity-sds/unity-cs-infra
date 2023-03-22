@@ -1006,15 +1006,6 @@ components:
         authorizerCredentials: ${csLambdaAuthorizerInvokeRole}
         authorizerResultTtlInSeconds: 0
         type: "token"
-    Unity_API_Gateway_Cognito_Authorizer:
-      type: "apiKey"
-      name: "Authorization"
-      in: "header"
-      x-amazon-apigateway-authtype: cognito_user_pools
-      x-amazon-apigateway-authorizer:
-        type: cognito_user_pools
-        providerARNs:
-          - arn:aws:cognito-idp:us-west-2:237868187491:userpool/us-west-2_yaOw3yj0z
 x-amazon-apigateway-gateway-responses:
   DEFAULT_5XX:
     responseParameters:

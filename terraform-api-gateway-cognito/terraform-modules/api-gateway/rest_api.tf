@@ -7,6 +7,14 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   body = data.template_file.api_template.rendered
 }
 
+resource "aws_api_gateway_authorizer" "cognito_authorizer"{
+  name = "Unity_API_Gateway_Cognito_Authorizer"
+  rest_api_id = aws_api_gateway_rest_api.rest_api
+  type = "apiKey"
+  identity_source = method.request.header.Authorization
+  provider_arns = "arn:aws:cognito-idp:${data.aws_region.current.name}:${data.aws_caller_identity.current}:userpool/us-west-2_yaOw3yj0z"
+}
+
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
@@ -191,5 +199,5 @@ resource "aws_lambda_permission" "uds_collections_create_dapa_lambda_permission"
 }
 
 output "url" {
-  value = "${aws_api_gateway_deployment.api-gateway-deployment.invoke_url}/api"
+  value = "${aws_api_gateway_deployment.api-gateway-deployment.invoke_url}"
 }
