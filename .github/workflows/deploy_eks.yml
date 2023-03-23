@@ -180,3 +180,6 @@ jobs:
             #eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantOperator --group system:masters --username adminOp
             eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn $word --group system:masters --username admin
           done
+          helm repo add fairwinds-stable https://charts.fairwinds.com/stable
+          helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
+          helm install goldilocks --namespace goldilocks fairwinds-stable/goldilocks
