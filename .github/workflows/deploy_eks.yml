@@ -182,4 +182,4 @@ jobs:
           done
           helm repo add fairwinds-stable https://charts.fairwinds.com/stable
           helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
-          helm install goldilocks --namespace goldilocks fairwinds-stable/goldilocks
+          helm install goldilocks --namespace goldilocks --create-namespace fairwinds-stable/goldilocks
