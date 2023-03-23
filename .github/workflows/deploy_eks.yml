@@ -101,24 +101,24 @@ jobs:
             echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_DEV_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
             echo "EKSPublicSubnetA=${{ vars.MCP_DEV_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
             echo "EKSPublicSubnetB=${{ vars.MCP_DEV_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
-            #echo "EKSPrivateSubnetA=${{ vars.MCP_DEV_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
-            #echo "EKSPrivateSubnetB=${{ vars.MCP_DEV_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetA=${{ vars.MCP_DEV_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetB=${{ vars.MCP_DEV_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
             echo "EKSInstanceRoleArn=${{ vars.MCP_DEV_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
             echo "EKSServiceArn=${{ vars.MCP_DEV_EKSSERVICEARN }}" >> $GITHUB_ENV
+            echo "EKSUserArn=${{ vars.MCP_DEV_EKSUSERARN }}" >> $GITHUB_ENV
           elif [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "TEST" ];
           then
             echo "EKSClusterVersion=${{ vars.MCP_TEST_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
             echo "EKSClusterAMI=${{ vars.MCP_TEST_EKSCLUSTERAMI }}" >> $GITHUB_ENV
             echo "EKSSecurityGroup=${{ vars.MCP_TEST_EKSSECURITYGROUP }}" >> $GITHUB_ENV
             echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_TEST_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
-            echo "EKSSubnetConfigA=${{ vars.MCP_TEST_EKSSUBNETCONFIGA }}" >> $GITHUB_ENV
-            echo "EKSSubnetConfigB=${{ vars.MCP_TEST_EKSSUBNETCONFIGB }}" >> $GITHUB_ENV
             echo "EKSPublicSubnetA=${{ vars.MCP_TEST_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
             echo "EKSPublicSubnetB=${{ vars.MCP_TEST_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
             echo "EKSPrivateSubnetA=${{ vars.MCP_TEST_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
             echo "EKSPrivateSubnetB=${{ vars.MCP_TEST_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
             echo "EKSInstanceRoleArn=${{ vars.MCP_TEST_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
             echo "EKSServiceArn=${{ vars.MCP_TEST_EKSSERVICEARN }}" >> $GITHUB_ENV
+            echo "EKSUserArn=${{ vars.MCP_TEST_EKSUSERARN }}" >> $GITHUB_ENV
           fi
       # Configure AWS Credentials through OIDC
       - name: Configure AWS credentials
@@ -172,5 +172,11 @@ jobs:
           eksctl create cluster -f /tmp/eksctl-config.yaml
           aws eks update-kubeconfig --region us-west-2 --name $cluster
           kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-          eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantDeveloper --group system:masters --username admin
-          eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantOperator --group system:masters --username adminOp
+          export IFS=";"
+          sentence="$EKSUserArn"
+          for word in $sentence; do
+            echo "$word"
+            #eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantDeveloper --group system:masters --username admin
+            #eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantOperator --group system:masters --username adminOp
+            eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn $word --group system:masters --username admin
+          done
