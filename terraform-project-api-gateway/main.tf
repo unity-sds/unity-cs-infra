@@ -28,7 +28,7 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_invoke_role_arn" {
 
 # OpenAPI Template 
 data "template_file" "api_template" {
-  template = file("./unity-rest-api-gateway-oas30.yaml")
+  template = file("./unity-project-blank-api-gateway-oas.yaml")
   vars = {
     csLambdaAuthorizerUri = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_uri.value
     csLambdaAuthorizerInvokeRole = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_invoke_role_arn.value
