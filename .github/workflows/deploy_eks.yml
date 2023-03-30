@@ -163,11 +163,10 @@ jobs:
           fi
           unity-cs-manager eks --name ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner}  --capability unset --capversion unset --component unset --creator unset --critinfra unset --experimental unset --exposed unset --pocs test --release unset --securityplan unset --sourcecontrol unset --userfacing unset --venue unset --servicearea unset --resourcename=${cluster} --applicationname unset --applicationversion unset > /tmp/eksctl-config.yaml
           cat /tmp/eksctl-config.yaml
-  # Launch EKS
-  deploy-eks:
-    if: "! ${{ inputs.TEARDOWN }}"
-    steps:
+
+      # Launch EKS
       - name: Launch EKS cluster
+        if: "! ${{ inputs.TEARDOWN }}"
         run: |
           if [ "${{inputs.AWSCONNECTION}}" == "keys" ]
           then
@@ -191,10 +190,10 @@ jobs:
           helm repo add fairwinds-stable https://charts.fairwinds.com/stable
           helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
           helm install goldilocks --namespace goldilocks --create-namespace fairwinds-stable/goldilocks
-  teardown-eks:
-    if: ${{ inputs.TEARDOWN }}
-    steps:
+
+      # Teardown EKS
       - name: Teardown EKS cluster
+        if: ${{ inputs.TEARDOWN }}
         run: |
           if [ "${{inputs.AWSCONNECTION}}" == "keys" ]
           then
