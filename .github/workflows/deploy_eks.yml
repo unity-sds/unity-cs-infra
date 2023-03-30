@@ -202,4 +202,9 @@ jobs:
               export AWS_SESSION_TOKEN=${{ inputs.TOKEN }}
               export AWS_PAGER=""
           fi
+          export IFS=";"
+          aws eks update-kubeconfig --region us-west-2 --name $cluster
+          helm repo add fairwinds-stable https://charts.fairwinds.com/stable
+          helm uninstall vpa fairwinds-stable/vpa --namespace vpa
+          helm uninstall goldilocks --namespace goldilocks fairwinds-stable/goldilocks
           eksctl delete cluster -f /tmp/eksctl-config.yaml
