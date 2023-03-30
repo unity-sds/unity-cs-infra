@@ -206,6 +206,5 @@ jobs:
           export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
           aws eks update-kubeconfig --region us-west-2 --name $cluster
           helm repo add fairwinds-stable https://charts.fairwinds.com/stable
-          helm uninstall vpa --namespace vpa
           helm uninstall goldilocks --namespace goldilocks
           eksctl delete cluster -f /tmp/eksctl-config.yaml
