@@ -203,6 +203,7 @@ jobs:
               export AWS_PAGER=""
           fi
           export IFS=";"
+          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
           aws eks update-kubeconfig --region us-west-2 --name $cluster
           helm repo add fairwinds-stable https://charts.fairwinds.com/stable
           helm uninstall vpa fairwinds-stable/vpa --namespace vpa
