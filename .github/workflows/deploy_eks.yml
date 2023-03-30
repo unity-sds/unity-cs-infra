@@ -165,7 +165,7 @@ jobs:
           cat /tmp/eksctl-config.yaml
   # Launch EKS
   deploy-eks:
-    if: ! ${{ inputs.TEARDOWN }}
+    if: "! ${{ inputs.TEARDOWN }}"
     steps:
       - name: Launch EKS cluster
         run: |
