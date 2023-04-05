@@ -729,7 +729,7 @@ paths:
           schema:
             type: "string"
       security:
-        - Unity_API_Gateway_Cognito_Authorizer: []
+        - Unity_API_Gateway_Lambda_Authorizer: []
       x-amazon-apigateway-request-validator: "Validate body, query string parameters,\
         \ and headers"
       x-amazon-apigateway-integration:
