@@ -132,9 +132,8 @@ jobs:
              echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
 
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@28ef023ee8e76f887d32aa7eacc8b4c908d2f4c5 
-#        uses: unity-sds/unity-cs-action@0de7e4a8b3786fd603b69d91a6cf520283dbc48a
-        id: hello
+        uses: unity-sds/unity-cs-action@v1.0.1 
+        id: runinstall
         env: 
           NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
         with:
@@ -142,5 +141,5 @@ jobs:
           ucsmetadata: ${{ env.NEW_NEW_METADATA }}
 
       # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.eksmeta }}"
+      - name: Print the resulting meta
+        run: echo "The time was ${{ steps.runinstall.outputs.eksmeta }}"
