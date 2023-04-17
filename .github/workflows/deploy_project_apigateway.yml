@@ -1,0 +1,193 @@
+# This workflow deploys a project account REST API in API Gateway
+# author: ryan.g.hunter@jpl.nasa.gov
+
+name: Project REST API Gateway Deployment
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      distinct_id:
+      deploymentProject:
+        description: 'Deployment Project'
+        required: true 
+        type: choice
+        default: 'UNITY'
+        options: 
+        - UNITY
+        - SIPS
+      deploymentStage:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+      deploymentOwner:
+        description: 'Deployment Owner'
+        required: true 
+        type: string
+        default: 'nightly'
+      deploymentTarget:
+        description: 'Cloud Host'
+        required: true 
+        type: choice
+        default: 'mcp'
+        options: 
+        - mcp
+      apiName:
+        description: 'API Name'
+        required: true
+        type: string
+        default: 'Unity Project REST API Gateway'
+      awsConnection:
+        description: 'Method of AWS connection'
+        required: true
+        type: choice
+        default: 'oidc'
+        options:
+        - oidc
+        - keys
+        - iam
+      deploymentSource:
+        description: 'Where the action is being run'
+        required: true
+        type: choice
+        default: 'github'
+        options:
+          - github
+          - act
+
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deployment"
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: install tform
+        run: |
+             wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+             echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list && \
+             sudo apt update && sudo apt install terraform
+      - name: Install apps
+        if: "${{ github.event.inputs.deploymentSource =='act'}}"
+        run: |
+          sudo apt update && sudo apt install -y curl git jq unzip && \
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo  ./aws/install && \
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}    
+      - name: Configure default variables
+        env:
+          DEFAULT_TARGET: 'mcp'
+          DEFAULT_COMMIT: 'main'
+          DEFAULT_STAGE: 'DEV'
+          DEFAULT_PROJECT: 'UNITY'
+          DEFAULT_OWNER: 'nightly'
+          DEFAULT_APINAME: 'Unity Project REST API Gateway'
+        run: |
+          echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+          echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
+          echo "COMMIT_HASH=${{ github.event.inputs.sourceBranch || env.DEFAULT_COMMIT }}" >> $GITHUB_ENV
+          echo "TARGET_PROJECT=${{ github.event.inputs.deploymentProject || env.DEFAULT_PROJECT }}" >> $GITHUB_ENV
+          echo "TARGET_OWNER=${{ github.event.inputs.deploymentOwner || env.DEFAULT_OWNER }}" >> $GITHUB_ENV
+          echo "TARGET_API=${{ github.event.inputs.apiName || env.DEFAULT_APINAME }}" >> $GITHUB_ENV
+
+      - name: Display deployment configuration
+        run :
+          echo "Target ENV ${{ env.TARGET_ENV }}"
+          echo "Target STAGE ${{ env.TARGET_STAGE }}"
+          echo "Target PROJECT ${{ env.TARGET_PROJECT }}"
+          echo "Target OWNER ${{ env.TARGET_OWNER }}"
+          echo "Target EKS Cluster ${{ env.TARGET_API }}"
+          echo "Commit Hash ${{ env.COMMIT_HASH }}"
+
+      - name: Select the proper Terraform Workspace
+        run :
+          terraform workspace select ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }} || terraform workspace new ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        if: ${{ INPUTS.awsConnection == 'oidc' }}
+        with:
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
+#          role-to-assume: ${{ secrets.OIDC_ROLE }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Get AWS Caller Identity
+        run: aws sts get-caller-identity
+      # Install eksctl to launch EKS
+      - name: Temporary Install kubectl
+        run: |
+         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - name: Temporary Connect to EKS
+        run: |
+          aws eks --region us-west-2 update-kubeconfig --name ${{ env.TARGET_CLUSTER }} && \
+          kubectl version
+
+      # Check out the repository under $GITHUB_WORKSPACE
+      - name: cs-infra checkout
+        uses: actions/checkout@v3
+
+      ## Check Terraform formatting
+      - name: Terraform Format
+        working-directory: ./resources/deployable/terraform-unity
+        id: fmt
+        run: terraform fmt -check
+
+      ## Install Terraform docs
+      - name: Install Terraform-Docs
+        run: |
+          curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+
+      - name: Auto-generate tfvars file for the deployable repository
+        run: |
+          terraform-docs tfvars hcl . >gh_actions.tfvars
+
+      ## Init terraform
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      ## Set terraform log level
+      - name: Set Terraform Log Level
+        id: log_level
+        run: export TF_LOG="DEBUG"
+
+      ## Validate Terraform
+      - name: Terraform Validate
+        id: validate
+        run: |
+          ls -al
+          terraform validate -no-color
+
+      ## Plan Terraform
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -var-file="gh_actions.tfvars"
+        continue-on-error: true
+
+      ## Fail the job if terraform plan doesn't succeed
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var-file="gh_actions.tfvars"

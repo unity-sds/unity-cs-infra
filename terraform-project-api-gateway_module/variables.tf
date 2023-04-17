@@ -22,10 +22,16 @@ variable "rest_api_description" {
   default     = "Unity Project REST API Gateway"
 }
 
-variable "rest_api_stage" {
+variable "venue" {
   type        = string
   description = "REST API Stage"
   default     = "dev"
+}
+
+variable "rest_api_stage" {
+  type = string
+  description = "REST API Stage"
+  default = var.venue
 }
 
 variable "counter" {
