@@ -140,7 +140,7 @@ jobs:
 
       ## Check Terraform formatting
       - name: Terraform Format
-        working-directory: ${{ env.TF_DIRECTORY }} 
+        working-directory: ${{ github.env.workspace }}/${{ env.TF_DIRECTORY }} 
         id: fmt
         run: terraform fmt -check
 
