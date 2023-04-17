@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "unity-cs-tf-state-${var.venue}"
+    bucket = "unity-cs-tf-state-dev"
     key    = "project_api_gateway_tf_state"
     region = "us-west-2"
   }
