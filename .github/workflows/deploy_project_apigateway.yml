@@ -138,7 +138,6 @@ jobs:
 
       ## Check Terraform formatting
       - name: Terraform Format
-        working-directory: ./resources/deployable/terraform-unity
         id: fmt
         run: terraform fmt -check
 
