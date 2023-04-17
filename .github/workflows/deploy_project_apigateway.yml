@@ -114,7 +114,7 @@ jobs:
           echo "Target STAGE ${{ env.TARGET_STAGE }}"
           echo "Target PROJECT ${{ env.TARGET_PROJECT }}"
           echo "Target OWNER ${{ env.TARGET_OWNER }}"
-          echo "Target EKS Cluster ${{ env.TARGET_API }}"
+          echo "Target API ${{ env.TARGET_API }}"
           echo "Commit Hash ${{ env.COMMIT_HASH }}"
 
       - name: Select the proper Terraform Workspace
@@ -131,14 +131,6 @@ jobs:
 
       - name: Get AWS Caller Identity
         run: aws sts get-caller-identity
-      # Install eksctl to launch EKS
-      - name: Temporary Install kubectl
-        run: |
-         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-      - name: Temporary Connect to EKS
-        run: |
-          aws eks --region us-west-2 update-kubeconfig --name ${{ env.TARGET_CLUSTER }} && \
-          kubectl version
 
       # Check out the repository under $GITHUB_WORKSPACE
       - name: cs-infra checkout
