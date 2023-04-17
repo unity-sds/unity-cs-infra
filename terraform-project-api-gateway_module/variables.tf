@@ -29,9 +29,9 @@ variable "venue" {
 }
 
 variable "rest_api_stage" {
-  type = string
+  type        = string
   description = "REST API Stage"
-  default = var.venue
+  default     = var.venue
 }
 
 variable "counter" {

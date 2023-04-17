@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "rest_api" {
-  name = var.rest_api_name
+  name        = var.rest_api_name
   description = var.rest_api_description
   endpoint_configuration {
     types = ["REGIONAL"]
@@ -8,10 +8,10 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 }
 
 # REST API id SSM Param for other resources to modify rest api
-resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter"{
+resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter" {
   name       = format("/unity/%s/api-gateway/rest-api-id", var.rest_api_stage)
   type       = "String"
-  value      = "${aws_api_gateway_rest_api.rest_api.id}"
+  value      = aws_api_gateway_rest_api.rest_api.id
   overwrite  = true
   depends_on = [aws_api_gateway_rest_api.rest_api]
 }
@@ -30,7 +30,7 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_invoke_role_arn" {
 data "template_file" "api_template" {
   template = file("./unity-project-blank-api-gateway-oas.yaml")
   vars = {
-    csLambdaAuthorizerUri = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_uri.value
+    csLambdaAuthorizerUri        = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_uri.value
     csLambdaAuthorizerInvokeRole = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_invoke_role_arn.value
   }
 }
