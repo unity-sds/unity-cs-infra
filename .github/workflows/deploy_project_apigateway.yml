@@ -100,6 +100,7 @@ jobs:
           DEFAULT_PROJECT: 'UNITY'
           DEFAULT_OWNER: 'nightly'
           DEFAULT_APINAME: 'Unity Project REST API Gateway'
+          DEFAULT_TF_DIRECTORY: 'terraform-projcet-api-gateway_module'
         run: |
           echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
           echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
@@ -107,6 +108,7 @@ jobs:
           echo "TARGET_PROJECT=${{ github.event.inputs.deploymentProject || env.DEFAULT_PROJECT }}" >> $GITHUB_ENV
           echo "TARGET_OWNER=${{ github.event.inputs.deploymentOwner || env.DEFAULT_OWNER }}" >> $GITHUB_ENV
           echo "TARGET_API=${{ github.event.inputs.apiName || env.DEFAULT_APINAME }}" >> $GITHUB_ENV
+          echo "TF_DIRECTORY=${{ env.DEFAULT_TF_DIRECTORY }}" >> $GITHUB_ENV
 
       - name: Display deployment configuration
         run :
@@ -138,32 +140,25 @@ jobs:
 
       ## Check Terraform formatting
       - name: Terraform Format
+        working-directory: ${{ env.TF_DIRECTORY }} 
         id: fmt
         run: terraform fmt -check
 
-      ## Install Terraform docs
-      - name: Install Terraform-Docs
-        run: |
-          curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
-          tar -xzf terraform-docs.tar.gz
-          chmod +x terraform-docs
-
-      - name: Auto-generate tfvars file for the deployable repository
-        run: |
-          terraform-docs tfvars hcl . >gh_actions.tfvars
-
       ## Init terraform
       - name: Terraform Init
+        working-directory: ${{ env.TF_DIRECTORY }} 
         id: init
         run: terraform init
 
       ## Set terraform log level
       - name: Set Terraform Log Level
+        working-directory: ${{ env.TF_DIRECTORY }} 
         id: log_level
         run: export TF_LOG="DEBUG"
 
       ## Validate Terraform
       - name: Terraform Validate
+        working-directory: ${{ env.TF_DIRECTORY }} 
         id: validate
         run: |
           ls -al
@@ -171,14 +166,17 @@ jobs:
 
       ## Plan Terraform
       - name: Terraform Plan
+        working-directory: ${{ env.TF_DIRECTORY }} 
         id: plan
-        run: terraform plan -no-color -var-file="gh_actions.tfvars"
+        run: terraform plan -no-color
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
       - name: Terraform Plan Status
+        working-directory: ${{ env.TF_DIRECTORY }} 
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var-file="gh_actions.tfvars"
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        run: terraform apply -auto-approve
