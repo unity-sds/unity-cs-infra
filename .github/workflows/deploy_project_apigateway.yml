@@ -180,7 +180,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.TF_DIRECTORY }} 
         id: plan
-        run: terraform plan -no-color -var-file="terraform-unity/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars" -var-file="gh_actions.tfvars"
+        run: terraform plan -no-color -var-file="terraform-unity/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars" -var-file="gh_action.tfvars"
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
@@ -191,4 +191,4 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ${{ env.TF_DIRECTORY }} 
-        run: terraform apply -auto-approve -var-file="terraform-unity/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars" -var-file="gh_actions.tfvars"
+        run: terraform apply -auto-approve -var-file="terraform-unity/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars" -var-file="gh_action.tfvars"
