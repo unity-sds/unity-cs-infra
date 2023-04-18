@@ -112,10 +112,7 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: install act
-        run: curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash && echo "/home/ubuntu/unity-cs/bin" >> $GITHUB_PATH        
-
+        
       - name: Output original inputs
         run: echo '${{ inputs.METADATA }}'
 
@@ -124,12 +121,6 @@ jobs:
 
       - name: Output new new inputs
         run: echo '${{ env.NEW_NEW_METADATA }}'
-
-      - name: test
-        run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
-             echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc &&
-             echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc &&
-             echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
 
       - name: Unity custom action step
         uses: unity-sds/unity-cs-action@v1.0.1 
@@ -143,3 +134,9 @@ jobs:
       # Use the output from the `hello` step
       - name: Print the resulting meta
         run: echo "The time was ${{ steps.runinstall.outputs.eksmeta }}"
+        
+     # Check some stuff
+     
+     # Teardown software
+     
+     # Teardown EKS
