@@ -26,7 +26,6 @@ on:
                     "metadataVersion":"unity-cs-0.1", 
                     "exectarget": "github", 
                     "deploymentName":"some name for the deployment of services", 
-                    "deploymentType":"teardown",
                     "services":[ 
                       { 
                         "name":"unity-sps-prototype", 
