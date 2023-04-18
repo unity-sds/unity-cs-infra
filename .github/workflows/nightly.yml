@@ -88,7 +88,7 @@ jobs:
       - name: Output new new inputs
         run: echo '${{ env.NEW_NEW_METADATA }}'
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
+        uses: unity-sds/unity-cs-action@ecd09c090f6f3b3bd6bc828e2a2d236379afda68
         id: runinstall
         env:
           NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
@@ -117,7 +117,7 @@ jobs:
           echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq --compact-output )"
       - name: Teardown EKS
         if: always()
-        uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
+        uses: unity-sds/unity-cs-action@ecd09c090f6f3b3bd6bc828e2a2d236379afda68
         id: runteardown
         env:
           NIGHTLY_METADATA: ${ steps.nightly_build_metadata_teardown.outputs.contents }
