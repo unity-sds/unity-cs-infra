@@ -9,6 +9,11 @@ on:
     branches: [ main ]
     inputs:
       distinct_id:
+      destroy:
+        description: 'Teardown Software'
+        required: false
+        type: boolean
+        default: false
       deploymentProject:
         description: 'Deployment Project'
         required: true 
@@ -280,10 +285,14 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
+        if: "${{ github.event.inputs.destroy == 'false' }}"
         working-directory: ./resources/deployable/terraform-unity
-#        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
         run: terraform apply -auto-approve -var-file="gh_actions.tfvars"
-
+        
+      - name: Terraform Apply
+        if: "${{ github.event.inputs.destroy == 'true' }}"
+        working-directory: ./resources/deployable/terraform-unity
+        run: terraform apply -destroy -auto-approve -var-file="gh_actions.tfvars"
 
       ## Verify that the smoke test exists
       - name: Check for Smoke Tests
