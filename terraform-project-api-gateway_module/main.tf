@@ -1,9 +1,3 @@
-variable "rest_api_stage" {
-  type        = string
-  description = "REST API Stage"
-  default     = var.venue
-}
-
 resource "aws_api_gateway_rest_api" "rest_api" {
   name        = var.rest_api_name
   description = var.rest_api_description
