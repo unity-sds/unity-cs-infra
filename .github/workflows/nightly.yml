@@ -78,8 +78,7 @@ jobs:
       - name: Read Nightly Metadata
         id: nightly_build_metadata
         run: >
-          echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq
-          --compact-output )"
+          echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq --compact-output )"
       - name: Checkout
         uses: actions/checkout@v3
       - name: Output original inputs
@@ -98,19 +97,23 @@ jobs:
           ucsmetadata: ${{ env.NEW_NEW_METADATA }}
       - name: Print the resulting meta
         run: echo "The time was ${{ steps.runinstall.outputs.eksmeta }}"
+      - name: Write METADATA to file
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: nightly_metadata.json
+          json: ${{ env.NEW_NEW_METADATA }}
       - name: Update METADATA with nightly values
         uses: jossef/action-set-json-field@v2.1
         if: always()
         with:
           file: nightly_metadata.json
           field: deploymentType
-          value: Teardown
+          value: teardown
       - name: Read Nightly Metadata
         if: always()
         id: nightly_build_metadata_teardown
         run: >
-          echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq
-          --compact-output )"
+          echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq --compact-output )"
       - name: Teardown EKS
         if: always()
         uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
