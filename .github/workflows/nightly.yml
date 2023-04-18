@@ -114,7 +114,7 @@ jobs:
       - name: Teardown EKS
         if: always()
         uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
-        id: runinstall
+        id: runteardown
         env:
           NIGHTLY_METADATA: ${ steps.nightly_build_metadata_teardown.outputs.contents }
         with:
