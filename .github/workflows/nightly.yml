@@ -107,7 +107,7 @@ jobs:
           value: Teardown
       - name: Read Nightly Metadata
         if: always()
-        id: nightly_build_metadata
+        id: nightly_build_metadata_teardown
         run: >
           echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq
           --compact-output )"
@@ -116,7 +116,7 @@ jobs:
         uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
         id: runinstall
         env:
-          NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
+          NIGHTLY_METADATA: ${ steps.nightly_build_metadata_teardown.outputs.contents }
         with:
           token: ${{ secrets.TOKEN }}
           ucsmetadata: ${{ env.NEW_NEW_METADATA }}
