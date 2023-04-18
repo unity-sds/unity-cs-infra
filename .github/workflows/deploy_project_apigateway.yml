@@ -138,11 +138,22 @@ jobs:
       - name: cs-infra checkout
         uses: actions/checkout@v3
 
+      ## Install Terraform docs
+      - name: Install Terraform-Docs
+        run: |
+          curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+
       ## Check Terraform formatting
       - name: Terraform Format
         working-directory: ${{ env.TF_DIRECTORY }} 
         id: fmt
         run: terraform fmt -check
+
+      - name: Auto-generate tfvars file for the deployable repository
+        run: |
+          ./terraform-docs tfvars hcl . >gh_action.tfvars
 
       ## Init terraform
       - name: Terraform Init
@@ -168,7 +179,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.TF_DIRECTORY }} 
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var-file="terraform-unity/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars" -var-file="gh_actions.tfvars"
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
@@ -179,4 +190,4 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ${{ env.TF_DIRECTORY }} 
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -var-file="terraform-unity/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars" -var-file="gh_actions.tfvars"
