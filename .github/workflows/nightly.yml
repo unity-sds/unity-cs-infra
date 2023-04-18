@@ -139,3 +139,26 @@ jobs:
      # Teardown software
      
      # Teardown EKS
+     - name: Update METADATA with nightly values
+       uses: jossef/action-set-json-field@v2.1
+       if: always()
+       with:
+        file: nightly_metadata.json
+        field: deploymentType
+        value: Teardown
+
+     - name: Read Nightly Metadata
+       if: always()
+       id: nightly_build_metadata
+       run: |
+        echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq --compact-output )"
+    
+     - name: Teardown EKS
+       if: always()
+       uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
+       id: runinstall
+       env: 
+        NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
+       with:
+         token: ${{ secrets.TOKEN }}
+         ucsmetadata: ${{ env.NEW_NEW_METADATA }}
