@@ -1,164 +1,122 @@
+---
 name: Nightly Build for Development Purposes Only
 on:
   workflow_dispatch:
-    branches: [ main ]
+    branches:
+      - main
     inputs:
       KEY:
-        description: 'Access Key ID'
+        description: Access Key ID
         required: false
         type: string
-        default: ''
+        default: ""
       SECRET:
-        description: 'Access Secret Key ID'
+        description: Access Secret Key ID
         required: false
         type: string
-        default: ''
+        default: ""
       TOKEN:
-        description: 'AWS Session Token'
+        description: AWS Session Token
         required: false
         type: string
-        default: ''
+        default: ""
       METADATA:
-        description: 'UCS Metadata Definition'
+        description: UCS Metadata Definition
         required: true
         type: string
-        default: '{ 
-                    "metadataVersion":"unity-cs-0.1", 
-                    "exectarget": "github", 
-                    "deploymentName":"some name for the deployment of services", 
-                    "services":[ 
-                      { 
-                        "name":"unity-sps-prototype", 
-                        "source":"unity-sds/unity-sps-prototype", 
-                        "version":"xxx","branch":"main" 
-                      } 
-                    ], 
-                    "extensions":{ 
-                      "kubernetes":{ 
-                        "clustername":"testclustertomthurs", 
-                        "owner":"tom", 
-                        "projectname":"testproject", 
-                        "nodegroups":{ 
-                          "group1":{
-                            "instancetype":"m5.xlarge", 
-                            "nodecount":"1" 
-                          } 
-                        } 
-                      } 
-                    } 
-                  }'
-
+        default: '{ "metadataVersion":"unity-cs-0.1", "exectarget": "github",
+          "deploymentName":"some name for the deployment of services",
+          "services":[ { "name":"unity-sps-prototype",
+          "source":"unity-sds/unity-sps-prototype",
+          "version":"xxx","branch":"main" } ], "extensions":{ "kubernetes":{
+          "clustername":"testclustertomthurs", "owner":"tom",
+          "projectname":"testproject", "nodegroups":{ "group1":{
+          "instancetype":"m5.xlarge", "nodecount":"1" } } } } }'
 jobs:
   configure_unity_job:
-    env: 
+    env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      metadata: ''
+      metadata: ""
     runs-on: ubuntu-latest
     steps:
       - name: Write METADATA to file
         uses: jsdaniell/create-json@v1.2.2
         with:
-          name: "nightly_metadata.json"
+          name: nightly_metadata.json
           json: ${{ inputs.METADATA }}
-
       - name: Generate Nightly ID
         uses: TGPSKI/name-generator-node-action@v2
         id: generator
         with:
-          separator: '_'
-          length: '2'
-          style: 'lowerCase'
-
+          separator: _
+          length: "2"
+          style: lowerCase
       - name: Update METADATA with nightly values
         uses: jossef/action-set-json-field@v2.1
         with:
           file: nightly_metadata.json
           field: extensions.kubernetes.owner
           value: uc-s-nightly
-
       - name: Update METADATA with nightly values
         uses: jossef/action-set-json-field@v2.1
         with:
           file: nightly_metadata.json
           field: extensions.kubernetes.clustername
           value: ucsnightlycluster
-
       - name: Update METADATA with nightly values
         uses: jossef/action-set-json-field@v2.1
         with:
           file: nightly_metadata.json
           field: deploymentName
           value: Unity CS Nightly Build
-
       - name: Update METADATA with nightly values
         uses: jossef/action-set-json-field@v2.1
         with:
           file: nightly_metadata.json
           field: services.0.name
           value: unity-sps-prototype-nightly
-
       - name: Read Nightly Metadata
         id: nightly_build_metadata
-        run: |
-          echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq --compact-output )"
-      # - name: Read Nightly Metadata
-      #   id: nightly_build_metadata
-      #   uses: andstor/file-reader-action@v1
-      #   with:
-      #     path: "nightly_metadata.json"
-
-      # To use this repository's private action,
-      # you must check out the repository
+        run: >
+          echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq
+          --compact-output )"
       - name: Checkout
         uses: actions/checkout@v3
-        
       - name: Output original inputs
         run: echo '${{ inputs.METADATA }}'
-
       - name: Output new inputs
         run: echo '${{ steps.nightly_build_metadata.outputs.contents }}'
-
       - name: Output new new inputs
         run: echo '${{ env.NEW_NEW_METADATA }}'
-
       - name: Unity custom action step
         uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
         id: runinstall
-        env: 
+        env:
           NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
         with:
           token: ${{ secrets.TOKEN }}
           ucsmetadata: ${{ env.NEW_NEW_METADATA }}
-
-      # Use the output from the `hello` step
       - name: Print the resulting meta
         run: echo "The time was ${{ steps.runinstall.outputs.eksmeta }}"
-        
-     # Check some stuff
-     
-     # Teardown software
-     
-     # Teardown EKS
-     - name: Update METADATA with nightly values
-       uses: jossef/action-set-json-field@v2.1
-       if: always()
-       with:
-        file: nightly_metadata.json
-        field: deploymentType
-        value: Teardown
-
-     - name: Read Nightly Metadata
-       if: always()
-       id: nightly_build_metadata
-       run: |
-        echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq --compact-output )"
-    
-     - name: Teardown EKS
-       if: always()
-       uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
-       id: runinstall
-       env: 
-        NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
-       with:
-         token: ${{ secrets.TOKEN }}
-         ucsmetadata: ${{ env.NEW_NEW_METADATA }}
+      - name: Update METADATA with nightly values
+        uses: jossef/action-set-json-field@v2.1
+        if: always()
+        with:
+          file: nightly_metadata.json
+          field: deploymentType
+          value: Teardown
+      - name: Read Nightly Metadata
+        if: always()
+        id: nightly_build_metadata
+        run: >
+          echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq
+          --compact-output )"
+      - name: Teardown EKS
+        if: always()
+        uses: unity-sds/unity-cs-action@147027ec49afa03314f524b0f560487f3e44ef34
+        id: runinstall
+        env:
+          NIGHTLY_METADATA: ${ steps.nightly_build_metadata.outputs.contents }
+        with:
+          token: ${{ secrets.TOKEN }}
+          ucsmetadata: ${{ env.NEW_NEW_METADATA }}
