@@ -28,12 +28,6 @@ variable "venue" {
   default     = "dev"
 }
 
-variable "rest_api_stage" {
-  type        = string
-  description = "REST API Stage"
-  default     = var.venue
-}
-
 variable "counter" {
   description = "value"
   type        = number
