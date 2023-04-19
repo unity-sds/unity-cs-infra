@@ -2,38 +2,7 @@
 name: Nightly Build for Development Purposes Only
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
-    branches:
-      - main
-    inputs:
-      KEY:
-        description: Access Key ID
-        required: false
-        type: string
-        default: ""
-      SECRET:
-        description: Access Secret Key ID
-        required: false
-        type: string
-        default: ""
-      TOKEN:
-        description: AWS Session Token
-        required: false
-        type: string
-        default: ""
-      METADATA:
-        description: UCS Metadata Definition
-        required: true
-        type: string
-        default: '{ "metadataVersion":"unity-cs-0.1", "exectarget": "github",
-          "deploymentName":"some name for the deployment of services",
-          "services":[ { "name":"unity-sps-prototype",
-          "source":"unity-sds/unity-sps-prototype",
-          "version":"xxx","branch":"main" } ], "extensions":{ "kubernetes":{
-          "clustername":"testclustertomthurs", "owner":"tom",
-          "projectname":"testproject", "nodegroups":{ "group1":{
-          "instancetype":"m5.xlarge", "nodecount":"1" } } } } }'
+    - cron: '38 2 * * *'
 jobs:
   configure_unity_job:
     env:
@@ -45,7 +14,14 @@ jobs:
         uses: jsdaniell/create-json@v1.2.2
         with:
           name: nightly_metadata.json
-          json: ${{ inputs.METADATA }}
+          json: '{ "metadataVersion":"unity-cs-0.1", "exectarget": "github",
+          "deploymentName":"some name for the deployment of services",
+          "services":[ { "name":"unity-sps-prototype",
+          "source":"unity-sds/unity-sps-prototype",
+          "version":"xxx","branch":"main" } ], "extensions":{ "kubernetes":{
+          "clustername":"testclustertomthurs", "owner":"tom",
+          "projectname":"testproject", "nodegroups":{ "group1":{
+          "instancetype":"m5.xlarge", "nodecount":"1" } } } } }'
       - name: Generate Nightly ID
         uses: TGPSKI/name-generator-node-action@v2
         id: generator
@@ -83,8 +59,6 @@ jobs:
           echo "::set-env name=NEW_NEW_METADATA::$( cat nightly_metadata.json | jq --compact-output )"
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Output original inputs
-        run: echo '${{ inputs.METADATA }}'
       - name: Output new inputs
         run: echo '${{ steps.nightly_build_metadata.outputs.contents }}'
       - name: Output new new inputs
