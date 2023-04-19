@@ -154,7 +154,7 @@ jobs:
 
       - name: Auto-generate tfvars file for the deployable repository
         working-directory: ${{ env.TF_DIRECTORY }}
-        run: ./terraform-docs tfvars hcl . > gh_action.tfvars
+        run: ./terraform-docs tfvars hcl . > project_api_gateway.tfvars
 
       ## Init terraform
       - name: Terraform Init
@@ -175,20 +175,24 @@ jobs:
         run: |
           ls -al
           terraform validate -no-color
+      
+      - name: Copy in Global TFVARS
+        id: copy_tfvars
+        run: |
+          cp terraform-unity/TFVARS/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars ${{ env.TF_DIRECTORY }}/global.tfvars
 
       ## Plan Terraform
       - name: Terraform Plan
         working-directory: ${{ env.TF_DIRECTORY }} 
         id: plan
-        run: terraform plan -no-color -var-file="terraform-unity/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars" -var-file="gh_action.tfvars"
+        run: terraform plan -no-color -var-file="global.tfvars" -var-file="project_api_gateway.tfvars"
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
       - name: Terraform Plan Status
-        working-directory: ${{ env.TF_DIRECTORY }} 
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
       - name: Terraform Apply
         working-directory: ${{ env.TF_DIRECTORY }} 
-        run: terraform apply -auto-approve -var-file="terraform-unity/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars" -var-file="gh_action.tfvars"
+        run: terraform apply -auto-approve -var-file="global.tfvars" -var-file="project_api_gateway.tfvars"
