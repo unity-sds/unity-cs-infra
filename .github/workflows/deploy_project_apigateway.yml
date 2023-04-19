@@ -165,7 +165,7 @@ jobs:
       - name: Set Terraform Log Level
         working-directory: ${{ env.TF_DIRECTORY }} 
         id: log_level
-        run: export TF_LOG="DEBUG"
+        run: export TF_LOG="TRACE"
 
       ## Validate Terraform
       - name: Terraform Validate
