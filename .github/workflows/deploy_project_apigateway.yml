@@ -128,7 +128,6 @@ jobs:
         if: ${{ INPUTS.awsConnection == 'oidc' }}
         with:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
-#          role-to-assume: ${{ secrets.OIDC_ROLE }}
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Get AWS Caller Identity
@@ -185,7 +184,7 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.TF_DIRECTORY }} 
         id: plan
-        run: terraform plan -no-color -var-file="global.tfvars" -var-file="project_api_gateway.tfvars"
+        run: terraform plan -no-color -var-file="project_api_gateway.tfvars" -var="rest_api_name=${{ env.TARGET_API }}" -var-file="global.tfvars" 
         continue-on-error: true
 
       ## Fail the job if terraform plan doesn't succeed
@@ -195,4 +194,4 @@ jobs:
 
       - name: Terraform Apply
         working-directory: ${{ env.TF_DIRECTORY }} 
-        run: terraform apply -auto-approve -var-file="global.tfvars" -var-file="project_api_gateway.tfvars"
+        run: terraform apply -auto-approve -var-file="project_api_gateway.tfvars" -var="rest_api_name=${{ env.TARGET_API }}" -var-file="global.tfvars" 
