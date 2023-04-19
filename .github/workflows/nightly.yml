@@ -2,7 +2,7 @@
 name: Nightly Build for Development Purposes Only
 on:
   schedule:
-    - cron: '38 14 * * *'
+    - cron: '40 13 * * *'
 jobs:
   configure_unity_job:
     env:
