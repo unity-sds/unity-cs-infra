@@ -158,6 +158,7 @@ jobs:
           cp terraform-unity/variables.mcp.tf resources/deployable/terraform-unity/
           cp terraform-unity/MCP-DEV.tfvars resources/deployable/terraform-unity/
           cp terraform-unity/TFVARS/DEV/mcp.tfvars resources/deployable/terraform-unity/
+          echo 'eks_cluster_name = "${{ env.TARGET_CLUSTER }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
           echo 'kubeconfig_filepath = "~/.kube/config"' >> resources/deployable/terraform-unity/gh_actions.tfvars
           echo 'counter = 1' >> resources/deployable/terraform-unity/gh_actions.tfvars
           echo 'namespace = "${{ env.TARGET_CLUSTER }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
