@@ -5,7 +5,10 @@ wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/so>
 sudo apt update && sudo apt install terraform
 
-## Install Apps
+## Kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+## Install Apps for act
 
 if [ $1 == "true" ]; then
     sudo apt update && sudo apt install -y curl git jq unzip && \
