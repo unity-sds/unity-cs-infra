@@ -152,6 +152,7 @@ jobs:
         run: |
           cp terraform-unity/main.mcp.tf resources/deployable/terraform-unity/
           cp terraform-unity/variables.mcp.tf resources/deployable/terraform-unity/
+          cp terraform-unity/MCP-DEV.tfvars resources/deployable/terraform-unity/
           cp terraform-unity/TFVARS/DEV/mcp.tfvars resources/deployable/terraform-unity/
           echo 'kubeconfig_filepath = "~/.kube/config"' >> resources/deployable/terraform-unity/gh_actions.tfvars
           echo 'counter = 1' >> resources/deployable/terraform-unity/gh_actions.tfvars
