@@ -160,7 +160,7 @@ jobs:
     
       - name: Run Terraform scripts
         run: |
-          ./utils/run_terraform.sh
+          ./utils/run_terraform.sh resources/deployable/terraform-unity
 
       - name: Send custom JSON data to Slack workflow
         id: slack
