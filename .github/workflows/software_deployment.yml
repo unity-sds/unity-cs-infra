@@ -131,7 +131,9 @@ jobs:
           echo "Commit Hash ${{ env.COMMIT_HASH }}"
 
       - name: Select the proper Terraform Workspace
-        run :
+        run : |
+          pwd && \
+          ls -al && \
           terraform workspace select ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }} || terraform workspace new ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }}
 
       - name: Configure AWS credentials
