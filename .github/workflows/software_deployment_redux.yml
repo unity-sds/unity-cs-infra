@@ -135,6 +135,10 @@ jobs:
       - name: Get AWS Caller Identity
         run: aws sts get-caller-identity
 
+      - name: Temporary Connect to EKS
+        run: |
+          aws eks --region us-west-2 update-kubeconfig --name ${{ env.TARGET_CLUSTER }} && \
+          kubectl version
       # Checks-out the repo to deploy
       # While cloning the repository:
       #   - it clones the repo into the given `path`
