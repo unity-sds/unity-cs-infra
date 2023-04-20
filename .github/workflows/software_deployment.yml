@@ -134,6 +134,7 @@ jobs:
         run : |
           pwd && \
           ls -al && \
+          export && \
           terraform workspace select ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }} || terraform workspace new ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }}
 
       - name: Configure AWS credentials
