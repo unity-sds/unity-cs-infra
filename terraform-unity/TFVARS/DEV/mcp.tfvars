@@ -8,4 +8,4 @@ venue         = "dev"
 
 
 subnets = { public: [], private: ["subnet-059bc4f467275b59d", "subnet-0ebdd997cc3ebe58d"] }
-eks_node_groups = { default: "defaultgroupNodeGroup", custom: [] }
+eks_node_groups = { default: ["defaultgroupNodeGroup"], custom: [] }
