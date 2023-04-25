@@ -4,7 +4,9 @@
 # It is based on what is documented here:
 # https://caas.gsfc.nasa.gov/display/GSD1/Using+the+Kion+%28Formerly+CloudTamer%29+API+to+generate+AWS+Keys
 # I use this script as follows:
-# eval $(mcp_keys.sh)
+#   eval $(mcp_keys.sh dev)
+#   or
+#   eval $(mcp_keys.sh test)
 # You need to edit it and add your Kion application key.
 # The eval is because the script spits out the variables you need so you can just eval them to bring them into bash instead of copying and pasting.
 # Note this script requires the jq tool installed to parse the API response.
@@ -67,4 +69,5 @@ session_token=$(echo $response | jq -r .data.session_token)
 
 # https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html
 expiration=$(date -v +30M -u +"%Y-%m-%dT%H:%M:%SZ")
-printf '{"Version":1,"AccessKeyId":"%s","SecretAccessKey":"%s","SessionToken":"%s","Expiration":"%s"}\n' "$access_key_id" "$secret_access_key" "$session_token" "$expiration"
+printf 'export AWS_ACCESS_KEY_ID=%s\nexport AWS_SECRET_ACCESS_KEY=%s\nexport AWS_SESSION_TOKEN=%s\nexport AWS_DEFAULT_REGION=us-west-2\n' "$access_key_id" "$secret_access_key" "$session_token"
+#printf '{"Version":1,"AccessKeyId":"%s","SecretAccessKey":"%s","SessionToken":"%s","Expiration":"%s"}\n' "$access_key_id" "$secret_access_key" "$session_token" "$expiration"
