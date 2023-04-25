@@ -2,8 +2,6 @@ variable "ami_name" { default = "unity-ubuntu" }
 variable "ami_key_pair_name" { default = "unity-cs-mcp-smolensk" }
 variable "ami_id" { default = "" }
 variable "vpc_id" { default = "" }
-variable "subnet_one_id" { default = "" }
-variable "subnet_two_id" { default = "" }
 variable "igw_id" { default = "" }
 
 variable "default_tags" {
@@ -13,6 +11,14 @@ variable "default_tags" {
   }
   description = "Default Tags"
   type        = map(string)
+}
+
+variable "subnets" {
+  type = map(string)
+}
+
+variable "eks_node_groups" {
+  type = map(string)
 }
 
 data "aws_vpc" "unity-test-env" {

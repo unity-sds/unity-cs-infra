@@ -3,7 +3,9 @@ ami_id = "ami-0966013e814042b23"
 vpc_id = "vpc-0106218dbddd3a753"
 igw_id = "igw-0622379cb99c03649"
 
-subnets = ["subnet-059bc4f467275b59d", "subnet-0ebdd997cc3ebe58d"]
 project       = "unity-sps-demo"
 venue         = "dev"
-eks_node_group_names = ["dafaultgroupNodeGroup"]
+
+
+subnets = { public: [], private: ["subnet-059bc4f467275b59d", "subnet-0ebdd997cc3ebe58d"] }
+eks_node_groups = { default: "defaultgroupNodeGroup", custom: [] }
