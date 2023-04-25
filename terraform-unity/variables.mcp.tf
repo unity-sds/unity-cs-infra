@@ -29,12 +29,12 @@ data "aws_vpc" "unity-test-env" {
 // Use existing subnets from MCP
 data "aws_subnet" "subnet-uno" {
   #  id = "subnet-059bc4f467275b59d"
-  id = var.subnet_one_id
+  id = var.subnets.private[0]
 }
 
 data "aws_subnet" "subnet-two" {
   #  id = "subnet-0ebdd997cc3ebe58d"
-  id = var.subnet_two_id
+  id = var.subnets.private[1]
 }
 
 data "aws_internet_gateway" "infra-env-gw" {
