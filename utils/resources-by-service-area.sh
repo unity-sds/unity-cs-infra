@@ -73,14 +73,14 @@ getResourcesTaggedWithServiceArea "sps"
 getResourcesTaggedWithServiceArea "ds"
 getNoServiceAreaResources "ucs|galen|ryan|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway" "U-CS"
 getNoServiceAreaResources "uds|cumulus" "U-DS"
-getNoServiceAreaResources "uads|jmcduffi|dockstore|esarkiss" "U-ADS"
+getNoServiceAreaResources "uads|jmcduffi|dockstore|esarkiss|nlahaye" "U-ADS"
 getNoServiceAreaResources "usps|u-sps|sps-api|luca|ryan|hysds" "U-SPS"
 getNoServiceAreaResources "bcdp" "U-AS"
 getNoServiceAreaResources "gmanipon|on-demand" "U-OD"
-getNoServiceAreaResources "nlahaye|anil|tapella|natha" "U-UI"
+getNoServiceAreaResources "anil|tapella|natha" "U-UI"
 
 
-export OTHER_RESOURCES=`getNoServiceAreaResources "arn" "OTHER" | grep -Ev "ucs|galen|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway|uds|cumulus|uads|jmcduffi|dockstore|esarkiss|usps|u-sps|sps-api|luca|ryan|hysds|bcdp|gmanipon|on-demand|nlahaye|anil|tapella|natha"`
+export OTHER_RESOURCES=`getNoServiceAreaResources "arn" "OTHER" | grep -Ev "ucs|galen|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway|uds|cumulus|uads|jmcduffi|dockstore|esarkiss|nlahaye|usps|u-sps|sps-api|luca|ryan|hysds|bcdp|gmanipon|on-demand|anil|tapella|natha"`
 OTHER_RESOURCE_COUNT=`echo "$OTHER_RESOURCES" | grep -c 'arn:'`
 echo
 echo "$OTHER_RESOURCE_COUNT OTHER suspected un-tagged (missing ServiceArea tag) resources:"
