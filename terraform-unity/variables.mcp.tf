@@ -13,13 +13,13 @@ variable "default_tags" {
   type        = map(string)
 }
 
-variable "subnets" {
-  type = map(list(string))
-}
+#variable "subnets" {
+#  type = map(list(string))
+#}
 
-variable "eks_node_groups" {
-  type = map(list(string))
-}
+#variable "eks_node_groups" {
+#  type = map(list(string))
+#}
 
 data "aws_vpc" "unity-test-env" {
   id         = var.vpc_id
