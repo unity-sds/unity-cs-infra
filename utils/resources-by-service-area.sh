@@ -1,21 +1,40 @@
 #!/bin/bash
 
+
+getNumResourcesTaggedWithServiceArea () {
+  export RESOURCES=`aws resourcegroupstaggingapi get-resources \
+    | jq '.ResourceTagMappingList[] | select(contains({Tags: [{Key: "ServiceArea"} ]})) | .ResourceARN' \
+    | grep "arn:"`
+  RESOURCE_COUNT=`echo "$RESOURCES" | grep -c 'arn:'`
+  echo "TOTAL tagged with ServiceArea tag: $RESOURCE_COUNT"
+}
+
+getNumResourcesNotTaggedWithServiceArea () {
+  export RESOURCES=`aws resourcegroupstaggingapi get-resources \
+    | jq '.ResourceTagMappingList[] | select(contains({Tags: [{Key: "ServiceArea"} ]}) | not) | .ResourceARN' \
+    | grep "arn:"`
+  RESOURCE_COUNT=`echo "$RESOURCES" | grep -c 'arn:'`
+  echo "TOTAL NOT tagged with ServiceArea tag: $RESOURCE_COUNT"
+}
+
 # =================================================
 # Displays AWS resource ARNs for a service area,
 # by looking for resources containing the specified
 # 'ServiceArea' tag.
 # =================================================
-getResourceArnsForServiceArea () {
-  export AWS_PAGER=""
+getResourcesTaggedWithServiceArea () {
+  #export AWS_PAGER=""
   RESOURCES=`aws resourcegroupstaggingapi get-resources \
     --tag-filters "Key=ServiceArea,Values=${1}" \
-    --query 'ResourceTagMappingList[*].ResourceARN' \
+    --query 'ResourceTagMappingList[*].[ResourceARN]' \
     --output text`
-  RESOURCE_COUNT=`echo $RESOURCES | grep -c 'arn:'`
-  echo "----------------------------------"
+  RESOURCE_COUNT=`echo "$RESOURCES" | grep -c 'arn:'`
+  echo
+  echo "------------ ServiceArea = ${1} -------------- ($RESOURCE_COUNT found):"
   if [[ $RESOURCE_COUNT -gt 0 ]]; then
-    echo "$1 resources ($RESOURCE_COUNT found):"
-    echo $RESOURCES
+    #echo "------------ ServiceArea = ${1} -------------- ($RESOURCE_COUNT found):"
+    #echo "$1 resources ($RESOURCE_COUNT found):"
+    echo "$RESOURCES" | grep "arn:"
   else
     echo "$1 resources (0 found)"
   fi
@@ -26,31 +45,46 @@ getNoServiceAreaResources () {
 #    --tag-filters "Key=ServiceArea,Values=null" \
 #    --query 'ResourceTagMappingList[*].ResourceARN' \
 #    --output text
-  echo "----------------------------------"
   export RESOURCES=`aws resourcegroupstaggingapi get-resources \
-    | jq '.ResourceTagMappingList[] | select(contains({Tags: [{Key: "environment"} ]}) | not) | .ResourceARN' \
-    | grep "$1"`
+    | jq '.ResourceTagMappingList[] | select(contains({Tags: [{Key: "ServiceArea"} ]}) | not) | .ResourceARN' \
+    | grep -E "$1"`
   RESOURCE_COUNT=`echo "$RESOURCES" | grep -c 'arn:'`
+  echo
+  echo "------------------------------------------------------------------------"
   echo "$2 has ${RESOURCE_COUNT} suspected un-tagged (missing ServiceArea tag) $2 resources"
-
+  echo "------------------------------------------------------------------------"
+  echo "$RESOURCES"
   #echo "Examples:"
   #echo "$RESOURCES" | head -3
   #echo "..."
   #echo "$RESOURCES" | tail -3
 }
 
- #| jq '.ResourceTagMappingList[] | select(contains({Tags: [{Key: "ServiceArea"} ]}) | not)'
 
-#getResourceArnsForServiceArea "U-CS"
-#getResourceArnsForServiceArea "U-SPS"
-#getResourceArnsForServiceArea "U-DS"
-#getResourceArnsForServiceArea "U-ADS"
-#getResourceArnsForServiceArea "U-AS"
+export AWS_PAGER=""
 
-getNoServiceAreaResources "ucs" "U-CS"
-getNoServiceAreaResources "uds" "U-DS"
-getNoServiceAreaResources "uads" "U-ADS"
-
+getNumResourcesTaggedWithServiceArea
+getNumResourcesNotTaggedWithServiceArea
 echo
-getResourceArnsForServiceArea "sps"
-getNoServiceAreaResources "usps" "U-SPS"
+getResourcesTaggedWithServiceArea "cs"
+getResourcesTaggedWithServiceArea "as"
+getResourcesTaggedWithServiceArea "ads"
+getResourcesTaggedWithServiceArea "sps"
+getResourcesTaggedWithServiceArea "ds"
+getNoServiceAreaResources "ucs|galen|ryan|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway" "U-CS"
+getNoServiceAreaResources "uds|cumulus" "U-DS"
+getNoServiceAreaResources "uads|jmcduffi|dockstore|esarkiss|nlahaye" "U-ADS"
+getNoServiceAreaResources "usps|u-sps|sps-api|luca|ryan|hysds" "U-SPS"
+getNoServiceAreaResources "bcdp" "U-AS"
+getNoServiceAreaResources "gmanipon|on-demand" "U-OD"
+getNoServiceAreaResources "anil|tapella|natha" "U-UI"
+
+
+export OTHER_RESOURCES=`getNoServiceAreaResources "arn" "OTHER" | grep -Ev "ucs|galen|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway|uds|cumulus|uads|jmcduffi|dockstore|esarkiss|nlahaye|usps|u-sps|sps-api|luca|ryan|hysds|bcdp|gmanipon|on-demand|anil|tapella|natha"`
+OTHER_RESOURCE_COUNT=`echo "$OTHER_RESOURCES" | grep -c 'arn:'`
+echo
+echo "$OTHER_RESOURCE_COUNT OTHER suspected un-tagged (missing ServiceArea tag) resources:"
+echo "$OTHER_RESOURCES"
+#echo
+#getResourceArnsForServiceArea "sps"
+#getNoServiceAreaResources "usps" "U-SPS"
