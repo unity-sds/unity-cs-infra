@@ -3,7 +3,7 @@ ami_id = "ami-0966013e814042b23"
 vpc_id = "vpc-0106218dbddd3a753"
 igw_id = "igw-0622379cb99c03649"
 
-project       = "unity-sps-demo"
+project       = "unity"
 venue         = "dev"
 
 
