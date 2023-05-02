@@ -80,6 +80,13 @@ jobs:
           echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
           echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
 
+      - name: Display deployment configuration
+        run :
+          echo "Target ENV ${{ env.TARGET_ENV }}"
+          echo "Target STAGE ${{ env.TARGET_STAGE }}"
+          echo "Target PROJECT ${{ env.TARGET_PROJECT }}"
+          echo "Target OWNER ${{ env.TARGET_OWNER }}"
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         if: ${{ INPUTS.awsConnection == 'oidc' }}
