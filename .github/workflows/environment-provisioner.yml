@@ -8,6 +8,36 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
+      deploymentProject:
+        description: 'Deployment Project'
+        required: true 
+        type: choice
+        default: 'UNITY'
+        options: 
+        - UNITY
+        - SIPS
+      deploymentStage:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+      deploymentOwner:
+        description: 'Deployment Owner'
+        required: true 
+        type: string
+        default: 'nightly'
+      deploymentTarget:
+        description: 'Cloud Host'
+        required: true 
+        type: choice
+        default: 'mcp'
+        options: 
+        - mcp
       awsConnection:
         description: 'Method of AWS connection'
         required: true
@@ -18,6 +48,12 @@ on:
         - keys
         - iam
       distinct_id:
+
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
 jobs:
   terraform:
     name: "Environment Provisioner"
