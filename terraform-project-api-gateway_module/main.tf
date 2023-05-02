@@ -9,7 +9,7 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 
 # REST API id SSM Param for other resources to modify rest api
 resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter" {
-  name       = format("/unity/%s/api-gateway/rest-api-id", var.rest_api_stage)
+  name       = format("/unity/cs/routing/api-gateway/rest-api-id")
   type       = "String"
   value      = aws_api_gateway_rest_api.rest_api.id
   overwrite  = true
