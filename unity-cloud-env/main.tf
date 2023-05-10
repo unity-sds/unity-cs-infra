@@ -43,14 +43,14 @@ resource "aws_ssm_parameter" "unity-project" {
 }
 
 resource "aws_ssm_parameter" "unity-private-subnets" {
-  name = "/unity/network/subnets/private"
-  type = "StringList"
+  name  = "/unity/network/subnets/private"
+  type  = "StringList"
   value = var.privatesubnets
 }
 
 resource "aws_ssm_parameter" "unity-public-subnets" {
-  name = "/unity/network/subnets/public"
-  type = "StringList"
+  name  = "/unity/network/subnets/public"
+  type  = "StringList"
   value = var.publicsubnets
 }
 

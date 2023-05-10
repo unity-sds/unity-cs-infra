@@ -21,20 +21,20 @@ variable "ssm_parameters" {
 
 variable "venue" {
   description = "The target venue"
-  type = string
+  type        = string
 }
 
 variable "project" {
   description = "The target project"
-  type = string
+  type        = string
 }
 
 variable "privatesubnets" {
   description = "The preferred private subnets"
-  type = string
+  type        = string
 }
 
 variable "publicsubnets" {
   description = "The preferred public subnets"
-  type = string
+  type        = string
 }

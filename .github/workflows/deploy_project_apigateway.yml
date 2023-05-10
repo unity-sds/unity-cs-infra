@@ -10,6 +10,11 @@ on:
     branches: [ main ]
     inputs:
       distinct_id:
+      teardown:
+        description: 'Teardown Project Api Gateway?'
+        required: false
+        type: boolean
+        default: false
       deploymentProject:
         description: 'Deployment Project'
         required: true 
@@ -62,7 +67,6 @@ on:
         options:
           - github
           - act
-
 
 permissions:
   id-token: write # required to use OIDC authentication
@@ -193,5 +197,12 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
+        if: "${{ ! inputs.teardown }}"
         working-directory: ${{ env.TF_DIRECTORY }} 
         run: terraform apply -auto-approve -var-file="project_api_gateway.tfvars" -var="rest_api_name=${{ env.TARGET_API }}" -var-file="global.tfvars" 
+
+      # Teardown API GW
+      - name: Teardown API GW
+        if: ${{ inputs.teardown }}
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        run: terraform destroy -auto-approve -var-file="project_api_gateway.tfvars" -var="rest_api_name=${{ env.TARGET_API }}" -var-file="global.tfvars" 

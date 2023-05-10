@@ -1,0 +1,113 @@
+name: "Environment Provisioner"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      deploymentProject:
+        description: 'Deployment Project'
+        required: true 
+        type: choice
+        default: 'UNITY'
+        options: 
+        - UNITY
+        - SIPS
+      deploymentStage:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+      deploymentOwner:
+        description: 'Deployment Owner'
+        required: true 
+        type: string
+        default: 'nightly'
+      deploymentTarget:
+        description: 'Cloud Host'
+        required: true 
+        type: choice
+        default: 'mcp'
+        options: 
+        - mcp
+      awsConnection:
+        description: 'Method of AWS connection'
+        required: true
+        type: choice
+        default: 'oidc'
+        options:
+        - oidc
+        - keys
+        - iam
+      distinct_id:
+
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+jobs:
+  terraform:
+    name: "Environment Provisioner"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}    
+
+      - name: Configure default variables
+        env:
+          DEFAULT_TARGET: 'mcp'
+          DEFAULT_REPO: 'unity-sds/unity-cs-sps-demo'
+          DEFAULT_COMMIT: 'smolenski_tf_test_mcp'
+          DEFAULT_STAGE: 'DEV'
+          DEFAULT_PROJECT: 'UNITY'
+          DEFAULT_OWNER: 'nightly'
+          DEFAULT_EKSCLUSTERNAME: 'testtommon6'
+        run: |
+          echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+          echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
+
+      - name: Display deployment configuration
+        run :
+          echo "Target ENV ${{ env.TARGET_ENV }}"
+          echo "Target STAGE ${{ env.TARGET_STAGE }}"
+          echo "Target PROJECT ${{ env.TARGET_PROJECT }}"
+          echo "Target OWNER ${{ env.TARGET_OWNER }}"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        if: ${{ INPUTS.awsConnection == 'oidc' }}
+        with:
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Format
+        id: fmt
+        run: cd unity-cloud-env && terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: cd unity-cloud-env && terraform init
+      
+      - name: Terraform Validate
+        id: validate
+        run: cd unity-cloud-env && terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: cd unity-cloud-env && terraform plan -no-color -input=false
+        continue-on-error: true
