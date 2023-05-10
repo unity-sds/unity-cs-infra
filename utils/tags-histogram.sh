@@ -9,8 +9,6 @@ getResourceCountsWithTag () {
     --query 'ResourceTagMappingList[*].Tags[?Key==`'${1}'`].Value' \
     --output text | sort -r | uniq -c)
     if [[ -z "${TAG_VALUES}" ]]; then
-#      echo "NO RESOURCES WITH '${1}' TAG:"
-#      echo
       :
     else
       echo "RESOURCES WITH '${1}' TAG:"
@@ -19,29 +17,17 @@ getResourceCountsWithTag () {
     fi
 }
 
-getResourceCountsWithTag "Venue"
-getResourceCountsWithTag "venue"
-
-getResourceCountsWithTag "ServiceArea"
-getResourceCountsWithTag "serviceArea"
-
-getResourceCountsWithTag "CapVersion"
-getResourceCountsWithTag "capVersion"
-
-getResourceCountsWithTag "Component"
-getResourceCountsWithTag "component"
-
-getResourceCountsWithTag "Name"
-getResourceCountsWithTag "name"
-
-getResourceCountsWithTag "Proj"
-getResourceCountsWithTag "proj"
-
-getResourceCountsWithTag "CreatedBy"
-getResourceCountsWithTag "createdBy"
-
-getResourceCountsWithTag "Env"
-getResourceCountsWithTag "env"
-
-getResourceCountsWithTag "Stack"
-getResourceCountsWithTag "stack"
+declare -a tags=(
+  "Venue"        "venue"
+  "ServiceArea"  "serviceArea"
+  "CapVersion"   "capVersion"
+  "Component"    "component"
+  "Name"         "name"
+  "Proj"         "proj"
+  "CreatedBy"    "createdBy"
+  "Env"          "env"
+  "Stack"        "stack"
+                )
+for tag in "${tags[@]}"; do
+   getResourceCountsWithTag "$tag"
+done
