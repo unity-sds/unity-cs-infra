@@ -78,7 +78,6 @@ on:
         type: boolean
         default: false
 
-
 permissions:
   id-token: write # required to use OIDC authentication
   contents: read # required to checkout the code from the repo
@@ -96,8 +95,13 @@ jobs:
       - name: SCM CHeckout
         uses: actions/checkout@v2
 
-      - name: install tools
+      - name: install tools github
+        if: ${{ inputs.deploymentSource == 'github' }}
         run: ./utils/install_utils.sh
+
+      - name: install tools act
+        if: ${{ inputs.deploymentSource == 'act' }}
+        run: ./utils/install_utils.sh true
 
       - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
         run: echo ${{ github.event.inputs.distinct_id }}    
@@ -119,6 +123,10 @@ jobs:
           echo "TARGET_PROJECT=${{ github.event.inputs.deploymentProject || env.DEFAULT_PROJECT }}" >> $GITHUB_ENV
           echo "TARGET_OWNER=${{ github.event.inputs.deploymentOwner || env.DEFAULT_OWNER }}" >> $GITHUB_ENV
           echo "TARGET_CLUSTER=${{ github.event.inputs.eksClusterName || env.DEFAULT_EKSCLUSTERNAME }}" >> $GITHUB_ENV
+          
+      - name: Configure token
+        if: ${{ inputs.deploymentSource == 'act' }}
+        run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
       - name: Display deployment configuration
         run :
@@ -129,10 +137,13 @@ jobs:
           echo "Target EKS Cluster ${{ env.TARGET_CLUSTER }}"
           echo "Repo Name ${{ env.REPO_NAME }}"
           echo "Commit Hash ${{ env.COMMIT_HASH }}"
+          echo "AWS Auth Method ${{ inputs.awsConnection }}"
+          echo "Deployment Method ${{ inputs.deploymentSource }}"
+          echo "Token ${{ env.GITHUB_TOKEN }}"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
-        if: ${{ INPUTS.awsConnection == 'oidc' }}
+        if: ${{ inputs.awsConnection == 'oidc' }}
         with:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
           aws-region: ${{ vars.AWS_REGION }}
@@ -148,15 +159,22 @@ jobs:
       # While cloning the repository:
       #   - it clones the repo into the given `path`
       #   - it checks out the branch defined at `ref`
-      - name: Clone the service repository for deployment
-        uses: actions/checkout@v2
+      - name: Clone the service repository for deployment github
+        uses: actions/checkout@v3
+        if: ${{ inputs.deploymentSource == 'github' }}
         with:
           repository: ${{ env.REPO_NAME }}
           path: resources/deployable
           ref: ${{ env.COMMIT_HASH }}
-
-
-
+          
+      - name: Clone the service repository for deployment act
+        uses: actions/checkout@v3
+        if: ${{ inputs.deploymentSource == 'act' }}
+        with:
+          repository: ${{ env.REPO_NAME }}
+          path: resources/deployable
+          ref: ${{ env.COMMIT_HASH }}
+          token: ${{ env.GITHUB_TOKEN }}
       - name: Configure app for install
         run: |
           cp terraform-unity/main.mcp.tf resources/deployable/terraform-unity/
@@ -169,6 +187,7 @@ jobs:
           echo 'counter = 1' >> resources/deployable/terraform-unity/gh_actions.tfvars
           echo 'namespace = "${{ env.TARGET_CLUSTER }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
           echo 'eks_node_group_names = ["eksctl-${{ env.TARGET_CLUSTER }}-nodegroup-defaultgroupNodeGroup"]' >> resources/deployable/terraform-unity/gh_actions.tfvars
+          echo 'default_group_node_group_launch_template_name = "eksctl-${{ env.TARGET_CLUSTER }}-nodegroup-defaultgroupNodeGroup"' >> resources/deployable/terraform-unity/gh_actions.tfvars
     
       - name: Run Terraform scripts apply
         if: "${{ ! inputs.teardown }}"
@@ -196,4 +215,3 @@ jobs:
       #   run: |
       #     cd ./resources/deployable/smoketest
       #     sh smokefail.sh
-

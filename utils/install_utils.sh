@@ -10,7 +10,7 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 
 ## Install Apps for act
 
-if [ $1 == "true" ]; then
+if [[ $1 == "true" ]]; then
     sudo apt update && sudo apt install -y curl git jq unzip && \
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo  ./aws/install && \
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \

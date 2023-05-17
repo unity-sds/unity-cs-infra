@@ -85,46 +85,28 @@ jobs:
       # Set up current working directory with the repo contents
       - uses: actions/checkout@v3
       - name: Install aws
-        if: ${{ github.event.act }}
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip awscliv2.zip
           sudo ./aws/install
 
       - name: Install kubectl
-        if: ${{ github.event.act }}
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl      
       - name: Set env vars
-        run: |
-          if [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "DEV" ];
-          then
-            echo "EKSClusterVersion=${{ vars.MCP_DEV_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
-            echo "EKSClusterAMI=${{ vars.MCP_DEV_EKSCLUSTERAMI }}" >> $GITHUB_ENV
-            echo "EKSSecurityGroup=${{ vars.MCP_DEV_EKSSECURITYGROUP }}" >> $GITHUB_ENV
-            echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_DEV_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
-            echo "EKSPublicSubnetA=${{ vars.MCP_DEV_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
-            echo "EKSPublicSubnetB=${{ vars.MCP_DEV_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
-            echo "EKSPrivateSubnetA=${{ vars.MCP_DEV_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
-            echo "EKSPrivateSubnetB=${{ vars.MCP_DEV_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
-            echo "EKSInstanceRoleArn=${{ vars.MCP_DEV_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
-            echo "EKSServiceArn=${{ vars.MCP_DEV_EKSSERVICEARN }}" >> $GITHUB_ENV
-            echo "EKSUserArn=${{ vars.MCP_DEV_EKSUSERARN }}" >> $GITHUB_ENV
-          elif [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "TEST" ];
-          then
-            echo "EKSClusterVersion=${{ vars.MCP_TEST_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
-            echo "EKSClusterAMI=${{ vars.MCP_TEST_EKSCLUSTERAMI }}" >> $GITHUB_ENV
-            echo "EKSSecurityGroup=${{ vars.MCP_TEST_EKSSECURITYGROUP }}" >> $GITHUB_ENV
-            echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_TEST_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
-            echo "EKSPublicSubnetA=${{ vars.MCP_TEST_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
-            echo "EKSPublicSubnetB=${{ vars.MCP_TEST_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
-            echo "EKSPrivateSubnetA=${{ vars.MCP_TEST_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
-            echo "EKSPrivateSubnetB=${{ vars.MCP_TEST_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
-            echo "EKSInstanceRoleArn=${{ vars.MCP_TEST_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
-            echo "EKSServiceArn=${{ vars.MCP_TEST_EKSSERVICEARN }}" >> $GITHUB_ENV
-            echo "EKSUserArn=${{ vars.MCP_TEST_EKSUSERARN }}" >> $GITHUB_ENV
-          fi
+        run: | 
+            echo "EKSClusterVersion=1.24" >> $GITHUB_ENV
+            echo "EKSClusterAMI=ami-0886544fa915698f0" >> $GITHUB_ENV
+            echo "EKSSecurityGroup=sg-09bd8de0af1c3c99a" >> $GITHUB_ENV
+            echo "EKSSharedNodeSecurityGroup=sg-09bd8de0af1c3c99a" >> $GITHUB_ENV
+            echo "EKSPublicSubnetA=us-west-2c: {id: subnet-087b54673c7549e2d}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetB=us-west-2d: {id: subnet-009c32904a8bf3b92}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetA=us-west-2c: {id: subnet-0ba7d45fe29659a2a}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetB=us-west-2d: {id: subnet-0e4ff7f670ebb4cc3}" >> $GITHUB_ENV
+            echo "EKSInstanceRoleArn=arn:aws:iam::237868187491:role/Unity-UCS-Development-EKSNodeRole" >> $GITHUB_ENV
+            echo "EKSServiceArn=arn:aws:iam::237868187491:role/Unity-UCS-Development-EKSClusterS3-Role" >> $GITHUB_ENV
+            echo "EKSUserArn=arn:aws:iam::237868187491:role/mcp-tenantDeveloper;arn:aws:iam::237868187491:role/mcp-tenantOperator" >> $GITHUB_ENV
       # Configure AWS Credentials through OIDC
       - name: Configure AWS credentials
         if: ${{ INPUTS.AWSCONNECTION == 'oidc' }}
@@ -145,6 +127,12 @@ jobs:
         run: |
           curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.26-Alpha/unity-cs-manager-0.1.26-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
           sudo mv /tmp/unity-cs-manager /usr/local/bin
+
+      - name: Install Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
 
       # Render template
       - name: Render Template
