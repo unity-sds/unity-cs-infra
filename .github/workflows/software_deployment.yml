@@ -32,13 +32,10 @@ on:
         required: true 
         type: string
         default: 'nightly'
-      deploymentTarget:
-        description: 'Cloud Host'
-        required: true 
-        type: choice
-        default: 'mcp'
-        options: 
-        - mcp
+      deploymentName:
+        descrition: 'Unique Deployment Name'
+        required: true
+        type: string
       sourceRepository:
         description: 'Service Area Repository'
         required: true 
@@ -54,7 +51,6 @@ on:
         required: true 
         type: string
         default: 'testtommon6'
-#        default: 'smolenski_tf_test_mcp'
       awsConnection:
         description: 'Method of AWS connection'
         required: true
@@ -123,6 +119,7 @@ jobs:
           echo "TARGET_PROJECT=${{ github.event.inputs.deploymentProject || env.DEFAULT_PROJECT }}" >> $GITHUB_ENV
           echo "TARGET_OWNER=${{ github.event.inputs.deploymentOwner || env.DEFAULT_OWNER }}" >> $GITHUB_ENV
           echo "TARGET_CLUSTER=${{ github.event.inputs.eksClusterName || env.DEFAULT_EKSCLUSTERNAME }}" >> $GITHUB_ENV
+          echo "TARGET_NAME=${{ github.event.inputs.deploymentName || env.DEFAULT_NAME }}" >> $GITHUB_ENV
           
       - name: Configure token
         if: ${{ inputs.deploymentSource == 'act' }}
@@ -137,9 +134,6 @@ jobs:
           echo "Target EKS Cluster ${{ env.TARGET_CLUSTER }}"
           echo "Repo Name ${{ env.REPO_NAME }}"
           echo "Commit Hash ${{ env.COMMIT_HASH }}"
-          echo "AWS Auth Method ${{ inputs.awsConnection }}"
-          echo "Deployment Method ${{ inputs.deploymentSource }}"
-          echo "Token ${{ env.GITHUB_TOKEN }}"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -177,17 +171,10 @@ jobs:
           token: ${{ env.GITHUB_TOKEN }}
       - name: Configure app for install
         run: |
-          cp terraform-unity/main.mcp.tf resources/deployable/terraform-unity/
-          cp terraform-unity/variables.mcp.tf resources/deployable/terraform-unity/
-          #cp terraform-unity/MCP-DEV.tfvars resources/deployable/terraform-unity/
-          cp terraform-unity/TFVARS/DEV/mcp.tfvars resources/deployable/terraform-unity/
-          cp resources/deployable/terraform-unity/tfvar_templates/MCP-DEV.tfvars resources/deployable/terraform-unity/
           echo 'eks_cluster_name = "${{ env.TARGET_CLUSTER }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
           echo 'kubeconfig_filepath = "~/.kube/config"' >> resources/deployable/terraform-unity/gh_actions.tfvars
-          echo 'counter = 1' >> resources/deployable/terraform-unity/gh_actions.tfvars
-          echo 'namespace = "${{ env.TARGET_CLUSTER }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
-          echo 'eks_node_group_names = ["eksctl-${{ env.TARGET_CLUSTER }}-nodegroup-defaultgroupNodeGroup"]' >> resources/deployable/terraform-unity/gh_actions.tfvars
-          echo 'default_group_node_group_launch_template_name = "eksctl-${{ env.TARGET_CLUSTER }}-nodegroup-defaultgroupNodeGroup"' >> resources/deployable/terraform-unity/gh_actions.tfvars
+          echo 'deployment_name = "${{ env.TARGET_NAME }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
+          echo 'release = "${{ env.COMMIT_HASH }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
     
       - name: Run Terraform scripts apply
         if: "${{ ! inputs.teardown }}"

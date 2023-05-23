@@ -1,5 +1,0 @@
-{
-	"inputs": {
-		"METADATA":"{\"deploymentType\":\"teardown\",\"metadataversion\": \"unity-cs-0.1\",\"exectarget\": \"act\",\"deploymentName\": \"managementdashboard\",\"services\":[{\"name\":\"unity-sps-prototype\",\"source\":\"unity-sds/unity-sps-prototype\",\"version\":\"xxx\",\"branch\":\"tf-variable-rename\"}],\"extensions\":{\"apigateway\":{\"apis\":[{\"name\":\"autodeploytest\"}]},\"kubernetes\":{\"clustername\":\"actdeploytest\",\"owner\":\"ryan\",\"projectname\":\"testproject\",\"nodegroups\":{\"group1\":{\"instancetype\":\"m5.xlarge\",\"nodecount\":\"1\"}}}}}" 
-	}
-}
