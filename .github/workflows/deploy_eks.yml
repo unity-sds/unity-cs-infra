@@ -68,6 +68,14 @@ on:
         - TEST
         - OPS
         - SIPS
+      DEPLOYMENTSOURCE:
+        description: 'Where the action is being run'
+        required: true
+        type: choice
+        default: 'github'
+        options:
+          - github
+          - act
 permissions:
   id-token: write # required to use OIDC authentication
   contents: read # required to checkout the code from the repo
@@ -96,7 +104,8 @@ jobs:
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl      
-      - name: Set env vars
+      - name: Set env vars github
+        if: ${{ INPUTS.DEPLOYMENTSOURCE == 'github'  }} 
         run: |
           if [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "DEV" ];
           then
@@ -125,6 +134,20 @@ jobs:
             echo "EKSServiceArn=${{ vars.MCP_TEST_EKSSERVICEARN }}" >> $GITHUB_ENV
             echo "EKSUserArn=${{ vars.MCP_TEST_EKSUSERARN }}" >> $GITHUB_ENV
           fi
+      - name: Set env vars act
+        if: ${{ INPUTS.DEPLOYMENTSOURCE == 'act' }}
+        run: |
+          echo "EKSClusterVersion=1.24" >> $GITHUB_ENV
+          echo "EKSClusterAMI=$(get-ssm-param.sh /unity/account/ami/eksClusterAmi)" >> $GITHUB_ENV
+          echo "EKSSecurityGroup=$(get-ssm-param.sh /unity/account/securityGroups/eksSecurityGroup)" >> $GITHUB_ENV
+          echo "EKSSharedNodeSecurityGroup=$(get-ssm-param.sh /unity/account/securityGroups/eksSharedNodeSecurityGroup)" >> $GITHUB_ENV
+          echo "EKSPublicSubnetA=$(awk -F, '{print $1}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/public))" >> $GITHUB_ENV
+          echo "EKSPublicSubnetB=$(awk -F, '{print $2}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/public))" >> $GITHUB_ENV
+          echo "EKSPrivateSubnetA=$(awk -F, '{print $1}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/private))" >> $GITHUB_ENV
+          echo "EKSPrivateSubnetB=$(awk -F, '{print $2}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/private))" >> $GITHUB_ENV
+          echo "EKSInstanceRoleArn=$(get-ssm-param.sh /unity/account/roles/eksInstanceRoleArn)" >> $GITHUB_ENV
+          echo "EKSServiceArn=$(get-ssm-param.sh /unity/account/roles/eksInstanceRoleArn)" >> $GITHUB_ENV
+          echo "EKSUserArn=$(get-ssm-param.sh /unity/account/roles/mcpRoleArns)" >> $GITHUB_ENV
       # Configure AWS Credentials through OIDC
       - name: Configure AWS credentials
         if: ${{ INPUTS.AWSCONNECTION == 'oidc' }}
@@ -190,6 +213,14 @@ jobs:
           helm repo add fairwinds-stable https://charts.fairwinds.com/stable
           helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
           helm install goldilocks --namespace goldilocks --create-namespace fairwinds-stable/goldilocks
+
+      # Launch EKS
+      - name: Write SSM Params
+        if: "${{ ! inputs.TEARDOWN }}"
+        run: |
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name --value defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName --value eksctl-${cluster}-nodegroup-defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds --value ${EKSPrivateSubnetA},${EKSPrivateSubnetB}
 
       # Teardown EKS
       - name: Teardown EKS cluster
