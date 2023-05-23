@@ -68,6 +68,14 @@ on:
         - TEST
         - OPS
         - SIPS
+      DEPLOYMENTSOURCE:
+        description: 'Where the action is being run'
+        required: true
+        type: choice
+        default: 'github'
+        options:
+          - github
+          - act
 permissions:
   id-token: write # required to use OIDC authentication
   contents: read # required to checkout the code from the repo
@@ -94,19 +102,50 @@ jobs:
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl      
-      - name: Set env vars
-        run: | 
-            echo "EKSClusterVersion=1.24" >> $GITHUB_ENV
-            echo "EKSClusterAMI=ami-0886544fa915698f0" >> $GITHUB_ENV
-            echo "EKSSecurityGroup=sg-09bd8de0af1c3c99a" >> $GITHUB_ENV
-            echo "EKSSharedNodeSecurityGroup=sg-09bd8de0af1c3c99a" >> $GITHUB_ENV
-            echo "EKSPublicSubnetA=us-west-2c: {id: subnet-087b54673c7549e2d}" >> $GITHUB_ENV
-            echo "EKSPublicSubnetB=us-west-2d: {id: subnet-009c32904a8bf3b92}" >> $GITHUB_ENV
-            echo "EKSPrivateSubnetA=us-west-2c: {id: subnet-0ba7d45fe29659a2a}" >> $GITHUB_ENV
-            echo "EKSPrivateSubnetB=us-west-2d: {id: subnet-0e4ff7f670ebb4cc3}" >> $GITHUB_ENV
-            echo "EKSInstanceRoleArn=arn:aws:iam::237868187491:role/Unity-UCS-Development-EKSNodeRole" >> $GITHUB_ENV
-            echo "EKSServiceArn=arn:aws:iam::237868187491:role/Unity-UCS-Development-EKSClusterS3-Role" >> $GITHUB_ENV
-            echo "EKSUserArn=arn:aws:iam::237868187491:role/mcp-tenantDeveloper;arn:aws:iam::237868187491:role/mcp-tenantOperator" >> $GITHUB_ENV
+      - name: Set env vars github
+        if: ${{ INPUTS.DEPLOYMENTSOURCE == 'github'  }} 
+        run: |
+          if [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "DEV" ];
+          then
+            echo "EKSClusterVersion=${{ vars.MCP_DEV_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
+            echo "EKSClusterAMI=${{ vars.MCP_DEV_EKSCLUSTERAMI }}" >> $GITHUB_ENV
+            echo "EKSSecurityGroup=${{ vars.MCP_DEV_EKSSECURITYGROUP }}" >> $GITHUB_ENV
+            echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_DEV_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetA=${{ vars.MCP_DEV_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetB=${{ vars.MCP_DEV_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetA=${{ vars.MCP_DEV_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetB=${{ vars.MCP_DEV_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
+            echo "EKSInstanceRoleArn=${{ vars.MCP_DEV_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
+            echo "EKSServiceArn=${{ vars.MCP_DEV_EKSSERVICEARN }}" >> $GITHUB_ENV
+            echo "EKSUserArn=${{ vars.MCP_DEV_EKSUSERARN }}" >> $GITHUB_ENV
+          elif [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "TEST" ];
+          then
+            echo "EKSClusterVersion=${{ vars.MCP_TEST_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
+            echo "EKSClusterAMI=${{ vars.MCP_TEST_EKSCLUSTERAMI }}" >> $GITHUB_ENV
+            echo "EKSSecurityGroup=${{ vars.MCP_TEST_EKSSECURITYGROUP }}" >> $GITHUB_ENV
+            echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_TEST_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetA=${{ vars.MCP_TEST_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetB=${{ vars.MCP_TEST_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetA=${{ vars.MCP_TEST_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetB=${{ vars.MCP_TEST_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
+            echo "EKSInstanceRoleArn=${{ vars.MCP_TEST_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
+            echo "EKSServiceArn=${{ vars.MCP_TEST_EKSSERVICEARN }}" >> $GITHUB_ENV
+            echo "EKSUserArn=${{ vars.MCP_TEST_EKSUSERARN }}" >> $GITHUB_ENV
+          fi
+      - name: Set env vars act
+        if: ${{ INPUTS.DEPLOYMENTSOURCE == 'act' }}
+        run: |
+          echo "EKSClusterVersion=1.24" >> $GITHUB_ENV
+          echo "EKSClusterAMI=$(get-ssm-param.sh /unity/account/ami/eksClusterAmi)" >> $GITHUB_ENV
+          echo "EKSSecurityGroup=$(get-ssm-param.sh /unity/account/securityGroups/eksSecurityGroup)" >> $GITHUB_ENV
+          echo "EKSSharedNodeSecurityGroup=$(get-ssm-param.sh /unity/account/securityGroups/eksSharedNodeSecurityGroup)" >> $GITHUB_ENV
+          echo "EKSPublicSubnetA=$(awk -F, '{print $1}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/public))" >> $GITHUB_ENV
+          echo "EKSPublicSubnetB=$(awk -F, '{print $2}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/public))" >> $GITHUB_ENV
+          echo "EKSPrivateSubnetA=$(awk -F, '{print $1}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/private))" >> $GITHUB_ENV
+          echo "EKSPrivateSubnetB=$(awk -F, '{print $2}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/private))" >> $GITHUB_ENV
+          echo "EKSInstanceRoleArn=$(get-ssm-param.sh /unity/account/roles/eksInstanceRoleArn)" >> $GITHUB_ENV
+          echo "EKSServiceArn=$(get-ssm-param.sh /unity/account/roles/eksInstanceRoleArn)" >> $GITHUB_ENV
+          echo "EKSUserArn=$(get-ssm-param.sh /unity/account/roles/mcpRoleArns)" >> $GITHUB_ENV
       # Configure AWS Credentials through OIDC
       - name: Configure AWS credentials
         if: ${{ INPUTS.AWSCONNECTION == 'oidc' }}
@@ -178,6 +217,14 @@ jobs:
           helm repo add fairwinds-stable https://charts.fairwinds.com/stable
           helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
           helm install goldilocks --namespace goldilocks --create-namespace fairwinds-stable/goldilocks
+
+      # Launch EKS
+      - name: Write SSM Params
+        if: "${{ ! inputs.TEARDOWN }}"
+        run: |
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name --value defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName --value eksctl-${cluster}-nodegroup-defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds --value ${EKSPrivateSubnetA},${EKSPrivateSubnetB}
 
       # Teardown EKS
       - name: Teardown EKS cluster
