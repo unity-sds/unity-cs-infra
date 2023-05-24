@@ -22,7 +22,7 @@ on:
         description: 'UCS Metadata Definition'
         required: true
         type: string
-        default: '{"metadataVersion":"unity-cs-0.1","exectarget": "github","deploymentName":"some name for the deployment of services","services":[{"name":"unity-sps-prototype","source":"unity-sds/unity-sps-prototype","version":"xxx","branch":"main"}],"extensions":{"kubernetes":{"clustername":"testclustertomthurs","owner":"tom","projectname":"testproject","nodegroups":{"group1":{"instancetype":"m5.xlarge","nodecount":"1"}}}}}'
+        default: '{"metadataVersion":"unity-cs-0.1","exectarget": "github","deploymentName":"some name for the deployment of services","services":[{"name":"unity-sps-prototype","source":"unity-sds/unity-sps-prototype","version":"xxx","branch":"main"}],"extensions":{"kubernetes":{"clustername":"testclusteract","owner":"tom","projectname":"testproject","nodegroups":{"group1":{"instancetype":"m5.xlarge","nodecount":"1"}}}, "apigateway":{"apis":[{"name":"testgh"}]}}}'
 jobs:
   run_unity_job:
     runs-on: ubuntu-latest
@@ -30,21 +30,27 @@ jobs:
     steps:
       # To use this repository's private action,
       # you must check out the repository
+      - name: Print Inputs
+        run: echo ${{ inputs.METADATA }}
       - name: Checkout
         uses: actions/checkout@v3
       - name: install act
-        run: curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash && echo "/home/ubuntu/unity-cs/bin" >> $GITHUB_PATH        
+        run: curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash && echo "/home/ubuntu/unity-cs-infra/bin" >> $GITHUB_PATH        
       - name: test
         run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
              echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc &&
              echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc &&
              echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
+      - name: Display working directory
+        run: |
+             pwd
+             ls
       - name: Unity custom action step
         uses: unity-sds/unity-cs-action@release/ryan-apigw
-        id: hello
+        id: main_action_run
         with:
           token: ${{ secrets.TOKEN }}
           ucsmetadata: ${{ inputs.METADATA }}
       # Use the output from the `hello` step
       - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.eksmeta }}"
+        run: echo "The time was ${{ steps.main_action_run.outputs.eksmeta }}"

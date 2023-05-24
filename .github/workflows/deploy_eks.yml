@@ -93,14 +93,12 @@ jobs:
       # Set up current working directory with the repo contents
       - uses: actions/checkout@v3
       - name: Install aws
-        if: ${{ github.event.act }}
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
+          unzip -q awscliv2.zip
           sudo ./aws/install
 
       - name: Install kubectl
-        if: ${{ github.event.act }}
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl      
@@ -138,16 +136,16 @@ jobs:
         if: ${{ INPUTS.DEPLOYMENTSOURCE == 'act' }}
         run: |
           echo "EKSClusterVersion=1.24" >> $GITHUB_ENV
-          echo "EKSClusterAMI=$(get-ssm-param.sh /unity/account/ami/eksClusterAmi)" >> $GITHUB_ENV
-          echo "EKSSecurityGroup=$(get-ssm-param.sh /unity/account/securityGroups/eksSecurityGroup)" >> $GITHUB_ENV
-          echo "EKSSharedNodeSecurityGroup=$(get-ssm-param.sh /unity/account/securityGroups/eksSharedNodeSecurityGroup)" >> $GITHUB_ENV
-          echo "EKSPublicSubnetA=$(awk -F, '{print $1}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/public))" >> $GITHUB_ENV
-          echo "EKSPublicSubnetB=$(awk -F, '{print $2}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/public))" >> $GITHUB_ENV
-          echo "EKSPrivateSubnetA=$(awk -F, '{print $1}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/private))" >> $GITHUB_ENV
-          echo "EKSPrivateSubnetB=$(awk -F, '{print $2}' <<< $(utils/get-ssm-param.sh /unity/account/network/subnets/private))" >> $GITHUB_ENV
-          echo "EKSInstanceRoleArn=$(get-ssm-param.sh /unity/account/roles/eksInstanceRoleArn)" >> $GITHUB_ENV
-          echo "EKSServiceArn=$(get-ssm-param.sh /unity/account/roles/eksInstanceRoleArn)" >> $GITHUB_ENV
-          echo "EKSUserArn=$(get-ssm-param.sh /unity/account/roles/mcpRoleArns)" >> $GITHUB_ENV
+          echo "EKSClusterAMI=$(utils/get-ssm-param.sh /unity/account/ami/eksClusterAmi)" >> $GITHUB_ENV
+          echo "EKSSecurityGroup=$(utils/get-ssm-param.sh /unity/account/securityGroups/eksSecurityGroup)" >> $GITHUB_ENV
+          echo "EKSSharedNodeSecurityGroup=$(utils/get-ssm-param.sh /unity/account/securityGroups/eksSharedNodeSecurityGroup)" >> $GITHUB_ENV
+          echo "EKSPublicSubnetA=$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/publicA)" >> $GITHUB_ENV
+          echo "EKSPublicSubnetB=$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/publicB)" >> $GITHUB_ENV
+          echo "EKSPrivateSubnetA=$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/privateA)" >> $GITHUB_ENV
+          echo "EKSPrivateSubnetB=$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/privateB)" >> $GITHUB_ENV
+          echo "EKSInstanceRoleArn=$(utils/get-ssm-param.sh /unity/account/roles/eksInstanceRoleArn)" >> $GITHUB_ENV
+          echo "EKSServiceArn=$(utils/get-ssm-param.sh /unity/account/roles/eksServiceRoleArn)" >> $GITHUB_ENV
+          echo "EKSUserArn=$(utils/get-ssm-param.sh /unity/account/roles/mcpRoleArns)" >> $GITHUB_ENV
       # Configure AWS Credentials through OIDC
       - name: Configure AWS credentials
         if: ${{ INPUTS.AWSCONNECTION == 'oidc' }}
@@ -168,6 +166,12 @@ jobs:
         run: |
           curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.26-Alpha/unity-cs-manager-0.1.26-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
           sudo mv /tmp/unity-cs-manager /usr/local/bin
+
+      - name: Install Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
 
       # Render template
       - name: Render Template
@@ -214,13 +218,13 @@ jobs:
           helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
           helm install goldilocks --namespace goldilocks --create-namespace fairwinds-stable/goldilocks
 
-      # Launch EKS
       - name: Write SSM Params
         if: "${{ ! inputs.TEARDOWN }}"
         run: |
-          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name --value defaultgroupNodeGroup
-          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName --value eksctl-${cluster}-nodegroup-defaultgroupNodeGroup
-          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds --value ${EKSPrivateSubnetA},${EKSPrivateSubnetB}
+          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name --type String --value defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName --type String --value eksctl-${cluster}-nodegroup-defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds --type StringList --value "$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/private)"
 
       # Teardown EKS
       - name: Teardown EKS cluster
@@ -241,3 +245,11 @@ jobs:
           helm uninstall goldilocks --namespace goldilocks
           eksctl delete nodegroup defaultgroupNodeGroup --cluster $cluster --drain=false --disable-eviction
           eksctl delete cluster --name $cluster
+          
+      - name: Delete SSM Params
+        if: ${{ inputs.TEARDOWN }}
+        run: |
+          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds
