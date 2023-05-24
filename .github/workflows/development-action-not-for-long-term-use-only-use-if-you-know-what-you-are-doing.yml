@@ -46,7 +46,7 @@ jobs:
              pwd
              ls
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@release/ryan-apigw
+        uses: unity-sds/unity-cs-action@main
         id: main_action_run
         with:
           token: ${{ secrets.TOKEN }}
