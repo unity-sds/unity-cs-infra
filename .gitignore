@@ -4,3 +4,6 @@
 .idea/unity-cs-infra.iml
 .idea/vcs.xml
 .idea/workspace.xml
+utils/tag-report-mcp-dev.txt
+utils/tag-report-mcp-test.txt
+utils/tag-report.txt

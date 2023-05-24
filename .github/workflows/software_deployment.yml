@@ -72,6 +72,11 @@ on:
         options:
           - github
           - act
+      teardown:
+        description: 'Teardown software deployment'
+        required: false
+        type: boolean
+        default: false
 
 
 permissions:
@@ -165,9 +170,15 @@ jobs:
           echo 'namespace = "${{ env.TARGET_CLUSTER }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
           echo 'eks_node_group_names = ["eksctl-${{ env.TARGET_CLUSTER }}-nodegroup-defaultgroupNodeGroup"]' >> resources/deployable/terraform-unity/gh_actions.tfvars
     
-      - name: Run Terraform scripts
+      - name: Run Terraform scripts apply
+        if: "${{ ! inputs.teardown }}"
         run: |
-          ./utils/run_terraform.sh resources/deployable/terraform-unity
+          ./utils/run_terraform.sh resources/deployable/terraform-unity apply
+
+      - name: Run Terraform scripts destroy
+        if: ${{ inputs.teardown }}
+        run: |
+          ./utils/run_terraform.sh resources/deployable/terraform-unity destroy
 
       - name: Send custom JSON data to Slack workflow
         id: slack

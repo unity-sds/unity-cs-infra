@@ -45,6 +45,20 @@ getResourcesTaggedWithServiceArea () {
   fi
 }
 
+# =================================================
+# Displays AWS resource ARNs for a service area,
+# by looking for resources containing the specified
+# 'ServiceArea' tag.
+# =================================================
+getResourceCountsWithTag () {
+  echo "RESOURCES WITH '${1}' TAG:"
+  aws resourcegroupstaggingapi get-resources \
+    --tag-filters "Key=${1}" \
+    --query 'ResourceTagMappingList[*].Tags[?Key==`${1}`].Value' \
+    --output text | sort -r | uniq -c
+}
+
+
 getNoServiceAreaResources () {
 #  aws resourcegroupstaggingapi get-resources \
 #    --tag-filters "Key=ServiceArea,Values=null" \
@@ -83,6 +97,10 @@ getNoServiceAreaResources "usps|u-sps|sps-api|luca|ryan|hysds" "U-SPS"
 getNoServiceAreaResources "bcdp" "U-AS"
 getNoServiceAreaResources "gmanipon|on-demand" "U-OD"
 getNoServiceAreaResources "anil|tapella|natha" "U-UI"
+
+getResourceCountsWithTag "ServiceArea"
+getResourceCountsWithTag "Proj"
+getResourceCountsWithTag "mission"
 
 
 export OTHER_RESOURCES=`getNoServiceAreaResources "arn" "OTHER" | grep -Ev "ucs|galen|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway|uds|cumulus|uads|jmcduffi|dockstore|esarkiss|nlahaye|jupyter|usps|u-sps|sps-api|luca|ryan|hysds|bcdp|gmanipon|on-demand|anil|tapella|natha"`

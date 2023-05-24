@@ -40,7 +40,7 @@ jobs:
              echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc &&
              echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
       - name: Unity custom action step
-        uses: unity-sds/unity-cs-action@a5cfaa667d5e30f9bb90c56ef6979ecb1bdc4e04
+        uses: unity-sds/unity-cs-action@release/ryan-apigw
         id: hello
         with:
           token: ${{ secrets.TOKEN }}

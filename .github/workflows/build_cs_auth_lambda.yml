@@ -1,0 +1,26 @@
+name: deploy to lambda
+on: [push]
+jobs:
+  build_source:
+    name: build and zip lambda
+    strategy:
+      matrix:
+        node-version: [14.x]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install and build
+        run: |
+          npm install
+      - name: zip
+        uses: montudor/action-zip@v0.1.0
+        with:
+          args: zip -qq -r ./bundle.zip ./
+          
