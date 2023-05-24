@@ -120,3 +120,7 @@ jobs:
         id: plan
         run: cd unity-cloud-env && terraform plan -no-color -input=false
         continue-on-error: true
+
+      - name: Terraform Apply
+        id: apply
+        run: cd unity-cloud-env && terraform apply -auto-approve
