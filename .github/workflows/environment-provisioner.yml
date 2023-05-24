@@ -77,7 +77,11 @@ jobs:
         run: |
           echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
           echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
-
+          echo "AWS ENV: ${{env.AWS_ACCESS_KEY_ID}}"
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          ./aws/install
+          aws sts get-caller-identity
       - name: Display deployment configuration
         run :
           echo "Target ENV ${{ env.TARGET_ENV }}"
@@ -87,10 +91,15 @@ jobs:
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
-        if: ${{ INPUTS.awsConnection == 'oidc' }}
         with:
-          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{env.AWS_SESSION_TOKEN}}
+          aws-region: us-west-2
+      #  if: ${{ INPUTS.awsConnection == 'oidc' }}
+      #  with:
+      #    role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
+      #    aws-region: ${{ vars.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
