@@ -9,3 +9,4 @@ venue         = "dev"
 
 subnets = { public: [], private: ["subnet-059bc4f467275b59d", "subnet-0ebdd997cc3ebe58d"] }
 eks_node_groups = { default: ["defaultgroupNodeGroup"], custom: [] }
+default_group_node_group_launch_template_name = "eksctl-sps-api-gw-cluster-nodegroup-defaultgroupNodeGroup"
