@@ -1,5 +1,5 @@
 name: build and zip lambda workflow
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   build_source:
     name: build and zip lambda
