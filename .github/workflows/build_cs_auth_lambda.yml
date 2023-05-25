@@ -19,10 +19,9 @@ jobs:
       - name: npm install and build
         run: |
           npm install
-      - name: zip
-        uses: montudor/action-zip@v0.1.0
-        with:
-          args: zip -qq -r ./terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth.zip ./terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth
+      - name: Create ZIP file
+        run: zip -qq -r ./terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth.zip ./
+        working-directory: ./terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth
       - name: Commit and push
         uses: EndBug/add-and-commit@v7
         with:
