@@ -26,6 +26,6 @@ jobs:
       - name: Commit and push
         uses: EndBug/add-and-commit@v7
         with:
-          add: '["cs-lambda-auth.zip"]'
+          add: '["./terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth.zip"]'
           message: 'Add cs-lambda-auth.zip'
           push: true
