@@ -22,7 +22,7 @@ jobs:
       - name: zip
         uses: montudor/action-zip@v0.1.0
         with:
-          args: zip -qq -r ./cs-lambda-auth.zip ./
+          args: zip -qq -r ./cs-lambda-auth.zip ./terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth
       - name: Commit and push
         uses: EndBug/add-and-commit@v7
         with:
