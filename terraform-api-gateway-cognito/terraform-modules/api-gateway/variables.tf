@@ -16,21 +16,53 @@ variable "rest_api_stage" {
   default     = "dev"
 }
 
+variable "cs_lambda_authorizer_zip_path" {
+  type        = string
+  description = "The URL of the CS Lambda Authorizer deployment ZIP file"
+  default     = "https://github.com/unity-sds/unity-cs-infra/raw/main/terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth.zip"
+}
+
+variable "cs_lambda_authorizer_cognito_client_id_list" {
+  type        = string
+  description = "List of Cognito client IDs for the CS Lambda Authorizer"
+  default     = "<Comma seperated list of Cognito client IDs to be allowed by the CS Lambda Authorizer>"
+}
+
+variable "cs_lambda_authorizer_cognito_user_pool_id" {
+  type        = string
+  description = "Cognito user pool ID for the CS Lambda Authorizer"
+  default     = "<Cognito user pool ID for the CS Lambda Authorizer>"
+}
+
+variable "cs_lambda_authorizer_function_name" {
+  type        = string
+  description = "Function name of the CS Lambda Authorizer"
+  default     = "cs-common-lambda-auth-terraform"
+}
+
+variable "cs_lambda_authorizer_iam_role_arn" {
+  type        = string
+  description = "IAM role for the CS Lambda Authorizer"
+  default     = "<ARN of IAM role for the CS Lambda Authorizer>"
+}
+
+
 # -----------------------------------------------------------------
 # SSM Params
 # -----------------------------------------------------------------
 
-variable "ssm_param_api_gateway_function_cs_lambda_authorizer_uri" {
-  type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Function URI"
-  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-uri"
-}
+#variable "ssm_param_api_gateway_function_cs_lambda_authorizer_uri" {
+#  type        = string
+#  description = "SSM Param for API Gateway CS Lambda Authorizer Function URI"
+#  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-uri"
+#}
 
-variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
-  type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
-  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-invoke-role-arn"
-}
+#
+#variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
+#  type        = string
+#  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
+#  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-invoke-role-arn"
+#}
 
 variable "ssm_param_api_gateway_integration_uads_dockstore_nlb_uri" {
   type        = string

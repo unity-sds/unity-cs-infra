@@ -7,16 +7,45 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   body = data.template_file.api_template.rendered
 }
 
+resource "null_resource" "download_lambda_zip" {
+  provisioner "local-exec" {
+    command = "wget --no-check-certificate ${var.cs_lambda_authorizer_zip_path}  -O ucs-common-lambda-auth.zip"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
+  name              = "/aws/lambda/${var.cs_lambda_authorizer_function_name}"
+  retention_in_days = 14
+}
+
+resource "aws_lambda_function" "cs_common_lambda_auth" {
+  filename      = "ucs-common-lambda-auth.zip"
+  function_name = var.cs_lambda_authorizer_function_name
+  role          = var.cs_lambda_authorizer_iam_role_arn
+  handler       = "index.test"
+  runtime       = "nodejs14.x"
+  depends_on = [null_resource.download_lambda_zip]
+
+  environment {
+    variables = {
+      COGNITO_CLIENT_ID_LIST = var.cs_lambda_authorizer_cognito_client_id_list
+      COGNITO_USER_POOL_ID = var.cs_lambda_authorizer_cognito_user_pool_id
+    }
+  }
+}
+
+
+
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
-data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_uri" {
-  name = var.ssm_param_api_gateway_function_cs_lambda_authorizer_uri
-}
-
-data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_invoke_role_arn" {
-  name = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
-}
+#data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_uri" {
+#  name = var.ssm_param_api_gateway_function_cs_lambda_authorizer_uri
+#}
+#
+#data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_invoke_role_arn" {
+#  name = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
+#}
 
 data "aws_ssm_parameter" "api_gateway_integration_uads_dockstore_nlb_uri" {
   name = var.ssm_param_api_gateway_integration_uads_dockstore_nlb_uri
@@ -59,8 +88,8 @@ data "template_file" "api_template" {
   template = file("./terraform-modules/api-gateway/unity-rest-api-gateway-oas30.yaml")
 
   vars = {
-    csLambdaAuthorizerUri = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_uri.value
-    csLambdaAuthorizerInvokeRole = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_invoke_role_arn.value
+    csLambdaAuthorizerUri = aws_lambda_function.cs_common_lambda_auth.invoke_arn
+    csLambdaAuthorizerInvokeRole = var.cs_lambda_authorizer_iam_role_arn
     uadsDockstoreNlbUri = data.aws_ssm_parameter.api_gateway_integration_uads_dockstore_nlb_uri.value
     uadsDockstoreLink2VpcLinkId = data.aws_ssm_parameter.api_gateway_integration_uads_dockstore_link_2_vpc_link_id.value
     udsGranulesDapaFunctionUri = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${data.aws_ssm_parameter.api_gateway_integration_uds_granules_dapa_function_name.value}/invocations"
@@ -68,6 +97,8 @@ data "template_file" "api_template" {
     udsCollectionsIngestDapaFunctionUri = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${data.aws_ssm_parameter.api_gateway_integration_uds_collections_ingest_dapa_function_name.value}/invocations"
     udsCollectionsCreateDapaFunctionUri = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${data.aws_ssm_parameter.api_gateway_integration_uds_collections_create_dapa_function_name.value}/invocations"
   }
+
+  depends_on = [aws_lambda_function.cs_common_lambda_auth]
 }
 
 resource "aws_api_gateway_deployment" "api-gateway-deployment" {
@@ -152,4 +183,8 @@ resource "aws_lambda_permission" "uds_collections_create_dapa_lambda_permission"
 
 output "url" {
   value = "${aws_api_gateway_deployment.api-gateway-deployment.invoke_url}/api"
+}
+
+output "invoke_arn" {
+  value = aws_lambda_function.cs_common_lambda_auth.invoke_arn
 }
