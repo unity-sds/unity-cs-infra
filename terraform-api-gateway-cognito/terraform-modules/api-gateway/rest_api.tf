@@ -22,7 +22,7 @@ resource "aws_lambda_function" "cs_common_lambda_auth" {
   filename      = "ucs-common-lambda-auth.zip"
   function_name = var.cs_lambda_authorizer_function_name
   role          = var.cs_lambda_authorizer_iam_role_arn
-  handler       = "index.test"
+  handler       = "index.handler"
   runtime       = "nodejs14.x"
   depends_on = [null_resource.download_lambda_zip]
 

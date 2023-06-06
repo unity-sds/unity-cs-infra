@@ -19,7 +19,7 @@ variable "rest_api_stage" {
 variable "cs_lambda_authorizer_zip_path" {
   type        = string
   description = "The URL of the CS Lambda Authorizer deployment ZIP file"
-  default     = "https://github.com/unity-sds/unity-cs-infra/raw/main/terraform-api-gateway-cognito/pre-deployment/cs-lambda-auth.zip"
+  default     = "https://github.com/unity-sds/unity-cs-auth-lambda/releases/download/1.0.1/unity-cs-lambda-auth-.zip"
 }
 
 variable "cs_lambda_authorizer_cognito_client_id_list" {
@@ -37,7 +37,7 @@ variable "cs_lambda_authorizer_cognito_user_pool_id" {
 variable "cs_lambda_authorizer_function_name" {
   type        = string
   description = "Function name of the CS Lambda Authorizer"
-  default     = "cs-common-lambda-auth-terraform"
+  default     = "unity-cs-common-lambda-auth"
 }
 
 variable "cs_lambda_authorizer_iam_role_arn" {
