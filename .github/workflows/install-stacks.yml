@@ -1,0 +1,23 @@
+name: Install Stack (Management Console Only)
+on:
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      METADATA:
+        description: 'UCS Metadata Definition'
+        required: true
+        type: string
+        default: ''
+jobs:
+  run_unity_job:
+    runs-on: ubuntu-latest
+    name: Parse Metadata and Execute
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Unity custom action step
+        uses: unity-sds/unity-cs-action@main
+        id: main_action_run
+        with:
+          token: ${{ secrets.TOKEN }}
+          ucsmetadata: ${{ inputs.METADATA }}
