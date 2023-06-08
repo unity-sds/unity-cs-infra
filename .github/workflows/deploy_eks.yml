@@ -197,6 +197,10 @@ jobs:
           for key in $(echo $nodegroups | jq -r 'keys[]'); do
             instancetype=$(echo $nodegroups | jq -r ".[\"$key\"].instancetype")
             nodecount=$(echo $nodegroups | jq -r ".[\"$key\"].nodecount")
+            echo "Debug: Key: $key"
+            echo "Debug: Instancetype: $instancetype"
+            echo "Debug: Nodecount: $nodecount"
+
             output+="--managenodegroups \"$key,$nodecount,$nodecount,$nodecount,$instancetype\" "
           done
 
