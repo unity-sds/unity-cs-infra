@@ -201,7 +201,7 @@ jobs:
           done
 
           echo "Output: $output"
-          unity-cs-manager eks --name ${cluster} --owner ${owner} --managenodegroups ${output} --instancetype ${instancetype} --projectname ${owner} --servicename ${owner}  --capability unset --capversion unset --component unset --creator unset --critinfra unset --experimental unset --exposed unset --pocs test --release unset --securityplan unset --sourcecontrol unset --userfacing unset --venue unset --servicearea unset --resourcename=${cluster} --applicationname unset --applicationversion unset > /tmp/eksctl-config.yaml
+          unity-cs-manager eks --name ${cluster} --owner ${owner} ${output} --instancetype ${instancetype} --projectname ${owner} --servicename ${owner}  --capability unset --capversion unset --component unset --creator unset --critinfra unset --experimental unset --exposed unset --pocs test --release unset --securityplan unset --sourcecontrol unset --userfacing unset --venue unset --servicearea unset --resourcename=${cluster} --applicationname unset --applicationversion unset > /tmp/eksctl-config.yaml
           cat /tmp/eksctl-config.yaml
 
       # Launch EKS
