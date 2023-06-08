@@ -188,7 +188,19 @@ jobs:
             unset EKSPublicSubnetA
             unset EKSPublicSubnetB
           fi
-          unity-cs-manager eks --name ${cluster} --owner ${owner} --managenodegroups defaultgroup,${minnodes},${maxnodes},${desirednodes},m5.xlarge --instancetype ${instancetype} --projectname ${owner} --servicename ${owner}  --capability unset --capversion unset --component unset --creator unset --critinfra unset --experimental unset --exposed unset --pocs test --release unset --securityplan unset --sourcecontrol unset --userfacing unset --venue unset --servicearea unset --resourcename=${cluster} --applicationname unset --applicationversion unset > /tmp/eksctl-config.yaml
+          
+          nodegroups=$(echo $json | jq -r '.nodegroups')
+
+          # iterate over the node groups
+          output=""
+          comma=""
+          for key in $(echo $nodegroups | jq -r 'keys[]'); do
+            instancetype=$(echo $nodegroups | jq -r --arg key "$key" '.[$key].instancetype')
+            nodecount=$(echo $nodegroups | jq -r --arg key "$key" '.[$key].nodecount')
+            output+="$comma\"$key,$nodecount,$nodecount,$nodecount,$instancetype\""
+            comma=", "
+          done
+          unity-cs-manager eks --name ${cluster} --owner ${owner} --managenodegroups ${output} --instancetype ${instancetype} --projectname ${owner} --servicename ${owner}  --capability unset --capversion unset --component unset --creator unset --critinfra unset --experimental unset --exposed unset --pocs test --release unset --securityplan unset --sourcecontrol unset --userfacing unset --venue unset --servicearea unset --resourcename=${cluster} --applicationname unset --applicationversion unset > /tmp/eksctl-config.yaml
           cat /tmp/eksctl-config.yaml
 
       # Launch EKS
