@@ -189,7 +189,7 @@ jobs:
             unset EKSPublicSubnetB
           fi
           
-          nodegroups=$(echo $json | jq -r '.nodegroups')
+          nodegroups=$(echo '${{ inputs.META }}' | jq -r '.nodegroups')
 
           # iterate over the node groups
           output=""
