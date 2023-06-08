@@ -201,7 +201,7 @@ jobs:
             echo "Debug: Instancetype: $instancetype"
             echo "Debug: Nodecount: $nodecount"
 
-            output+="--managenodegroups \"$key,$nodecount,$nodecount,$nodecount,$instancetype\" "
+            output+="--managenodegroups $key,$nodecount,$nodecount,$nodecount,$instancetype "
           done
 
           echo "Output: $output"
