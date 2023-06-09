@@ -40,14 +40,32 @@ variable "counter" {
   default     = 1
 }
 
-variable "ssm_param_api_gateway_function_cs_lambda_authorizer_uri" {
-  type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Function URI"
-  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-uri"
-}
-
 variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
   type        = string
   description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
   default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-invoke-role-arn"
+}
+
+variable "unity_cs_lambda_authorizer_function_name" {
+  type        = string
+  description = "Function name of the CS Lambda Authorizer"
+  default     = "unity-cs-common-lambda-auth"
+}
+
+variable "unity_cs_lambda_authorizer_zip_path" {
+  type        = string
+  description = "The URL of the CS Lambda Authorizer deployment ZIP file"
+  default     = "https://github.com/unity-sds/unity-cs-auth-lambda/releases/download/1.0.1/unity-cs-lambda-auth-.zip"
+}
+
+variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_client_id_list" {
+  type        = string
+  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito Client ID List"
+  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-cognito-client-id-list"
+}
+
+variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_pool_id" {
+  type        = string
+  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Pool ID"
+  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-cognito-user-pool-id"
 }
