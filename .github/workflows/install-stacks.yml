@@ -15,6 +15,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: print env
+        run: echo "${{inputs.METADATA}}"
+      - name: Print inputs
+        uses: actions/github-script@v5
+        with:
+          script: |
+            console.log(`Workflow Inputs: ${JSON.stringify(process.env, null, 2)}`)
+      - name: Print trigger type
+        uses: actions/github-script@v5
+        with:
+          script: |
+            console.log(`Trigger Event Type: ${context.eventName}`)
       - name: Unity custom action step
         uses: unity-sds/unity-cs-action@main
         id: main_action_run
