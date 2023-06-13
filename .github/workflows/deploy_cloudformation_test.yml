@@ -39,7 +39,8 @@ jobs:
 #          role-to-assume: ${{ secrets.OIDC_DEV_ROLE }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - uses: dkershner6/aws-ssm-getparameters-action@v1
+      - name: Retrieve SSM parameters
+        uses: dkershner6/aws-ssm-getparameters-action@v1
         with:
             parameterPairs: "/unity-sds/u-cs/nightly/vpcid = VPCID,
                 /unity-sds/u-cs/nightly/keypairname = KEYPAIRNAME,
@@ -67,4 +68,4 @@ jobs:
         with:
           name: MyStack
           template: deployable/templates/ubuntu/unity_deployer_instance-management_console.yaml
-#          parameter-overrides: "VPCID=myValue,PublicSubnetID=${{ secrets.MY_SECRET_VALUE }},KeyPairName=hello,InstanceType=hello,PrivilegesPolicyName=hello,UnityAppsToBootstap=sps,GithubToken=hello"
+          parameter-overrides: "VPCID=${{ env.VPCID }},PublicSubnetID=${{ env.PUBLICSUBNETID }},KeyPairName=${{ env.KEYPAIRNAME }},GithubToken=${{ env.GITHUBTOKEN }}"
