@@ -39,6 +39,16 @@ jobs:
 #          role-to-assume: ${{ secrets.OIDC_DEV_ROLE }}
           aws-region: ${{ vars.AWS_REGION }}
 
+      - uses: dkershner6/aws-ssm-getparameters-action@v1
+        with:
+            parameterPairs: "/unity-sds/u-cs/nightly/vpcid = VPCID,
+                /unity-sds/u-cs/nightly/keypairname = KEYPAIRNAME,
+                /unity-sds/u-cs/nightly/publicsubnetid = PUBLICSUBNETID,
+                /unity-sds/u-cs/nightly/githubtoken = GITHUBTOKEN"
+            # The part before equals is the ssm parameterName, and after is the ENV Variable name for the workflow.
+            # No limit on number of parameters. You can put new lines and spaces in as desired, they get trimmed out.
+            withDecryption: "true" # defaults to true
+
 
       # Checkout the cloudformation repo 
       - name: Checkout deployable cloudformation code
