@@ -1,8 +1,5 @@
 name: Cloudformation Kickoff for Management Console
 
-env: 
-  DEPLOYMENTSTAGE: unity-sips-test
-
 permissions:
   id-token: write # required to use OIDC authentication
   contents: read # required to checkout the code from the repo
