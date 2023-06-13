@@ -50,7 +50,7 @@ jobs:
 
       # Ensure files are where we expect
       - name: Debug 1
-        run: ls -al; ls -al deployable
+        run: ls -al; ls -al deployable; ls -al deployable/templates/ubuntu/
 
       - name: Deploy to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
