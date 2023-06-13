@@ -13,6 +13,18 @@ on:
   workflow_dispatch:
     branches: [ main ]
 
+  inputs: 
+    DEPLOYMENTSTAGE:
+      description: 'Deployment Target'
+      required: true 
+      type: choice
+      default: 'DEV'
+      options: 
+      - DEV
+      - TEST
+      - OPS
+      - SIPS
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   deployment:
@@ -28,7 +40,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           #role-to-assume: ${{ secrets.OIDC_ROLE }}
-          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', DEPLOYMENTSTAGE)] }}
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.DEPLOYMENTSTAGE)] }}
           aws-region: ${{ vars.AWS_REGION }}
 
 
