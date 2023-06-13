@@ -32,16 +32,16 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
 
 
-    # Checkout the cloudformation repo 
-    - name: Checkout deployable cloudformation code
-      uses: actions/checkout@v3
-      with:
-        repository: unity-sds/unity-on-demand-cloudformation
-        path: deployable
-        ref: ubuntu-port
+      # Checkout the cloudformation repo 
+      - name: Checkout deployable cloudformation code
+        uses: actions/checkout@v3
+        with:
+          repository: unity-sds/unity-on-demand-cloudformation
+          path: deployable
+          ref: ubuntu-port
 
-    - name: Debug 1
-      run: ls -al; ls -al deployable
+      - name: Debug 1
+        run: ls -al; ls -al deployable
 
 
 #    - name: Deploy to AWS CloudFormation
