@@ -1,0 +1,39 @@
+name: Cloudformation Kickoff for Management Console
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+    # Checkout the cloudformation repo 
+    - name: Checkout deployable cloudformation code
+      uses: actions/checkout@v3
+      with:
+        repository: unity-sds/unity-on-demand-cloudformation
+        path: deployable
+        ref: ubuntu-port
+
+    - name: Debug 1
+      run: ls -al; ls -al deployable
+
+
+#    - name: Deploy to AWS CloudFormation
+#      uses: aws-actions/aws-cloudformation-github-deploy@v1
+#      with:
+#        name: MyStack
+#        template: myStack.yaml
+#        parameter-overrides: "MyParam1=myValue,MyParam2=${{ secrets.MY_SECRET_VALUE }}"
