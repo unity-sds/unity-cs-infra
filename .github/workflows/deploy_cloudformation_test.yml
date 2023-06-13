@@ -36,7 +36,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
 #          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.DEPLOYMENTSTAGE)] }}
-          role-to-assume: ${{ secrets[OIDC_DEV_ROLE] }}
+          role-to-assume: ${{ secrets.OIDC_DEV_ROLE }}
           aws-region: ${{ vars.AWS_REGION }}
 
 
