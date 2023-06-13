@@ -32,7 +32,7 @@ jobs:
     steps:
 
       # Configure AWS Credentials through OIDC
-      - name: Configure AWS credentials for {{ format('OIDC_{0}_ROLE', inputsDEPLOYMENTSTAGE) }}
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', inputs.DEPLOYMENTSTAGE)] }}
@@ -48,13 +48,13 @@ jobs:
           path: deployable
           ref: ubuntu-port
 
+      # Ensure files are where we expect
       - name: Debug 1
         run: ls -al; ls -al deployable
 
-
-#    - name: Deploy to AWS CloudFormation
-#      uses: aws-actions/aws-cloudformation-github-deploy@v1
-#      with:
-#        name: MyStack
-#        template: myStack.yaml
-#        parameter-overrides: "MyParam1=myValue,MyParam2=${{ secrets.MY_SECRET_VALUE }}"
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: MyStack
+          template: deployable/templates/ubuntu/unity_developer_instance-management_console.yaml
+#          parameter-overrides: "VPCID=myValue,PublicSubnetID=${{ secrets.MY_SECRET_VALUE }},KeyPairName=hello,InstanceType=hello,PrivilegesPolicyName=hello,UnityAppsToBootstap=sps,GithubToken=hello"
