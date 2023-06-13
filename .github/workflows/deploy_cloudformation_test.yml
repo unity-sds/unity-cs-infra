@@ -56,5 +56,5 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: MyStack
-          template: deployable/templates/ubuntu/unity_developer_instance-management_console.yaml
+          template: deployable/templates/ubuntu/unity_deployer_instance-management_console.yaml
 #          parameter-overrides: "VPCID=myValue,PublicSubnetID=${{ secrets.MY_SECRET_VALUE }},KeyPairName=hello,InstanceType=hello,PrivilegesPolicyName=hello,UnityAppsToBootstap=sps,GithubToken=hello"
