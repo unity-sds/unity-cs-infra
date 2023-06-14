@@ -45,7 +45,8 @@ jobs:
             parameterPairs: "/unity-sds/u-cs/nightly/vpcid = VPCID,
                 /unity-sds/u-cs/nightly/keypairname = KEYPAIRNAME,
                 /unity-sds/u-cs/nightly/publicsubnetid = PUBLICSUBNETID,
-                /unity-sds/u-cs/nightly/githubtoken = GITHUBTOKEN"
+                /unity-sds/u-cs/nightly/githubtoken = GITHUBTOKEN,
+                /unity-sds/u-cs/nightly/privilegedpolicyname = PRIVILEGEDPOLICYNAME"
             # The part before equals is the ssm parameterName, and after is the ENV Variable name for the workflow.
             # No limit on number of parameters. You can put new lines and spaces in as desired, they get trimmed out.
             withDecryption: "true" # defaults to true
@@ -68,4 +69,4 @@ jobs:
         with:
           name: MyStack
           template: deployable/templates/ubuntu/unity_deployer_instance-management_console.yaml
-          parameter-overrides: "VPCID=${{ env.VPCID }},PublicSubnetID=${{ env.PUBLICSUBNETID }},KeyPairName=${{ env.KEYPAIRNAME }},GithubToken=${{ env.GITHUBTOKEN }}"
+          parameter-overrides: "VPCID=${{ env.VPCID }},PublicSubnetID=${{ env.PUBLICSUBNETID }},KeyPairName=${{ env.KEYPAIRNAME }},GithubToken=${{ env.GITHUBTOKEN }},PrivilegedPolicyName=${{ env.PRIVILEGEDPOLICYNAME }}"
