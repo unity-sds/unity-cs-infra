@@ -69,6 +69,6 @@ jobs:
       - name: Deploy to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          name: MyStack
+          name: U-CS-Nightly-Stack
           template: deployable/templates/ubuntu/unity_deployer_instance-management_console-github_action.yaml
           parameter-overrides: "VPCID=${{ env.VPCID }},PublicSubnetID=${{ env.PUBLICSUBNETID }},KeyPairName=${{ env.KEYPAIRNAME }},GithubToken=${{ env.GITHUBTOKEN }},PrivilegedPolicyName=${{ env.PRIVILEGEDPOLICYNAME }}"
