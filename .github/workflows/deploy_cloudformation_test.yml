@@ -59,7 +59,7 @@ jobs:
         with:
           repository: unity-sds/unity-on-demand-cloudformation
           path: deployable
-          ref: ubuntu-port
+          ref: ubuntu-port-smolensk
 
       # Ensure files are where we expect
       - name: Debug 1
