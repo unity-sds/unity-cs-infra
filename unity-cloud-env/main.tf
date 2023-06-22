@@ -44,18 +44,6 @@ resource "aws_ssm_parameter" "unity-project" {
   value = var.project
 }
 
-resource "aws_ssm_parameter" "unity-private-subnets" {
-  name  = "/unity/network/subnets/private"
-  type  = "StringList"
-  value = var.privatesubnets
-}
-
-resource "aws_ssm_parameter" "unity-public-subnets" {
-  name  = "/unity/network/subnets/public"
-  type  = "StringList"
-  value = var.publicsubnets
-}
-
 resource "aws_ssm_parameter" "eks-instance-role" {
   name = "/unity/account/roles/eksInstanceRoleArn"
   type = "String"
