@@ -30,6 +30,8 @@ variable "default_tags" {
   type        = map(string)
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_ssm_parameter" "unity-venue" {
   name  = "/unity/core/venue"
   type  = "String"
@@ -52,6 +54,28 @@ resource "aws_ssm_parameter" "unity-public-subnets" {
   name  = "/unity/network/subnets/public"
   type  = "StringList"
   value = var.publicsubnets
+}
+
+resource "aws_ssm_parameter" "eks-instance-role" {
+  name = "/unity/account/roles/eksInstanceRoleArn"
+  type = "String"
+  value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Unity-UCS-Development-EKSNodeRole"
+}
+
+resource "aws_ssm_parameter" "eks-service-role" {
+  name = "/unity/account/roles/eksServiceRoleArn"
+  type = "String"
+  value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Unity-UCS-Development-EKSClusterS3-Role"
+}
+
+data "aws_ssm_parameter" "mcp-eks-ami" {
+  name = "/mcp/amis/aml2-eks"
+}
+
+resource "aws_ssm_parameter" "eks-cluster-ami" {
+    name = "/unity/account/ami/eksClusterAmi"
+    type = "String"
+    value = data.aws_ssm_parameter.mcp-eks-ami.value
 }
 
 locals {
