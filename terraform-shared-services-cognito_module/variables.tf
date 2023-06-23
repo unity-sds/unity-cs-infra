@@ -7,7 +7,7 @@ variable "region" {
 variable "user_pool_name" {
   type        = string
   description = "Name of the Cognito User Pool"
-  default     = "/unity/cs/security/shared-services-cognito-user-pool/user-pool-id"
+  default     = "/unity/cs/security/shared-services-cognito-user-pool/user-pool-name"
 }
 
 variable "user_pool_domain" {
