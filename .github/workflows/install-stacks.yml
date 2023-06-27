@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          repository: 'unity-sds/unity-cs-infra' 
+      - name: Check path
+        run: echo "path ${PWD}" && ls -al
       - name: print env
         run: echo "${{inputs.METADATA}}"
       - name: Print inputs
@@ -27,6 +31,14 @@ jobs:
         with:
           script: |
             console.log(`Trigger Event Type: ${context.eventName}`)
+      - name: install act
+        run: curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | bash && echo "${PWD}/bin" >> $GITHUB_PATH
+
+      - name: test
+        run: echo "-P ubuntu-latest=catthehacker/ubuntu:act-latest" > ~/.actrc &&
+             echo "-P ubuntu-22.04=catthehacker/ubuntu:act-22.04" >> ~/.actrc &&
+             echo "-P ubuntu-20.04=catthehacker/ubuntu:act-20.04" >> ~/.actrc &&
+             echo "-P ubuntu-18.04=catthehacker/ubuntu:act-18.04" >> ~/.actrc
       - name: Unity custom action step
         uses: unity-sds/unity-cs-action@main
         id: main_action_run
