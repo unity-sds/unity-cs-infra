@@ -37,7 +37,7 @@ on:
         required: false
         type: string
         default: ''
-      META:
+      METADATA:
         description: 'metadata description'
         required: true
         type: string
@@ -176,20 +176,20 @@ jobs:
       # Render template
       - name: Render Template
         run: |
-          export owner=$(echo '${{ inputs.META }}' | jq -r .owner)
-          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
-          export minnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
-          export maxnodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
-          export desirednodes=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.nodecount)
-          export instancetype=$(echo '${{ inputs.META }}' | jq -r .nodegroups.group1.instancetype)
-          export private=$(echo '${{ inputs.META }}' | jq -r .private)
+          export owner=$(echo '${{ inputs.METADATA }}' | jq -r .owner)
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          export minnodes=$(echo '${{ inputs.METADATA }}' | jq -r .nodegroups.group1.nodecount)
+          export maxnodes=$(echo '${{ inputs.METADATA }}' | jq -r .nodegroups.group1.nodecount)
+          export desirednodes=$(echo '${{ inputs.METADATA }}' | jq -r .nodegroups.group1.nodecount)
+          export instancetype=$(echo '${{ inputs.METADATA }}' | jq -r .nodegroups.group1.instancetype)
+          export private=$(echo '${{ inputs.METADATA }}' | jq -r .private)
           if [ $private == "true" ]
           then
             unset EKSPublicSubnetA
             unset EKSPublicSubnetB
           fi
           
-          nodegroups=$(echo '${{ inputs.META }}' | jq -r '.nodegroups')
+          nodegroups=$(echo '${{ inputs.METADATA }}' | jq -r '.nodegroups')
 
           # iterate over the node groups
           output=""
@@ -219,7 +219,7 @@ jobs:
               export AWS_SESSION_TOKEN=${{ inputs.TOKEN }}
               export AWS_PAGER=""
           fi
-          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
           eksctl create cluster -f /tmp/eksctl-config.yaml
           aws eks update-kubeconfig --region us-west-2 --name $cluster
           kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
@@ -238,7 +238,7 @@ jobs:
       - name: Write SSM Params
         if: "${{ ! inputs.TEARDOWN }}"
         run: |
-          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
           aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name --type String --value defaultgroupNodeGroup
           aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName --type String --value eksctl-${cluster}-nodegroup-defaultgroupNodeGroup
           aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds --type StringList --value "$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/private)"
@@ -255,7 +255,7 @@ jobs:
               export AWS_PAGER=""
           fi
           export IFS=";"
-          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
           aws eks update-kubeconfig --region us-west-2 --name $cluster
           helm repo add fairwinds-stable https://charts.fairwinds.com/stable
           helm uninstall vpa --namespace vpa
@@ -266,7 +266,7 @@ jobs:
       - name: Delete SSM Params
         if: ${{ inputs.TEARDOWN }}
         run: |
-          export cluster=$(echo '${{ inputs.META }}' | jq -r .clustername)
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
           aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name
           aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName
           aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds
