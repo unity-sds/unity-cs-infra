@@ -9,64 +9,11 @@ on:
   workflow_dispatch:
     branches: [ main ]
     inputs:
-      distinct_id:
       teardown:
         description: 'Teardown Project Api Gateway?'
         required: false
         type: boolean
         default: false
-      deploymentProject:
-        description: 'Deployment Project'
-        required: true 
-        type: choice
-        default: 'UNITY'
-        options: 
-        - UNITY
-        - SIPS
-      deploymentStage:
-        description: 'Deployment Target'
-        required: true 
-        type: choice
-        default: 'DEV'
-        options: 
-        - DEV
-        - TEST
-        - OPS
-        - SIPS
-      deploymentOwner:
-        description: 'Deployment Owner'
-        required: true 
-        type: string
-        default: 'nightly'
-      deploymentTarget:
-        description: 'Cloud Host'
-        required: true 
-        type: choice
-        default: 'mcp'
-        options: 
-        - mcp
-      apiName:
-        description: 'API Name'
-        required: true
-        type: string
-        default: 'Unity Project REST API Gateway'
-      awsConnection:
-        description: 'Method of AWS connection'
-        required: true
-        type: choice
-        default: 'oidc'
-        options:
-        - oidc
-        - keys
-        - iam
-      deploymentSource:
-        description: 'Where the action is being run'
-        required: true
-        type: choice
-        default: 'github'
-        options:
-          - github
-          - act
 
 permissions:
   id-token: write # required to use OIDC authentication
@@ -88,31 +35,11 @@ jobs:
              echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list && \
              sudo apt update && sudo apt install terraform
       - name: Install apps
-        if: "${{ github.event.inputs.deploymentSource =='act'}}"
         run: |
           sudo apt update && sudo apt install -y curl git jq unzip && \
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo  ./aws/install && \
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
-        run: echo ${{ github.event.inputs.distinct_id }}    
-      - name: Configure default variables
-        env:
-          DEFAULT_TARGET: 'mcp'
-          DEFAULT_COMMIT: 'main'
-          DEFAULT_STAGE: 'DEV'
-          DEFAULT_PROJECT: 'UNITY'
-          DEFAULT_OWNER: 'nightly'
-          DEFAULT_APINAME: 'Unity Project REST API Gateway'
-          DEFAULT_TF_DIRECTORY: 'terraform-project-api-gateway_module'
-        run: |
-          echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
-          echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
-          echo "COMMIT_HASH=${{ github.event.inputs.sourceBranch || env.DEFAULT_COMMIT }}" >> $GITHUB_ENV
-          echo "TARGET_PROJECT=${{ github.event.inputs.deploymentProject || env.DEFAULT_PROJECT }}" >> $GITHUB_ENV
-          echo "TARGET_OWNER=${{ github.event.inputs.deploymentOwner || env.DEFAULT_OWNER }}" >> $GITHUB_ENV
-          echo "TARGET_API=${{ github.event.inputs.apiName || env.DEFAULT_APINAME }}" >> $GITHUB_ENV
-          echo "TF_DIRECTORY=${{ env.DEFAULT_TF_DIRECTORY }}" >> $GITHUB_ENV
 
       - name: Display deployment configuration
         run :
@@ -126,13 +53,6 @@ jobs:
       - name: Select the proper Terraform Workspace
         run :
           terraform workspace select ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }} || terraform workspace new ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }}
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        if: ${{ INPUTS.awsConnection == 'oidc' }}
-        with:
-          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
-          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Get AWS Caller Identity
         run: aws sts get-caller-identity
