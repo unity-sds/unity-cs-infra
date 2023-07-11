@@ -54,10 +54,10 @@ jobs:
 
       - name: Set new SSM parameter
         run: |
-          aws ssm put-parameter 
-          --name "/unity-sds/u-cs/nightly/testwriteparameter" 
-          --value "nightly github job" 
-          --type String 
+          aws ssm put-parameter \
+          --name "/unity-sds/u-cs/nightly/testwriteparameter" \
+          --value "nightly github job" \
+          --type String \
           --tags "Key=owner,Value=smolensk"
 
       - name: Retrieve New SSM parameter
