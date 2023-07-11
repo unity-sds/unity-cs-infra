@@ -57,7 +57,7 @@ jobs:
           aws ssm put-parameter \
           --name "/unity-sds/u-cs/nightly/testwriteparameter" \
           --value "nightly github job" \
-          --type String"
+          --type String
 
       - name: Retrieve New SSM parameter
         uses: dkershner6/aws-ssm-getparameters-action@v1
