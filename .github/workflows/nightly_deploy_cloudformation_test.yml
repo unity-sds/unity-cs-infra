@@ -1,4 +1,4 @@
-name: Cloudformation Kickoff for Management Console
+name: Nightly Cloudformation Kickoff for Management Console
 
 permissions:
   id-token: write # required to use OIDC authentication

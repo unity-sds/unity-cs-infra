@@ -1,4 +1,4 @@
-name: Cloudformation Destroy for Management Console
+name: Nightly Cloudformation Destroy for Management Console
 
 permissions:
   id-token: write # required to use OIDC authentication
