@@ -1,0 +1,73 @@
+name: Smolensk test for ssm access over OIDC
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+
+    inputs: 
+      DEPLOYMENTSTAGE:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Configure AWS Credentials through OIDC
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', inputs.DEPLOYMENTSTAGE)] }}
+#          role-to-assume: ${{ secrets.OIDC_DEV_ROLE }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Retrieve SSM parameters
+        uses: dkershner6/aws-ssm-getparameters-action@v1
+        with:
+            parameterPairs: "/unity-sds/u-cs/nightly/vpcid = VPCID,
+                /unity-sds/u-cs/nightly/keypairname = KEYPAIRNAME,
+                /unity-sds/u-cs/nightly/publicsubnetid = PUBLICSUBNETID,
+                /unity-sds/u-cs/nightly/githubtoken = GITHUBTOKEN,
+                /unity-sds/u-cs/nightly/privilegedpolicyname = PRIVILEGEDPOLICYNAME,
+                /unity-sds/u-cs/nightly/lambdaexecutionrole = LAMBDAEXECUTIONROLE"
+            # The part before equals is the ssm parameterName, and after is the ENV Variable name for the workflow.
+            # No limit on number of parameters. You can put new lines and spaces in as desired, they get trimmed out.
+            withDecryption: "true" # defaults to true
+
+      - name: Set new SSM parameter
+        run: |
+          aws ssm put-parameter 
+          --name "/unity-sds/u-cs/nightly/testwriteparameter" 
+          --value "nightly github job" 
+          --type String 
+          --tags "Key=owner,Value=smolensk"
+
+      - name: Retrieve New SSM parameter
+        uses: dkershner6/aws-ssm-getparameters-action@v1
+        with:
+            parameterPairs: "/unity-sds/u-cs/nightly/testwriteparameter = TPARAM"
+            # The part before equals is the ssm parameterName, and after is the ENV Variable name for the workflow.
+            # No limit on number of parameters. You can put new lines and spaces in as desired, they get trimmed out.
+            withDecryption: "true" # defaults to true
+
+      - name: Display new param
+        run: echo "New param is ${{ env.TPARAM }}"
+
