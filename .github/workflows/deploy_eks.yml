@@ -242,6 +242,7 @@ jobs:
           aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name --type String --value defaultgroupNodeGroup
           aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName --type String --value eksctl-${cluster}-nodegroup-defaultgroupNodeGroup
           aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds --type StringList --value "$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/private)"
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/publicIds --type StringList --value "$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/public)"
 
       # Teardown EKS
       - name: Teardown EKS cluster
@@ -270,3 +271,4 @@ jobs:
           aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name
           aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName
           aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/publicIds
