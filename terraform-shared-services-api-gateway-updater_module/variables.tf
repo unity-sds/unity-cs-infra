@@ -13,13 +13,13 @@ variable "shared_services_rest_api_name" {
 variable "sample_rest_api_integration_uri" {
   type = string
   description = "Sample REST API Integration URI"
-  default = "https://p86m7e8qh3.execute-api.us-west-2.amazonaws.com/dev/sips-test-project-level/test-data"
+  default = "https://sample-rest-api-id.execute-api.us-west-2.amazonaws.com/dev/{proxy}"
 }
 
 variable "sample_website_integration_uri" {
   type = string
   description = "Sample Website Integration URI"
-  default = "https://www.google.com"
+  default = "https://www.wikipedia.org"
 }
 
 variable "rest_api_stage" {
