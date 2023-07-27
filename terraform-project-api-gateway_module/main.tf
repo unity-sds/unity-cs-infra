@@ -63,7 +63,7 @@ resource "aws_lambda_function" "cs_common_lambda_auth" {
 
 # OpenAPI Template 
 data "template_file" "api_template" {
-  template = file("./unity-project-blank-api-gateway-oas.yaml")
+  template = file("${path.module}/unity-project-blank-api-gateway-oas.yaml")
   vars = {
     csLambdaAuthorizerUri        = aws_lambda_function.cs_common_lambda_auth.invoke_arn
     csLambdaAuthorizerInvokeRole = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_invoke_role_arn.value
