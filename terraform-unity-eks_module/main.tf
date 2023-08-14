@@ -38,7 +38,7 @@ module "eks" {
 
   cluster_name    = local.cluster_name
   cluster_version = "1.25"
-  subnet_ids       = [aws_subnet.subnet-uno.id]
+  subnet_ids       = var.subnets.private
 
   vpc_id = data.aws_vpc.id
 
