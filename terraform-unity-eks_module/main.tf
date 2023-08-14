@@ -42,15 +42,24 @@ module "eks" {
 
   vpc_id = data.aws_vpc.id
 
-  node_groups = {
-    first = {
-      desired_capacity = 1
-      max_capacity     = 10
-      min_capacity     = 1
+  eks_managed_node_group_defaults = {
+    instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
+  }
 
-      instance_type = "m5.large"
+  eks_managed_node_groups = {
+    blue = {}
+    green = {
+      min_size     = 1
+      max_size     = 10
+      desired_size = 1
+
+      ami_type = "AL2_x86_64"
+      ami_id = "ami-00c008cd43492a617"
+      instance_types = ["t3.large"]
+      capacity_type  = "SPOT"
     }
   }
+
 
   write_kubeconfig   = true
   config_output_path = "./"
