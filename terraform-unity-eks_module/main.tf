@@ -59,8 +59,4 @@ module "eks" {
       capacity_type  = "SPOT"
     }
   }
-
-
-  write_kubeconfig   = true
-  config_output_path = "./"
 }
