@@ -45,7 +45,7 @@ module "eks" {
   cluster_version = "1.25"
   subnet_ids       = var.subnets.private
 
-  vpc_id = vpc_id
+  vpc_id = var.vpc_id
 
   eks_managed_node_group_defaults = {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
