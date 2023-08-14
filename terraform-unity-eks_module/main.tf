@@ -23,7 +23,6 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
   token                  = data.aws_eks_cluster_auth.cluster.token
   load_config_file       = false
-  version                = "~> 1.11"
 }
 
 data "aws_availability_zones" "available" {
@@ -35,11 +34,11 @@ locals {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "12.2.0"
+  version = "19.16.0"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.17"
-  subnet_id       = aws_subnet.subnet-uno.id
+  cluster_version = "1.25"
+  subnet_ids       = [aws_subnet.subnet-uno.id]
 
   vpc_id = data.aws_vpc.id
 
