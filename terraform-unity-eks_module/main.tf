@@ -39,7 +39,7 @@ variable "tags" {
 
 
 locals {
-  cluster_name = "my-cluster"
+  cluster_name = "my-cluster2"
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
 }
 
@@ -64,15 +64,15 @@ module "eks" {
 
   subnet_ids       = local.subnet_map["private"]
 
-  vpc_id = data.aws_ssm_parameter.vpc_id
+  vpc_id = data.aws_ssm_parameter.vpc_id.value
 
-  cluster_security_group_id = data.aws_ssm_parameter.cluster_sg
+  cluster_security_group_id = data.aws_ssm_parameter.cluster_sg.value
   create_cluster_security_group = false
   create_node_security_group = false
   create_iam_role = false
   enable_irsa = false
-  iam_role_arn = data.aws_ssm_parameter.eks_iam_role
-  node_security_group_id = data.aws_ssm_parameter.node_sg
+  iam_role_arn = data.aws_ssm_parameter.eks_iam_role.value
+  node_security_group_id = data.aws_ssm_parameter.node_sg.value
 
   eks_managed_node_group_defaults = {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
@@ -88,7 +88,7 @@ module "eks" {
 #    }
     green = {
       create_iam_role = false
-      iam_role_arn = data.aws_ssm_parameter.eks_iam_node_role
+      iam_role_arn = data.aws_ssm_parameter.eks_iam_node_role.value
 
       min_size     = 1
       max_size     = 10
