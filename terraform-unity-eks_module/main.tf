@@ -1,13 +1,3 @@
-provider "aws" {
-  region = "us-west-2"
-  default_tags {
-    tags = {
-      ServiceArea = "UCS"
-      Project     = "Nightly"
-    }
-  }
-}
-
 data "aws_ssm_parameter" "vpc_id" {
   name = "/unity/account/network/vpc_id"
 }
