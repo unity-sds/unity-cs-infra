@@ -7,44 +7,40 @@ provider "aws" {
     }
   }
 }
-variable "vpc_id" {
-  type = string
-}
-variable "subnets" {
-  type = map(list(string))
+
+data "aws_ssm_parameter" "vpc_id" {
+  name = "/unity/account/network/vpc_id"
 }
 
-variable "cluster_sg" {
-  type = string
+data "aws_ssm_parameter" "subnet_list" {
+  name = "/unity/account/network/subnet_list"
 }
 
-variable "node_sg" {
-  type = string
+data "aws_ssm_parameter" "cluster_sg" {
+  name = "/unity/account/eks/cluster_sg"
 }
 
-variable "eks_iam_role" {
-  type = string
+data "aws_ssm_parameter" "node_sg" {
+  name = "/unity/account/eks/node_sg"
 }
 
-variable "eks_iam_node_role" {
-  type = string
+data "aws_ssm_parameter" "eks_iam_node_role" {
+  name = "/unity/account/eks/eks_iam_node_role"
+}
+
+data "aws_ssm_parameter" "eks_iam_role" {
+  name = "/unity/account/eks/eks_iam_role"
 }
 
 variable "tags" {
   type = map(string)
 }
 
-#provider "kubernetes" {
-#  host                   = data.aws_eks_cluster.cluster.endpoint
-#  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority)
-#  token                  = data.aws_eks_cluster_auth.cluster.token
-#}
 
-data "aws_availability_zones" "available" {
-}
 
 locals {
   cluster_name = "my-cluster"
+  subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
 }
 
 module "eks" {
@@ -66,17 +62,17 @@ module "eks" {
     }
   }
 
-  subnet_ids       = var.subnets.private
+  subnet_ids       = local.subnet_map["private"]
 
-  vpc_id = var.vpc_id
+  vpc_id = data.aws_ssm_parameter.vpc_id
 
-  cluster_security_group_id = var.cluster_sg
+  cluster_security_group_id = data.aws_ssm_parameter.cluster_sg
   create_cluster_security_group = false
   create_node_security_group = false
   create_iam_role = false
   enable_irsa = false
-  iam_role_arn = var.eks_iam_role
-  node_security_group_id = var.node_sg
+  iam_role_arn = data.aws_ssm_parameter.eks_iam_role
+  node_security_group_id = data.aws_ssm_parameter.node_sg
 
   eks_managed_node_group_defaults = {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
@@ -92,7 +88,7 @@ module "eks" {
 #    }
     green = {
       create_iam_role = false
-      iam_role_arn = var.eks_iam_node_role
+      iam_role_arn = data.aws_ssm_parameter.eks_iam_node_role
 
       min_size     = 1
       max_size     = 10
