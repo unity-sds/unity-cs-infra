@@ -26,10 +26,14 @@ variable "tags" {
   type = map(string)
 }
 
+variable "name" {
+  type = string
+}
+
 
 
 locals {
-  cluster_name = "my-cluster2"
+  cluster_name = var.name
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
 }
 
