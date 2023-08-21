@@ -49,30 +49,7 @@ variable "nodegroups" {
     enable_bootstrap_user_data  = bool
   }))
 
-  default = {
-    blue = {
-      create_iam_role           = false
-      iam_role_arn              = data.aws_ssm_parameter.eks_iam_node_role.value
-      min_size                  = 1
-      max_size                  = 10
-      desired_size              = 1
-      ami_id                    = "ami-0c0e3c5bfa15ba56b"
-      instance_types            = ["t3.large"]
-      capacity_type             = "SPOT"
-      enable_bootstrap_user_data = true
-    }
-    green = {
-      create_iam_role           = false
-      iam_role_arn              = data.aws_ssm_parameter.eks_iam_node_role.value
-      min_size                  = 1
-      max_size                  = 10
-      desired_size              = 1
-      ami_id                    = "ami-0c0e3c5bfa15ba56b"
-      instance_types            = ["t3.large"]
-      capacity_type             = "SPOT"
-      enable_bootstrap_user_data = true
-    }
-  }
+  default = {}
 }
 
 variable "cluster_version" {
@@ -86,6 +63,20 @@ locals {
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   ami = data.aws_ssm_parameter.eks_ami.value
   iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
+  base_nodegroups = {
+    UnityDefault = {
+      create_iam_role           = false
+      iam_role_arn              = data.aws_ssm_parameter.eks_iam_node_role.value
+      min_size                  = 1
+      max_size                  = 10
+      desired_size              = 1
+      ami_id                    = "ami-0c0e3c5bfa15ba56b"
+      instance_types            = ["t3.large"]
+      capacity_type             = "SPOT"
+      enable_bootstrap_user_data = true
+    }
+  }
+  mergednodegroups = merge(local.base_nodegroups, var.nodegroups)
 }
 
 module "eks" {
@@ -123,28 +114,7 @@ module "eks" {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
   }
 
-  eks_managed_node_groups = var.nodegroups
-#    blue = {
-#      create_iam_role = false
-#      iam_role_arn = var.eks_iam_node_role
-#      ami_id = "ami-0c0e3c5bfa15ba56b"
-#      use_custom_launch_template = true
-#
-#    }
-#    green = {
-#      create_iam_role = false
-#      iam_role_arn = data.aws_ssm_parameter.eks_iam_node_role.value
-#
-#      min_size     = 1
-#      max_size     = 10
-#      desired_size = 1
-#
-#      ami_id = "ami-0c0e3c5bfa15ba56b"
-#      instance_types = ["t3.large"]
-#      capacity_type  = "SPOT"
-#      enable_bootstrap_user_data = true
-#
-#    }
+  eks_managed_node_groups = local.mergednodegroups
   tags = var.tags
 }
 
