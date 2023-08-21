@@ -30,7 +30,7 @@ variable "name" {
   type = string
 }
 
-variable "environments" {
+variable "nodegroups" {
   description = "The environments configuration"
 
   type = map(object({
@@ -93,7 +93,7 @@ module "eks" {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
   }
 
-  eks_managed_node_groups = var.environments
+  eks_managed_node_groups = var.nodegroups
 #    blue = {
 #      create_iam_role = false
 #      iam_role_arn = var.eks_iam_node_role
