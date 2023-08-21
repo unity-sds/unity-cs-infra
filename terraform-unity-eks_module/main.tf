@@ -22,6 +22,10 @@ data "aws_ssm_parameter" "eks_iam_role" {
   name = "/unity/account/eks/eks_iam_role"
 }
 
+data "aws_ssm_parameter" "eks_ami" {
+  name = "/unity/account/ami/eksClusterAmi"
+}
+
 variable "tags" {
   type = map(string)
 }
@@ -31,13 +35,12 @@ variable "name" {
 }
 
 variable "nodegroups" {
-  description = "The environments configuration"
+  description = "The nodegroups configuration"
 
   type = map(object({
     create_iam_role             = bool
     iam_role_arn                = string
     ami_id                      = string
-    use_custom_launch_template  = bool
     min_size                    = number
     max_size                    = number
     desired_size                = number
@@ -45,6 +48,31 @@ variable "nodegroups" {
     capacity_type               = string
     enable_bootstrap_user_data  = bool
   }))
+
+  default = {
+    blue = {
+      create_iam_role           = false
+      iam_role_arn              = data.aws_ssm_parameter.eks_iam_node_role.value
+      min_size                  = 1
+      max_size                  = 10
+      desired_size              = 1
+      ami_id                    = "ami-0c0e3c5bfa15ba56b"
+      instance_types            = ["t3.large"]
+      capacity_type             = "SPOT"
+      enable_bootstrap_user_data = true
+    }
+    green = {
+      create_iam_role           = false
+      iam_role_arn              = data.aws_ssm_parameter.eks_iam_node_role.value
+      min_size                  = 1
+      max_size                  = 10
+      desired_size              = 1
+      ami_id                    = "ami-0c0e3c5bfa15ba56b"
+      instance_types            = ["t3.large"]
+      capacity_type             = "SPOT"
+      enable_bootstrap_user_data = true
+    }
+  }
 }
 
 variable "cluster_version" {
@@ -56,6 +84,8 @@ variable "cluster_version" {
 locals {
   cluster_name = var.name
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
+  ami = data.aws_ssm_parameter.eks_ami.value
+  iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
 }
 
 module "eks" {
