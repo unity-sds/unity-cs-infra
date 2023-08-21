@@ -30,6 +30,27 @@ variable "name" {
   type = string
 }
 
+variable "environments" {
+  description = "The environments configuration"
+
+  type = map(object({
+    create_iam_role             = bool
+    iam_role_arn                = string
+    ami_id                      = string
+    use_custom_launch_template  = bool
+    min_size                    = number
+    max_size                    = number
+    desired_size                = number
+    instance_types              = list(string)
+    capacity_type               = string
+    enable_bootstrap_user_data  = bool
+  }))
+}
+
+variable "cluster_version" {
+  type = string
+  default = "1.27"
+}
 
 
 locals {
@@ -42,7 +63,7 @@ module "eks" {
   version = "19.16.0"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.27"
+  cluster_version = var.cluster_version
 
   cluster_addons = {
     coredns = {
@@ -72,7 +93,7 @@ module "eks" {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
   }
 
-  eks_managed_node_groups = {
+  eks_managed_node_groups = var.environments
 #    blue = {
 #      create_iam_role = false
 #      iam_role_arn = var.eks_iam_node_role
@@ -80,21 +101,20 @@ module "eks" {
 #      use_custom_launch_template = true
 #
 #    }
-    green = {
-      create_iam_role = false
-      iam_role_arn = data.aws_ssm_parameter.eks_iam_node_role.value
-
-      min_size     = 1
-      max_size     = 10
-      desired_size = 1
-
-      ami_id = "ami-0c0e3c5bfa15ba56b"
-      instance_types = ["t3.large"]
-      capacity_type  = "SPOT"
-      enable_bootstrap_user_data = true
-
-    }
-  }
+#    green = {
+#      create_iam_role = false
+#      iam_role_arn = data.aws_ssm_parameter.eks_iam_node_role.value
+#
+#      min_size     = 1
+#      max_size     = 10
+#      desired_size = 1
+#
+#      ami_id = "ami-0c0e3c5bfa15ba56b"
+#      instance_types = ["t3.large"]
+#      capacity_type  = "SPOT"
+#      enable_bootstrap_user_data = true
+#
+#    }
   tags = var.tags
 }
 
