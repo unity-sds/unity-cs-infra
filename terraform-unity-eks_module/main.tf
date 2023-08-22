@@ -59,6 +59,7 @@ variable "cluster_version" {
 
 
 locals {
+  common_tags = {}
   cluster_name = var.name
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   ami = data.aws_ssm_parameter.eks_ami.value
@@ -116,6 +117,25 @@ module "eks" {
 
   eks_managed_node_groups = local.mergednodegroups
   tags = var.tags
+}
+
+resource "aws_launch_template" "node_group_launch_template" {
+  image_id = data.aws_ssm_parameter.eks_ami.value
+  name = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
+  user_data = base64encode(<<EOT
+#!/bin/bash
+set -o xtrace
+/etc/eks/bootstrap.sh ${local.cluster_name}
+  EOT
+  )
+  tag_specifications {
+    resource_type = "instance"
+    tags = merge(local.common_tags, {
+      Name      = "${local.cluster_name} Node Group Node"
+      Component = "EKS EC2 Instance"
+      Stack     = "EKS EC2 Instance"
+    })
+  }
 }
 
 #module "irsa-ebs-csi" {
