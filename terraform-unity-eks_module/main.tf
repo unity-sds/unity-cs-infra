@@ -81,22 +81,39 @@ set -o xtrace
 
 # TODO: select default node group more intelligently, or remove concept altogether
 resource "aws_ssm_parameter" "node_group_default_name" {
-  name = "/unity/extensions/eks/${var.cluster_name}/nodeGroups/default/name"
+  name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/name"
   type = "String"
   # Get name of first nodegroup in nodegroup map variable
-  value = keys(var.node_groups)[0]
-  # Get first nodegroup name from keys of node group variable and use it to 
+  value = keys(local.mergednodegroups[0])[0]
+  # Get first nodegroup name from keys of node group variable and use it to
+
   # value = split(":", aws_eks_node_group.node_groups[keys(var.node_groups)[0]].id)[0]
 }
 
 resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
-  name = "/unity/extensions/eks/${var.cluster_name}/nodeGroups/default/launchTemplateName"
+  name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
   type = "String"
   value = aws_launch_template.node_group_launch_template.name
 }
 
-resource "aws_ssm_parameter" "eks_subnets_private" {
-  name = "/unity/extensions/eks/${var.cluster_name}/networking/subnets/privateIds"
-  type = "String"
-  value = data.aws_ssm_parameter.eks_subnets_private.value
-}
+#module "irsa-ebs-csi" {
+#  source  = "terraform-aws-modules/iam/aws//modules/iamable-role-with-oidc"
+#  version = "4.7.0"
+#
+#  create_role                   = true
+#  role_name                     = "AmazonEKSTFEBSCSIRole-${module.eks.cluster_name}"
+#  provider_url                  = module.eks.oidc_provider
+#  role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
+#  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+#}
+#
+#resource "aws_eks_addon" "ebs-csi" {
+#  cluster_name             = module.eks.cluster_name
+#  addon_name               = "aws-ebs-csi-driver"
+#  addon_version            = "v1.20.0-eksbuild.1"
+#  service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+#  tags = {
+#    "eks_addon" = "ebs-csi"
+#    "terraform" = "true"
+#  }
+#}
