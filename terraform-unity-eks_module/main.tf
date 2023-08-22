@@ -138,6 +138,23 @@ set -o xtrace
   }
 }
 
+
+# TODO: select default node group more intelligently, or remove concept altogether
+resource "aws_ssm_parameter" "node_group_default_name" {
+  name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/name"
+  type = "String"
+  # Get name of first nodegroup in nodegroup map variable
+  value = keys(local.mergednodegroups[0])[0]
+  # Get first nodegroup name from keys of node group variable and use it to
+  # value = split(":", aws_eks_node_group.node_groups[keys(var.node_groups)[0]].id)[0]
+}
+
+resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
+  name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
+  type = "String"
+  value = aws_launch_template.node_group_launch_template.name
+}
+
 #module "irsa-ebs-csi" {
 #  source  = "terraform-aws-modules/iam/aws//modules/iamable-role-with-oidc"
 #  version = "4.7.0"
