@@ -38,15 +38,15 @@ variable "nodegroups" {
   description = "The nodegroups configuration"
 
   type = map(object({
-    create_iam_role             = bool
-    iam_role_arn                = string
-    ami_id                      = string
-    min_size                    = number
-    max_size                    = number
-    desired_size                = number
-    instance_types              = list(string)
-    capacity_type               = string
-    enable_bootstrap_user_data  = bool
+    create_iam_role             = optional(bool)
+    iam_role_arn                = optional(string)
+    ami_id                      = optional(string)
+    min_size                    = optional(number)
+    max_size                    = optional(number)
+    desired_size                = optional(number)
+    instance_types              = optional(list(string))
+    capacity_type               = optional(string)
+    enable_bootstrap_user_data  = optional(bool)
   }))
 
   default = {}
@@ -63,20 +63,19 @@ locals {
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   ami = data.aws_ssm_parameter.eks_ami.value
   iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
-  base_nodegroups = {
-    UnityDefault = {
-      create_iam_role           = false
-      iam_role_arn              = data.aws_ssm_parameter.eks_iam_node_role.value
-      min_size                  = 1
-      max_size                  = 10
-      desired_size              = 1
-      ami_id                    = "ami-0c0e3c5bfa15ba56b"
-      instance_types            = ["t3.large"]
-      capacity_type             = "SPOT"
-      enable_bootstrap_user_data = true
+  mergednodegroups = {for name, ng in var.nodegroups:
+      name => {
+        create_iam_role = false
+        min_size = ng.min_size != null ? ng.min_size : 1
+        max_size = ng.max_size != null ? ng.max_size : 10
+        desired_size = ng.desired_size != null ? ng.desired_size : 3
+        ami_id = ng.ami_id != null ? ng.ami_id : data.aws_ssm_parameter.eks_ami.value
+        instance_types = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
+        capacity_type = ng.capacity_type != null ? ng.capacity_type : "SPOT"
+        iam_role_arn = ng.iam_role_arn != null ? ng.iam_role_arn : data.aws_ssm_parameter.eks_iam_node_role.value
+        enable_bootstrap_user_data = true
+      }
     }
-  }
-  mergednodegroups = merge(local.base_nodegroups, var.nodegroups)
 }
 
 module "eks" {
@@ -112,6 +111,7 @@ module "eks" {
 
   eks_managed_node_group_defaults = {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
+    iam_role_arn              = data.aws_ssm_parameter.eks_iam_node_role.value
   }
 
   eks_managed_node_groups = local.mergednodegroups
