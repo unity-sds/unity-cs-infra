@@ -144,7 +144,7 @@ resource "aws_ssm_parameter" "node_group_default_name" {
   name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/name"
   type = "String"
   # Get name of first nodegroup in nodegroup map variable
-  value = keys(local.mergednodegroups[0])[0]
+  value =  element(keys(local.mergednodegroups), 0)
   # Get first nodegroup name from keys of node group variable and use it to
   # value = split(":", aws_eks_node_group.node_groups[keys(var.node_groups)[0]].id)[0]
 }
