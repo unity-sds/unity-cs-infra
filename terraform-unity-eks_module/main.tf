@@ -155,6 +155,12 @@ resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
   value = aws_launch_template.node_group_launch_template.name
 }
 
+resource "aws_ssm_parameter" "eks_subnets" {
+  name = "/unity/extensions/eks/${local.cluster_name}/networking/subnets/publicIds"
+  type = "String"
+  value = join(",", local.subnet_map["private"])
+}
+
 #module "irsa-ebs-csi" {
 #  source  = "terraform-aws-modules/iam/aws//modules/iamable-role-with-oidc"
 #  version = "4.7.0"
