@@ -2,7 +2,7 @@
 
 source ./NIGHTLY.ENV
 
-export SSH_KEY="~/.ssh/smolensk.pem"
+export SSH_KEY="~/.ssh/ucs-nightly.pem"
 
 INSTANCE_ID=$(cat instance.id)
 
