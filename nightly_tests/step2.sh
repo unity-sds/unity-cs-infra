@@ -4,8 +4,6 @@ source ./NIGHTLY.ENV
 
 export SSH_KEY="~/.ssh/ucs-nightly.pem"
 
-INSTANCE_ID=$(cat instance.id)
-
 echo "Private IP Address: [$IP_ADDRESS]" >> nightly_output.txt
 echo "Private IP Address: [$IP_ADDRESS]"
 
