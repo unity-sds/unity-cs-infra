@@ -23,7 +23,7 @@ data "aws_ssm_parameter" "eks_iam_role" {
 }
 
 data "aws_ssm_parameter" "eks_ami" {
-  name = "/unity/account/ami/eksClusterAmi"
+  name = "/mcp/amis/aml2-eks-1-26"
 }
 
 variable "tags" {
@@ -54,7 +54,7 @@ variable "nodegroups" {
 
 variable "cluster_version" {
   type = string
-  default = "1.27"
+  default = "1.26"
 }
 
 
@@ -72,9 +72,12 @@ locals {
         desired_size = ng.desired_size != null ? ng.desired_size : 3
         ami_id = ng.ami_id != null ? ng.ami_id : data.aws_ssm_parameter.eks_ami.value
         instance_types = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
-        capacity_type = ng.capacity_type != null ? ng.capacity_type : "SPOT"
+        capacity_type = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
         iam_role_arn = ng.iam_role_arn != null ? ng.iam_role_arn : data.aws_ssm_parameter.eks_iam_node_role.value
         enable_bootstrap_user_data = true
+        pre_bootstrap_user_data = <<-EOT
+            sudo sed -i 's/^net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf && sudo sysctl -p |true
+        EOT
       }
     }
 }
