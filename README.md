@@ -107,4 +107,4 @@ See our: [LICENSE](LICENSE)
 
 ## Support
 
-Key points of contact are: [@github-user-1](#) [@github-user-2](#)
+Key points of contact are: [@galenatjpl]https://github.com/galenatjpl
