@@ -158,6 +158,21 @@ resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
   value = aws_launch_template.node_group_launch_template.name
 }
 
+resource "aws_ssm_parameter" "node_group_default_name" {
+  name = "/unity/extensions/eks/${var.name}/nodeGroups/default/name"
+  type = "String"
+  # Get name of first nodegroup in nodegroup map variable
+  value = keys(var.nodegroups)[0]
+  # Get first nodegroup name from keys of node group variable and use it to
+  # value = split(":", aws_eks_node_group.node_groups[keys(var.node_groups)[0]].id)[0]
+}
+
+resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
+  name = "/unity/extensions/eks/${var.name}/nodeGroups/default/launchTemplateName"
+  type = "String"
+  value = aws_launch_template.node_group_launch_template.name
+}
+
 resource "aws_ssm_parameter" "eks_subnets" {
   name = "/unity/extensions/eks/${local.cluster_name}/networking/subnets/publicIds"
   type = "String"
