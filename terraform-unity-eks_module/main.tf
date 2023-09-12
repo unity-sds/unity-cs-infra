@@ -144,7 +144,7 @@ set -o xtrace
 
 
 # TODO: select default node group more intelligently, or remove concept altogether
-resource "aws_ssm_parameter" "node_group_default_name" {
+resource "aws_ssm_parameter" "node_group_default_name_3" {
   name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/name"
   type = "String"
   # Get name of first nodegroup in nodegroup map variable
