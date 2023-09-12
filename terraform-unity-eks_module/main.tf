@@ -66,6 +66,7 @@ locals {
   iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
   mergednodegroups = {for name, ng in var.nodegroups:
       name => {
+        use_name_prefix = false
         create_iam_role = false
         min_size = ng.min_size != null ? ng.min_size : 1
         max_size = ng.max_size != null ? ng.max_size : 10
