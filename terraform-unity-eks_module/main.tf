@@ -168,7 +168,7 @@ resource "aws_ssm_parameter" "node_group_default_name" {
   # value = split(":", aws_eks_node_group.node_groups[keys(var.node_groups)[0]].id)[0]
 }
 
-resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
+resource "aws_ssm_parameter" "node_group_default_launch_template_name_2" {
   name = "/unity/extensions/eks/${var.name}/nodeGroups/default/launchTemplateName"
   type = "String"
   value = aws_launch_template.node_group_launch_template.name
