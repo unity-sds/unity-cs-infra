@@ -62,7 +62,7 @@ locals {
   common_tags = {}
   cluster_name = var.name
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
-  ami = data.aws_ssm_parameter.eks_ami.value
+  ami = "ami-0e3e9697a56f6ba66"
   iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
   mergednodegroups = {for name, ng in var.nodegroups:
       name => {
@@ -71,7 +71,7 @@ locals {
         min_size = ng.min_size != null ? ng.min_size : 1
         max_size = ng.max_size != null ? ng.max_size : 10
         desired_size = ng.desired_size != null ? ng.desired_size : 3
-        ami_id = ng.ami_id != null ? ng.ami_id : data.aws_ssm_parameter.eks_ami.value
+        ami_id = "ami-0e3e9697a56f6ba66"
         instance_types = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
         capacity_type = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
         iam_role_arn = ng.iam_role_arn != null ? ng.iam_role_arn : data.aws_ssm_parameter.eks_iam_node_role.value
@@ -124,7 +124,7 @@ module "eks" {
 }
 
 resource "aws_launch_template" "node_group_launch_template" {
-  image_id = data.aws_ssm_parameter.eks_ami.value
+  image_id = "ami-0e3e9697a56f6ba66"
   name = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
   user_data = base64encode(<<EOT
 #!/bin/bash
@@ -144,14 +144,6 @@ set -o xtrace
 
 
 # TODO: select default node group more intelligently, or remove concept altogether
-resource "aws_ssm_parameter" "node_group_default_name_3" {
-  name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/name"
-  type = "String"
-  # Get name of first nodegroup in nodegroup map variable
-  value =  element(keys(local.mergednodegroups), 0)
-  # Get first nodegroup name from keys of node group variable and use it to
-  # value = split(":", aws_eks_node_group.node_groups[keys(var.node_groups)[0]].id)[0]
-}
 
 resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
   name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
@@ -166,12 +158,6 @@ resource "aws_ssm_parameter" "node_group_default_name" {
   value = keys(var.nodegroups)[0]
   # Get first nodegroup name from keys of node group variable and use it to
   # value = split(":", aws_eks_node_group.node_groups[keys(var.node_groups)[0]].id)[0]
-}
-
-resource "aws_ssm_parameter" "node_group_default_launch_template_name_2" {
-  name = "/unity/extensions/eks/${var.name}/nodeGroups/default/launchTemplateName"
-  type = "String"
-  value = aws_launch_template.node_group_launch_template.name
 }
 
 resource "aws_ssm_parameter" "eks_subnets" {
