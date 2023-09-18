@@ -1,113 +1,114 @@
 #!/bin/bash
 
+export AWS_PAGER=""
 
-getNumResourcesTaggedWithServiceArea () {
-  export RESOURCES=`aws resourcegroupstaggingapi get-resources \
-    | jq '.ResourceTagMappingList[] | select(contains({Tags: [{Key: "ServiceArea"} ]})) | .ResourceARN' \
-    | grep "arn:"`
-  RESOURCE_COUNT=`echo "$RESOURCES" | grep -c 'arn:'`
-  echo "TOTAL tagged with ServiceArea tag: $RESOURCE_COUNT"
+getResources() {
+  local QUERY=$1
+  aws resourcegroupstaggingapi get-resources | jq -r "$QUERY"
 }
 
-getNumResourcesNotTaggedWithServiceArea () {
-  export RESOURCES=`aws resourcegroupstaggingapi get-resources \
-    | jq '.ResourceTagMappingList[] | select(contains({Tags: [{Key: "ServiceArea"} ]}) | not) | .ResourceARN' \
-    | grep "arn:"`
-  RESOURCE_COUNT=`echo "$RESOURCES" | grep -c 'arn:'`
-  echo "TOTAL NOT tagged with ServiceArea tag: $RESOURCE_COUNT"
+getResourcesCount() {
+  local QUERY=$1
+  getResources "$QUERY" | wc -l
 }
 
-# =================================================
-# Displays AWS resource ARNs for a service area,
-# by looking for resources containing the specified
-# 'ServiceArea' tag.
-# =================================================
-getResourcesTaggedWithServiceArea () {
+printTaggingSummary() {
+  echo "-----------------------------------------------"
+  printf "%-20s | %-6s | %-10s\n" "Tag Category" "Tagged" "Not Tagged"
+  echo "-----------------------------------------------"
 
-  # Get AWS resources with the specified ServiceArea tag
-  RESOURCES=`aws resourcegroupstaggingapi get-resources \
-    --tag-filters "Key=ServiceArea,Values=${1}" \
-    --query 'ResourceTagMappingList[*].[ResourceARN]' \
-    --output text`
+  for TAG_KEY in "${TAG_KEYS[@]}"; do
+    TAGGED=$(getResourcesCount ".ResourceTagMappingList[] | select(contains({Tags: [{Key: \"$TAG_KEY\" } ]})) | .ResourceARN")
+    NOT_TAGGED=$(getResourcesCount ".ResourceTagMappingList[] | select(contains({Tags: [{Key: \"$TAG_KEY\" } ]}) | not) | .ResourceARN")
+    printf "%-20s | %-6s | %-10s\n" "$TAG_KEY" "$TAGGED" "$NOT_TAGGED"
+  done
+}
 
-  # Count the number of resources found
-  RESOURCE_COUNT=`echo "$RESOURCES" | grep -c 'arn:'`
+printTagKeyValueDetails() {
+  echo "------------------------------------"
+  printf "%-15s | %-23s\n" "$TAG_KEY" "Number of Resources"
+  echo "------------------------------------"
 
-  # Print the results
-  echo
-  echo "------------ ServiceArea = ${1} -------------- ($RESOURCE_COUNT found):"
-  if [[ $RESOURCE_COUNT -gt 0 ]]; then
-    # If resources are found, print their ARNs
-    echo "$RESOURCES" | grep "arn:"
-  else
-    # If no resources are found, print a message indicating this
-    echo "$1 resources (0 found)"
+  local AWS_TAG_VALUES=$(getResources ".ResourceTagMappingList[].Tags[]? | select(.Key == \"$TAG_KEY\") | .Value" | sort | uniq)
+
+  echo "### Expected Values ###"
+  for EXPECTED_VALUE in "${EXPECTED_VALUES_ARRAY[@]}"; do
+    local RESOURCE_COUNT=$(getResourcesCount ".ResourceTagMappingList[] | select(.Tags[]? | (.Key == \"$TAG_KEY\" and .Value == \"$EXPECTED_VALUE\")) | .ResourceARN")
+    FOUND_VALUES["$EXPECTED_VALUE"]=$RESOURCE_COUNT
+    printf "%-15s | %-23s\n" "$EXPECTED_VALUE" "${RESOURCE_COUNT} found"
+  done
+
+  local EXTRA_VALUES_FOUND=()
+  for AWS_TAG_VALUE in $AWS_TAG_VALUES; do
+    if [[ ! " ${EXPECTED_VALUES_ARRAY[@]} " =~ " $AWS_TAG_VALUE " ]]; then
+      local RESOURCE_COUNT=$(getResourcesCount ".ResourceTagMappingList[] | select(.Tags[]? | (.Key == \"$TAG_KEY\" and .Value == \"$AWS_TAG_VALUE\")) | .ResourceARN")
+      EXTRA_VALUES_FOUND+=("$AWS_TAG_VALUE: $RESOURCE_COUNT")
+    fi
+  done
+
+  if [ ${#EXTRA_VALUES_FOUND[@]} -gt 0 ]; then
+    echo "### Extra Values Found ###"
+    for EXTRA_VALUE_FOUND in "${EXTRA_VALUES_FOUND[@]}"; do
+      IFS=':' read -r EXTRA_VALUE RESOURCE_COUNT <<< "$EXTRA_VALUE_FOUND"
+      printf "%-15s | %-23s\n" "$EXTRA_VALUE" "${RESOURCE_COUNT} found"
+    done
+    echo
   fi
 }
 
-# =================================================
-# Displays AWS resource ARNs for a service area,
-# by looking for resources containing the specified
-# 'ServiceArea' tag.
-# =================================================
-getResourceCountsWithTag () {
-  echo "RESOURCES WITH '${1}' TAG:"
-  aws resourcegroupstaggingapi get-resources \
-    --tag-filters "Key=${1}" \
-    --query 'ResourceTagMappingList[*].Tags[?Key==`${1}`].Value' \
-    --output text | sort -r | uniq -c
+printUntaggedResourceDetails() {
+  echo "-------------------------------------------------"
+  printf "%-8s | %-43s\n" "Category" "Number of Suspected Untagged Resources"
+  echo "-------------------------------------------------"
+
+  for TAG_KEY_PATTERN_LABEL in "${TAG_KEY_PATTERN_LABELS[@]}"; do
+    IFS=':' read -r PATTERN LABEL <<< "$TAG_KEY_PATTERN_LABEL"
+    local TOTAL_COUNT=0
+    for TAG_KEY in "${TAG_KEYS[@]}"; do
+      local RESOURCE_COUNT=$(getResourcesCount ".ResourceTagMappingList[] | select((contains({Tags: [{Key: \"$TAG_KEY\" } ]}) | not) and (.ResourceARN | test(\"$PATTERN\"))) | .ResourceARN")
+      TOTAL_COUNT=$((TOTAL_COUNT + RESOURCE_COUNT))
+    done
+    printf "%-8s | %-43s\n" "$LABEL" "$TOTAL_COUNT suspected untagged"
+  done
 }
 
-
-getNoServiceAreaResources () {
-#  aws resourcegroupstaggingapi get-resources \
-#    --tag-filters "Key=ServiceArea,Values=null" \
-#    --query 'ResourceTagMappingList[*].ResourceARN' \
-#    --output text
-  export RESOURCES=`aws resourcegroupstaggingapi get-resources \
-    | jq '.ResourceTagMappingList[] | select(contains({Tags: [{Key: "ServiceArea"} ]}) | not) | .ResourceARN' \
-    | grep -E "$1"`
-  RESOURCE_COUNT=`echo "$RESOURCES" | grep -c 'arn:'`
-  echo
-  echo "------------------------------------------------------------------------"
-  echo "$2 has ${RESOURCE_COUNT} suspected un-tagged (missing ServiceArea tag) $2 resources"
-  echo "------------------------------------------------------------------------"
-  echo "$RESOURCES"
-  #echo "Examples:"
-  #echo "$RESOURCES" | head -3
-  #echo "..."
-  #echo "$RESOURCES" | tail -3
-}
-
-
-export AWS_PAGER=""
-
-getNumResourcesTaggedWithServiceArea
-getNumResourcesNotTaggedWithServiceArea
+# Main section
+echo "###################################################################"
+echo "##################           MCP-DEV             ##################"
+echo "###################################################################"
 echo
-getResourcesTaggedWithServiceArea "cs"
-getResourcesTaggedWithServiceArea "as"
-getResourcesTaggedWithServiceArea "ads"
-getResourcesTaggedWithServiceArea "sps"
-getResourcesTaggedWithServiceArea "ds"
-getNoServiceAreaResources "ucs|galen|ryan|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway" "U-CS"
-getNoServiceAreaResources "uds|cumulus" "U-DS"
-getNoServiceAreaResources "uads|jmcduffi|dockstore|esarkiss|nlahaye|jupyter" "U-ADS"
-getNoServiceAreaResources "usps|u-sps|sps-api|luca|ryan|hysds" "U-SPS"
-getNoServiceAreaResources "bcdp" "U-AS"
-getNoServiceAreaResources "gmanipon|on-demand" "U-OD"
-getNoServiceAreaResources "anil|tapella|natha" "U-UI"
+echo "### TAGGING SUMMARY ###"
+TAG_KEYS=("Venue" "ServiceArea" "CapVersion" "Component" "Name" "Proj" "CreatedBy" "Env" "Stack")
+printTaggingSummary
 
-getResourceCountsWithTag "ServiceArea"
-getResourceCountsWithTag "Proj"
-getResourceCountsWithTag "mission"
-
-
-export OTHER_RESOURCES=`getNoServiceAreaResources "arn" "OTHER" | grep -Ev "ucs|galen|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway|uds|cumulus|uads|jmcduffi|dockstore|esarkiss|nlahaye|jupyter|usps|u-sps|sps-api|luca|ryan|hysds|bcdp|gmanipon|on-demand|anil|tapella|natha"`
-OTHER_RESOURCE_COUNT=`echo "$OTHER_RESOURCES" | grep -c 'arn:'`
 echo
-echo "$OTHER_RESOURCE_COUNT OTHER suspected un-tagged (missing ServiceArea tag) resources:"
-echo "$OTHER_RESOURCES"
-#echo
-#getResourceArnsForServiceArea "sps"
-#getNoServiceAreaResources "usps" "U-SPS"
+echo "### TAG KEY-VALUE DETAILS ###"
+declare -A EXPECTED_TAG_VALUES=(
+  ["Venue"]="dev test prod sips-test"
+  ["ServiceArea"]="cs sps ds as ads uiux"
+  ["Env"]=""
+  ["CapVersion"]=""
+  ["Component"]="SDAP HySDS dockerstore"
+  ["Proj"]=""
+  ["CreatedBy"]=""
+  ["Stack"]=""
+)
+for TAG_KEY in "${!EXPECTED_TAG_VALUES[@]}"; do
+  IFS=' ' read -r -a EXPECTED_VALUES_ARRAY <<< "${EXPECTED_TAG_VALUES[$TAG_KEY]}"
+  declare -A FOUND_VALUES
+  printTagKeyValueDetails
+done
+
+TAG_KEY_PATTERN_LABELS=(
+  "ucs|galen|ryan|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway:U-CS"
+  "uds|cumulus:U-DS"
+  "uads|jmcduffi|dockstore|esarkiss|nlahaye|jupyter:U-ADS"
+  "usps|u-sps|sps-api|luca|ryan|hysds:U-SPS"
+  "bcdp:U-AS"
+  "gmanipon|on-demand:U-OD"
+  "anil|tapella|natha:U-UI"
+)
+
+echo
+echo "### UNTAGGED RESOURCE DETAILS ###"
+printUntaggedResourceDetails
