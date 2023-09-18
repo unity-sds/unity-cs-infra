@@ -71,6 +71,12 @@ locals {
   cluster_name = var.name
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   ami = "ami-0e3e9697a56f6ba66"
+  ami_map = {
+    "1.26" = data.aws_ssm_parameter.eks_ami_1_26.value
+    "1.25" = data.aws_ssm_parameter.eks_ami_1_25.value
+    "1.24" = data.aws_ssm_parameter.eks_ami_1_24.value
+    "default" = "ami-0e3e9697a56f6ba66"
+  }
   iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
   mergednodegroups = {for name, ng in var.nodegroups:
       name => {
@@ -79,11 +85,7 @@ locals {
         min_size = ng.min_size != null ? ng.min_size : 1
         max_size = ng.max_size != null ? ng.max_size : 10
         desired_size = ng.desired_size != null ? ng.desired_size : 3
-        ami_id = ng.ami_id != null ? ng.ami_id : 
-          (var.cluster_version == "1.26" ? data.aws_ssm_parameter.eks_ami_1_26.value : 
-          (var.cluster_version == "1.25" ? data.aws_ssm_parameter.eks_ami_1_25.value :
-          (var.cluster_version == "1.24" ? data.aws_ssm_parameter.eks_ami_1_24.value : 
-          "ami-0e3e9697a56f6ba66")))
+        ami_id = ng.ami_id != null ? ng.ami_id : lookup(local.ami_map, var.cluster_version, local.ami_map["default"])
         instance_types = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
         capacity_type = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
         iam_role_arn = ng.iam_role_arn != null ? ng.iam_role_arn : data.aws_ssm_parameter.eks_iam_node_role.value
