@@ -2,16 +2,19 @@
 
 export AWS_PAGER=""
 
+# Fetches the resources based on the provided query.
 getResources() {
   local QUERY=$1
   aws resourcegroupstaggingapi get-resources | jq -r "$QUERY"
 }
 
+# Gets the count of resources based on the provided query.
 getResourcesCount() {
   local QUERY=$1
   getResources "$QUERY" | wc -l
 }
 
+# Prints a summary of tagging including the count of tagged and untagged resources for each tag key.
 printTaggingSummary() {
   echo "-----------------------------------------------"
   printf "%-20s | %-6s | %-10s\n" "Tag Category" "Tagged" "Not Tagged"
@@ -24,6 +27,7 @@ printTaggingSummary() {
   done
 }
 
+# Prints details of tag key-values including the expected and extra values found.
 printTagKeyValueDetails() {
   echo "------------------------------------"
   printf "%-15s | %-23s\n" "$TAG_KEY" "Number of Resources"
@@ -56,6 +60,7 @@ printTagKeyValueDetails() {
   fi
 }
 
+# Prints the details of untagged resources based on specific patterns and labels.
 printUntaggedResourceDetails() {
   echo "-------------------------------------------------"
   printf "%-8s | %-43s\n" "Category" "Number of Suspected Untagged Resources"
