@@ -1,19 +1,19 @@
-FILTERS="suspected un|ServiceArea =|TOTAL|RESOURCES WITH"
+#!/bin/bash
 
-echo "Switching environment to MCP-DEV"
-eval $(./mcp_keys.sh dev)
-echo "Now on MCP-DEV"
-echo "Generating tagging summary..."
-OUTPUT=`./resources-by-service-area.sh | grep -E "${FILTERS}"`
-echo "$OUTPUT"
-echo "$OUTPUT" > tag-report-mcp-test.txt
+FILTERS="suspected untagged|ServiceArea|TOTAL|RESOURCES WITH|OTHER"
+# WEBHOOK_URL= XXXXXXXXXXXXXXXXXXXXXXXXX
+echo "────────────────────────────────────────"
+echo "              MCP-DEV                   "
+echo "────────────────────────────────────────"
+# eval $(./mcp_keys.sh dev)
 
-echo "Switching environment to MCP-TEST"
-eval $(./mcp_keys.sh test)
-echo "Now on MCP-TEST"
-echo "Generating tagging summary..."
-OUTPUT=`./resources-by-service-area.sh | grep -E "${FILTERS}"`
-echo "$OUTPUT"
-echo "$OUTPUT" > tag-report-mcp-test.txt
+OUTPUT=$(./resources-by-service-area.sh)
 
-echo "done."
+TAG_SUMMARY=$(echo "$OUTPUT" | grep -E "─ TAGGING SUMMARY ─" -A 2)
+SERVICE_AREA_DETAILS=$(echo "$OUTPUT" | grep -E "─ SERVICE AREA DETAILS ─" -A 5)
+UNTAGGED_DETAILS=$(echo "$OUTPUT" | grep -E "─ UNTAGGED RESOURCE DETAILS ─" -A 7)
+TAG_ANALYSIS=$(echo "$OUTPUT" | grep -E "─ TAG ANALYSIS ─" -A 3)
+OTHER=$(echo "$OUTPUT" | grep -E "─ OTHER ─" -A 2)
+
+
+curl -X POST -H 'Content-type: application/json' --data '{"text": "'"${OUTPUT}"'"}' $WEBHOOK_URL
