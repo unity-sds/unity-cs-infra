@@ -49,7 +49,7 @@ aws ec2 run-instances \
     --key-name ${KEYPAIR_NAME} \
     --security-group-ids ${SG_IDS} \
     --subnet-id ${SUBNET_ID} \
-    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=ucs-nightly-test-management-console}]' > output.txt
+    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=ucs-nightly-test-management-console},{Key=ServiceArea,Value=U-CS}]' > output.txt
 
 INSTANCE_ID=$(grep InstanceId output.txt |sed 's/^.*: "//' | sed 's/".*$//')
 echo "INSTANCE_ID=$INSTANCE_ID">NIGHTLY.ENV
