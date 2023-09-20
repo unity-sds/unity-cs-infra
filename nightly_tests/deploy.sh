@@ -4,14 +4,16 @@ export SSH_KEY="~/.ssh/ucs-nightly.pem"
 
 export SSM_SUBNET_ID="/unity-sds/u-cs/nightly/publicsubnetid"
 export SSM_INSTANCE_TYPE="/unity-sds/u-cs/nightly/instancetype"
-#export SSM_SECURITY_GROUP="/unity-sds/u-cs/nightly/securitygroup"
+export SSM_SECURITY_GROUP_ID="/unity-sds/u-cs/nightly/securitygroup"
 export SSM_KEYPAIR_NAME="/unity-sds/u-cs/nightly/keypairname"
 export SSM_AMI_ID="/mcp/amis/ubuntu2004"
 
-SUBNET_ID=$(aws ssm get-parameter --name ${SSM_SUBNET_ID}     |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-INSTANCE_TYPE=$(aws ssm get-parameter --name ${SSM_INSTANCE_TYPE} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-KEYPAIR_NAME=$(aws ssm get-parameter --name ${SSM_KEYPAIR_NAME}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-AMI_ID=$(aws ssm get-parameter --name ${SSM_AMI_ID}        |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+
+SUBNET_ID=$(aws ssm get-parameter --name ${SSM_SUBNET_ID}                 |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+INSTANCE_TYPE=$(aws ssm get-parameter --name ${SSM_INSTANCE_TYPE}         |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+KEYPAIR_NAME=$(aws ssm get-parameter --name ${SSM_KEYPAIR_NAME}           |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+AMI_ID=$(aws ssm get-parameter --name ${SSM_AMI_ID}                       |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+SECURITY_GROUP_ID=$(aws ssm get-parameter --name ${SSM_SECURITY_GROUP_ID} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
 if [ -z "$SUBNET_ID" ]
 then
@@ -47,7 +49,7 @@ aws ec2 run-instances \
     --count 1 \
     --instance-type ${INSTANCE_TYPE} \
     --key-name ${KEYPAIR_NAME} \
-    --security-group-ids ${SG_IDS} \
+    --security-group-ids ${SECURITY_GROUP_ID} \
     --subnet-id ${SUBNET_ID} \
     --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=ucs-nightly-test-management-console},{Key=ServiceArea,Value=U-CS}]' > output.txt
 
