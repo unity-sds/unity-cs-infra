@@ -63,18 +63,32 @@ printTagKeyValueDetails() {
 # Prints the details of untagged resources based on specific patterns and labels.
 printUntaggedResourceDetails() {
   echo "-------------------------------------------------"
+  echo "Warning: This script identifies resources that are suspected to be untagged based on the provided tag patterns. Note that there might be an overlap in the counts since a resource might match multiple patterns. It is advised to verify the resources manually to ensure accurate tagging."
+  echo "-------------------------------------------------"
   printf "%-8s | %-43s\n" "Category" "Number of Suspected Untagged Resources"
   echo "-------------------------------------------------"
 
+  # Loop through each label and pattern pair in the TAG_KEY_PATTERN_LABELS array
   for TAG_KEY_PATTERN_LABEL in "${TAG_KEY_PATTERN_LABELS[@]}"; do
     IFS=':' read -r PATTERN LABEL <<< "$TAG_KEY_PATTERN_LABEL"
     local TOTAL_COUNT=0
+
+    # Loop through each tag key in the TAG_KEYS array
     for TAG_KEY in "${TAG_KEYS[@]}"; do
+      # Get the count of resources that match the pattern but don't have the current tag key
       local RESOURCE_COUNT=$(getResourcesCount ".ResourceTagMappingList[] | select((contains({Tags: [{Key: \"$TAG_KEY\" } ]}) | not) and (.ResourceARN | test(\"$PATTERN\"))) | .ResourceARN")
+
+      # Accumulate the count of suspected untagged resources
       TOTAL_COUNT=$((TOTAL_COUNT + RESOURCE_COUNT))
     done
+
+    # Print the label and the total count of suspected untagged resources
     printf "%-8s | %-43s\n" "$LABEL" "$TOTAL_COUNT suspected untagged"
   done
+
+  echo "-------------------------------------------------"
+  echo "Note: The numbers reported might include overlap, where a resource is counted in multiple categories. It's recommended to review the resources individually for precise tagging."
+  echo "-------------------------------------------------"
 }
 
 # Main section
