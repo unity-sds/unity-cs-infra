@@ -23,10 +23,12 @@ ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "ls -al"
 
 ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "wget https://github.com/unity-sds/unity-management-console/releases/download/0.2.12/managementconsole.zip"
 
+ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "unzip -o managementconsole.zip; "
+
 echo "Starting up the management console webapp in the background" >> nightly_output.txt
 echo "Starting up the management console webapp in the background"
 
-ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "unzip -o managementconsole.zip; cd management-console; nohup ./main webapp > /dev/null 2>&1 &" &
+ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "cd management-console; nohup ./main webapp > /dev/null 2>&1 &" &
 #ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "unzip -o managementconsole.zip; cd management-console; sudo -u ubuntu ./main webapp > /var/log/management-console.log 2>&1 &" &
 
 sleep 5
