@@ -1,7 +1,8 @@
 #!/bin/sh
 
 bash deploy.sh
-bash step2.sh
+bash step2.sh &
+sleep 10
 bash destroy.sh
 
 cat nightly_output.txt
