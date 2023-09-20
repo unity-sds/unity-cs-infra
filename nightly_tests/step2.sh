@@ -13,7 +13,7 @@ echo "Public IP Address: [$IP_ADDRESS_PUBLIC]"
 
 CONN_ERROR=$(ssh -i $SSH_KEY -o 'StrictHostKeyChecking no' -o ConnectTimeout=10 ubuntu@$IP_ADDRESS 'exit' |grep 'Connection timed out')
 
-if [ -z "$CONN_ERROR" ]
+if [ $CONN_ERROR == *"Connection timed out"* ]
 then 
     echo "ERROR: Could not connect to new management console instance.  Connection timed out" >> nightly_output.txt
     exit
