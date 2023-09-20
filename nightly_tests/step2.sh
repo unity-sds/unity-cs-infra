@@ -11,16 +11,16 @@ echo "Public IP Address: [$IP_ADDRESS_PUBLIC]" >> nightly_output.txt
 echo "Public IP Address: [$IP_ADDRESS_PUBLIC]"
 
 
-ssh -i $SSH_KEY -o 'StrictHostKeyChecking no' ubuntu@$IP_ADDRESS 'exit'
+ssh -i $SSH_KEY -o 'StrictHostKeyChecking no' ConnectTimeout=10 ubuntu@$IP_ADDRESS 'exit'
 
-ssh -i $SSH_KEY ubuntu@$IP_ADDRESS "ls -al"
+ssh -i $SSH_KEY ConnectTimeout=10 ubuntu@$IP_ADDRESS "ls -al"
 
-ssh -i $SSH_KEY ubuntu@$IP_ADDRESS "wget https://github.com/unity-sds/unity-management-console/releases/download/0.2.12/managementconsole.zip"
+ssh -i $SSH_KEY ConnectTimeout=10 ubuntu@$IP_ADDRESS "wget https://github.com/unity-sds/unity-management-console/releases/download/0.2.12/managementconsole.zip"
 
 echo "Starting up the management console webapp in the background" >> nightly_output.txt
 echo "Starting up the management console webapp in the background"
 
-ssh -i $SSH_KEY  ubuntu@$IP_ADDRESS "unzip -o managementconsole.zip; cd management-console; nohup ./main webapp &" &
+ssh -i $SSH_KEY ConnectTimeout=10 ubuntu@$IP_ADDRESS "unzip -o managementconsole.zip; cd management-console; nohup ./main webapp &" &
 
 sleep 5
 
