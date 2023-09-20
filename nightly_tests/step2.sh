@@ -26,7 +26,7 @@ ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "wget https://github.com
 echo "Starting up the management console webapp in the background" >> nightly_output.txt
 echo "Starting up the management console webapp in the background"
 
-ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "unzip -o managementconsole.zip; cd management-console; nohup ./main webapp &" &
+ssh -i $SSH_KEY -o ConnectTimeout=10 ubuntu@$IP_ADDRESS "unzip -o managementconsole.zip; cd management-console; ./main webapp > /var/log/management-console.log 2>&1 &" &
 
 sleep 5
 
