@@ -12,7 +12,7 @@ aws cloudformation delete-stack --stack-name ${STACK_NAME}
 STACK_STATUS=""
 
 WAIT_TIME=0
-MAX_WAIT_TIME=300
+MAX_WAIT_TIME=100
 WAIT_BLOCK=20
 
 while [ -z "$STACK_STATUS" ]
