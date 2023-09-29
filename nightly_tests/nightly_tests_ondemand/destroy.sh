@@ -20,7 +20,14 @@ do
     echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
     echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..."
     aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
-    STACK_STATUS=$(cat status.txt |grep 'does not exist')
+    STACK_STATUS=""
+    if [ -s status.txt ]
+    then
+        STACK_STATUS=""
+    else
+        STACK_STATUS="TERMINATED"
+    fi
+
     sleep $WAIT_BLOCK
     WAIT_TIME=$(($WAIT_BLOCK + $WAIT_TIME))
     if [ "$WAIT_TIME" -gt "$MAX_WAIT_TIME" ] 
