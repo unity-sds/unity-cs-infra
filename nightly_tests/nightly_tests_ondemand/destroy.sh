@@ -22,7 +22,7 @@ do
     aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
     STACK_STATUS=$(cat status.txt |grep '"StackStatus": \"TERMINATED\"')
     sleep $WAIT_BLOCK
-    WAIT_TIME+=$WAIT_BLOCK
+    WAIT_TIME=$(($WAIT_BLOCK + $WAIT_TIME))
     if [ "$WAIT_TIME" >= "$MAX_WAIT_TIME" ] 
     then
         echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not terminated after ${MAX_WAIT_TIME} seconds." >> nightly_output.txt
