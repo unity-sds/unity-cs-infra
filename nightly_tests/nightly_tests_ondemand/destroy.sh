@@ -11,16 +11,27 @@ aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
 STACK_STATUS=""
 
+WAIT_TIME=0
+MAX_WAIT_TIME=300
+WAIT_BLOCK=20
+
 while [ -z "$STACK_STATUS" ]
 do
-    echo "Checking Stack Termination [${STACK_NAME}] Status..." >> nightly_output.txt
-    echo "Checking Stack Termination [${STACK_NAME}] Status..."
+    echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
+    echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..."
     aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
-    INSTANCE_STATUS=$(cat status.txt |grep '"StackStatus": \"TERMINATED\"')
-    sleep 10
+    STACK_STATUS=$(cat status.txt |grep '"StackStatus": \"TERMINATED\"')
+    sleep $WAIT_BLOCK
+    WAIT_TIME+=$WAIT_BLOCK
+    if [ "$WAIT_TIME" >= "$MAX_WAIT_TIME" ] 
+    then
+        echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not terminated after ${MAX_WAIT_TIME} seconds." >> nightly_output.txt
+        echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not terminated after ${MAX_WAIT_TIME} seconds."
+        exit
+    fi
 done
 
-echo "Instance [${INSTANCE_ID}] Terminated." >> nightly_output.txt
-echo "Instance [${INSTANCE_ID}] Terminated."
+echo "Cloudformation Stack [${STACK_NAME}] Terminated." >> nightly_output.txt
+echo "Cloudformation Stack [${STACK_NAME}] Terminated."
 
 
