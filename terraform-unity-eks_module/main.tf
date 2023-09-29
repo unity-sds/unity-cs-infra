@@ -38,7 +38,7 @@ variable "tags" {
   type = map(string)
 }
 
-variable "name" {
+variable "deployment_name" {
   type = string
 }
 
@@ -68,7 +68,7 @@ variable "cluster_version" {
 
 locals {
   common_tags = {}
-  cluster_name = var.name
+  cluster_name = var.deployment_name
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   ami = "ami-0e3e9697a56f6ba66"
   ami_map = {
