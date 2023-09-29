@@ -2,29 +2,17 @@
 
 export SSH_KEY="~/.ssh/ucs-nightly.pem"
 
-export SSM_VPC_ID           ="/unity-sds/u-cs/nightly/vpc-id"
-export SSM_PUB_SUBNET1      ="/unity-sds/u-cs/nightly/publicsubnet1"
-export SSM_PUB_SUBNET2      ="/unity-sds/u-cs/nightly/publicsubnet2"
-export SSM_PRIV_SUBNET1     ="/unity-sds/u-cs/nightly/privatesubnet1"
-export SSM_PRIV_SUBNET2     ="/unity-sds/u-cs/nightly/privatesubnet2"
-export SSM_KEYPAIR_NAME     ="/unity-sds/u-cs/nightly/keypairname"
-export SSM_INSTANCE_TYPE    ="/unity-sds/u-cs/nightly/instancetype"
+export SSM_VPC_ID="/unity-sds/u-cs/nightly/vpc-id"
+export SSM_PUB_SUBNET1="/unity-sds/u-cs/nightly/publicsubnet1"
+export SSM_PUB_SUBNET2="/unity-sds/u-cs/nightly/publicsubnet2"
+export SSM_PRIV_SUBNET1="/unity-sds/u-cs/nightly/privatesubnet1"
+export SSM_PRIV_SUBNET2="/unity-sds/u-cs/nightly/privatesubnet2"
+export SSM_KEYPAIR_NAME="/unity-sds/u-cs/nightly/keypairname"
+export SSM_INSTANCE_TYPE="/unity-sds/u-cs/nightly/instancetype"
 export SSM_PRIVILEGED_POLICY="/unity-sds/u-cs/nightly/privelegedpolicyname"
-export SSM_GITHUB_TOKEN     ="/unity-sds/u-cs/nightly/githubtoken"
-export SSM_VENUE            ="/unity-sds/u-cs/nightly/venue"
-
-
-#   --parameters ParameterKey=VPCID,ParameterValue=${VPCID} \
-#     ParameterKey=PublicSubnetID1,ParameterValue=${PublicSubnetID1} \
-#     ParameterKey=PublicSubnetID2,ParameterValue=${PublicSubnetID2} \
-#     ParameterKey=PrivateSubnetID1,ParameterValue=${PrivateSubnetID1} \
-#     ParameterKey=PrivateSubnetID2,ParameterValue=${PrivateSubnetID2} \
-#     ParameterKey=KeyPairName,ParameterValue=${KeyPairName} \
-#     ParameterKey=InstanceType,ParameterValue=${InstanceType} \
-#     ParameterKey=PrivilegedPolicyName,ParameterValue=${PrivilegedPolicyName} \
-#     ParameterKey=GithubToken,ParameterValue=${GithubToken} \
-#     ParameterKey=Venue,ParameterValue=${Venue} \
-
+export SSM_GITHUB_TOKEN="/unity-sds/u-cs/nightly/githubtoken"
+export SSM_VENUE="/unity-sds/u-cs/nightly/venue"
+export STACK_NAME="unity-cs-nightly-management-console"
 
 
 VPCID=$(aws ssm get-parameter                --name ${SSM_VPC_ID}            |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
@@ -38,27 +26,54 @@ PrivilegedPolicyName=$(aws ssm get-parameter --name ${SSM_PRIVILEGED_POLICY} |gr
 GithubToken=$(aws ssm get-parameter          --name ${SSM_GITHUB_TOKEN}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 Venue=$(aws ssm get-parameter                --name ${SSM_VENUE}             |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
-if [ -z "$SUBNET_ID" ]
-then
-    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_SUBNET_ID] exist?"
-    exit
-fi
-
-if [ -z "$INSTANCE_TYPE" ] 
+if [ -z "$VPCID" ] 
 then 
-    echo "ERROR: Could not read Instance Type from SSM.  Does the key [$SSM_INSTANCE_TYPE] exist?"
+    echo "ERROR: Could not read VPC ID from SSM.  Does the key [$SSM_VPC_ID] exist?"
     exit
 fi
-
-if [ -z "$KEYPAIR_NAME" ] 
+if [ -z "$PublicSubnetID1" ]
+then
+    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PUB_SUBNET1] exist?"
+    exit
+fi
+if [ -z "$PublicSubnetID2" ]
+then
+    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PUB_SUBNET2] exist?"
+    exit
+fi
+if [ -z "$PrivateSubnetID1" ]
+then
+    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PRIV_SUBNET1] exist?"
+    exit
+fi
+if [ -z "$PrivateSubnetID2" ]
+then
+    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PRIV_SUBNET2] exist?"
+    exit
+fi
+if [ -z "$KeyPairName" ] 
 then 
     echo "ERROR: Could not read Key Pair Name from SSM.  Does the key [$SSM_KEYPAIR_NAME] exist?"
     exit
 fi
-
-if [ -z "$AMI_ID" ] 
+if [ -z "$InstanceType" ] 
 then 
-    echo "ERROR: Could not read AMI ID from SSM.  Does the key [$SSM_AMI_ID] exist?"
+    echo "ERROR: Could not read Instance Type from SSM.  Does the key [$SSM_INSTANCE_TYPE] exist?"
+    exit
+fi
+if [ -z "$PrivilegedPolicyName" ] 
+then 
+    echo "ERROR: Could not read Privileged Policy Name from SSM.  Does the key [$SSM_PRIVILEGED_POLICY] exist?"
+    exit
+fi
+if [ -z "$GithubToken" ] 
+then 
+    echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?"
+    exit
+fi
+if [ -z "$Venue" ] 
+then 
+    echo "ERROR: Could not read Venue from SSM.  Does the key [$SSM_VENUE] exist?"
     exit
 fi
 
@@ -69,7 +84,7 @@ touch nightly_output.txt
 
 
 aws cloudformation create-stack \
-  --stack-name unity-cs-nightly-management-console \
+  --stack-name ${STACK_NAME} \
   --template-body file://template.yml \
   --capabilities CAPABILITY_IAM \
   --parameters ParameterKey=VPCID,ParameterValue=${VPCID} \
@@ -86,32 +101,42 @@ aws cloudformation create-stack \
 
 
 INSTANCE_ID=$(grep InstanceId output.txt |sed 's/^.*: "//' | sed 's/".*$//')
-echo "INSTANCE_ID=$INSTANCE_ID">NIGHTLY.ENV
+echo "STACK_NAME=$STACK_NAME">NIGHTLY.ENV
 
-echo "Instance ID: $INSTANCE_ID" >> nightly_output.txt
-echo "Instance ID: $INSTANCE_ID"
+echo "Stack Name: $STACK_NAME" >> nightly_output.txt
+echo "Stack Name: $STACK_NAME"
 
 ## Wait for startup
-INSTANCE_STATUS=""
+STACK_STATUS=""
 
-while [ -z "$INSTANCE_STATUS" ]
+WAIT_TIME=0
+MAX_WAIT_TIME=1200
+WAIT_BLOCK=20
+
+while [ -z "$STACK_STATUS" ]
 do
-   echo "Checking Instance [${INSTANCE_ID}] Status..." >> nightly_output.txt
-   echo "Checking Instance [${INSTANCE_ID}] Status..."
-
-   aws ec2 describe-instance-status --instance-id $INSTANCE_ID > status.txt
-   INSTANCE_STATUS=$(cat status.txt |grep '"Status": "ok"')
-   sleep 10
+    echo "Checking Stack Creation [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
+    echo "Checking Stack Creation [${STACK_NAME}] Status after ${WAIT_TIME} seconds..."
+    aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
+    STACK_STATUS=$(cat status.txt |grep '"StackStatus": \"CREATE_COMPLETE\"')
+    sleep $WAIT_BLOCK
+    WAIT_TIME=$(($WAIT_BLOCK + $WAIT_TIME))
+    if [ "$WAIT_TIME" -gt "$MAX_WAIT_TIME" ] 
+    then
+        echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not created after ${MAX_WAIT_TIME} seconds." >> nightly_output.txt
+        echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not created after ${MAX_WAIT_TIME} seconds."
+        exit
+    fi
 done
 
 
 ## This is where some stuff should go
 
 ## Get the information needed to connect to the new instance
-aws ec2 describe-instances --instance-id $INSTANCE_ID > status.txt
-IP_ADDRESS=$(grep PrivateIpAddress status.txt |sed 's/^.*: "//' | sed 's/".*$//' |head -n 1)
-echo "IP_ADDRESS=$IP_ADDRESS">>NIGHTLY.ENV
+#aws ec2 describe-instances --instance-id $INSTANCE_ID > status.txt
+#IP_ADDRESS=$(grep PrivateIpAddress status.txt |sed 's/^.*: "//' | sed 's/".*$//' |head -n 1)
+#echo "IP_ADDRESS=$IP_ADDRESS">>NIGHTLY.ENV
 
-IP_ADDRESS_PUBLIC=$(grep PublicIpAddress status.txt |sed 's/^.*: "//' | sed 's/".*$//' |head -n 1)
-echo "IP_ADDRESS_PUBLIC=$IP_ADDRESS_PUBLIC">>NIGHTLY.ENV
+#IP_ADDRESS_PUBLIC=$(grep PublicIpAddress status.txt |sed 's/^.*: "//' | sed 's/".*$//' |head -n 1)
+#echo "IP_ADDRESS_PUBLIC=$IP_ADDRESS_PUBLIC">>NIGHTLY.ENV
 
