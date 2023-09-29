@@ -166,7 +166,7 @@ resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
 }
 
 resource "aws_ssm_parameter" "node_group_default_name" {
-  name = "/unity/extensions/eks/${var.name}/nodeGroups/default/name"
+  name = "/unity/extensions/eks/${var.deployment_name}/nodeGroups/default/name"
   type = "String"
   # Get name of first nodegroup in nodegroup map variable
   value = keys(var.nodegroups)[0]
