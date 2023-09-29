@@ -1,3 +1,3 @@
 #!/bin/bash
 mkdir $WORKDIR/k8s
-aws eks update-kubeconfig --name $NAME --kubeconfig $WORKDIR/k8s/$NAME.yml
+aws eks update-kubeconfig --name $DISPLAYNAME --kubeconfig $WORKDIR/k8s/$DISPLAYNAME.yml

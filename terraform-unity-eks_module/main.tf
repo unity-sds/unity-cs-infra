@@ -38,7 +38,7 @@ variable "tags" {
   type = map(string)
 }
 
-variable "name" {
+variable "deployment_name" {
   type = string
 }
 
@@ -68,7 +68,7 @@ variable "cluster_version" {
 
 locals {
   common_tags = {}
-  cluster_name = var.name
+  cluster_name = var.deployment_name
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   ami = "ami-0e3e9697a56f6ba66"
   ami_map = {
@@ -166,7 +166,7 @@ resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
 }
 
 resource "aws_ssm_parameter" "node_group_default_name" {
-  name = "/unity/extensions/eks/${var.name}/nodeGroups/default/name"
+  name = "/unity/extensions/eks/${var.deployment_name}/nodeGroups/default/name"
   type = "String"
   # Get name of first nodegroup in nodegroup map variable
   value = keys(var.nodegroups)[0]
