@@ -100,7 +100,6 @@ aws cloudformation create-stack \
   --tags Key=ServiceArea,Value=U-CS
 
 
-INSTANCE_ID=$(grep InstanceId output.txt |sed 's/^.*: "//' | sed 's/".*$//')
 echo "STACK_NAME=$STACK_NAME">NIGHTLY.ENV
 
 echo "Stack Name: $STACK_NAME" >> nightly_output.txt
@@ -115,7 +114,7 @@ WAIT_BLOCK=20
 
 while [ -z "$STACK_STATUS" ]
 do
-    echo "Checking Stack Creation [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
+    #echo "Checking Stack Creation [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
     echo "Checking Stack Creation [${STACK_NAME}] Status after ${WAIT_TIME} seconds..."
     aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
     STACK_STATUS=$(cat status.txt |grep '"StackStatus": \"CREATE_COMPLETE\"')
@@ -129,6 +128,14 @@ do
     fi
 done
 
+echo "Final Stack Status: ${STACK_STATUS}" >> nightly_output.txt
+echo "Final Stack Status: ${STACK_STATUS}"
+
+if [ ! -z "$STACK_STATUS" ]
+then 
+    echo "Stack [${STACK_NAME}] Creation Completed after ${WAIT_TIME} seconds..." >> nightly_output.txt
+    echo "Stack [${STACK_NAME}] Creation Completed after ${WAIT_TIME} seconds..."
+fi
 
 ## This is where some stuff should go
 
