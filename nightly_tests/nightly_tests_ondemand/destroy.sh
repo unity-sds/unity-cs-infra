@@ -17,7 +17,7 @@ WAIT_BLOCK=20
 
 while [ -z "$STACK_STATUS" ]
 do
-    echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
+    #echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
     echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..."
     aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
     STACK_STATUS=""
@@ -38,7 +38,10 @@ do
     fi
 done
 
-echo "Cloudformation Stack [${STACK_NAME}] Terminated." >> nightly_output.txt
-echo "Cloudformation Stack [${STACK_NAME}] Terminated."
+if [ "$STACK_STATUS" == "TERMINATED" ]
+then 
+    echo "Cloudformation Stack [${STACK_NAME}] Terminated after ${WAIT_TIME} seconds" >> nightly_output.txt
+    echo "Cloudformation Stack [${STACK_NAME}] Terminated after ${WAIT_TIME} seconds"
+fi
 
 

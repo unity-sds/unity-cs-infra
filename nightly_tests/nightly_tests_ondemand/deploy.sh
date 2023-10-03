@@ -133,8 +133,8 @@ echo "Final Stack Status: ${STACK_STATUS}"
 
 if [ ! -z "$STACK_STATUS" ]
 then 
-    echo "Stack [${STACK_NAME}] Creation Completed after ${WAIT_TIME} seconds..." >> nightly_output.txt
-    echo "Stack [${STACK_NAME}] Creation Completed after ${WAIT_TIME} seconds..."
+    echo "Stack [${STACK_NAME}] Creation Completed after ${WAIT_TIME} seconds" >> nightly_output.txt
+    echo "Stack [${STACK_NAME}] Creation Completed after ${WAIT_TIME} seconds"
 fi
 
 ## This is where some stuff should go
