@@ -1,11 +1,5 @@
 #!/bin/sh
 
-GITHUB_TOKEN=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
-
-git clone https://${GITHUB_TOKEN}@github.com/unity-sds/cfn-ps-jpl-unity-sds.git
-
-exit 
-
 rm -f nightly_output.txt
 
 bash deploy.sh
