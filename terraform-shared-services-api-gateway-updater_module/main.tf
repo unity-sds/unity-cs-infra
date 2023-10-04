@@ -41,7 +41,7 @@ resource "aws_api_gateway_integration" "sample_rest_api_proxy_resource_method_in
   http_method          = aws_api_gateway_method.sample_rest_api_proxy_resource_method.http_method
   type                 = "HTTP_PROXY"
   uri                  = var.sample_rest_api_integration_uri
-  integration_http_method = "GET"
+  integration_http_method = "ANY"
 
   cache_key_parameters = ["method.request.path.proxy"]
 
