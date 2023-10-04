@@ -8,6 +8,8 @@ data "aws_api_gateway_rest_api" "rest_api" {
 # Creates the project API Gateway resource.
 # DEPLOYER SHOULD MODIFY THE path_part TO BE THE PROJECT NAME (e.g. "soundersips")
 #
+# TODO: move the path_part to a variable in variables.tf
+#
 resource "aws_api_gateway_resource" "sample_rest_api_resource" {
   rest_api_id = data.aws_api_gateway_rest_api.rest_api.id
   parent_id   = data.aws_api_gateway_rest_api.rest_api.root_resource_id
@@ -26,7 +28,7 @@ resource "aws_api_gateway_resource" "sample_rest_api_proxy_resource" {
 resource "aws_api_gateway_method" "sample_rest_api_proxy_resource_method" {
   rest_api_id   = data.aws_api_gateway_rest_api.rest_api.id
   resource_id   = aws_api_gateway_resource.sample_rest_api_proxy_resource.id
-  http_method   = "GET"
+  http_method   = "ANY"
   authorization = "NONE"
   request_parameters = {
     "method.request.path.proxy" = true
