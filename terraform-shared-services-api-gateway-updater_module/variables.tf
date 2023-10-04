@@ -10,6 +10,13 @@ variable "shared_services_rest_api_name" {
   default     = "Unity Shared Services REST API Gateway"
 }
 
+#
+# Overwrite the default value below with the project-level API-Gateway, including the stage.
+# This is the the API Gateway route that automatically gets created by the 
+# Management Console when it boots up for the first time.
+# This represents the main entry point from the shared services API Gateway,
+# into the project-level API Gateway stage.
+#
 variable "sample_rest_api_integration_uri" {
   type = string
   description = "Sample REST API Integration URI"
