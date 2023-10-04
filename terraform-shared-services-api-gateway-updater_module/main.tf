@@ -4,13 +4,19 @@ data "aws_api_gateway_rest_api" "rest_api" {
   name = var.shared_services_rest_api_name
 }
 
-# Sample REST API Proxy
+# 
+# Creates the project API Gateway resource.
+# DEPLOYER SHOULD MODIFY THE path_part TO BE THE PROJECT NAME (e.g. "soundersips")
+#
 resource "aws_api_gateway_resource" "sample_rest_api_resource" {
   rest_api_id = data.aws_api_gateway_rest_api.rest_api.id
   parent_id   = data.aws_api_gateway_rest_api.rest_api.root_resource_id
   path_part   = "sample_rest_api"
 }
 
+#
+# Creates the wildcard path (proxy+) resource, under the project resource 
+#
 resource "aws_api_gateway_resource" "sample_rest_api_proxy_resource" {
   rest_api_id = data.aws_api_gateway_rest_api.rest_api.id
   parent_id   = aws_api_gateway_resource.sample_rest_api_resource.id
