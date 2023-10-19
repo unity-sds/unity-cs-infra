@@ -22,6 +22,7 @@ git pull origin main
 rm -rf cloudformation
 git clone https://oauth2:$GITHUB_TOKEN@github.com/unity-sds/cfn-ps-jpl-unity-sds.git cloudformation
 PWD=$(pwd)
+echo "PWD: $PWD"
 cd cloudformation
 CLOUDFORMATION_HASH=$(git rev-parse --short HEAD)
 cd $PWD
