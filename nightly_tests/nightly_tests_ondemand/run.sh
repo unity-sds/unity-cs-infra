@@ -30,6 +30,10 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
 bash deploy.sh
 #bash step2.sh &
+
+
+exit
+
 #sleep 10
 bash destroy.sh
 
@@ -39,4 +43,4 @@ OUTPUT=$(cat nightly_output.txt)
 
 WEBHOOK_URL="https://hooks.slack.com/workflows/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"
 
-curl -X POST -H 'Content-type: application/json' --data '{"text": "'"${OUTPUT}"'"}' $WEBHOOK_URL
+curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${EF_EVENTS}"'"}' $WEBHOOK_URL
