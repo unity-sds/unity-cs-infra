@@ -77,12 +77,6 @@ then
     exit
 fi
 
-
-
-rm nightly_output.txt
-touch nightly_output.txt
-
-
 aws cloudformation create-stack \
   --stack-name ${STACK_NAME} \
   --template-body file://template.yml \
