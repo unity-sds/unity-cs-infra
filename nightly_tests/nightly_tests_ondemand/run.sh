@@ -3,7 +3,7 @@
 ## Retrieve the github token from SSM
 export SSM_GITHUB_TOKEN="/unity-sds/u-cs/nightly/githubtoken"
 GITHUB_TOKEN=$(aws ssm get-parameter          --name ${SSM_GITHUB_TOKEN}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-if [ -z "$GithubToken" ] 
+if [ -z "$GITHUB_TOKEN" ] 
 then 
     echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?"
     exit
