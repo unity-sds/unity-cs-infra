@@ -19,14 +19,14 @@ echo "Using nightly test repo commit [$NIGHTLY_HASH]" >> nightly_output.txt
 git pull origin main
 
 ## update cloudformation scripts
-rm -rf /temp/cloudformation
-git clone https://oauth2:$GITHUB_TOKEN@github.com/unity-sds/cfn-ps-jpl-unity-sds.git /temp/cloudformation
-cp /temp/cloudformation/templates/unity-mc.main.template.yaml template.yml
+rm -rf cloudformation
+git clone https://oauth2:$GITHUB_TOKEN@github.com/unity-sds/cfn-ps-jpl-unity-sds.git cloudformation
 PWD=$(pwd)
-cd /temp/cloudformation
+cd cloudformation
 CLOUDFORMATION_HASH=$(git rev-parse --short HEAD)
 cd $PWD
 echo "Using cfn-ps-jpl-unity-sds repo commit [$CLOUDFORMATION_HASH]" >> nightly_output.txt
+cp cloudformation/templates/unity-mc.main.template.yaml template.yml
 
 
 exit
