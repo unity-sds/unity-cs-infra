@@ -35,7 +35,6 @@ bash deploy.sh
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
-exit
 
 #sleep 10
 bash destroy.sh
