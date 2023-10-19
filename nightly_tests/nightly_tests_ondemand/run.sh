@@ -28,9 +28,6 @@ echo "Using cfn-ps-jpl-unity-sds repo commit [$CLOUDFORMATION_HASH]" >> nightly_
 cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
 
-exit
-
-
 bash deploy.sh
 #bash step2.sh &
 #sleep 10
