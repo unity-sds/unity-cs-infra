@@ -25,8 +25,9 @@ PWD=$(pwd)
 cd cloudformation
 CLOUDFORMATION_HASH=$(git rev-parse --short HEAD)
 cd $PWD
+echo "PWD: $PWD"
 echo "Using cfn-ps-jpl-unity-sds repo commit [$CLOUDFORMATION_HASH]" >> nightly_output.txt
-cp cloudformation/templates/unity-mc.main.template.yaml template.yml
+cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
 
 exit
