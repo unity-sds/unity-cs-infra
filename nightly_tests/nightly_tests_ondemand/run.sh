@@ -1,4 +1,5 @@
 #!/bin/sh
+export STACK_NAME="unity-cs-nightly-management-console"
 
 ## Retrieve the github token from SSM
 export SSM_GITHUB_TOKEN="/unity-sds/u-cs/nightly/githubtoken"
@@ -11,6 +12,7 @@ fi
 
 
 rm -f nightly_output.txt
+rm -f cloudformation_events.txt
 
 NIGHTLY_HASH=$(git rev-parse --short HEAD)
 echo "Using nightly test repo commit [$NIGHTLY_HASH]" >> nightly_output.txt
@@ -31,6 +33,7 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 bash deploy.sh
 #bash step2.sh &
 
+aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 exit
 
@@ -43,4 +46,6 @@ OUTPUT=$(cat nightly_output.txt)
 
 WEBHOOK_URL="https://hooks.slack.com/workflows/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"
 
-curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${EF_EVENTS}"'"}' $WEBHOOK_URL
+CF_EVENTS=$(cat cloudformation_events.txt)
+
+curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $WEBHOOK_URL
