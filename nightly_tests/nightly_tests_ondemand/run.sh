@@ -36,15 +36,24 @@ bash deploy.sh
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 
-#sleep 10
+
+# sleep 10
 bash destroy.sh
 
-cat nightly_output.txt
+#cat nightly_output.txt
 
 OUTPUT=$(cat nightly_output.txt)
 
 WEBHOOK_URL="https://hooks.slack.com/workflows/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"
 
-CF_EVENTS=$(cat cloudformation_events.txt)
+cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
+
+EVENTS=$(cat CF_EVENTS.txt |grep -v ResourceProperties)
+
+echo "$EVENTS" > CF_EVENTS.txt
+
+cat CF_EVENTS.txt
+
+CF_EVENTS=$(cat CF_EVENTS.txt)
 
 curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $WEBHOOK_URL
