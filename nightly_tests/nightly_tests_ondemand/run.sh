@@ -87,6 +87,9 @@ echo "</testsuites>" >> results.xml
 
 sed -i 's/{TEST_ERRORS}/'${TEST_ERRORS}'/g' results.xml
 sed -i 's/{TEST_SKIPPED}/'${TEST_SKIPPED}'/g' results.xml
+sed -i 's/{TEST_FAILURES}/'${TEST_FAILURES}'/g' results.xml
+sed -i 's/{TEST_TOTAL}/'${TEST_TOTAL}'/g' results.xml
+sed -i 's/{TEST_TIME}/'${TEST_TIME}'/g' results.xml
 
 
 #cat nightly_output.txt
