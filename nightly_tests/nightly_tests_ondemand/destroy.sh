@@ -47,8 +47,8 @@ done
 if [ "$STACK_STATUS" == "TERMINATED" ]
 then 
     #echo"--------------------------------------------------------------------------[PASS]" 
-    echo "Cloudformtion Stack Terminated in ${WAIT_TIME} seconds............................[PASS]" >> nightly_output.txt
-    echo "Cloudformtion Stack Terminated in ${WAIT_TIME} seconds............................[PASS]"
+    echo "Cloudformtion Stack Terminated in ${WAIT_TIME} seconds.............................[PASS]" >> nightly_output.txt
+    echo "Cloudformtion Stack Terminated in ${WAIT_TIME} seconds.............................[PASS]"
 
 fi
 
