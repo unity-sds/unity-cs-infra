@@ -96,8 +96,10 @@ aws cloudformation create-stack \
 
 echo "STACK_NAME=$STACK_NAME">NIGHTLY.ENV
 
-echo "Stack Name: $STACK_NAME" >> nightly_output.txt
-echo "Stack Name: $STACK_NAME"
+#echo"--------------------------------------------------------------------------[PASS]"
+echo "Setting Stack Name........................................................[$STACK_NAME]" >> nightly_output.txt
+echo "Setting Stack Name........................................................[$STACK_NAME]"
+
 
 ## Wait for startup
 STACK_STATUS=""
@@ -109,15 +111,18 @@ WAIT_BLOCK=20
 while [ -z "$STACK_STATUS" ]
 do
     #echo "Checking Stack Creation [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
-    echo "Checking Stack Creation [${STACK_NAME}] Status after ${WAIT_TIME} seconds..."
+    #echo"--------------------------------------------------------------------------[PASS]" 
+    echo "Waiting for Cloudformation Stack..........................................[$WAIT_TIME]"
+
     aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
     STACK_STATUS=$(cat status.txt |grep '"StackStatus": \"CREATE_COMPLETE\"')
     sleep $WAIT_BLOCK
     WAIT_TIME=$(($WAIT_BLOCK + $WAIT_TIME))
     if [ "$WAIT_TIME" -gt "$MAX_WAIT_TIME" ] 
     then
-        echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not created after ${MAX_WAIT_TIME} seconds." >> nightly_output.txt
-        echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not created after ${MAX_WAIT_TIME} seconds."
+        #echo"--------------------------------------------------------------------------[PASS]" 
+        echo "Cloudformation Stack created under $MAX_WAIT_TIME seconds..........................[FAIL]" >> nightly_output.txt
+        echo "Cloudformation Stack created under $MAX_WAIT_TIME seconds..........................[FAIL]"
         exit
     fi
 done
@@ -127,10 +132,16 @@ STACK_STATUS=$(echo "${STACK_STATUS}" |sed 's/^.*: "//' |sed 's/".*//')
 echo "Final Stack Status: ${STACK_STATUS}" >> nightly_output.txt
 echo "Final Stack Status: ${STACK_STATUS}"
 
+#echo"--------------------------------------------------------------------------[PASS]" 
+echo "Final Cloudformation Stack Status.........................................[$STACK_STATUS]" >> nightly_output.txt
+echo "Final Cloudformation Stack Status.........................................[$STACK_STATUS]"
+
+
 if [ ! -z "$STACK_STATUS" ]
 then 
-    echo "Stack [${STACK_NAME}] Creation Completed after ${WAIT_TIME} seconds" >> nightly_output.txt
-    echo "Stack [${STACK_NAME}] Creation Completed after ${WAIT_TIME} seconds"
+    #echo"--------------------------------------------------------------------------[PASS]" 
+    echo "Cloudformtion Stack Completed in ${WAIT_TIME} seconds.............................[PASS]" >> nightly_output.txt
+    echo "Cloudformtion Stack Completed in ${WAIT_TIME} seconds.............................[PASS]"
 fi
 
 ## This is where some stuff should go

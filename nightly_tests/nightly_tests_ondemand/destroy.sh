@@ -5,20 +5,24 @@ source NIGHTLY.ENV
 STACK_NAME=unity-cs-nightly-management-console
 
 ## Shutdown Process
-echo "Terminating cloudformation stack [$STACK_NAME]" >> nightly_output.txt
-echo "Terminating cloudformation stack [$STACK_NAME]" 
+#echo"--------------------------------------------------------------------------[PASS]" 
+echo "Beginning Cloudformation Teardown........................................." >> nightly_output.txt
+echo "Beginning Cloudformation Teardown........................................."
+
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
 STACK_STATUS=""
 
 WAIT_TIME=0
-MAX_WAIT_TIME=1200
+MAX_WAIT_TIME=2400
 WAIT_BLOCK=20
 
 while [ -z "$STACK_STATUS" ]
 do
-    #echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..." >> nightly_output.txt
-    echo "Checking Stack Termination [${STACK_NAME}] Status after ${WAIT_TIME} seconds..."
+
+    #echo"--------------------------------------------------------------------------[PASS]" 
+    echo "Waiting for Cloudformation Stack Termination..............................[$WAIT_TIME]"
+
     aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
     STACK_STATUS=""
     if [ -s status.txt ]
@@ -32,16 +36,20 @@ do
     WAIT_TIME=$(($WAIT_BLOCK + $WAIT_TIME))
     if [ "$WAIT_TIME" -gt "$MAX_WAIT_TIME" ] 
     then
-        echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not terminated after ${MAX_WAIT_TIME} seconds." >> nightly_output.txt
-        echo "ERROR: Cloudformation Stack [${STACK_NAME}] Has not terminated after ${MAX_WAIT_TIME} seconds."
+        #echo"--------------------------------------------------------------------------[PASS]" 
+        echo "Cloudformation Stack destroyed under $MAX_WAIT_TIME seconds.........................[FAIL]" >> nightly_output.txt
+        echo "Cloudformation Stack destroyed under $MAX_WAIT_TIME seconds.........................[FAIL]"
+
         exit
     fi
 done
 
 if [ "$STACK_STATUS" == "TERMINATED" ]
 then 
-    echo "Cloudformation Stack [${STACK_NAME}] Terminated after ${WAIT_TIME} seconds" >> nightly_output.txt
-    echo "Cloudformation Stack [${STACK_NAME}] Terminated after ${WAIT_TIME} seconds"
+    #echo"--------------------------------------------------------------------------[PASS]" 
+    echo "Cloudformtion Stack Terminated in ${WAIT_TIME} seconds............................[PASS]" >> nightly_output.txt
+    echo "Cloudformtion Stack Terminated in ${WAIT_TIME} seconds............................[PASS]"
+
 fi
 
 
