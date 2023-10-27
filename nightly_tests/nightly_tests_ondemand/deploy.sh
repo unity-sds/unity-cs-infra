@@ -140,8 +140,8 @@ echo "Final Cloudformation Stack Status.........................................
 if [ ! -z "$STACK_STATUS" ]
 then 
     #echo"--------------------------------------------------------------------------[PASS]" 
-    echo "Cloudformtion Stack Completed in ${WAIT_TIME} seconds.............................[PASS]" >> nightly_output.txt
-    echo "Cloudformtion Stack Completed in ${WAIT_TIME} seconds.............................[PASS]"
+    echo "Cloudformtion Stack Completed in ${WAIT_TIME} seconds..............................[PASS]" >> nightly_output.txt
+    echo "Cloudformtion Stack Completed in ${WAIT_TIME} seconds..............................[PASS]"
 fi
 
 ## This is where some stuff should go
