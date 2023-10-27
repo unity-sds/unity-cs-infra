@@ -44,7 +44,7 @@ bash deploy.sh
 #bash step2.sh &
 
 
-# aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
+aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 
 # sleep 10
@@ -66,4 +66,4 @@ cat CF_EVENTS.txt
 
 CF_EVENTS=$(cat CF_EVENTS.txt)
 
-#curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $WEBHOOK_URL
+curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $WEBHOOK_URL
