@@ -129,8 +129,8 @@ done
 
 STACK_STATUS=$(echo "${STACK_STATUS}" |sed 's/^.*: "//' |sed 's/".*//')
 
-echo "Final Stack Status: ${STACK_STATUS}" >> nightly_output.txt
-echo "Final Stack Status: ${STACK_STATUS}"
+#echo "Final Stack Status: ${STACK_STATUS}" >> nightly_output.txt
+#echo "Final Stack Status: ${STACK_STATUS}"
 
 #echo"--------------------------------------------------------------------------[PASS]" 
 echo "Final Cloudformation Stack Status.........................................[$STACK_STATUS]" >> nightly_output.txt
