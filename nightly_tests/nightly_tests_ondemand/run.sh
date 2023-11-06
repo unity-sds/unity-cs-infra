@@ -46,8 +46,6 @@ echo "Retrieving Cloudformation Repo Hash.......................................
 cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
 
-
-
 bash deploy.sh
 #bash step2.sh &
 
@@ -56,15 +54,14 @@ aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudform
 
 # run selenium test on management console
 export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
-echo "$MC_USERNAME"
-echo "$MC_PASSWORD"
-echo "$MANAGEMENT_CONSOLE_URL"
 
 sudo docker pull selenium/standalone-chrome
-sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
+CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
 sleep 10
 
-python3 selenium_test.py > nightly_output.txt
+python3 selenium_test_management_console.py > nightly_output.txt
+
+sudo docker stop $CONTAINER_ID
 # sleep 10
 # bash destroy.sh
 # 
