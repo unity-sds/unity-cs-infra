@@ -34,42 +34,33 @@ def navigate_to_url_with_cred(driver, url_with_cred, url_without_cred, image_dir
 
 # Function to test login
 def test_login(driver, image_dir):
-    try:
-        screenshot_path = os.path.join(image_dir, 'screenshot_after_login.png')
-        driver.save_screenshot(screenshot_path)
-        assert driver.current_url.endswith('/ui/landing'), "Navigation to home page failed"
-        assert driver.title == 'Unity Management Console', "The page title should be Unity Management Console"
-        print("Login Test: PASSED")
-    except AssertionError as e:
-        print(f"Login Test: FAILED - {e}")
+    screenshot_path = os.path.join(image_dir, 'screenshot_after_login.png')
+    driver.save_screenshot(screenshot_path)
+    assert driver.current_url.endswith('/ui/landing'), "Navigation to home page failed"
+    assert driver.title == 'Unity Management Console', "The page title should be Unity Management Console"
+    print("Login Test: PASSED")
 
 # Function to test clicking the Go! button
 def test_click_go_button(driver, image_dir):
-    try:
-        go_button = driver.find_element(By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]')
-        go_button.click()
-        time.sleep(1)  # Wait for the page to load
-        
-        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
-        driver.save_screenshot(screenshot_path)
-        assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
-        print("Click Go Button Test: PASSED")
-    except AssertionError as e:
-        print(f"Click Go Button Test: FAILED - {e}")
+    go_button = driver.find_element(By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]')
+    go_button.click()
+    time.sleep(1)  # Wait for the page to load
+
+    screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
+    driver.save_screenshot(screenshot_path)
+    assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
+    print("Click Go Button Test: PASSED")
 
 # Function to test logout
 def test_logout(driver, image_dir):
-    try:
-        logout_button = driver.find_element(By.CSS_SELECTOR, 'a.nav-link[href="/logout"]')
-        logout_button.click()
-        time.sleep(20)  # Wait for the page to load
+    logout_button = driver.find_element(By.CSS_SELECTOR, 'a.nav-link[href="/logout"]')
+    logout_button.click()
+    time.sleep(20)  # Wait for the page to load
 
-        screenshot_path = os.path.join(image_dir, 'screenshot_after_logout.png')
-        driver.save_screenshot(screenshot_path)
-        assert driver.current_url.endswith('/logout'), "Logout failed"
-        print("Logout Test: PASSED")
-    except AssertionError as e:
-        print(f"Logout Test: FAILED - {e}")
+    screenshot_path = os.path.join(image_dir, 'screenshot_after_logout.png')
+    driver.save_screenshot(screenshot_path)
+    assert driver.current_url.endswith('/logout'), "Logout failed"
+    print("Logout Test: PASSED")
 
 # Main execution
 if __name__ == '__main__':
@@ -90,20 +81,18 @@ if __name__ == '__main__':
     # Create driver
     driver = create_driver()
 
-    try:
-        print("Navigating to URLs...")
-        navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR)
-        
-        print("Testing Login...")
-        test_login(driver, IMAGE_DIR)
-        
-        print("Testing Click Go Button...")
-        test_click_go_button(driver, IMAGE_DIR)
-        
-        print("Testing Logout...")
-        test_logout(driver, IMAGE_DIR)
-    except Exception as e:
-        print(f"An error occurred: {e}")
-    finally:
-        # Quit the driver after the test
-        driver.quit()
+    # Run the tests
+    print("Navigating to URLs...")
+    navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR)
+    
+    print("Testing Login...")
+    test_login(driver, IMAGE_DIR)
+    
+    print("Testing Click Go Button...")
+    test_click_go_button(driver, IMAGE_DIR)
+    
+    print("Testing Logout...")
+    test_logout(driver, IMAGE_DIR)
+
+    # Quit the driver after the test
+    driver.quit()
