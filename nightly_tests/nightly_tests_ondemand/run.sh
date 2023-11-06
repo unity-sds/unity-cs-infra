@@ -64,7 +64,7 @@ sudo docker pull selenium/standalone-chrome
 sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
 sleep 10
 
-python3 selenium_test_management_console.py 
+python3 selenium_test.py > nightly_output.txt
 # sleep 10
 # bash destroy.sh
 # 
