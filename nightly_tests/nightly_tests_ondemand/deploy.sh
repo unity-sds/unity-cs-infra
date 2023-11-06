@@ -13,8 +13,7 @@ export SSM_PRIVILEGED_POLICY="/unity-sds/u-cs/nightly/privilegedpolicyname"
 export SSM_GITHUB_TOKEN="/unity-sds/u-cs/nightly/githubtoken"
 export SSM_VENUE="/unity-sds/u-cs/nightly/venue"
 export STACK_NAME="unity-cs-nightly-management-console"
-export MC_USERNAME="/unity/ci/mc_username"
-export MC_PASSWORD="/unity/ci/mc_password"
+
 
 VPCID=$(aws ssm get-parameter                --name ${SSM_VPC_ID}            |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 PublicSubnetID1=$(aws ssm get-parameter      --name ${SSM_PUB_SUBNET1}       |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
