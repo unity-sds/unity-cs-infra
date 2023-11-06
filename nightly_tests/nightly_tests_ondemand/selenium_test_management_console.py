@@ -62,7 +62,7 @@ def test_logout(driver, image_dir):
     try:
         logout_button = driver.find_element(By.CSS_SELECTOR, 'a.nav-link[href="/logout"]')
         logout_button.click()
-        time.sleep(8)  # Wait for the page to load
+        time.sleep(20)  # Wait for the page to load
 
         screenshot_path = os.path.join(image_dir, 'screenshot_after_logout.png')
         driver.save_screenshot(screenshot_path)
