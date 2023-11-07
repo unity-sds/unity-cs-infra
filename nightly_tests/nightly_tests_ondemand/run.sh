@@ -56,12 +56,10 @@ aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudform
 export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
 
 sudo docker pull selenium/standalone-chrome
-CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
+sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
 sleep 10
 
-python3 selenium_test_management_console.py > nightly_output.txt
-
-sudo docker stop $CONTAINER_ID
+python3 selenium_test_management_console.py 
 # sleep 10
 # bash destroy.sh
 # 
