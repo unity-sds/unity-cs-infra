@@ -37,6 +37,7 @@ do
     if [ "$WAIT_TIME" -gt "$MAX_WAIT_TIME" ] 
     then
         #echo"--------------------------------------------------------------------------[PASS]" 
+        echo ""
         echo "Stack teardown exceeded ${MAX_WAIT_TIME} seconds - [FAIL]" >> nightly_output.txt
         echo "Stack teardown exceeded ${MAX_WAIT_TIME} seconds - [FAIL]"
 
