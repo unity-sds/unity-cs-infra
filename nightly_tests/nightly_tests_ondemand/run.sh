@@ -49,7 +49,6 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 bash deploy.sh
 #bash step2.sh &
 
-
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 # run selenium test on management console
@@ -57,13 +56,14 @@ export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name 
 
 sudo docker pull selenium/standalone-chrome
 echo "starting docker"
-sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
+CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
 
 sleep 10
 echo "starting script"
 
-python3 selenium_test_management_console.py
+python3 selenium_test_management_console.py >> nightly_output.txt
 
+docker stop $CONTAINER_ID
 # sleep 10
 # bash destroy.sh
 # 
