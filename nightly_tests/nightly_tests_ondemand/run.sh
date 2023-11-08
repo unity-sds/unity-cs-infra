@@ -26,8 +26,8 @@ rm -f cloudformation_events.txt
 NIGHTLY_HASH=$(git rev-parse --short HEAD)
 #echo "Using nightly test repo commit [$NIGHTLY_HASH]" >> nightly_output.txt
 #echo"--------------------------------------------------------------------------[PASS]"
-echo "Retrieving Nightly Test Repo Hash.........................................[$NIGHTLY_HASH]" >> nightly_output.txt
-echo "Retrieving Nightly Test Repo Hash.........................................[$NIGHTLY_HASH]"
+echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]" >> nightly_output.txt
+echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
 
 ## update self
 git pull origin main
@@ -40,8 +40,8 @@ CLOUDFORMATION_HASH=$(git rev-parse --short HEAD)
 cd ..
 #echo "Using cfn-ps-jpl-unity-sds repo commit [$CLOUDFORMATION_HASH]" >> nightly_output.txt
 #echo"--------------------------------------------------------------------------[PASS]"
-echo "Retrieving Cloudformation Repo Hash.......................................[$CLOUDFORMATION_HASH]" >> nightly_output.txt
-echo "Retrieving Cloudformation Repo Hash.......................................[$CLOUDFORMATION_HASH]"
+echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]" >> nightly_output.txt
+echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
 
 cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
