@@ -26,8 +26,14 @@ def create_driver():
 def navigate_to_url_with_cred(driver, url_with_cred, url_without_cred, image_dir):
     driver.get(url_with_cred)
     driver.get(url_without_cred)
-    time.sleep(1)  # Wait for the page to load
+    time.sleep(2)  # Wait for the page to load
 
+    try:
+        assert driver.current_url == url_without_cred, "URL does not match the expected URL without credentials"
+        results.append({'name': 'Navigate to URL', 'status': 'PASSED'})
+    except AssertionError as e:
+        results.append({'name': 'Navigate to URL', 'status': f'FAILED - {e}'})
+        
     # Create directory for images if it doesn't exist
     if not os.path.exists(image_dir):
         os.makedirs(image_dir)
@@ -67,9 +73,9 @@ def test_click_go_button(driver, image_dir, results):
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
         assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
-        results.append({'name': 'Click Go Button', 'status': 'PASSED'})
+        results.append({'name': 'Click Core Management Btn', 'status': 'PASSED'})
     except AssertionError as e:
-        results.append({'name': 'Click Go Button', 'status': f'FAILED - {e}'})
+        results.append({'name': 'Click Core Management Btn', 'status': f'FAILED - {e}'})
 
 # Main execution
 if __name__ == '__main__':
@@ -94,7 +100,6 @@ if __name__ == '__main__':
     driver = create_driver()
 
     # Run the tests
-    print("Navigating to URLs...")
     navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR)
     
     test_login(driver, IMAGE_DIR, test_results)
