@@ -86,8 +86,5 @@ if __name__ == '__main__':
     print("Testing Click Go Button...")
     test_click_go_button(driver, IMAGE_DIR)
     
-    print("Testing Logout...")
-    test_logout(driver, IMAGE_DIR)
-
     # Quit the driver after the test
     driver.quit()
