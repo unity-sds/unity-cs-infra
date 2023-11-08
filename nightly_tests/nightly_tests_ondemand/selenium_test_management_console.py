@@ -23,7 +23,7 @@ def create_driver():
     return driver
 
 # Function to navigate to the management console URL with credentials
-def navigate_to_url_with_cred(driver, url_with_cred, url_without_cred, image_dir):
+def navigate_to_url_with_cred(driver, url_with_cred, url_without_cred, image_dir, results):
     driver.get(url_with_cred)
     driver.get(url_without_cred)
     time.sleep(2)  # Wait for the page to load
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     driver = create_driver()
 
     # Run the tests
-    navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR)
+    navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
     
     test_login(driver, IMAGE_DIR, test_results)
     test_click_go_button(driver, IMAGE_DIR, test_results)
