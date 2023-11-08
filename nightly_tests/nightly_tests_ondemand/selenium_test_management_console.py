@@ -65,8 +65,6 @@ def test_logout(driver, image_dir):
         logout_button.click()
         time.sleep(20)  # Wait for the page to load
 
-        screenshot_path = os.path.join(image_dir, 'screenshot_after_logout.png')
-        driver.save_screenshot(screenshot_path)
         assert driver.current_url.endswith('/logout'), "Logout failed"
         print("Logout Test: PASSED")
     except AssertionError as e:
