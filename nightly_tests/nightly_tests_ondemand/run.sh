@@ -63,7 +63,7 @@ echo "starting script"
 
 python3 selenium_test_management_console.py >> nightly_output.txt
 
-docker stop $CONTAINER_ID
+sudo docker stop $CONTAINER_ID
 # sleep 10
 # bash destroy.sh
 # 
