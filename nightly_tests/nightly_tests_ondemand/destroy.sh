@@ -6,8 +6,8 @@ STACK_NAME=unity-cs-nightly-management-console
 
 ## Shutdown Process
 #echo"--------------------------------------------------------------------------[PASS]" 
-echo "Beginning Cloudformation Teardown........................................." >> nightly_output.txt
-echo "Beginning Cloudformation Teardown........................................."
+echo "Initiating Cloudformation Teardown..." >> nightly_output.txt
+echo "Initiating Cloudformation Teardown..."
 
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
@@ -37,8 +37,8 @@ do
     if [ "$WAIT_TIME" -gt "$MAX_WAIT_TIME" ] 
     then
         #echo"--------------------------------------------------------------------------[PASS]" 
-        echo "Cloudformation Stack destroyed under $MAX_WAIT_TIME seconds.........................[FAIL]" >> nightly_output.txt
-        echo "Cloudformation Stack destroyed under $MAX_WAIT_TIME seconds.........................[FAIL]"
+        echo "Stack teardown exceeded ${MAX_WAIT_TIME} seconds - [FAIL]" >> nightly_output.txt
+        echo "Stack teardown exceeded ${MAX_WAIT_TIME} seconds - [FAIL]"
 
         exit
     fi
@@ -47,8 +47,8 @@ done
 if [ "$STACK_STATUS" == "TERMINATED" ]
 then 
     #echo"--------------------------------------------------------------------------[PASS]" 
-    echo "Cloudformtion Stack Terminated in ${WAIT_TIME} seconds.............................[PASS]" >> nightly_output.txt
-    echo "Cloudformtion Stack Terminated in ${WAIT_TIME} seconds.............................[PASS]"
+    echo "Stack Teardown: Completed in ${WAIT_TIME}s - [PASS]" >> nightly_output.txt
+    echo "Stack Teardown: Completed in ${WAIT_TIME}s - [PASS]"
 
 fi
 
