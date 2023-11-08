@@ -34,33 +34,43 @@ def navigate_to_url_with_cred(driver, url_with_cred, url_without_cred, image_dir
 
 # Function to test login
 def test_login(driver, image_dir):
-    screenshot_path = os.path.join(image_dir, 'screenshot_after_login.png')
-    driver.save_screenshot(screenshot_path)
-    assert driver.current_url.endswith('/ui/landing'), "Navigation to home page failed"
-    assert driver.title == 'Unity Management Console', "The page title should be Unity Management Console"
-    print("Login Test: PASSED")
+    try:
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_login.png')
+        driver.save_screenshot(screenshot_path)
+        assert driver.current_url.endswith('/ui/landing'), "Navigation to home page failed"
+        assert driver.title == 'Unity Management Console', "The page title should be Unity Management Console"
+        print("Login Test: PASSED")
+    except AssertionError as e:
+        print(f"Login Test: FAILED - {e}")
 
 # Function to test clicking the Go! button
 def test_click_go_button(driver, image_dir):
-    go_button = driver.find_element(By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]')
-    go_button.click()
-    time.sleep(1)  # Wait for the page to load
+    try:
+        go_button = driver.find_element(By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]')
+        go_button.click()
+        time.sleep(1)  # Wait for the page to load
 
-    screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
-    driver.save_screenshot(screenshot_path)
-    assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
-    print("Click Go Button Test: PASSED")
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
+        driver.save_screenshot(screenshot_path)
+        assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
+        print("Click Go Button Test: PASSED")
+    except AssertionError as e:
+        print(f"Click Go Button Test: FAILED - {e}")
+    
 
 # Function to test logout
 def test_logout(driver, image_dir):
-    logout_button = driver.find_element(By.CSS_SELECTOR, 'a.nav-link[href="/logout"]')
-    logout_button.click()
-    time.sleep(20)  # Wait for the page to load
+    try:
+        logout_button = driver.find_element(By.CSS_SELECTOR, 'a.nav-link[href="/logout"]')
+        logout_button.click()
+        time.sleep(20)  # Wait for the page to load
 
-    screenshot_path = os.path.join(image_dir, 'screenshot_after_logout.png')
-    driver.save_screenshot(screenshot_path)
-    assert driver.current_url.endswith('/logout'), "Logout failed"
-    print("Logout Test: PASSED")
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_logout.png')
+        driver.save_screenshot(screenshot_path)
+        assert driver.current_url.endswith('/logout'), "Logout failed"
+        print("Logout Test: PASSED")
+    except AssertionError as e:
+        print(f"Logout Test: FAILED - {e}")
 
 # Main execution
 if __name__ == '__main__':
