@@ -56,28 +56,27 @@ export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name 
 
 sudo docker pull selenium/standalone-chrome
 CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
-
 sleep 10
 
 python3 selenium_test_management_console.py >> nightly_output.txt
-
 sudo docker stop $CONTAINER_ID
-# sleep 10
-# bash destroy.sh
-# 
-# #cat nightly_output.txt
-# 
-# OUTPUT=$(cat nightly_output.txt)
-# 
-# 
-# cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
-# 
-# EVENTS=$(cat CF_EVENTS.txt |grep -v ResourceProperties)
-# 
-# echo "$EVENTS" > CF_EVENTS.txt
-# 
-# cat CF_EVENTS.txt
-# 
-# CF_EVENTS=$(cat CF_EVENTS.txt)
-# 
-# curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
+
+sleep 10
+bash destroy.sh
+
+#cat nightly_output.txt
+
+OUTPUT=$(cat nightly_output.txt)
+
+
+cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
+ 
+EVENTS=$(cat CF_EVENTS.txt |grep -v ResourceProperties)
+
+echo "$EVENTS" > CF_EVENTS.txt
+
+cat CF_EVENTS.txt
+
+CF_EVENTS=$(cat CF_EVENTS.txt)
+
+curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
