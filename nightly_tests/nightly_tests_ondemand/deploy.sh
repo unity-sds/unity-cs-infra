@@ -97,8 +97,8 @@ aws cloudformation create-stack \
 echo "STACK_NAME=$STACK_NAME">NIGHTLY.ENV
 
 #echo"--------------------------------------------------------------------------[PASS]"
-echo "Setting Stack Name........................................................[$STACK_NAME]" >> nightly_output.txt
-echo "Setting Stack Name........................................................[$STACK_NAME]"
+echo "Stack Name: [$STACK_NAME]" >> nightly_output.txt
+echo "Stack Name: [$STACK_NAME]"
 
 
 ## Wait for startup
@@ -121,8 +121,8 @@ do
     if [ "$WAIT_TIME" -gt "$MAX_WAIT_TIME" ] 
     then
         #echo"--------------------------------------------------------------------------[PASS]" 
-        echo "Cloudformation Stack created under $MAX_WAIT_TIME seconds..........................[FAIL]" >> nightly_output.txt
-        echo "Cloudformation Stack created under $MAX_WAIT_TIME seconds..........................[FAIL]"
+        echo "Cloudformation Stack creation exceeded ${MAX_WAIT_TIME} seconds - [FAIL]" >> nightly_output.txt
+        echo "Cloudformation Stack creation exceeded ${MAX_WAIT_TIME} seconds - [FAIL]"
         exit
     fi
 done
@@ -133,15 +133,15 @@ STACK_STATUS=$(echo "${STACK_STATUS}" |sed 's/^.*: "//' |sed 's/".*//')
 #echo "Final Stack Status: ${STACK_STATUS}"
 
 #echo"--------------------------------------------------------------------------[PASS]" 
-echo "Final Cloudformation Stack Status.........................................[$STACK_STATUS]" >> nightly_output.txt
-echo "Final Cloudformation Stack Status.........................................[$STACK_STATUS]"
+echo "Stack Status (Final): [$STACK_STATUS]" >> nightly_output.txt
+echo "Stack Status (Final): [$STACK_STATUS]"
 
 
 if [ ! -z "$STACK_STATUS" ]
 then 
     #echo"--------------------------------------------------------------------------[PASS]" 
-    echo "Cloudformtion Stack Completed in ${WAIT_TIME} seconds..............................[PASS]" >> nightly_output.txt
-    echo "Cloudformtion Stack Completed in ${WAIT_TIME} seconds..............................[PASS]"
+    echo "Stack Creation Time: [${WAIT_TIME} seconds] - PASS" >> nightly_output.txt
+    echo "Stack Creation Time: [${WAIT_TIME} seconds] - PASS"
 fi
 
 ## This is where some stuff should go
