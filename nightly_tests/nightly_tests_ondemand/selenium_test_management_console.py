@@ -66,9 +66,12 @@ def test_login(driver, image_dir, results):
 # Function to test clicking the Go! button
 def test_click_go_button(driver, image_dir, results):
     try:
-        go_button = driver.find_element(By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]')
+        go_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
+        )
         go_button.click()
-        time.sleep(1)  # Wait for the page to load
+
+        WebDriverWait(driver, 10).until(EC.url_contains('/ui/setup')) 
 
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
