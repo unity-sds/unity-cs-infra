@@ -122,6 +122,22 @@ def core_management_setup_venue(driver, image_dir, results, text):
 
     except AssertionError as e:
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
+        
+def core_management_setup_save_btn(driver, image_dir, results):
+    test_name = 'Save Button'
+    try:
+        save_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[@type='submit'][contains(@class, 'st-button large mt-5')]"))
+        )
+        save_button.click()
+
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_save_button.png')
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+
+    except Exception as e:
+        results.append({'name': test_name, 'status': f'FAILED - {e}'})
 
 # Main execution
 if __name__ == '__main__':
@@ -152,6 +168,7 @@ if __name__ == '__main__':
     test_click_go_button(driver, IMAGE_DIR, test_results)
     core_management_setup_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
     core_management_setup_venue(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
+    core_management_setup_save_btn(click_save_button(driver, IMAGE_DIR, test_results)
     # Print the results in a table
     print_table(test_results)
     
