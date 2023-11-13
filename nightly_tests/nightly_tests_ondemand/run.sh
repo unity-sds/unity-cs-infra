@@ -1,6 +1,6 @@
 #!/bin/sh
 export STACK_NAME="unity-cs-nightly-management-console"
-
+TODAYS_DATE=$(date +%F)
 ## Retrieve the github token from SSM
 export SSM_GITHUB_TOKEN="/unity-sds/u-cs/nightly/githubtoken"
 export SSM_MC_USERNAME="/unity/ci/mc_username"
@@ -60,6 +60,16 @@ sleep 10
 
 python3 selenium_test_management_console.py >> nightly_output.txt
 sudo docker stop $CONTAINER_ID
+
+mv nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
+
+# git config --global user.email "<EMAIL>"
+# git config --global user.name "<GITHUB_USERNAME>"
+# git add "nightly_output_$TODAYS_DATE.txt"
+# git commit -m "Add nightly output for $TODAYS_DATE"
+# git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/<USERNAME>/<GITHUB_REPPO.git
+# git push origin main
+
 
 sleep 10
 bash destroy.sh
