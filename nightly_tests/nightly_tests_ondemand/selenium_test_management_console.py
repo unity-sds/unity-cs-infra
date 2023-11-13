@@ -138,6 +138,27 @@ def core_management_setup_save_btn(driver, image_dir, results):
 
     except Exception as e:
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
+        
+def go_back_and_click_go_button(driver, image_dir, results):
+    test_name = 'Go Back and Click Go Button'
+    try:
+        driver.back()
+
+        go_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
+        )
+
+        go_button.click()
+
+        # Take a screenshot for confirmation
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+
+    except Exception as e:
+        # Append a failed result
+        results.append({'name': test_name, 'status': f'FAILED - {e}'})
 
 # Main execution
 if __name__ == '__main__':
