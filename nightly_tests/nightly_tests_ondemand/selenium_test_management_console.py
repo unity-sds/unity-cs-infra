@@ -83,7 +83,7 @@ def test_click_go_button(driver, image_dir, results):
         results.append({'name': 'Click Core Management Btn', 'status': f'FAILED - {e}'})
         
 def core_management_setup_name(driver, image_dir, results, text):
-    test_name = 'Project Name'
+    test_name = 'Enter Project Name'
     try:
         text_box = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, "project"))
@@ -103,7 +103,7 @@ def core_management_setup_name(driver, image_dir, results, text):
     except AssertionError as e:
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
 def core_management_setup_venue(driver, image_dir, results, text):
-    test_name = 'Project Name'
+    test_name = 'Enter Project Venue '
     try:
         text_box = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, "venue"))
