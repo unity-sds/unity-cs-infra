@@ -82,11 +82,31 @@ def test_click_go_button(driver, image_dir, results):
     except AssertionError as e:
         results.append({'name': 'Click Core Management Btn', 'status': f'FAILED - {e}'})
         
-def input_text_in_textbox(driver, image_dir, results, text):
+def core_management_setup_name(driver, image_dir, results, text):
     test_name = 'Project Name'
     try:
         text_box = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, "project"))
+        )
+        assert text_box is not None, "Textbox not found."
+
+        text_box.clear()
+        text_box.send_keys(text)
+
+        assert text_box.get_attribute('value') == text, "Text not correctly entered."
+
+        screenshot_path = os.path.join(image_dir, f'screenshot_after_input_{text}.png')
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+
+    except AssertionError as e:
+        results.append({'name': test_name, 'status': f'FAILED - {e}'})
+def core_management_setup_venue(driver, image_dir, results, text):
+    test_name = 'Project Name'
+    try:
+        text_box = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, "venue"))
         )
         assert text_box is not None, "Textbox not found."
 
@@ -130,7 +150,8 @@ if __name__ == '__main__':
     
     test_login(driver, IMAGE_DIR, test_results)
     test_click_go_button(driver, IMAGE_DIR, test_results)
-    input_text_in_textbox(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
+    core_management_setup_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
+    core_management_setup_venue(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
     # Print the results in a table
     print_table(test_results)
     
