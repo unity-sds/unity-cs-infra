@@ -168,7 +168,7 @@ if __name__ == '__main__':
     test_click_go_button(driver, IMAGE_DIR, test_results)
     core_management_setup_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
     core_management_setup_venue(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
-    core_management_setup_save_btn(click_save_button(driver, IMAGE_DIR, test_results)
+    core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
     # Print the results in a table
     print_table(test_results)
     
