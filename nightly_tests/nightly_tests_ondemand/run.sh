@@ -66,6 +66,7 @@ mv nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
 # git config --global user.email "<EMAIL>"
 # git config --global user.name "<GITHUB_USERNAME>"
 # git add "nightly_output_$TODAYS_DATE.txt"
+# git add /selenium_unity_images/*
 # git commit -m "Add nightly output for $TODAYS_DATE"
 # git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/<USERNAME>/<GITHUB_REPPO.git
 # git push origin main
