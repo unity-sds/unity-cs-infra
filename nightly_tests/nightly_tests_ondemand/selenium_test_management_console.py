@@ -139,16 +139,18 @@ def core_management_setup_save_btn(driver, image_dir, results):
     except Exception as e:
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
         
-def go_back_and_click_go_button(driver, image_dir, results):
-    test_name = 'Go Back and Click Go Button'
+def go_back_and_goto_marketplace(driver, image_dir, results):
+    test_name = 'Go Back and Go To Market'
     try:
         driver.back()
 
         go_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
         )
-
         go_button.click()
+
+        WebDriverWait(driver, 10).until(EC.url_contains('/ui/marketplace'))
+        assert driver.current_url.endswith('/ui/marketplace'), "URL does not end with '/ui/marketplace'"
 
         # Take a screenshot for confirmation
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
@@ -157,7 +159,7 @@ def go_back_and_click_go_button(driver, image_dir, results):
         results.append({'name': test_name, 'status': 'PASSED'})
 
     except Exception as e:
-        # Append a failed result
+        # Append a failed result with the exception message
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
         
 def grab_terminal_output(driver, element_selector, results):
@@ -207,7 +209,8 @@ if __name__ == '__main__':
     core_management_setup_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
     core_management_setup_venue(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
     core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
-    terminal_output = grab_terminal_output(driver, ".terminal", test_results)
+    grab_terminal_output(driver, ".terminal", test_results)
+    go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results)
     # Print the results in a table
     print_table(test_results)
     
