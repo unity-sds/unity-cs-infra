@@ -159,7 +159,24 @@ def go_back_and_click_go_button(driver, image_dir, results):
     except Exception as e:
         # Append a failed result
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
+        
+def grab_terminal_output(driver, element_selector, results):
+    try:
+        terminal_output_element = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
+        )
+        assert terminal_output_element is not None, "Terminal output element not found."
 
+        lines = terminal_output_element.find_elements(By.TAG_NAME, 'div')
+        output_text = "\n".join([line.text for line in lines])
+
+        if "success" in output_text.lower():
+            results.append({'name': 'Terminal Output', 'status': 'PASSED'})
+        else:
+            results.append({'name': 'Terminal Output', 'status': 'FAILED - Success not found in terminal output'})
+
+        return output_text
+        
 # Main execution
 if __name__ == '__main__':
     IMAGE_DIR = 'selenium_unity_images'
@@ -182,7 +199,7 @@ if __name__ == '__main__':
     # Create driver
     driver = create_driver()
 
-    # Run the tests
+   # Run the tests
     navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
     
     test_login(driver, IMAGE_DIR, test_results)
@@ -190,6 +207,7 @@ if __name__ == '__main__':
     core_management_setup_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
     core_management_setup_venue(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
     core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
+    terminal_output = grab_terminal_output(driver, ".terminal", test_results)
     # Print the results in a table
     print_table(test_results)
     
