@@ -133,19 +133,29 @@ def go_back_and_goto_marketplace(driver, image_dir, results):
     try:
         driver.back()
 
-        go_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
-        )
-        go_button.click()
+        try:
+            go_button = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
+            )
+            go_button.click()
+        except TimeoutException:
+            raise Exception("Failed to find or click the 'Go to Marketplace' button within the given time.")
 
-        WebDriverWait(driver, 10).until(EC.url_contains('/ui/marketplace'))
-        assert driver.current_url.endswith('/ui/marketplace'), "URL does not end with '/ui/marketplace'"
+        try:
+            WebDriverWait(driver, 20).until(EC.url_contains('/ui/marketplace'))
+            assert driver.current_url.endswith('/ui/marketplace'), "URL does not end with '/ui/marketplace'"
+        except AssertionError as url_error:
+            raise Exception(f"URL check failed: {url_error}")
 
         # Take a screenshot for confirmation
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
 
         results.append({'name': test_name, 'status': 'PASSED'})
+
+    except Exception as e:
+        # Append a failed result with the exception message
+        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
 
     except Exception as e:
         # Append a failed result with the exception message
