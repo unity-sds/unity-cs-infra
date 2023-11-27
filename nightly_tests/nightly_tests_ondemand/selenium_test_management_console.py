@@ -172,14 +172,6 @@ def go_back_and_goto_marketplace(driver, image_dir, results):
         print("Test failed.")
 
 
-
-    except Exception as e:
-        # Append a failed result with the exception message
-        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
-
-    except Exception as e:
-        # Append a failed result with the exception message
-        results.append({'name': test_name, 'status': f'FAILED - {e}'})
         
 def grab_terminal_output(driver, element_selector, results):
     try:
