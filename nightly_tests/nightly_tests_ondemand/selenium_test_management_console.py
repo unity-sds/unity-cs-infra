@@ -227,6 +227,29 @@ def unity_management_setup(driver, image_dir, results, text, element_id):
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
         print(str(e))
 
+def click_button(driver, image_dir, results, button_class):
+    test_name = f'Next Button'
+    try:
+        # Find and click the button
+        button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+        )
+        button.click()
+
+        # Generate a screenshot name based on the button class
+        screenshot_name = f'click_{button_class.replace(" ", "_").replace(".", "_")}.png'
+        screenshot_path = os.path.join(image_dir, screenshot_name)
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+    except TimeoutException:
+        error_message = f"Button with class '{button_class}' not found or not clickable within the given time."
+        results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
+        print(error_message)
+    except AssertionError as e:
+        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
+        print(str(e))
+
 # Main execution
 if __name__ == '__main__':
     IMAGE_DIR = 'selenium_unity_images'
@@ -262,6 +285,7 @@ if __name__ == '__main__':
     install_eks(driver, IMAGE_DIR, test_results)
     unity_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
     unity_management_setup(driver, IMAGE_DIR, test_results, "main", "branch")
+    click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
     # Print the results in a table
     print_table(test_results)
     
