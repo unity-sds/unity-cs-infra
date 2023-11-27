@@ -91,13 +91,13 @@ sudo docker stop $CONTAINER_ID
 
 mv nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
 
-git config --global user.email "smolensk@jpl.nasa.gov"
-git config --global user.name "jonathansmolenski "
-git add "nightly_output_$TODAYS_DATE.txt"
-git add /selenium_unity_images/*
-git commit -m "Add nightly output for $TODAYS_DATE"
-git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
-git push origin main
+# git config --global user.email "smolensk@jpl.nasa.gov"
+# git config --global user.name "jonathansmolenski "
+# git add "nightly_output_$TODAYS_DATE.txt"
+# git add /selenium_unity_images/*
+# git commit -m "Add nightly output for $TODAYS_DATE"
+# git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
+# git push origin main
 
 
 sleep 10
