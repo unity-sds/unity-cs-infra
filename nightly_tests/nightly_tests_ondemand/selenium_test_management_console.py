@@ -178,6 +178,11 @@ def grab_terminal_output(driver, element_selector, results):
             results.append({'name': 'Terminal Output', 'status': 'FAILED - Success not found in terminal output'})
 
         return output_text
+
+    except Exception as e:
+        print(f"Error in grabbing terminal output: {e}")
+        results.append({'name': 'Terminal Output', 'status': f'FAILED - {e}'})
+        return None
         
 # Main execution
 if __name__ == '__main__':
