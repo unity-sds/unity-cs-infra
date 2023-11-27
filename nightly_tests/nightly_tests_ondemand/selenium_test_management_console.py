@@ -82,11 +82,11 @@ def test_click_go_button(driver, image_dir, results):
     except AssertionError as e:
         results.append({'name': 'Click Core Management Btn', 'status': f'FAILED - {e}'})
         
-def core_management_setup_name(driver, image_dir, results, text):
-    test_name = 'Enter Project Name'
+def core_management_setup(driver, image_dir, results, text, element_id):
+    test_name = f'Enter {element_id} Name'
     try:
         text_box = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.ID, "project"))
+            EC.visibility_of_element_located((By.ID, element_id))
         )
         assert text_box is not None, "Textbox not found."
 
@@ -102,23 +102,6 @@ def core_management_setup_name(driver, image_dir, results, text):
 
     except AssertionError as e:
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
-def core_management_setup_venue(driver, image_dir, results, text):
-    test_name = 'Enter Project Venue '
-    try:
-        text_box = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.ID, "venue"))
-        )
-        assert text_box is not None, "Textbox not found."
-
-        text_box.clear()
-        text_box.send_keys(text)
-
-        assert text_box.get_attribute('value') == text, "Text not correctly entered."
-
-        screenshot_path = os.path.join(image_dir, f'screenshot_after_input_{text}.png')
-        driver.save_screenshot(screenshot_path)
-
-        results.append({'name': test_name, 'status': 'PASSED'})
 
     except AssertionError as e:
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
@@ -237,8 +220,8 @@ if __name__ == '__main__':
     
     test_login(driver, IMAGE_DIR, test_results)
     test_click_go_button(driver, IMAGE_DIR, test_results)
-    core_management_setup_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
-    core_management_setup_venue(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test")
+    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test", "project")
+    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test", "venue")
     core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
     go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results)
