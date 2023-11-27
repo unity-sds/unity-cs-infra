@@ -1,9 +1,10 @@
 import os
 import time
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from urllib.parse import urlparse, urlunparse
 
@@ -85,9 +86,19 @@ def test_click_go_button(driver, image_dir, results):
 def core_management_setup(driver, image_dir, results, text, element_id):
     test_name = f'Enter {element_id} Name'
     try:
+        print('before')
         text_box = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, element_id))
         )
+        print("after")
+    except TimeoutException:
+        error_message = f"Element with ID '{element_id}' not found within the given time."
+        results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
+        print(error_message)
+        return  # Exit the function if the element is not found
+
+    # If the element is found, continue with the rest of the code
+    try:
         assert text_box is not None, "Textbox not found."
 
         text_box.clear()
@@ -99,12 +110,9 @@ def core_management_setup(driver, image_dir, results, text, element_id):
         driver.save_screenshot(screenshot_path)
 
         results.append({'name': test_name, 'status': 'PASSED'})
-
     except AssertionError as e:
-        results.append({'name': test_name, 'status': f'FAILED - {e}'})
-
-    except AssertionError as e:
-        results.append({'name': test_name, 'status': f'FAILED - {e}'})
+        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
+        print(str(e))
         
 def core_management_setup_save_btn(driver, image_dir, results):
     test_name = 'Save Button'
