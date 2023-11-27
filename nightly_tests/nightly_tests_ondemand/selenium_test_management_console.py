@@ -237,6 +237,7 @@ def click_button(driver, image_dir, results, button_class):
         button.click()
 
         # Generate a screenshot name based on the button class
+        time.sleep(2)
         screenshot_name = f'click_{button_class.replace(" ", "_").replace(".", "_")}.png'
         screenshot_path = os.path.join(image_dir, screenshot_name)
         driver.save_screenshot(screenshot_path)
@@ -286,6 +287,11 @@ if __name__ == '__main__':
     unity_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
     unity_management_setup(driver, IMAGE_DIR, test_results, "main", "branch")
     click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
+    click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
+    click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
+    click_button(driver, IMAGE_DIR, test_results, 'btn.btn-primary.svelte-1pvzwgg')
+    grab_terminal_output(driver, ".terminal", test_results)
+
     # Print the results in a table
     print_table(test_results)
     
