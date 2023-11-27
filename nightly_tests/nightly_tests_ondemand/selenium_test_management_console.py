@@ -128,11 +128,12 @@ def core_management_setup_save_btn(driver, image_dir, results):
     except Exception as e:
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
         
-def go_back_and_goto_marketplace(driver, image_dir, results):
+def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
     test_name = 'Go Back and Go To Market'
     try:
         print("Going back to the previous page.")
-        driver.back()
+        driver.get(url_without_cred)
+        time.sleep(5)
         driver.refresh()
         time.sleep(5)
         driver.refresh()
@@ -309,7 +310,7 @@ if __name__ == '__main__':
     core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
     core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
-    go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results)
+    go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
     install_eks(driver, IMAGE_DIR, test_results)
     unity_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
     unity_management_setup(driver, IMAGE_DIR, test_results, "main", "branch")
