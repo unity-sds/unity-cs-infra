@@ -183,7 +183,33 @@ def grab_terminal_output(driver, element_selector, results):
         print(f"Error in grabbing terminal output: {e}")
         results.append({'name': 'Terminal Output', 'status': f'FAILED - {e}'})
         return None
+
+def install_eks(driver, image_dir, results):
+    test_name = 'Install EKS'
+    try:
+        # Locate the Install Application button
+        install_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.st-button.large.float-end"))
+        )
+        assert install_button is not None, "Install Application button not found."
+
+        # Click the button
+        install_button.click()
         
+        WebDriverWait(driver, 10).until(EC.url_contains('/ui/install'))
+        assert driver.current_url.endswith('/ui/install'), "URL does not end with '/ui/install'"
+        
+        # Take a screenshot for confirmation
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_install_button.png')
+        driver.save_screenshot(screenshot_path)
+
+        # Add a passed result
+        results.append({'name': test_name, 'status': 'PASSED'})
+
+    except Exception as e:
+        # Append a failed result with the exception message
+        results.append({'name': test_name, 'status': f'FAILED - {e}'})
+
 # Main execution
 if __name__ == '__main__':
     IMAGE_DIR = 'selenium_unity_images'
@@ -216,6 +242,7 @@ if __name__ == '__main__':
     core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
     go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results)
+    install_eks(driver, IMAGE_DIR, test_results)
     # Print the results in a table
     print_table(test_results)
     
