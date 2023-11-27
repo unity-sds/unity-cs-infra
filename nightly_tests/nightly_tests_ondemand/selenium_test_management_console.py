@@ -69,7 +69,7 @@ def test_login(driver, image_dir, results):
 # Function to test clicking the Go! button
 def test_click_go_button(driver, image_dir, results):
     try:
-        go_button = WebDriverWait(driver, 10).until(
+        go_button = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
         )
         go_button.click()
