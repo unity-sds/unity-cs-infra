@@ -86,11 +86,9 @@ def test_click_go_button(driver, image_dir, results):
 def core_management_setup(driver, image_dir, results, text, element_id):
     test_name = f'Enter {element_id} Name'
     try:
-        print('before')
         text_box = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, element_id))
         )
-        print("after")
     except TimeoutException:
         error_message = f"Element with ID '{element_id}' not found within the given time."
         results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
@@ -200,6 +198,34 @@ def install_eks(driver, image_dir, results):
     except Exception as e:
         # Append a failed result with the exception message
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
+def unity_management_setup(driver, image_dir, results, text, element_id):
+    test_name = f'Enter {element_id} Name'
+    try:
+        text_box = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, element_id))
+        )
+    except TimeoutException:
+        error_message = f"Element with ID '{element_id}' not found within the given time."
+        results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
+        print(error_message)
+        return  # Exit the function if the element is not found
+
+    # If the element is found, continue with the rest of the code
+    try:
+        assert text_box is not None, "Textbox not found."
+
+        text_box.clear()
+        text_box.send_keys(text)
+
+        assert text_box.get_attribute('value') == text, "Text not correctly entered."
+
+        screenshot_path = os.path.join(image_dir, f'screenshot_after_input_{text}.png')
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+    except AssertionError as e:
+        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
+        print(str(e))
 
 # Main execution
 if __name__ == '__main__':
@@ -228,12 +254,14 @@ if __name__ == '__main__':
     
     test_login(driver, IMAGE_DIR, test_results)
     test_click_go_button(driver, IMAGE_DIR, test_results)
-    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test", "project")
-    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-test", "venue")
+    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
+    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
     core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
     go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results)
     install_eks(driver, IMAGE_DIR, test_results)
+    unity_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
+    unity_management_setup(driver, IMAGE_DIR, test_results, "main", "branch")
     # Print the results in a table
     print_table(test_results)
     
