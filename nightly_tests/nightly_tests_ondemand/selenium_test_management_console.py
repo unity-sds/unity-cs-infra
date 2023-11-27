@@ -133,7 +133,12 @@ def go_back_and_goto_marketplace(driver, image_dir, results):
     try:
         print("Going back to the previous page.")
         driver.back()
-
+        driver.refresh()
+        time.sleep(5)
+        driver.refresh()
+        time.sleep(5)
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_back.png')
+        driver.save_screenshot(screenshot_path)
         try:
             print("Waiting for 'Go to Marketplace' button to be clickable.")
             go_button = WebDriverWait(driver, 20).until(
