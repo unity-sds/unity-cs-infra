@@ -201,7 +201,7 @@ if __name__ == '__main__':
     # Create driver
     driver = create_driver()
 
-   # Run the tests
+    # Run the tests
     navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
     
     test_login(driver, IMAGE_DIR, test_results)
