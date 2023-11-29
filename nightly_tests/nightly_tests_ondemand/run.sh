@@ -100,22 +100,22 @@ git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/un
 git push origin main
 
 
-# sleep 10
-# bash destroy.sh
+sleep 10
+bash destroy.sh
 
-#cat nightly_output.txt
+cat nightly_output.txt
 
-# OUTPUT=$(cat nightly_output.txt)
+OUTPUT=$(cat nightly_output.txt)
 
 
-#  cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
+cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
  
-#  EVENTS=$(cat CF_EVENTS.txt |grep -v ResourceProperties)
+EVENTS=$(cat CF_EVENTS.txt |grep -v ResourceProperties)
 
-#  echo "$EVENTS" > CF_EVENTS.txt
+echo "$EVENTS" > CF_EVENTS.txt
 
-#  cat CF_EVENTS.txt
+cat CF_EVENTS.txt
 
-#  CF_EVENTS=$(cat CF_EVENTS.txt)
+CF_EVENTS=$(cat CF_EVENTS.txt)
 
-# curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
+curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
