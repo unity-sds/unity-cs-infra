@@ -131,7 +131,6 @@ def core_management_setup_save_btn(driver, image_dir, results):
 def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
     test_name = 'Go Back and Go To Market'
     try:
-        print("Going back to the previous page.")
         driver.get(url_without_cred)
         time.sleep(5)
         driver.refresh()
@@ -141,11 +140,11 @@ def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_back.png')
         driver.save_screenshot(screenshot_path)
         try:
-            print("Waiting for 'Go to Marketplace' button to be clickable.")
+            
             go_button = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
             )
-            print("'Go to Marketplace' button found. Clicking the button.")
+            
             go_button.click()
         except TimeoutException:
             error_message = "Failed to find or click the 'Go to Marketplace' button within the given time."
@@ -153,11 +152,8 @@ def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
             raise Exception(error_message)
 
         try:
-            print("Waiting for URL to contain '/ui/marketplace'.")
             WebDriverWait(driver, 20).until(EC.url_contains('/ui/marketplace'))
-            print("URL check in progress.")
             assert driver.current_url.endswith('/ui/marketplace'), "URL does not end with '/ui/marketplace'"
-            print("URL check passed.")
         except AssertionError as url_error:
             error_message = f"URL check failed: {url_error}"
             print(error_message)
@@ -166,16 +162,14 @@ def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
         # Take a screenshot for confirmation
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
-        print(f"Screenshot saved to {screenshot_path}.")
 
         results.append({'name': test_name, 'status': 'PASSED'})
-        print("Test passed.")
-
+        
     except Exception as e:
         print(f"Exception occurred: {e}")
         # Append a failed result with the exception message
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
-        print("Test failed.")
+     
 
 
         
