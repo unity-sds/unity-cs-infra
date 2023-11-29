@@ -170,8 +170,6 @@ def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
         # Append a failed result with the exception message
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
      
-
-
         
 def grab_terminal_output(driver, element_selector, results):
     try:
