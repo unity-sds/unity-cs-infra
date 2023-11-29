@@ -92,7 +92,7 @@ sudo docker stop $CONTAINER_ID
 mv nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
 
 git config --global user.email "smolensk@jpl.nasa.gov"
-git config --global user.name "jonathansmolenski "
+git config --global user.name "jonathansmolenski"
 git add "nightly_output_$TODAYS_DATE.txt"
 # git add /selenium_unity_images/*
 git commit -m "Add nightly output for $TODAYS_DATE"
