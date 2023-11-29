@@ -103,8 +103,6 @@ git push origin main
 sleep 10
 bash destroy.sh
 
-cat nightly_output.txt
-
 OUTPUT=$(cat nightly_output.txt)
 
 
