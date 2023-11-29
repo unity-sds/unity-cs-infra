@@ -1,0 +1,238 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:RunInstances",
+                "iam:PassRole",
+                "iam:CreateInstanceProfile",
+                "iam:DeleteInstanceProfile",
+                "iam:AddRoleToInstanceProfile",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:CreateRole"
+            ],
+            "Resource": [
+                "arn:aws:ec2:*:*:subnet/*",
+                "arn:aws:ec2:*:*:key-pair/*",
+                "arn:aws:ec2:*:*:instance/*",
+                "arn:aws:ec2:*:*:volume/*",
+                "arn:aws:ec2:*:*:security-group/*",
+                "arn:aws:ec2:*:*:image/ami-*",
+                "arn:aws:ec2:*:*:network-interface/*",
+                "arn:aws:iam::*:instance-profile/ucs-nightly*",
+                "arn:aws:iam::*:role/U-CS_Service_Role",
+                "arn:aws:iam::*:role/unity-cs-nightly-*",
+                "arn:aws:iam::*:role/u-cs-ecs-use-eks"
+            ]
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": [
+                        "eks.amazonaws.com",
+                        "eks-nodegroup.amazonaws.com",
+                        "eks-fargate.amazonaws.com"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": "elasticloadbalancing.amazonaws.com"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateInstanceProfile",
+                "iam:GetPolicyVersion",
+                "iam:TagRole",
+                "iam:RemoveRoleFromInstanceProfile",
+                "iam:DeletePolicy",
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:AddRoleToInstanceProfile",
+                "iam:ListInstanceProfilesForRole",
+                "iam:PassRole",
+                "ssm:DeleteParameter",
+                "iam:DetachRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:ListAttachedRolePolicies",
+                "iam:ListRolePolicies",
+                "iam:DeleteOpenIDConnectProvider",
+                "iam:DeleteInstanceProfile",
+                "iam:GetRole",
+                "iam:GetInstanceProfile",
+                "iam:GetPolicy",
+                "iam:DeleteRole",
+                "iam:TagPolicy",
+                "iam:CreateOpenIDConnectProvider",
+                "iam:CreatePolicy",
+                "ssm:PutParameter",
+                "iam:ListPolicyVersions",
+                "iam:GetOpenIDConnectProvider",
+                "iam:TagOpenIDConnectProvider",
+                "iam:GetRolePolicy"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:role/eksctl-*",
+                "arn:aws:iam::*:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup",
+                "arn:aws:iam::*:role/eksctl-managed-*",
+                "arn:aws:iam::*:role/Unity-UCS-Development-EKSClusterS3-Role",
+                "arn:aws:iam::*:role/U-CS-AmazonEKSNodeRole",
+                "arn:aws:iam::*:role/Unity-*",
+                "arn:aws:iam::*:role/unity-dev-*",
+                "arn:aws:iam::*:oidc-provider/*",
+                "arn:aws:iam::*:policy/eksctl-*",
+                "arn:aws:iam::*:policy/unity-dev-*",
+                "arn:aws:iam::*:instance-profile/eksctl-*",
+                "arn:aws:ssm:*:*:parameter/*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor4",
+            "Effect": "Allow",
+            "Action": "iam:GetRole",
+            "Resource": "arn:aws:iam::*:role/*"
+        },
+        {
+            "Sid": "VisualEditor5",
+            "Effect": "Allow",
+            "Action": [
+                "elasticloadbalancing:ModifyListener",
+                "elasticloadbalancing:DetachLoadBalancerFromSubnets",
+                "iam:List*",
+                "rds:*",
+                "elasticloadbalancing:RegisterTargets",
+                "dynamodb:*",
+                "autoscaling:*",
+                "ssm:GetParameter",
+                "elasticloadbalancing:DeleteLoadBalancer",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "ssm:DeleteParameter",
+                "route53:Get*",
+                "secretsmanager:*",
+                "ssm:DescribeParameters",
+                "ssm:RemoveTagsFromResource",
+                "autoscaling:DescribeAutoScalingGroups",
+                "ssm:AddTagsToResource",
+                "elasticloadbalancing:DescribeLoadBalancerPolicies",
+                "route53:List*",
+                "autoscaling:UpdateAutoScalingGroup",
+                "elasticloadbalancing:ModifyTargetGroupAttributes",
+                "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                "elasticloadbalancing:SetLoadBalancerPoliciesForBackendServer",
+                "apigateway:*",
+                "elasticloadbalancing:CreateTargetGroup",
+                "cloudformation:*",
+                "elasticloadbalancing:DeregisterTargets",
+                "ssm:GetParameters",
+                "elasticloadbalancing:DescribeLoadBalancerAttributes",
+                "ssm:PutParameter",
+                "elasticloadbalancing:DescribeTargetGroupAttributes",
+                "cloudwatch:*",
+                "elasticloadbalancing:AddTags",
+                "elasticloadbalancing:DeleteLoadBalancerListeners",
+                "ec2:*",
+                "cognito-idp:*",
+                "eks:*",
+                "elasticloadbalancing:ModifyLoadBalancerAttributes",
+                "elasticloadbalancing:ConfigureHealthCheck",
+                "iam:Get*",
+                "elasticloadbalancing:CreateListener",
+                "elasticloadbalancing:DescribeListeners",
+                "sts:DecodeAuthorizationMessage",
+                "elasticloadbalancing:ApplySecurityGroupsToLoadBalancer",
+                "kms:DescribeKey",
+                "elasticloadbalancing:CreateLoadBalancerPolicy",
+                "kms:CreateGrant",
+                "execute-api:*",
+                "elasticfilesystem:*",
+                "elasticloadbalancing:CreateLoadBalancer",
+                "elasticloadbalancing:AttachLoadBalancerToSubnets",
+                "s3:*",
+                "elasticloadbalancing:*",
+                "elasticloadbalancing:DeleteTargetGroup",
+                "elasticloadbalancing:CreateLoadBalancerListeners",
+                "es:*",
+                "elasticloadbalancing:SetLoadBalancerPoliciesOfListener",
+                "memorydb:*",
+                "ssm:ListTagsForResource",
+                "ssm:Describe*",
+                "elasticloadbalancing:DescribeTargetHealth",
+                "lambda:*",
+                "route53:*",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "route53:Change*Sets",
+                "logs:PutRetentionPolicy",
+                "elasticache:*",
+                "elasticloadbalancing:ModifyTargetGroup",
+                "elasticloadbalancing:DeleteListener",
+                "tag:GetResources",
+                "ecs:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor6",
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParameter*",
+                "sts:AssumeRole"
+            ],
+            "Resource": [
+                "arn:aws:ssm:*:*:parameter/*",
+                "arn:aws:ssm:*::parameter/aws/*",
+                "arn:aws:ec2:*:*:subnet/*",
+                "arn:aws:ec2:*:*:key-pair/*",
+                "arn:aws:ec2:*:*:instance/*",
+                "arn:aws:ec2:*:*:volume/*",
+                "arn:aws:ec2:*:*:security-group/*",
+                "arn:aws:ec2:*:*:image/ami-*",
+                "arn:aws:ec2:*:*:network-interface/*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor7",
+            "Effect": "Allow",
+            "Action": "iam:ListInstanceProfiles",
+            "Resource": [
+                "arn:aws:iam::*:role/eksctl-*",
+                "arn:aws:iam::*:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup",
+                "arn:aws:iam::*:role/eksctl-managed-*",
+                "arn:aws:iam::*:role/Unity-UCS-Development-EKSClusterS3-Role",
+                "arn:aws:iam::*:role/U-CS-AmazonEKSNodeRole",
+                "arn:aws:iam::*:role/Unity-*",
+                "arn:aws:iam::*:role/unity-dev-*",
+                "arn:aws:iam::*:oidc-provider/*",
+                "arn:aws:iam::*:policy/eksctl-*",
+                "arn:aws:iam::*:policy/unity-dev-*",
+                "arn:aws:iam::*:instance-profile/eksctl-*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor8",
+            "Effect": "Allow",
+            "Action": "ssm:List*",
+            "Resource": [
+                "arn:aws:ssm:*:*:parameter/*",
+                "arn:aws:ssm:*::parameter/aws/*"
+            ]
+        }
+    ]
+}

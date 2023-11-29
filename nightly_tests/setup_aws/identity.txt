@@ -1,0 +1,5 @@
+{
+    "UserId": "AROA4S74LNWFGLMF3LZLG:jmsmolen",
+    "Account": "865428270474",
+    "Arn": "arn:aws:sts::865428270474:assumed-role/mcp-tenantOperator/jmsmolen"
+}
