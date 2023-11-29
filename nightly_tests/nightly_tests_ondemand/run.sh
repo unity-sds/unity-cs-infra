@@ -1,6 +1,6 @@
 #!/bin/sh
 export STACK_NAME="unity-cs-nightly-management-console"
-
+TODAYS_DATE=$(date +%F)
 ## Retrieve the github token from SSM
 export SSM_GITHUB_TOKEN="/unity-sds/u-cs/nightly/githubtoken"
 export SSM_MC_USERNAME="/unity/ci/mc_username"
@@ -54,6 +54,34 @@ aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudform
 # run selenium test on management console
 export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
 
+# Check if Docker is installed
+if ! command -v docker &> /dev/null; then
+    echo "Docker not installed. Installing Docker..."
+
+    # Add Docker's official GPG key
+    sudo apt-get update
+    sudo apt-get install -y ca-certificates curl gnupg
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+    # Add the repository to Apt sources
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    # Install Docker
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo systemctl start docker
+    sleep 10
+
+    echo "Docker installed successfully."
+else
+    echo "Docker is already installed."
+fi
+
 sudo docker pull selenium/standalone-chrome
 CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
 sleep 10
@@ -61,10 +89,19 @@ sleep 10
 python3 selenium_test_management_console.py >> nightly_output.txt
 sudo docker stop $CONTAINER_ID
 
+mv nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
+
+git config --global user.email "smolensk@jpl.nasa.gov"
+git config --global user.name "jonathansmolenski"
+git add "nightly_output_$TODAYS_DATE.txt"
+# git add /selenium_unity_images/*
+git commit -m "Add nightly output for $TODAYS_DATE"
+git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
+git push origin main
+
+
 sleep 10
 bash destroy.sh
-
-#cat nightly_output.txt
 
 OUTPUT=$(cat nightly_output.txt)
 
