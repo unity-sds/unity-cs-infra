@@ -86,13 +86,13 @@ aws cloudformation create-stack \
     ParameterKey=PublicSubnetID2,ParameterValue=${PublicSubnetID2} \
     ParameterKey=PrivateSubnetID1,ParameterValue=${PrivateSubnetID1} \
     ParameterKey=PrivateSubnetID2,ParameterValue=${PrivateSubnetID2} \
-    ParameterKey=KeyPairName,ParameterValue=${KeyPairName} \
     ParameterKey=InstanceType,ParameterValue=${InstanceType} \
     ParameterKey=PrivilegedPolicyName,ParameterValue=${PrivilegedPolicyName} \
     ParameterKey=GithubToken,ParameterValue=${GithubToken} \
     ParameterKey=Venue,ParameterValue=${Venue} \
   --tags Key=ServiceArea,Value=U-CS
 
+#    ParameterKey=KeyPairName,ParameterValue=${KeyPairName} \
 
 echo "STACK_NAME=$STACK_NAME">NIGHTLY.ENV
 
