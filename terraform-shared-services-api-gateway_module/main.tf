@@ -5,7 +5,22 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
-  body = data.template_file.api_template.rendered
+}
+
+# REST API Gateway root level GET method
+resource "aws_api_gateway_method" "root_level_get_method" {
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  resource_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+# REST API Gateway rot level GET method mock integration
+resource "aws_api_gateway_integration" "root_level_get_method_mock_integration" {
+  rest_api_id          = aws_api_gateway_rest_api.rest_api.id
+  resource_id          = aws_api_gateway_rest_api.rest_api.root_resource_id
+  http_method          = aws_api_gateway_method.root_level_get_method.http_method
+  type                 = "MOCK"
 }
 
 # REST API ID SSM Param for other resources to modify rest api
@@ -17,14 +32,11 @@ resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter" {
   depends_on = [aws_api_gateway_rest_api.rest_api]
 }
 
-# Blank OpenAPI Template
-data "template_file" "api_template" {
-  template = file("./unity-project-blank-api-gateway-oas.yaml")
-}
-
+# API Gateway deployment
 resource "aws_api_gateway_deployment" "api-gateway-deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   stage_name  = var.rest_api_stage
+  depends_on = [aws_api_gateway_integration.root_level_get_method_mock_integration]
 }
 
 data "aws_region" "current" {}
