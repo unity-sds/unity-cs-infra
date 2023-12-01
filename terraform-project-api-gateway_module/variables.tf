@@ -7,19 +7,19 @@ variable "region" {
 variable "project_name" {
   type        = string
   description = "Project Name"
-  default     = "TestProject"
+  default     = "Unity-SampleProject-Dev"
 }
 
 variable "rest_api_name" {
   type        = string
   description = "REST API Name"
-  default     = "Unity Project REST API Gateway"
+  default     = "Unity SampleProject-Dev Project REST API Gateway"
 }
 
 variable "rest_api_description" {
   type        = string
   description = "REST API Description"
-  default     = "Unity Project REST API Gateway"
+  default     = "Unity Unity-SampleProject-Dev Project REST API Gateway"
 }
 
 variable "venue" {
@@ -40,16 +40,10 @@ variable "counter" {
   default     = 1
 }
 
-variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
-  type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
-  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-invoke-role-arn"
-}
-
 variable "unity_cs_lambda_authorizer_function_name" {
   type        = string
   description = "Function name of the CS Lambda Authorizer"
-  default     = "unity-cs-common-lambda-auth-with-group-list"
+  default     = "unity-cs-common-lambda-authorizer"
 }
 
 variable "unity_cs_lambda_authorizer_zip_path" {
@@ -60,18 +54,24 @@ variable "unity_cs_lambda_authorizer_zip_path" {
 
 variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_client_id_list" {
   type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito Client ID List"
-  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-cognito-client-id-list"
+  description = "SSM Param for Project Level API Gateway CS Lambda Authorizer Lambda Allowed Cognito Client ID List"
+  default     = "/unity/project-api-gateway/cs-lambda-authorizer-cognito-client-id-list"
 }
 
 variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_pool_id" {
   type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Pool ID"
-  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-cognito-user-pool-id"
+  description = "SSM Param for Project Level API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Pool ID"
+  default     = "/unity/project-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
 }
 
 variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
   type        = string
   description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Groups List"
-  default     = "/unity/dev/unity-sps-1/api-gateway/functions/cs-lambda-authorizer-cognito-user-groups-list"
+  default     = "/unity/project-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
+}
+
+variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
+  type        = string
+  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
+  default     = "/unity/project-api-gateway/cs-lambda-authorizer-invoke-role-arn"
 }
