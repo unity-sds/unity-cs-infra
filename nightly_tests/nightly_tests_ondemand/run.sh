@@ -89,7 +89,7 @@ sleep 10
 python3 selenium_test_management_console.py >> nightly_output.txt
 sudo docker stop $CONTAINER_ID
 
-mv nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
+cp nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
 
 git config --global user.email "smolensk@jpl.nasa.gov"
 git config --global user.name "jonathansmolenski"
