@@ -86,7 +86,8 @@ sudo docker pull selenium/standalone-chrome
 CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
 sleep 10
 
-python3 selenium_test_management_console.py >> nightly_output.txt
+python3 selenium_test_management_console.py >> nightly_output.txt 2>&1
+
 sudo docker stop $CONTAINER_ID
 
 cp nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
