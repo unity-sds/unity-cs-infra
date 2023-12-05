@@ -92,14 +92,15 @@
                 "arn:aws:iam::*:role/eksctl-*",
                 "arn:aws:iam::*:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup",
                 "arn:aws:iam::*:role/eksctl-managed-*",
-                "arn:aws:iam::*:role/Unity-UCS-Development-EKSClusterS3-Role",
                 "arn:aws:iam::*:role/U-CS-AmazonEKSNodeRole",
                 "arn:aws:iam::*:role/Unity-*",
-                "arn:aws:iam::*:role/unity-dev-*",
+                "arn:aws:iam::*:role/unity-*",
                 "arn:aws:iam::*:oidc-provider/*",
                 "arn:aws:iam::*:policy/eksctl-*",
-                "arn:aws:iam::*:policy/unity-dev-*",
+                "arn:aws:iam::*:policy/unity-*",
                 "arn:aws:iam::*:instance-profile/eksctl-*",
+                "arn:aws:iam::*:instance-profile/unity-*",
+                "arn:aws:iam::*:instance-profile/Unity-*",
                 "arn:aws:ssm:*:*:parameter/*"
             ]
         },
