@@ -36,24 +36,28 @@ resource "aws_ssm_parameter" "unity-venue" {
   name  = "/unity/core/venue"
   type  = "String"
   value = var.venue
+  overwrite = true
 }
 
 resource "aws_ssm_parameter" "unity-project" {
   name  = "/unity/core/project"
   type  = "String"
   value = var.project
+  overwrite = true
 }
 
 resource "aws_ssm_parameter" "eks-instance-role" {
   name = "/unity/account/roles/eksInstanceRoleArn"
   type = "String"
   value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Unity-UCS-Development-EKSNodeRole"
+  overwrite = true
 }
 
 resource "aws_ssm_parameter" "eks-service-role" {
   name = "/unity/account/roles/eksServiceRoleArn"
   type = "String"
   value = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Unity-UCS-Development-EKSClusterS3-Role"
+  overwrite = true
 }
 
 data "aws_ssm_parameter" "mcp-eks-ami" {
@@ -64,6 +68,7 @@ resource "aws_ssm_parameter" "eks-cluster-ami" {
     name = "/unity/account/ami/eksClusterAmi"
     type = "String"
     value = data.aws_ssm_parameter.mcp-eks-ami.value
+    overwrite = true
 }
 
 locals {
@@ -77,4 +82,5 @@ resource "aws_ssm_parameter" "example" {
   name  = each.key
   type  = each.value.type
   value = each.value.value
+  overwrite = true
 }

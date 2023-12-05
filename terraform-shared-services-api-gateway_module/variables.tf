@@ -19,11 +19,11 @@ variable "rest_api_description" {
 variable "venue" {
   type        = string
   description = "Venue for deployment"
-  default     = "dev"
+  default     = "prod"
 }
 
 variable "rest_api_stage" {
   type        = string
   description = "REST API Stage Name"
-  default     = "dev"
+  default     = "prod"
 }

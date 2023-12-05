@@ -1,8 +1,11 @@
 import os
 import time
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
 from urllib.parse import urlparse, urlunparse
 
 # Function to create a new Selenium driver
@@ -66,9 +69,12 @@ def test_login(driver, image_dir, results):
 # Function to test clicking the Go! button
 def test_click_go_button(driver, image_dir, results):
     try:
-        go_button = driver.find_element(By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]')
+        go_button = WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
+        )
         go_button.click()
-        time.sleep(1)  # Wait for the page to load
+
+        WebDriverWait(driver, 10).until(EC.url_contains('/ui/setup')) 
 
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
@@ -76,6 +82,194 @@ def test_click_go_button(driver, image_dir, results):
         results.append({'name': 'Click Core Management Btn', 'status': 'PASSED'})
     except AssertionError as e:
         results.append({'name': 'Click Core Management Btn', 'status': f'FAILED - {e}'})
+        
+def core_management_setup(driver, image_dir, results, text, element_id):
+    test_name = f'Enter {element_id} Name'
+    try:
+        text_box = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, element_id))
+        )
+    except TimeoutException:
+        error_message = f"Element with ID '{element_id}' not found within the given time."
+        results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
+        print(error_message)
+        return  # Exit the function if the element is not found
+
+    # If the element is found, continue with the rest of the code
+    try:
+        assert text_box is not None, "Textbox not found."
+
+        text_box.clear()
+        text_box.send_keys(text)
+
+        assert text_box.get_attribute('value') == text, "Text not correctly entered."
+
+        screenshot_path = os.path.join(image_dir, f'screenshot_after_input_{text}.png')
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+    except AssertionError as e:
+        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
+        print(str(e))
+        
+def core_management_setup_save_btn(driver, image_dir, results):
+    test_name = 'Save Button'
+    try:
+        save_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//button[@type='submit'][contains(@class, 'st-button large mt-5')]"))
+        )
+        save_button.click()
+
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_save_button.png')
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+
+    except Exception as e:
+        results.append({'name': test_name, 'status': f'FAILED - {e}'})
+        
+def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
+    test_name = 'Go Back and Go To Market'
+    try:
+        driver.get(url_without_cred)
+        time.sleep(5)
+        driver.refresh()
+        time.sleep(5)
+        driver.refresh()
+        time.sleep(5)
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_back.png')
+        driver.save_screenshot(screenshot_path)
+        try:
+            
+            go_button = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
+            )
+            
+            go_button.click()
+        except TimeoutException:
+            error_message = "Failed to find or click the 'Go to Marketplace' button within the given time."
+            print(error_message)
+            raise Exception(error_message)
+
+        try:
+            WebDriverWait(driver, 20).until(EC.url_contains('/ui/marketplace'))
+            assert driver.current_url.endswith('/ui/marketplace'), "URL does not end with '/ui/marketplace'"
+        except AssertionError as url_error:
+            error_message = f"URL check failed: {url_error}"
+            print(error_message)
+            raise Exception(error_message)
+
+        # Take a screenshot for confirmation
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+        
+    except Exception as e:
+        print(f"Exception occurred: {e}")
+        # Append a failed result with the exception message
+        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
+     
+        
+def grab_terminal_output(driver, element_selector, results):
+    try:
+        terminal_output_element = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
+        )
+        assert terminal_output_element is not None, "Terminal output element not found."
+
+        lines = terminal_output_element.find_elements(By.TAG_NAME, 'div')
+        output_text = "\n".join([line.text for line in lines])
+
+        if "success" in output_text.lower():
+            results.append({'name': 'Terminal Output', 'status': 'PASSED'})
+        else:
+            results.append({'name': 'Terminal Output', 'status': 'FAILED - Success not found in terminal output'})
+
+        return output_text
+
+    except Exception as e:
+        print(f"Error in grabbing terminal output: {e}")
+        results.append({'name': 'Terminal Output', 'status': f'FAILED - {e}'})
+        return None
+
+def install_eks(driver, image_dir, results):
+    test_name = 'Install EKS'
+    try:
+        # Locate the Install Application button
+        install_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.st-button.large.float-end"))
+        )
+        assert install_button is not None, "Install Application button not found."
+
+        # Click the button
+        install_button.click()
+        
+        WebDriverWait(driver, 10).until(EC.url_contains('/ui/install'))
+        assert driver.current_url.endswith('/ui/install'), "URL does not end with '/ui/install'"
+        
+        # Take a screenshot for confirmation
+        screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_install_button.png')
+        driver.save_screenshot(screenshot_path)
+
+        # Add a passed result
+        results.append({'name': test_name, 'status': 'PASSED'})
+
+    except Exception as e:
+        # Append a failed result with the exception message
+        results.append({'name': test_name, 'status': f'FAILED - {e}'})
+def unity_management_setup(driver, image_dir, results, text, element_id):
+    test_name = f'Enter {element_id} Name'
+    try:
+        text_box = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, element_id))
+        )
+    except TimeoutException:
+        error_message = f"Element with ID '{element_id}' not found within the given time."
+        results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
+        print(error_message)
+        return  # Exit the function if the element is not found
+
+    # If the element is found, continue with the rest of the code
+    try:
+        assert text_box is not None, "Textbox not found."
+
+        text_box.clear()
+        text_box.send_keys(text)
+
+        assert text_box.get_attribute('value') == text, "Text not correctly entered."
+
+        screenshot_path = os.path.join(image_dir, f'screenshot_after_input_{text}.png')
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+    except AssertionError as e:
+        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
+        print(str(e))
+
+def click_button(driver, image_dir, results, button_class):
+    test_name = f'Next Button'
+    try:
+        # Find and click the button
+        button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+        )
+        button.click()
+
+        # Generate a screenshot name based on the button class
+        time.sleep(2)
+        screenshot_name = f'click_{button_class.replace(" ", "_").replace(".", "_")}.png'
+        screenshot_path = os.path.join(image_dir, screenshot_name)
+        driver.save_screenshot(screenshot_path)
+
+        results.append({'name': test_name, 'status': 'PASSED'})
+    except TimeoutException:
+        error_message = f"Button with class '{button_class}' not found or not clickable within the given time."
+        results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
+        print(error_message)
+    except AssertionError as e:
+        results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
+        print(str(e))
 
 # Main execution
 if __name__ == '__main__':
@@ -104,7 +298,20 @@ if __name__ == '__main__':
     
     test_login(driver, IMAGE_DIR, test_results)
     test_click_go_button(driver, IMAGE_DIR, test_results)
-    
+    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
+    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
+    core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
+    grab_terminal_output(driver, ".terminal", test_results)
+    go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
+    install_eks(driver, IMAGE_DIR, test_results)
+    unity_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
+    unity_management_setup(driver, IMAGE_DIR, test_results, "main", "branch")
+    click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
+    click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
+    click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
+    click_button(driver, IMAGE_DIR, test_results, 'btn.btn-primary.svelte-1pvzwgg')
+    grab_terminal_output(driver, ".terminal", test_results)
+
     # Print the results in a table
     print_table(test_results)
     
