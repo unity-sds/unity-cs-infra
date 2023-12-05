@@ -1,0 +1,9 @@
+Repo Hash (Nightly Test):     [c66942c]
+Repo Hash (Cloudformation):   [a4ff51b]
+Stack Name: [unity-cs-nightly-management-console]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [440 seconds] - PASS
+Traceback (most recent call last):
+  File "selenium_test_management_console.py", line 3, in <module>
+    from selenium import webdriver
+ModuleNotFoundError: No module named 'selenium'
