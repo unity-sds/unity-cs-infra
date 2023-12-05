@@ -1,9 +1,24 @@
-Repo Hash (Nightly Test):     [c66942c]
+Repo Hash (Nightly Test):     [37c52e9]
 Repo Hash (Cloudformation):   [a4ff51b]
 Stack Name: [unity-cs-nightly-management-console]
 Stack Status (Final): [CREATE_COMPLETE]
 Stack Creation Time: [440 seconds] - PASS
-Traceback (most recent call last):
-  File "selenium_test_management_console.py", line 3, in <module>
-    from selenium import webdriver
-ModuleNotFoundError: No module named 'selenium'
+
+Test Name                 | Status
+--------------------------+--------
+Navigate to URL           | PASSED
+Login                     | PASSED
+Click Core Management Btn | PASSED
+Enter project Name        | PASSED
+Enter venue Name          | PASSED
+Save Button               | PASSED
+Terminal Output           | FAILED - Success not found in terminal output
+Go Back and Go To Market  | PASSED
+Install EKS               | PASSED
+Enter name Name           | PASSED
+Enter branch Name         | PASSED
+Next Button               | PASSED
+Next Button               | PASSED
+Next Button               | PASSED
+Next Button               | PASSED
+Terminal Output           | FAILED - Success not found in terminal output
