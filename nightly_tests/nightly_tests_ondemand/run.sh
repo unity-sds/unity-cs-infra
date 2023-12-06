@@ -3,8 +3,8 @@ export STACK_NAME="unity-cs-nightly-management-console"
 TODAYS_DATE=$(date +%F)
 ## Retrieve the github token from SSM
 export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken"
-export SSM_MC_USERNAME="/unity/ci/mc_username"
-export SSM_MC_PASSWORD="/unity/ci/mc_password"
+export SSM_MC_USERNAME="/unity/testing/nightly/mc_username"
+export SSM_MC_PASSWORD="/unity/testing/nightly/mc_password"
 export SSM_SLACK_URL="/unity/ci/slack-web-hook-url"
 
 export MC_USERNAME=$(aws ssm get-parameter --name ${SSM_MC_USERNAME}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
