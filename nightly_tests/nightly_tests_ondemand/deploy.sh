@@ -21,12 +21,12 @@ PublicSubnetID1=$(aws ssm get-parameter      --name ${SSM_PUB_SUBNET1}       |gr
 PublicSubnetID2=$(aws ssm get-parameter      --name ${SSM_PUB_SUBNET2}       |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 PrivateSubnetID1=$(aws ssm get-parameter     --name ${SSM_PRIV_SUBNET1}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 PrivateSubnetID2=$(aws ssm get-parameter     --name ${SSM_PRIV_SUBNET2}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-KeyPairName=$(aws ssm get-parameter          --name ${SSM_KEYPAIR_NAME}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 InstanceType=$(aws ssm get-parameter         --name ${SSM_INSTANCE_TYPE}     |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 PrivilegedPolicyName=$(aws ssm get-parameter --name ${SSM_PRIVILEGED_POLICY} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 GithubToken=$(aws ssm get-parameter          --name ${SSM_GITHUB_TOKEN}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 Venue=$(aws ssm get-parameter                --name ${SSM_VENUE}             |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 ACCOUNT_NAME=$(aws ssm get-parameter         --name ${SSM_ACCOUNT_NAME}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+#KeyPairName=$(aws ssm get-parameter          --name ${SSM_KEYPAIR_NAME}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
 if [ -z "$VPCID" ] 
 then 
@@ -51,11 +51,6 @@ fi
 if [ -z "$PrivateSubnetID2" ]
 then
     echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PRIV_SUBNET2] exist?"
-    exit
-fi
-if [ -z "$KeyPairName" ] 
-then 
-    echo "ERROR: Could not read Key Pair Name from SSM.  Does the key [$SSM_KEYPAIR_NAME] exist?"
     exit
 fi
 if [ -z "$InstanceType" ] 
@@ -83,6 +78,11 @@ then
     echo "ERROR: Could not read Account Name from SSM.  Does the key [$SSM_ACCOUNT_NAME] exist?"
     exit
 fi
+#if [ -z "$KeyPairName" ] 
+#then 
+#    echo "ERROR: Could not read Key Pair Name from SSM.  Does the key [$SSM_KEYPAIR_NAME] exist?"
+#    exit
+#fi
 
 aws cloudformation create-stack \
   --stack-name ${STACK_NAME} \
