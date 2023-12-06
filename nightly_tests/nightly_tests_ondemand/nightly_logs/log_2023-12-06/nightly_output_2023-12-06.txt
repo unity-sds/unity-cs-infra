@@ -1,6 +1,5 @@
-Repo Hash (Nightly Test):     [3b08baa]
+Repo Hash (Nightly Test):     [aac8209]
 Repo Hash (Cloudformation):   [12e8d0e]
-Stack Teardown: Completed in 1040s - [PASS]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
 Stack Status (Final): [CREATE_COMPLETE]
