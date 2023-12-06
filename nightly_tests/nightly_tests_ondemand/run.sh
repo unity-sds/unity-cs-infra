@@ -1,6 +1,7 @@
 #!/bin/sh
 export STACK_NAME="unity-cs-nightly-management-console"
 TODAYS_DATE=$(date +%F)
+
 ## Retrieve the github token from SSM
 export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken"
 export SSM_MC_USERNAME="/unity/testing/nightly/mc_username"
@@ -36,7 +37,7 @@ fi
 
 rm -f nightly_output.txt
 rm -f cloudformation_events.txt
-
+mkdir -p nightly_logs/log_$TODAYS_DATE
 
 NIGHTLY_HASH=$(git rev-parse --short HEAD)
 #echo "Using nightly test repo commit [$NIGHTLY_HASH]" >> nightly_output.txt
@@ -106,10 +107,12 @@ python3 selenium_test_management_console.py >> nightly_output.txt 2>&1
 sudo docker stop $CONTAINER_ID
 
 cp nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
+mv nightly_output_$TODAYS_DATE.txt nightly_logs/log_$TODAYS_DATE/
 
 git config --global user.email "smolensk@jpl.nasa.gov"
 git config --global user.name "jonathansmolenski"
-git add "nightly_output_$TODAYS_DATE.txt"
+# git add "nightly_output_$TODAYS_DATE.txt"
+git add "nightly_logs/log_$TODAYS_DATE/nightly_output_$TODAYS_DATE.txt"
 # git add /selenium_unity_images/*
 git commit -m "Add nightly output for $TODAYS_DATE"
 git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
@@ -132,4 +135,4 @@ cat CF_EVENTS.txt
 
 CF_EVENTS=$(cat CF_EVENTS.txt)
 
-curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
+# curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
