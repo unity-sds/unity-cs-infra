@@ -22,6 +22,10 @@ data "aws_ssm_parameter" "eks_iam_role" {
   name = "/unity/account/eks/eks_iam_role"
 }
 
+data "aws_ssm_parameter" "eks_ami_1_27" {
+  name = "/unity/account/eks/amis/aml2-eks-1-27"
+}
+
 data "aws_ssm_parameter" "eks_ami_1_26" {
   name = "/unity/account/eks/amis/aml2-eks-1-26"
 }
@@ -72,6 +76,7 @@ locals {
   subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   ami = "ami-0e3e9697a56f6ba66"
   ami_map = {
+    "1.27" = data.aws_ssm_parameter.eks_ami_1_27.value
     "1.26" = data.aws_ssm_parameter.eks_ami_1_26.value
     "1.25" = data.aws_ssm_parameter.eks_ami_1_25.value
     "1.24" = data.aws_ssm_parameter.eks_ami_1_24.value
@@ -124,7 +129,7 @@ module "eks" {
   create_cluster_security_group = false
   create_node_security_group = false
   create_iam_role = false
-  enable_irsa = false
+  enable_irsa = true
   iam_role_arn = data.aws_ssm_parameter.eks_iam_role.value
   node_security_group_id = data.aws_ssm_parameter.node_sg.value
 
@@ -158,7 +163,6 @@ set -o xtrace
 
 
 # TODO: select default node group more intelligently, or remove concept altogether
-
 resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
   name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
   type = "String"
@@ -180,24 +184,29 @@ resource "aws_ssm_parameter" "eks_subnets" {
   value = join(",", local.subnet_map["private"])
 }
 
-#module "irsa-ebs-csi" {
-#  source  = "terraform-aws-modules/iam/aws//modules/iamable-role-with-oidc"
-#  version = "4.7.0"
-#
-#  create_role                   = true
-#  role_name                     = "AmazonEKSTFEBSCSIRole-${module.eks.cluster_name}"
-#  provider_url                  = module.eks.oidc_provider
-#  role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
-#  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
-#}
-#
-#resource "aws_eks_addon" "ebs-csi" {
-#  cluster_name             = module.eks.cluster_name
-#  addon_name               = "aws-ebs-csi-driver"
-#  addon_version            = "v1.20.0-eksbuild.1"
-#  service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
-#  tags = {
-#    "eks_addon" = "ebs-csi"
-#    "terraform" = "true"
-#  }
-#}
+data "aws_iam_policy" "ebs_csi_policy" {
+  arn = "arn:aws:iam::604856450995:policy/U-CS_Service_Policy"
+}
+
+module "irsa-ebs-csi" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version = "4.7.0"
+
+  create_role                   = false
+  #role_name                     = "AmazonEKSTFEBSCSIRole-${module.eks.cluster_name}"
+  role_name = "U-CS_Service_Role"
+  provider_url                  = module.eks.oidc_provider
+  role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+}
+
+resource "aws_eks_addon" "ebs-csi" {
+  cluster_name             = module.eks.cluster_name
+  addon_name               = "aws-ebs-csi-driver"
+  addon_version            = "v1.20.0-eksbuild.1"
+  service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+  tags = {
+    "eks_addon" = "ebs-csi"
+    "terraform" = "true"
+  }
+}
