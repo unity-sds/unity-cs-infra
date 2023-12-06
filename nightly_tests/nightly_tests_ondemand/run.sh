@@ -2,19 +2,34 @@
 export STACK_NAME="unity-cs-nightly-management-console"
 TODAYS_DATE=$(date +%F)
 ## Retrieve the github token from SSM
-export SSM_GITHUB_TOKEN="/unity-sds/u-cs/nightly/githubtoken"
+export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken"
 export SSM_MC_USERNAME="/unity/ci/mc_username"
 export SSM_MC_PASSWORD="/unity/ci/mc_password"
 export SSM_SLACK_URL="/unity/ci/slack-web-hook-url"
-export MC_USERNAME=$(aws ssm get-parameter           --name ${SSM_MC_USERNAME}       |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-export MC_PASSWORD=$(aws ssm get-parameter           --name ${SSM_MC_PASSWORD}       |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-SLACK_URL=$(aws ssm get-parameter           --name ${SSM_SLACK_URL}       |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
-GITHUB_TOKEN=$(aws ssm get-parameter          --name ${SSM_GITHUB_TOKEN}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export MC_USERNAME=$(aws ssm get-parameter --name ${SSM_MC_USERNAME}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export MC_PASSWORD=$(aws ssm get-parameter --name ${SSM_MC_PASSWORD}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+SLACK_URL=$(aws ssm get-parameter          --name ${SSM_SLACK_URL}    |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+GITHUB_TOKEN=$(aws ssm get-parameter       --name ${SSM_GITHUB_TOKEN} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
 if [ -z "$GITHUB_TOKEN" ] 
 then 
     echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?"
+    exit
+fi
+if [ -z "$MC_USERNAME" ] 
+then 
+    echo "ERROR: Could not read MC Username from SSM.  Does the key [$SSM_MC_USERNAME] exist?"
+    exit
+fi
+if [ -z "$MC_PASSWORD" ] 
+then 
+    echo "ERROR: Could not read MC Password from SSM.  Does the key [$SSM_MC_PASSWORD] exist?"
+    exit
+fi
+if [ -z "$SLACK_URL" ] 
+then 
+    echo "ERROR: Could not read Slack URL from SSM.  Does the key [$SSM_SLACK_URL] exist?"
     exit
 fi
 

@@ -2,16 +2,17 @@
 
 export SSH_KEY="~/.ssh/ucs-nightly.pem"
 
-export SSM_VPC_ID="/unity-sds/u-cs/nightly/vpc-id"
-export SSM_PUB_SUBNET1="/unity-sds/u-cs/nightly/publicsubnet1"
-export SSM_PUB_SUBNET2="/unity-sds/u-cs/nightly/publicsubnet2"
-export SSM_PRIV_SUBNET1="/unity-sds/u-cs/nightly/privatesubnet1"
-export SSM_PRIV_SUBNET2="/unity-sds/u-cs/nightly/privatesubnet2"
-export SSM_KEYPAIR_NAME="/unity-sds/u-cs/nightly/keypairname"
-export SSM_INSTANCE_TYPE="/unity-sds/u-cs/nightly/instancetype"
-export SSM_PRIVILEGED_POLICY="/unity-sds/u-cs/nightly/privilegedpolicyname"
-export SSM_GITHUB_TOKEN="/unity-sds/u-cs/nightly/githubtoken"
-export SSM_VENUE="/unity-sds/u-cs/nightly/venue"
+export SSM_VPC_ID="/unity/testing/nightly/vpc-id"
+export SSM_PUB_SUBNET1="/unity/testing/nightly/publicsubnet1"
+export SSM_PUB_SUBNET2="/unity/testing/nightly/publicsubnet2"
+export SSM_PRIV_SUBNET1="/unity/testing/nightly/privatesubnet1"
+export SSM_PRIV_SUBNET2="/unity/testing/nightly/privatesubnet2"
+export SSM_KEYPAIR_NAME="/unity/testing/nightly/keypairname"
+export SSM_INSTANCE_TYPE="/unity/testing/nightly/instancetype"
+export SSM_PRIVILEGED_POLICY="/unity/testing/nightly/privilegedpolicyname"
+export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken"
+export SSM_VENUE="/unity/testing/nightly/venue"
+export SSM_ACCOUNT_NAME="/unity/testing/nightly/accountname"
 export STACK_NAME="unity-cs-nightly-management-console"
 
 
@@ -25,6 +26,7 @@ InstanceType=$(aws ssm get-parameter         --name ${SSM_INSTANCE_TYPE}     |gr
 PrivilegedPolicyName=$(aws ssm get-parameter --name ${SSM_PRIVILEGED_POLICY} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 GithubToken=$(aws ssm get-parameter          --name ${SSM_GITHUB_TOKEN}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 Venue=$(aws ssm get-parameter                --name ${SSM_VENUE}             |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+ACCOUNT_NAME=$(aws ssm get-parameter         --name ${SSM_ACCOUNT_NAME}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
 if [ -z "$VPCID" ] 
 then 
@@ -76,6 +78,11 @@ then
     echo "ERROR: Could not read Venue from SSM.  Does the key [$SSM_VENUE] exist?"
     exit
 fi
+if [ -z "$ACCOUNT_NAME" ] 
+then 
+    echo "ERROR: Could not read Account Name from SSM.  Does the key [$SSM_ACCOUNT_NAME] exist?"
+    exit
+fi
 
 aws cloudformation create-stack \
   --stack-name ${STACK_NAME} \
@@ -94,6 +101,7 @@ aws cloudformation create-stack \
 
 #    ParameterKey=KeyPairName,ParameterValue=${KeyPairName} \
 
+echo "Nightly Test in the $ACCOUNT_NAME account" >> nightly_output.txt
 echo "STACK_NAME=$STACK_NAME">NIGHTLY.ENV
 
 #echo"--------------------------------------------------------------------------[PASS]"
