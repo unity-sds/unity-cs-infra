@@ -44,7 +44,7 @@ resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
   retention_in_days = 14
 }
 
-resource "aws_ssm_parameter" "foo" {
+resource "aws_ssm_parameter" "invoke_role_arn" {
   name  = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
   type  = "String"
   value = aws_iam_role.iam_for_lambda.arn
@@ -78,9 +78,14 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
+data "aws_iam_policy" "mcp_operator_policy" {
+  name = "mcp-tenantOperator-AMI-APIG"
+}
+
 resource "aws_iam_role" "iam_for_lambda" {
   name               = "iam_for_lambda"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  permissions_boundary = data.aws_iam_policy.mcp_operator_policy.arn
 }
 
 # Unity CS Common Auth Lambda
