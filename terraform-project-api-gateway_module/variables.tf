@@ -4,6 +4,16 @@ variable "region" {
   default     = "us-west-2"
 }
 
+variable "tags" {
+  description = "AWS Tags"
+  type = map(string)
+}
+
+variable "deployment_name" {
+  description = "The deployment name"
+  type        = string
+}
+
 variable "project_name" {
   type        = string
   description = "Project Name"
