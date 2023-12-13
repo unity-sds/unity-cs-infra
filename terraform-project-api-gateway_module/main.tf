@@ -44,11 +44,6 @@ resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
   retention_in_days = 14
 }
 
-# Unity CS Common Lambda Authorizer Execution Role ARN
-data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_invoke_role_arn" {
-  name = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
-}
-
 resource "aws_ssm_parameter" "foo" {
   name  = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
   type  = "String"
