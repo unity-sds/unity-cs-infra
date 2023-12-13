@@ -460,8 +460,8 @@ module "eks" {
   vpc_id = data.aws_ssm_parameter.vpc_id.value
 
   #cluster_security_group_id = data.aws_ssm_parameter.cluster_sg.value
-  create_cluster_security_group = false
-  create_node_security_group = false
+  create_cluster_security_group = true
+  create_node_security_group = true
   create_iam_role = false
   enable_irsa = true
   iam_role_arn = aws_iam_role.cluster_iam_role.arn
@@ -534,13 +534,13 @@ module "irsa-ebs-csi" {
   oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
 }
 
-resource "aws_eks_addon" "ebs-csi" {
-  cluster_name             = module.eks.cluster_name
-  addon_name               = "aws-ebs-csi-driver"
-  addon_version            = "v1.20.0-eksbuild.1"
-  service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
-  tags = {
-    "eks_addon" = "ebs-csi"
-    "terraform" = "true"
-  }
-}
+#resource "aws_eks_addon" "ebs-csi" {
+#  cluster_name             = module.eks.cluster_name
+#  addon_name               = "aws-ebs-csi-driver"
+#  addon_version            = "v1.20.0-eksbuild.1"
+#  service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
+#  tags = {
+#    "eks_addon" = "ebs-csi"
+#    "terraform" = "true"
+#  }
+#}
