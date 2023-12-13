@@ -177,7 +177,7 @@ data "aws_iam_policy" "mcptools"{
 
 resource "aws_iam_role_policy_attachment" "mcptools" {
   role       = aws_iam_role.cluster_iam_role.name
-  policy_arn = data.aws_iam_policy.mcptools
+  policy_arn = data.aws_iam_policy.mcptools.arn
 }
 
 
@@ -519,7 +519,7 @@ resource "aws_ssm_parameter" "eks_subnets" {
 }
 
 data "aws_iam_policy" "ebs_csi_policy" {
-  arn = "arn:aws:iam::604856450995:policy/U-CS_Service_Policy"
+  name = "U-CS_Service_Policy"
 }
 
 module "irsa-ebs-csi" {
