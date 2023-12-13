@@ -49,6 +49,12 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_invoke_role_arn" {
   name = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
 }
 
+resource "aws_ssm_parameter" "foo" {
+  name  = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
+  type  = "String"
+  value = aws_iam_role.iam_for_lambda.arn
+}
+
 # Unity CS Common Lambda Authorizer Allowed Cognito Client ID List (Command Seperated)
 data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_client_id_list" {
   name = var.ssm_param_api_gateway_cs_lambda_authorizer_cognito_client_id_list
