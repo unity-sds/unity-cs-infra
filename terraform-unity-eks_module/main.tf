@@ -116,6 +116,13 @@ resource "aws_iam_role" "cluster_iam_role" {
         Action = "sts:AssumeRole",
         Effect = "Allow",
         Principal = {
+          Service = "eks.amazonaws.com" # or the appropriate AWS service
+        },
+      },
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
           Service = "ec2.amazonaws.com" # or the appropriate AWS service
         },
       },
@@ -522,17 +529,17 @@ data "aws_iam_policy" "ebs_csi_policy" {
   name = "U-CS_Service_Policy"
 }
 
-module "irsa-ebs-csi" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version = "4.7.0"
-
-  create_role                   = false
-  #role_name                     = "AmazonEKSTFEBSCSIRole-${module.eks.cluster_name}"
-  role_name = "U-CS_Service_Role"
-  provider_url                  = module.eks.oidc_provider
-  role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
-}
+#module "irsa-ebs-csi" {
+#  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+#  version = "4.7.0"
+#
+#  create_role                   = false
+#  #role_name                     = "AmazonEKSTFEBSCSIRole-${module.eks.cluster_name}"
+#  role_name = "U-CS_Service_Role"
+#  provider_url                  = module.eks.oidc_provider
+#  role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
+#  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+#}
 
 #resource "aws_eks_addon" "ebs-csi" {
 #  cluster_name             = module.eks.cluster_name
