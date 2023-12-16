@@ -56,7 +56,7 @@ def print_table(results):
         print(f"{result['name'].ljust(name_width)} | {result['status']}")
 
 # Function to test login
-def test_login(driver, image_dir, results):
+def login_to_MC(driver, image_dir, results):
     try:
         screenshot_path = os.path.join(image_dir, 'screenshot_after_login.png')
         driver.save_screenshot(screenshot_path)
@@ -67,7 +67,7 @@ def test_login(driver, image_dir, results):
         results.append({'name': 'Login', 'status': f'FAILED - {e}'})
 
 # Function to test clicking the Go! button
-def test_click_go_button(driver, image_dir, results):
+def initiate_core_setup(driver, image_dir, results):
     try:
         go_button = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
@@ -128,7 +128,7 @@ def core_management_setup_save_btn(driver, image_dir, results):
     except Exception as e:
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
         
-def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
+def return_to_MC(driver, image_dir, results, url_without_cred):
     test_name = 'Go Back and Go To Market'
     try:
         driver.get(url_without_cred)
@@ -296,13 +296,13 @@ if __name__ == '__main__':
     # Run the tests
     navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
     
-    test_login(driver, IMAGE_DIR, test_results)
-    test_click_go_button(driver, IMAGE_DIR, test_results)
+    login_to_MC(driver, IMAGE_DIR, test_results)
+    initiate_core_setup(driver, IMAGE_DIR, test_results)
     core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
     core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
     core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
-    go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
+    return_to_MC(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
     install_eks(driver, IMAGE_DIR, test_results)
     unity_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
     unity_management_setup(driver, IMAGE_DIR, test_results, "main", "branch")
