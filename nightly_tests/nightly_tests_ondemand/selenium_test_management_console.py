@@ -124,7 +124,7 @@ def input_project_name(driver, image_dir, results, text):
     core_management_setup(driver, image_dir, results, text, "unity-cs-selenium-project")
 
 
-def core_management_setup_save_btn(driver, image_dir, results):
+def core_setup_save_btn(driver, image_dir, results):
     test_name = 'Save Button'
     try:
         save_button = WebDriverWait(driver, 10).until(
@@ -258,6 +258,18 @@ def unity_management_setup(driver, image_dir, results, text, element_id):
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
         print(str(e))
+def eks_module_name(driver, image_dir, results, text):
+    """
+    Wrapper function to setup the EKS module name using unity_management_setup.
+    """
+    unity_management_setup(driver, image_dir, results, text, "unity-cs-selenium-name")
+
+def eks_module_branch(driver, image_dir, results, text):
+    """
+    Wrapper function to setup the EKS module branch using unity_management_setup.
+    :param text: Text to be input as the EKS module branch
+    """
+    unity_management_setup(driver, image_dir, results, text, "main")
 
 def click_button(driver, image_dir, results, button_class):
     test_name = f'Next Button'
@@ -312,12 +324,12 @@ if __name__ == '__main__':
     initiate_core_setup(driver, IMAGE_DIR, test_results)
     input_project_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
     input_venue_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
-    core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
+    core_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
     return_to_MC(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
     install_eks(driver, IMAGE_DIR, test_results)
-    unity_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
-    unity_management_setup(driver, IMAGE_DIR, test_results, "main", "branch")
+    eks_module_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
+    eks_module_branch(driver, IMAGE_DIR, test_results, "main", "branch")
     click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
     click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
     click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
