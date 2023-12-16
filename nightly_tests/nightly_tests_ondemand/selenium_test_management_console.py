@@ -111,7 +111,19 @@ def core_management_setup(driver, image_dir, results, text, element_id):
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
         print(str(e))
-        
+def input_venue_name(driver, image_dir, results, text):
+    """
+    Wrapper function to input venue name using core_management_setup.
+    """
+    core_management_setup(driver, image_dir, results, text, "unity-cs-selenium-venue")
+
+def input_project_name(driver, image_dir, results, text):
+    """
+    Wrapper function to input project name using core_management_setup.
+    """
+    core_management_setup(driver, image_dir, results, text, "unity-cs-selenium-project")
+
+
 def core_management_setup_save_btn(driver, image_dir, results):
     test_name = 'Save Button'
     try:
@@ -298,8 +310,8 @@ if __name__ == '__main__':
     
     login_to_MC(driver, IMAGE_DIR, test_results)
     initiate_core_setup(driver, IMAGE_DIR, test_results)
-    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
-    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
+    input_project_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
+    input_venue_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
     core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
     return_to_MC(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
