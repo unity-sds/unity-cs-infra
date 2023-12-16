@@ -317,15 +317,18 @@ if __name__ == '__main__':
     # Create driver
     driver = create_driver()
 
-    # Run the tests
+    # Login to management console
     navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
-    
     login_to_MC(driver, IMAGE_DIR, test_results)
+    
+    # Initiate core setup
     initiate_core_setup(driver, IMAGE_DIR, test_results)
     input_project_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
     input_venue_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
     core_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
+
+    #Initiate EKS module Install
     return_to_MC(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
     install_eks(driver, IMAGE_DIR, test_results)
     eks_module_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
