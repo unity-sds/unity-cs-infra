@@ -79,9 +79,9 @@ def initiate_core_setup(driver, image_dir, results):
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
         assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
-        results.append({'name': 'Click Core Management Btn', 'status': 'PASSED'})
+        results.append({'name': 'Initiate Core Setup', 'status': 'PASSED'})
     except AssertionError as e:
-        results.append({'name': 'Click Core Management Btn', 'status': f'FAILED - {e}'})
+        results.append({'name': 'Initiate Core Setup', 'status': f'FAILED - {e}'})
         
 def core_management_setup(driver, image_dir, results, text, element_id):
     test_name = f'Enter {element_id} Name'
@@ -125,7 +125,7 @@ def input_project_name(driver, image_dir, results, text):
 
 
 def core_setup_save_btn(driver, image_dir, results):
-    test_name = 'Save Button'
+    test_name = 'Core Setup Save Button'
     try:
         save_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[@type='submit'][contains(@class, 'st-button large mt-5')]"))
