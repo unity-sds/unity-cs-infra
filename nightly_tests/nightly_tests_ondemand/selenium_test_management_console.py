@@ -166,7 +166,7 @@ def return_to_MC(driver, image_dir, results, url_without_cred):
         except AssertionError as url_error:
             error_ = f"URL check failed: {url_error}"
             
-            raise Exception(error_message)
+            raise Exception(error_)
 
         # Take a screenshot for confirmation
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
