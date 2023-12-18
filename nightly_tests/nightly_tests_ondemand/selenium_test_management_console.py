@@ -141,7 +141,7 @@ def core_setup_save_btn(driver, image_dir, results):
         results.append({'name': test_name, 'status': f'FAILED - {e}'})
         
 def return_to_MC(driver, image_dir, results, url_without_cred):
-    test_name = 'Go Back and Go To Market'
+    test_name = 'Return to MC'
     try:
         driver.get(url_without_cred)
         time.sleep(5)
