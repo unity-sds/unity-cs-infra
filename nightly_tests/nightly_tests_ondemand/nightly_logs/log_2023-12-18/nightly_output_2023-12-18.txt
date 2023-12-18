@@ -1,48 +1,94 @@
-Repo Hash (Nightly Test):     [8392953]
+Repo Hash (Nightly Test):     [84ed1b9]
 Repo Hash (Cloudformation):   [12e8d0e]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [20 seconds] - PASS
-Initiating Cloudformation Teardown...
+Stack Creation Time: [600 seconds] - PASS
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [380 seconds] - PASS
 Traceback (most recent call last):
-  File "selenium_test_management_console.py", line 297, in <module>
-    navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
-  File "selenium_test_management_console.py", line 30, in navigate_to_url_with_cred
-    driver.get(url_with_cred)
-  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 356, in get
-    self.execute(Command.GET, {"url": url})
-  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 347, in execute
-    self.error_handler.check_response(response)
-  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/errorhandler.py", line 229, in check_response
-    raise exception_class(message, screen, stacktrace)
-selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
-  (Session info: chrome=120.0.6099.71)
+  File "selenium_test_management_console.py", line 300, in <module>
+    test_click_go_button(driver, IMAGE_DIR, test_results)
+  File "selenium_test_management_console.py", line 72, in test_click_go_button
+    go_button = WebDriverWait(driver, 20).until(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py", line 101, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
 Stacktrace:
-#0 0x558ca81bbd33 <unknown>
-#1 0x558ca7e78f87 <unknown>
-#2 0x558ca7e7097a <unknown>
-#3 0x558ca7e5f851 <unknown>
-#4 0x558ca7e60ff0 <unknown>
-#5 0x558ca7e5fb04 <unknown>
-#6 0x558ca7e5e836 <unknown>
-#7 0x558ca7e5e6fa <unknown>
-#8 0x558ca7e5ca99 <unknown>
-#9 0x558ca7e5d2ca <unknown>
-#10 0x558ca7e7be4e <unknown>
-#11 0x558ca7f11a45 <unknown>
-#12 0x558ca7ef2342 <unknown>
-#13 0x558ca7f11297 <unknown>
-#14 0x558ca7ef20e3 <unknown>
-#15 0x558ca7eba044 <unknown>
-#16 0x558ca7ebb44e <unknown>
-#17 0x558ca8180861 <unknown>
-#18 0x558ca8184785 <unknown>
-#19 0x558ca816e285 <unknown>
-#20 0x558ca818541f <unknown>
-#21 0x558ca815220f <unknown>
-#22 0x558ca81a9028 <unknown>
-#23 0x558ca81a91f7 <unknown>
-#24 0x558ca81baed4 <unknown>
-#25 0x7fb551633ac3 <unknown>
+#0 0x557291ae5d33 <unknown>
+#1 0x5572917a2f87 <unknown>
+#2 0x5572917f2c0e <unknown>
+#3 0x5572917f2d11 <unknown>
+#4 0x55729183e004 <unknown>
+#5 0x55729181c36d <unknown>
+#6 0x55729183b297 <unknown>
+#7 0x55729181c0e3 <unknown>
+#8 0x5572917e4044 <unknown>
+#9 0x5572917e544e <unknown>
+#10 0x557291aaa861 <unknown>
+#11 0x557291aae785 <unknown>
+#12 0x557291a98285 <unknown>
+#13 0x557291aaf41f <unknown>
+#14 0x557291a7c20f <unknown>
+#15 0x557291ad3028 <unknown>
+#16 0x557291ad31f7 <unknown>
+#17 0x557291ae4ed4 <unknown>
+#18 0x7f8b0f13dac3 <unknown>
 
+Traceback (most recent call last):
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/connection.py", line 461, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/lib/python3.8/http/client.py", line 1348, in getresponse
+    response.begin()
+  File "/usr/lib/python3.8/http/client.py", line 316, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.8/http/client.py", line 285, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+http.client.RemoteDisconnected: Remote end closed connection without response
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "selenium_test_management_console.py", line 294, in <module>
+    driver = create_driver()
+  File "selenium_test_management_console.py", line 22, in create_driver
+    driver = webdriver.Remote(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 208, in __init__
+    self.start_session(capabilities)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 292, in start_session
+    response = self.execute(Command.NEW_SESSION, caps)["value"]
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 345, in execute
+    response = self.command_executor.execute(driver_command, params)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/remote_connection.py", line 300, in execute
+    return self._request(command_info[0], url, body=data)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/remote_connection.py", line 321, in _request
+    response = self._conn.request(method, url, body=body, headers=headers)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/_request_methods.py", line 118, in request
+    return self.request_encode_body(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/_request_methods.py", line 217, in request_encode_body
+    return self.urlopen(method, url, **extra_kw)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/poolmanager.py", line 444, in urlopen
+    response = conn.urlopen(method, u.request_uri, **kw)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/util/retry.py", line 470, in increment
+    raise reraise(type(error), error, _stacktrace)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/util/util.py", line 38, in reraise
+    raise value.with_traceback(tb)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/connectionpool.py", line 536, in _make_request
+    response = conn.getresponse()
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/urllib3/connection.py", line 461, in getresponse
+    httplib_response = super().getresponse()
+  File "/usr/lib/python3.8/http/client.py", line 1348, in getresponse
+    response.begin()
+  File "/usr/lib/python3.8/http/client.py", line 316, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python3.8/http/client.py", line 285, in _read_status
+    raise RemoteDisconnected("Remote end closed connection without"
+urllib3.exceptions.ProtocolError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
