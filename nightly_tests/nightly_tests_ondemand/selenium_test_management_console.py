@@ -73,15 +73,15 @@ def initiate_core_setup(driver, image_dir, results):
             EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
         )
         go_button.click()
-
         WebDriverWait(driver, 10).until(EC.url_contains('/ui/setup')) 
-
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
         assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
         results.append({'name': 'Initiate Core Setup', 'status': 'PASSED'})
     except AssertionError as e:
-        results.append({'name': 'Initiate Core Setup', 'status': f'FAILED - {e}'})
+        results.append({'name': 'Click Core Management Btn', 'status': 'FAILED '})
+    except Exception as e:
+        results.append({'name': 'Click Core Management Btn', 'status': 'FAILED '})
         
 def core_management_setup(driver, image_dir, results, text, element_id):
     test_name = f'Enter {element_id} Name'
@@ -90,9 +90,9 @@ def core_management_setup(driver, image_dir, results, text, element_id):
             EC.visibility_of_element_located((By.ID, element_id))
         )
     except TimeoutException:
-        error_message = f"Element with ID '{element_id}' not found within the given time."
-        results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
-        print(error_message)
+        error_ = f"Element with ID '{element_id}' not found within the given time."
+        results.append({'name': test_name, 'status': 'FAILED', 'error': error_})
+        
         return  # Exit the function if the element is not found
 
     # If the element is found, continue with the rest of the code
@@ -110,7 +110,7 @@ def core_management_setup(driver, image_dir, results, text, element_id):
         results.append({'name': test_name, 'status': 'PASSED'})
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
-        print(str(e))
+
 def input_venue_name(driver, image_dir, results, text):
     """
     Wrapper function to input venue name using core_management_setup.
@@ -125,7 +125,7 @@ def input_project_name(driver, image_dir, results, text):
 
 
 def core_setup_save_btn(driver, image_dir, results):
-    test_name = 'Core Setup Save Button'
+    test_name = 'Core Setup Save Button'   
     try:
         save_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[@type='submit'][contains(@class, 'st-button large mt-5')]"))
@@ -138,7 +138,7 @@ def core_setup_save_btn(driver, image_dir, results):
         results.append({'name': test_name, 'status': 'PASSED'})
 
     except Exception as e:
-        results.append({'name': test_name, 'status': f'FAILED - {e}'})
+        results.append({'name': test_name, 'status': 'FAILED'})
         
 def return_to_MC(driver, image_dir, results, url_without_cred):
     test_name = 'Return to MC'
@@ -152,23 +152,20 @@ def return_to_MC(driver, image_dir, results, url_without_cred):
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_back.png')
         driver.save_screenshot(screenshot_path)
         try:
-            
             go_button = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
             )
-            
             go_button.click()
         except TimeoutException:
-            error_message = "Failed to find or click the 'Go to Marketplace' button within the given time."
-            print(error_message)
-            raise Exception(error_message)
+            error_ = "Failed to find or click the 'Go to Marketplace' button within the given time."
+            raise Exception(error_)
 
         try:
             WebDriverWait(driver, 20).until(EC.url_contains('/ui/marketplace'))
             assert driver.current_url.endswith('/ui/marketplace'), "URL does not end with '/ui/marketplace'"
         except AssertionError as url_error:
-            error_message = f"URL check failed: {url_error}"
-            print(error_message)
+            error_ = f"URL check failed: {url_error}"
+            
             raise Exception(error_message)
 
         # Take a screenshot for confirmation
@@ -178,7 +175,6 @@ def return_to_MC(driver, image_dir, results, url_without_cred):
         results.append({'name': test_name, 'status': 'PASSED'})
         
     except Exception as e:
-        print(f"Exception occurred: {e}")
         # Append a failed result with the exception message
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
      
@@ -201,8 +197,7 @@ def grab_terminal_output(driver, element_selector, results):
         return output_text
 
     except Exception as e:
-        print(f"Error in grabbing terminal output: {e}")
-        results.append({'name': 'Terminal Output', 'status': f'FAILED - {e}'})
+        results.append({'name': 'Terminal Output', 'status': 'FAILED '})
         return None
 
 def install_eks(driver, image_dir, results):
@@ -229,7 +224,8 @@ def install_eks(driver, image_dir, results):
 
     except Exception as e:
         # Append a failed result with the exception message
-        results.append({'name': test_name, 'status': f'FAILED - {e}'})
+        results.append({'name': test_name, 'status': 'FAILED'})
+        
 def unity_management_setup(driver, image_dir, results, text, element_id):
     test_name = f'Enter {element_id} Name'
     try:
@@ -239,7 +235,6 @@ def unity_management_setup(driver, image_dir, results, text, element_id):
     except TimeoutException:
         error_message = f"Element with ID '{element_id}' not found within the given time."
         results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
-        print(error_message)
         return  # Exit the function if the element is not found
 
     # If the element is found, continue with the rest of the code
@@ -257,7 +252,7 @@ def unity_management_setup(driver, image_dir, results, text, element_id):
         results.append({'name': test_name, 'status': 'PASSED'})
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
-        print(str(e))
+        
 def eks_module_name(driver, image_dir, results, text):
     """
     Wrapper function to setup the EKS module name using unity_management_setup.
@@ -288,12 +283,12 @@ def click_button(driver, image_dir, results, button_class):
 
         results.append({'name': test_name, 'status': 'PASSED'})
     except TimeoutException:
-        error_message = f"Button with class '{button_class}' not found or not clickable within the given time."
-        results.append({'name': test_name, 'status': 'FAILED', 'error': error_message})
-        print(error_message)
+        error_ = f"Button with class '{button_class}' not found or not clickable within the given time."
+        results.append({'name': test_name, 'status': 'FAILED', 'error': error_})
+
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
-        print(str(e))
+    
 
 # Main execution
 if __name__ == '__main__':
@@ -302,7 +297,7 @@ if __name__ == '__main__':
     mc_password = os.getenv('MC_PASSWORD')
     management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
 
-    # Construct the URL with credentials
+    # Construct the URL with credential
     parsed_url = urlparse(management_console_url)
     new_netloc = f"{mc_username}:{mc_password}@{parsed_url.hostname}"
     if parsed_url.port:

@@ -1,0 +1,25 @@
+Repo Hash (Nightly Test):     [c5c277d]
+Repo Hash (Cloudformation):   [12e8d0e]
+Nightly Test in the unity-cm account
+Stack Name: [unity-cs-nightly-management-console]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [380 seconds] - PASS
+
+Test Name                 | Status
+--------------------------+--------
+Navigate to URL           | PASSED
+Login                     | FAILED - The page title should be Unity Management Console
+Click Core Management Btn | FAILED 
+Enter project Name        | FAILED
+Enter venue Name          | FAILED
+Save Button               | FAILED
+Terminal Output           | FAILED 
+Go Back and Go To Market  | FAILED
+Install EKS               | FAILED
+Enter name Name           | FAILED
+Enter branch Name         | FAILED
+Next Button               | FAILED
+Next Button               | FAILED
+Next Button               | FAILED
+Next Button               | FAILED
+Terminal Output           | FAILED 
