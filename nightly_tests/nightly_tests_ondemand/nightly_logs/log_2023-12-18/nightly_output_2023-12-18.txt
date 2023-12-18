@@ -1,63 +1,9 @@
-Repo Hash (Nightly Test):     [3b0c2a6]
+Repo Hash (Nightly Test):     [a16e99f]
 Repo Hash (Cloudformation):   [12e8d0e]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
 Stack Status (Final): [CREATE_COMPLETE]
 Stack Creation Time: [380 seconds] - PASS
-Element with ID 'project' not found within the given time.
-Element with ID 'venue' not found within the given time.
-Error in grabbing terminal output: Message: 
-Stacktrace:
-#0 0x55a97d310d33 <unknown>
-#1 0x55a97cfcdf87 <unknown>
-#2 0x55a97d01dc0e <unknown>
-#3 0x55a97d01dd11 <unknown>
-#4 0x55a97d069004 <unknown>
-#5 0x55a97d04736d <unknown>
-#6 0x55a97d066297 <unknown>
-#7 0x55a97d0470e3 <unknown>
-#8 0x55a97d00f044 <unknown>
-#9 0x55a97d01044e <unknown>
-#10 0x55a97d2d5861 <unknown>
-#11 0x55a97d2d9785 <unknown>
-#12 0x55a97d2c3285 <unknown>
-#13 0x55a97d2da41f <unknown>
-#14 0x55a97d2a720f <unknown>
-#15 0x55a97d2fe028 <unknown>
-#16 0x55a97d2fe1f7 <unknown>
-#17 0x55a97d30fed4 <unknown>
-#18 0x7f2a1406dac3 <unknown>
-
-Failed to find or click the 'Go to Marketplace' button within the given time.
-Exception occurred: Failed to find or click the 'Go to Marketplace' button within the given time.
-Element with ID 'name' not found within the given time.
-Element with ID 'branch' not found within the given time.
-Button with class 'default-btn.next-step.svelte-1pvzwgg' not found or not clickable within the given time.
-Button with class 'default-btn.next-step.svelte-1pvzwgg' not found or not clickable within the given time.
-Button with class 'default-btn.next-step.svelte-1pvzwgg' not found or not clickable within the given time.
-Button with class 'btn.btn-primary.svelte-1pvzwgg' not found or not clickable within the given time.
-Error in grabbing terminal output: Message: 
-Stacktrace:
-#0 0x55a97d310d33 <unknown>
-#1 0x55a97cfcdf87 <unknown>
-#2 0x55a97d01dc0e <unknown>
-#3 0x55a97d01dd11 <unknown>
-#4 0x55a97d069004 <unknown>
-#5 0x55a97d04736d <unknown>
-#6 0x55a97d066297 <unknown>
-#7 0x55a97d0470e3 <unknown>
-#8 0x55a97d00f044 <unknown>
-#9 0x55a97d01044e <unknown>
-#10 0x55a97d2d5861 <unknown>
-#11 0x55a97d2d9785 <unknown>
-#12 0x55a97d2c3285 <unknown>
-#13 0x55a97d2da41f <unknown>
-#14 0x55a97d2a720f <unknown>
-#15 0x55a97d2fe028 <unknown>
-#16 0x55a97d2fe1f7 <unknown>
-#17 0x55a97d30fed4 <unknown>
-#18 0x7f2a1406dac3 <unknown>
-
 
 Test Name                 | Status
 --------------------------+--------
@@ -65,94 +11,94 @@ Navigate to URL           | PASSED
 Login                     | FAILED - The page title should be Unity Management Console
 Click Core Management Btn | FAILED - Message: 
 Stacktrace:
-#0 0x55a97d310d33 <unknown>
-#1 0x55a97cfcdf87 <unknown>
-#2 0x55a97d01dc0e <unknown>
-#3 0x55a97d01dd11 <unknown>
-#4 0x55a97d069004 <unknown>
-#5 0x55a97d04736d <unknown>
-#6 0x55a97d066297 <unknown>
-#7 0x55a97d0470e3 <unknown>
-#8 0x55a97d00f044 <unknown>
-#9 0x55a97d01044e <unknown>
-#10 0x55a97d2d5861 <unknown>
-#11 0x55a97d2d9785 <unknown>
-#12 0x55a97d2c3285 <unknown>
-#13 0x55a97d2da41f <unknown>
-#14 0x55a97d2a720f <unknown>
-#15 0x55a97d2fe028 <unknown>
-#16 0x55a97d2fe1f7 <unknown>
-#17 0x55a97d30fed4 <unknown>
-#18 0x7f2a1406dac3 <unknown>
+#0 0x5582c2c5fd33 <unknown>
+#1 0x5582c291cf87 <unknown>
+#2 0x5582c296cc0e <unknown>
+#3 0x5582c296cd11 <unknown>
+#4 0x5582c29b8004 <unknown>
+#5 0x5582c299636d <unknown>
+#6 0x5582c29b5297 <unknown>
+#7 0x5582c29960e3 <unknown>
+#8 0x5582c295e044 <unknown>
+#9 0x5582c295f44e <unknown>
+#10 0x5582c2c24861 <unknown>
+#11 0x5582c2c28785 <unknown>
+#12 0x5582c2c12285 <unknown>
+#13 0x5582c2c2941f <unknown>
+#14 0x5582c2bf620f <unknown>
+#15 0x5582c2c4d028 <unknown>
+#16 0x5582c2c4d1f7 <unknown>
+#17 0x5582c2c5eed4 <unknown>
+#18 0x7f6715ec7ac3 <unknown>
 
 Enter project Name        | FAILED
 Enter venue Name          | FAILED
 Save Button               | FAILED - Message: 
 Stacktrace:
-#0 0x55a97d310d33 <unknown>
-#1 0x55a97cfcdf87 <unknown>
-#2 0x55a97d01dc0e <unknown>
-#3 0x55a97d01dd11 <unknown>
-#4 0x55a97d069004 <unknown>
-#5 0x55a97d04736d <unknown>
-#6 0x55a97d066297 <unknown>
-#7 0x55a97d0470e3 <unknown>
-#8 0x55a97d00f044 <unknown>
-#9 0x55a97d01044e <unknown>
-#10 0x55a97d2d5861 <unknown>
-#11 0x55a97d2d9785 <unknown>
-#12 0x55a97d2c3285 <unknown>
-#13 0x55a97d2da41f <unknown>
-#14 0x55a97d2a720f <unknown>
-#15 0x55a97d2fe028 <unknown>
-#16 0x55a97d2fe1f7 <unknown>
-#17 0x55a97d30fed4 <unknown>
-#18 0x7f2a1406dac3 <unknown>
+#0 0x5582c2c5fd33 <unknown>
+#1 0x5582c291cf87 <unknown>
+#2 0x5582c296cc0e <unknown>
+#3 0x5582c296cd11 <unknown>
+#4 0x5582c29b8004 <unknown>
+#5 0x5582c299636d <unknown>
+#6 0x5582c29b5297 <unknown>
+#7 0x5582c29960e3 <unknown>
+#8 0x5582c295e044 <unknown>
+#9 0x5582c295f44e <unknown>
+#10 0x5582c2c24861 <unknown>
+#11 0x5582c2c28785 <unknown>
+#12 0x5582c2c12285 <unknown>
+#13 0x5582c2c2941f <unknown>
+#14 0x5582c2bf620f <unknown>
+#15 0x5582c2c4d028 <unknown>
+#16 0x5582c2c4d1f7 <unknown>
+#17 0x5582c2c5eed4 <unknown>
+#18 0x7f6715ec7ac3 <unknown>
 
 Terminal Output           | FAILED - Message: 
 Stacktrace:
-#0 0x55a97d310d33 <unknown>
-#1 0x55a97cfcdf87 <unknown>
-#2 0x55a97d01dc0e <unknown>
-#3 0x55a97d01dd11 <unknown>
-#4 0x55a97d069004 <unknown>
-#5 0x55a97d04736d <unknown>
-#6 0x55a97d066297 <unknown>
-#7 0x55a97d0470e3 <unknown>
-#8 0x55a97d00f044 <unknown>
-#9 0x55a97d01044e <unknown>
-#10 0x55a97d2d5861 <unknown>
-#11 0x55a97d2d9785 <unknown>
-#12 0x55a97d2c3285 <unknown>
-#13 0x55a97d2da41f <unknown>
-#14 0x55a97d2a720f <unknown>
-#15 0x55a97d2fe028 <unknown>
-#16 0x55a97d2fe1f7 <unknown>
-#17 0x55a97d30fed4 <unknown>
-#18 0x7f2a1406dac3 <unknown>
+#0 0x5582c2c5fd33 <unknown>
+#1 0x5582c291cf87 <unknown>
+#2 0x5582c296cc0e <unknown>
+#3 0x5582c296cd11 <unknown>
+#4 0x5582c29b8004 <unknown>
+#5 0x5582c299636d <unknown>
+#6 0x5582c29b5297 <unknown>
+#7 0x5582c29960e3 <unknown>
+#8 0x5582c295e044 <unknown>
+#9 0x5582c295f44e <unknown>
+#10 0x5582c2c24861 <unknown>
+#11 0x5582c2c28785 <unknown>
+#12 0x5582c2c12285 <unknown>
+#13 0x5582c2c2941f <unknown>
+#14 0x5582c2bf620f <unknown>
+#15 0x5582c2c4d028 <unknown>
+#16 0x5582c2c4d1f7 <unknown>
+#17 0x5582c2c5eed4 <unknown>
+#18 0x7f6715ec7ac3 <unknown>
 
 Go Back and Go To Market  | FAILED
 Install EKS               | FAILED - Message: 
 Stacktrace:
-#0 0x55a97d310d33 <unknown>
-#1 0x55a97cfcdf87 <unknown>
-#2 0x55a97d01dc0e <unknown>
-#3 0x55a97d01dd11 <unknown>
-#4 0x55a97d069004 <unknown>
-#5 0x55a97d04736d <unknown>
-#6 0x55a97d066297 <unknown>
-#7 0x55a97d0470e3 <unknown>
-#8 0x55a97d00f044 <unknown>
-#9 0x55a97d01044e <unknown>
-#10 0x55a97d2d5861 <unknown>
-#11 0x55a97d2d9785 <unknown>
-#12 0x55a97d2c3285 <unknown>
-#13 0x55a97d2da41f <unknown>
-#14 0x55a97d2a720f <unknown>
-#15 0x55a97d2fe028 <unknown>
-#16 0x55a97d2fe1f7 <unknown>
-#17 0x55a97d30fed4 <unknown>
-#18 0x7f2a1406dac3 <unknown>
+#0 0x5582c2c5fd33 <unknown>
+#1 0x5582c291cf87 <unknown>
+#2 0x5582c296cc0e <unknown>
+#3 0x5582c296cd11 <unknown>
+#4 0x5582c29b8004 <unknown>
+#5 0x5582c299636d <unknown>
+#6 0x5582c29b5297 <unknown>
+#7 0x5582c29960e3 <unknown>
+#8 0x5582c295e044 <unknown>
+#9 0x5582c295f44e <unknown>
+#10 0x5582c2c24861 <unknown>
+#11 0x5582c2c28785 <unknown>
+#12 0x5582c2c12285 <unknown>
+#13 0x5582c2c2941f <unknown>
+#14 0x5582c2bf620f <unknown>
+#15 0x5582c2c4d028 <unknown>
+#16 0x5582c2c4d1f7 <unknown>
+#17 0x5582c2c5eed4 <unknown>
+#18 0x7f6715ec7ac3 <unknown>
 
 Enter name Name           | FAILED
 Enter branch Name         | FAILED
@@ -162,23 +108,23 @@ Next Button               | FAILED
 Next Button               | FAILED
 Terminal Output           | FAILED - Message: 
 Stacktrace:
-#0 0x55a97d310d33 <unknown>
-#1 0x55a97cfcdf87 <unknown>
-#2 0x55a97d01dc0e <unknown>
-#3 0x55a97d01dd11 <unknown>
-#4 0x55a97d069004 <unknown>
-#5 0x55a97d04736d <unknown>
-#6 0x55a97d066297 <unknown>
-#7 0x55a97d0470e3 <unknown>
-#8 0x55a97d00f044 <unknown>
-#9 0x55a97d01044e <unknown>
-#10 0x55a97d2d5861 <unknown>
-#11 0x55a97d2d9785 <unknown>
-#12 0x55a97d2c3285 <unknown>
-#13 0x55a97d2da41f <unknown>
-#14 0x55a97d2a720f <unknown>
-#15 0x55a97d2fe028 <unknown>
-#16 0x55a97d2fe1f7 <unknown>
-#17 0x55a97d30fed4 <unknown>
-#18 0x7f2a1406dac3 <unknown>
+#0 0x5582c2c5fd33 <unknown>
+#1 0x5582c291cf87 <unknown>
+#2 0x5582c296cc0e <unknown>
+#3 0x5582c296cd11 <unknown>
+#4 0x5582c29b8004 <unknown>
+#5 0x5582c299636d <unknown>
+#6 0x5582c29b5297 <unknown>
+#7 0x5582c29960e3 <unknown>
+#8 0x5582c295e044 <unknown>
+#9 0x5582c295f44e <unknown>
+#10 0x5582c2c24861 <unknown>
+#11 0x5582c2c28785 <unknown>
+#12 0x5582c2c12285 <unknown>
+#13 0x5582c2c2941f <unknown>
+#14 0x5582c2bf620f <unknown>
+#15 0x5582c2c4d028 <unknown>
+#16 0x5582c2c4d1f7 <unknown>
+#17 0x5582c2c5eed4 <unknown>
+#18 0x7f6715ec7ac3 <unknown>
 
