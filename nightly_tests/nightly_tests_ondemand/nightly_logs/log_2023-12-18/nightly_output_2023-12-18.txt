@@ -1,4 +1,4 @@
-Repo Hash (Nightly Test):     [a16e99f]
+Repo Hash (Nightly Test):     [a01c9f5]
 Repo Hash (Cloudformation):   [12e8d0e]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
@@ -9,122 +9,17 @@ Test Name                 | Status
 --------------------------+--------
 Navigate to URL           | PASSED
 Login                     | FAILED - The page title should be Unity Management Console
-Click Core Management Btn | FAILED - Message: 
-Stacktrace:
-#0 0x5582c2c5fd33 <unknown>
-#1 0x5582c291cf87 <unknown>
-#2 0x5582c296cc0e <unknown>
-#3 0x5582c296cd11 <unknown>
-#4 0x5582c29b8004 <unknown>
-#5 0x5582c299636d <unknown>
-#6 0x5582c29b5297 <unknown>
-#7 0x5582c29960e3 <unknown>
-#8 0x5582c295e044 <unknown>
-#9 0x5582c295f44e <unknown>
-#10 0x5582c2c24861 <unknown>
-#11 0x5582c2c28785 <unknown>
-#12 0x5582c2c12285 <unknown>
-#13 0x5582c2c2941f <unknown>
-#14 0x5582c2bf620f <unknown>
-#15 0x5582c2c4d028 <unknown>
-#16 0x5582c2c4d1f7 <unknown>
-#17 0x5582c2c5eed4 <unknown>
-#18 0x7f6715ec7ac3 <unknown>
-
+Click Core Management Btn | FAILED 
 Enter project Name        | FAILED
 Enter venue Name          | FAILED
-Save Button               | FAILED - Message: 
-Stacktrace:
-#0 0x5582c2c5fd33 <unknown>
-#1 0x5582c291cf87 <unknown>
-#2 0x5582c296cc0e <unknown>
-#3 0x5582c296cd11 <unknown>
-#4 0x5582c29b8004 <unknown>
-#5 0x5582c299636d <unknown>
-#6 0x5582c29b5297 <unknown>
-#7 0x5582c29960e3 <unknown>
-#8 0x5582c295e044 <unknown>
-#9 0x5582c295f44e <unknown>
-#10 0x5582c2c24861 <unknown>
-#11 0x5582c2c28785 <unknown>
-#12 0x5582c2c12285 <unknown>
-#13 0x5582c2c2941f <unknown>
-#14 0x5582c2bf620f <unknown>
-#15 0x5582c2c4d028 <unknown>
-#16 0x5582c2c4d1f7 <unknown>
-#17 0x5582c2c5eed4 <unknown>
-#18 0x7f6715ec7ac3 <unknown>
-
-Terminal Output           | FAILED - Message: 
-Stacktrace:
-#0 0x5582c2c5fd33 <unknown>
-#1 0x5582c291cf87 <unknown>
-#2 0x5582c296cc0e <unknown>
-#3 0x5582c296cd11 <unknown>
-#4 0x5582c29b8004 <unknown>
-#5 0x5582c299636d <unknown>
-#6 0x5582c29b5297 <unknown>
-#7 0x5582c29960e3 <unknown>
-#8 0x5582c295e044 <unknown>
-#9 0x5582c295f44e <unknown>
-#10 0x5582c2c24861 <unknown>
-#11 0x5582c2c28785 <unknown>
-#12 0x5582c2c12285 <unknown>
-#13 0x5582c2c2941f <unknown>
-#14 0x5582c2bf620f <unknown>
-#15 0x5582c2c4d028 <unknown>
-#16 0x5582c2c4d1f7 <unknown>
-#17 0x5582c2c5eed4 <unknown>
-#18 0x7f6715ec7ac3 <unknown>
-
+Save Button               | FAILED
+Terminal Output           | FAILED 
 Go Back and Go To Market  | FAILED
-Install EKS               | FAILED - Message: 
-Stacktrace:
-#0 0x5582c2c5fd33 <unknown>
-#1 0x5582c291cf87 <unknown>
-#2 0x5582c296cc0e <unknown>
-#3 0x5582c296cd11 <unknown>
-#4 0x5582c29b8004 <unknown>
-#5 0x5582c299636d <unknown>
-#6 0x5582c29b5297 <unknown>
-#7 0x5582c29960e3 <unknown>
-#8 0x5582c295e044 <unknown>
-#9 0x5582c295f44e <unknown>
-#10 0x5582c2c24861 <unknown>
-#11 0x5582c2c28785 <unknown>
-#12 0x5582c2c12285 <unknown>
-#13 0x5582c2c2941f <unknown>
-#14 0x5582c2bf620f <unknown>
-#15 0x5582c2c4d028 <unknown>
-#16 0x5582c2c4d1f7 <unknown>
-#17 0x5582c2c5eed4 <unknown>
-#18 0x7f6715ec7ac3 <unknown>
-
+Install EKS               | FAILED
 Enter name Name           | FAILED
 Enter branch Name         | FAILED
 Next Button               | FAILED
 Next Button               | FAILED
 Next Button               | FAILED
 Next Button               | FAILED
-Terminal Output           | FAILED - Message: 
-Stacktrace:
-#0 0x5582c2c5fd33 <unknown>
-#1 0x5582c291cf87 <unknown>
-#2 0x5582c296cc0e <unknown>
-#3 0x5582c296cd11 <unknown>
-#4 0x5582c29b8004 <unknown>
-#5 0x5582c299636d <unknown>
-#6 0x5582c29b5297 <unknown>
-#7 0x5582c29960e3 <unknown>
-#8 0x5582c295e044 <unknown>
-#9 0x5582c295f44e <unknown>
-#10 0x5582c2c24861 <unknown>
-#11 0x5582c2c28785 <unknown>
-#12 0x5582c2c12285 <unknown>
-#13 0x5582c2c2941f <unknown>
-#14 0x5582c2bf620f <unknown>
-#15 0x5582c2c4d028 <unknown>
-#16 0x5582c2c4d1f7 <unknown>
-#17 0x5582c2c5eed4 <unknown>
-#18 0x7f6715ec7ac3 <unknown>
-
+Terminal Output           | FAILED 
