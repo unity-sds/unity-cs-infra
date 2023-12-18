@@ -73,14 +73,14 @@ def test_click_go_button(driver, image_dir, results):
             EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
         )
         go_button.click()
-
         WebDriverWait(driver, 10).until(EC.url_contains('/ui/setup')) 
-
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
         assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
         results.append({'name': 'Click Core Management Btn', 'status': 'PASSED'})
     except AssertionError as e:
+        results.append({'name': 'Click Core Management Btn', 'status': f'FAILED - {e}'})
+    except Exception as e:
         results.append({'name': 'Click Core Management Btn', 'status': f'FAILED - {e}'})
         
 def core_management_setup(driver, image_dir, results, text, element_id):
