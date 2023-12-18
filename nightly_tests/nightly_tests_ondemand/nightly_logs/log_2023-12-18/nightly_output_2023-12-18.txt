@@ -1,0 +1,48 @@
+Repo Hash (Nightly Test):     [8392953]
+Repo Hash (Cloudformation):   [12e8d0e]
+Nightly Test in the unity-cm account
+Stack Name: [unity-cs-nightly-management-console]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [20 seconds] - PASS
+Initiating Cloudformation Teardown...
+Traceback (most recent call last):
+  File "selenium_test_management_console.py", line 297, in <module>
+    navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
+  File "selenium_test_management_console.py", line 30, in navigate_to_url_with_cred
+    driver.get(url_with_cred)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 356, in get
+    self.execute(Command.GET, {"url": url})
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 347, in execute
+    self.error_handler.check_response(response)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/errorhandler.py", line 229, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: chrome=120.0.6099.71)
+Stacktrace:
+#0 0x558ca81bbd33 <unknown>
+#1 0x558ca7e78f87 <unknown>
+#2 0x558ca7e7097a <unknown>
+#3 0x558ca7e5f851 <unknown>
+#4 0x558ca7e60ff0 <unknown>
+#5 0x558ca7e5fb04 <unknown>
+#6 0x558ca7e5e836 <unknown>
+#7 0x558ca7e5e6fa <unknown>
+#8 0x558ca7e5ca99 <unknown>
+#9 0x558ca7e5d2ca <unknown>
+#10 0x558ca7e7be4e <unknown>
+#11 0x558ca7f11a45 <unknown>
+#12 0x558ca7ef2342 <unknown>
+#13 0x558ca7f11297 <unknown>
+#14 0x558ca7ef20e3 <unknown>
+#15 0x558ca7eba044 <unknown>
+#16 0x558ca7ebb44e <unknown>
+#17 0x558ca8180861 <unknown>
+#18 0x558ca8184785 <unknown>
+#19 0x558ca816e285 <unknown>
+#20 0x558ca818541f <unknown>
+#21 0x558ca815220f <unknown>
+#22 0x558ca81a9028 <unknown>
+#23 0x558ca81a91f7 <unknown>
+#24 0x558ca81baed4 <unknown>
+#25 0x7fb551633ac3 <unknown>
+
