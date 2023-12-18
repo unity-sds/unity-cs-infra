@@ -1,0 +1,35 @@
+Repo Hash (Nightly Test):     [caefc97]
+Repo Hash (Cloudformation):   [12e8d0e]
+Nightly Test in the unity-cm account
+Stack Name: [unity-cs-nightly-management-console]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [380 seconds] - PASS
+Traceback (most recent call last):
+  File "selenium_test_management_console.py", line 300, in <module>
+    test_click_go_button(driver, IMAGE_DIR, test_results)
+  File "selenium_test_management_console.py", line 72, in test_click_go_button
+    go_button = WebDriverWait(driver, 20).until(
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py", line 101, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+Stacktrace:
+#0 0x55b6dc4d3d33 <unknown>
+#1 0x55b6dc190f87 <unknown>
+#2 0x55b6dc1e0c0e <unknown>
+#3 0x55b6dc1e0d11 <unknown>
+#4 0x55b6dc22c004 <unknown>
+#5 0x55b6dc20a36d <unknown>
+#6 0x55b6dc229297 <unknown>
+#7 0x55b6dc20a0e3 <unknown>
+#8 0x55b6dc1d2044 <unknown>
+#9 0x55b6dc1d344e <unknown>
+#10 0x55b6dc498861 <unknown>
+#11 0x55b6dc49c785 <unknown>
+#12 0x55b6dc486285 <unknown>
+#13 0x55b6dc49d41f <unknown>
+#14 0x55b6dc46a20f <unknown>
+#15 0x55b6dc4c1028 <unknown>
+#16 0x55b6dc4c11f7 <unknown>
+#17 0x55b6dc4d2ed4 <unknown>
+#18 0x7f0b0c93aac3 <unknown>
+
