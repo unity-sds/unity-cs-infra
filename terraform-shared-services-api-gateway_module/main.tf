@@ -39,7 +39,7 @@ resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter" {
 }
 
 resource "aws_ssm_parameter" "api_gateway_uri" {
-  name = "/unity/cs/management/api-gateway/uri"
+  name = "/unity/cs/management/api-gateway/gateway-uri"
   type = "string"
   value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
 }
