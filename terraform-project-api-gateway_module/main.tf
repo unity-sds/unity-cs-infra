@@ -137,6 +137,6 @@ resource "aws_api_gateway_deployment" "api-gateway-deployment" {
 
 resource "aws_ssm_parameter" "api_gateway_uri" {
   name = "/unity/cs/management/api-gateway/gateway-uri"
-  type = "string"
+  type = "String"
   value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
 }
