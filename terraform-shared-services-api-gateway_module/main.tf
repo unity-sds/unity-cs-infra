@@ -7,12 +7,6 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   }
 }
 
-resource "aws_api_gateway_stage" "api-gateway-stage" {
-  deployment_id = aws_api_gateway_deployment.api-gateway-deployment.id
-  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  stage_name    = "default"
-}
-
 # REST API Gateway root level OPTIONS method (to allow deployment with at least one method)
 resource "aws_api_gateway_method" "root_level_options_method" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
@@ -36,19 +30,6 @@ resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter" {
   value      = aws_api_gateway_rest_api.rest_api.id
   overwrite  = true
   depends_on = [aws_api_gateway_rest_api.rest_api]
-}
-
-resource "aws_ssm_parameter" "api_gateway_uri" {
-  name = "/unity/cs/management/api-gateway/gateway-uri"
-  type = "string"
-  value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
-}
-
-# API Gateway deployment
-resource "aws_api_gateway_deployment" "api-gateway-deployment" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  stage_name  = var.rest_api_stage
-  depends_on = [aws_api_gateway_integration.root_level_get_method_mock_integration]
 }
 
 data "aws_region" "current" {}
