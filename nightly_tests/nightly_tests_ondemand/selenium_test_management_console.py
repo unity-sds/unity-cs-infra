@@ -56,7 +56,7 @@ def print_table(results):
         print(f"{result['name'].ljust(name_width)} | {result['status']}")
 
 # Function to test login
-def test_login(driver, image_dir, results):
+def login_to_MC(driver, image_dir, results):
     try:
         screenshot_path = os.path.join(image_dir, 'screenshot_after_login.png')
         driver.save_screenshot(screenshot_path)
@@ -67,7 +67,7 @@ def test_login(driver, image_dir, results):
         results.append({'name': 'Login', 'status': f'FAILED - {e}'})
 
 # Function to test clicking the Go! button
-def test_click_go_button(driver, image_dir, results):
+def initiate_core_setup(driver, image_dir, results):
     try:
         go_button = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
@@ -77,7 +77,7 @@ def test_click_go_button(driver, image_dir, results):
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
         driver.save_screenshot(screenshot_path)
         assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
-        results.append({'name': 'Click Core Management Btn', 'status': 'PASSED'})
+        results.append({'name': 'Initiate Core Setup', 'status': 'PASSED'})
     except AssertionError as e:
         results.append({'name': 'Click Core Management Btn', 'status': 'FAILED '})
     except Exception as e:
@@ -110,10 +110,22 @@ def core_management_setup(driver, image_dir, results, text, element_id):
         results.append({'name': test_name, 'status': 'PASSED'})
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
-        
-        
-def core_management_setup_save_btn(driver, image_dir, results):
-    test_name = 'Save Button'
+
+def input_venue_name(driver, image_dir, results, text):
+    """
+    Wrapper function to input venue name using core_management_setup.
+    """
+    core_management_setup(driver, image_dir, results, text, "unity-cs-selenium-venue")
+
+def input_project_name(driver, image_dir, results, text):
+    """
+    Wrapper function to input project name using core_management_setup.
+    """
+    core_management_setup(driver, image_dir, results, text, "unity-cs-selenium-project")
+
+
+def core_setup_save_btn(driver, image_dir, results):
+    test_name = 'Core Setup Save Button'   
     try:
         save_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[@type='submit'][contains(@class, 'st-button large mt-5')]"))
@@ -128,8 +140,8 @@ def core_management_setup_save_btn(driver, image_dir, results):
     except Exception as e:
         results.append({'name': test_name, 'status': 'FAILED'})
         
-def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
-    test_name = 'Go Back and Go To Market'
+def return_to_MC(driver, image_dir, results, url_without_cred):
+    test_name = 'Return to MC'
     try:
         driver.get(url_without_cred)
         time.sleep(5)
@@ -154,7 +166,7 @@ def go_back_and_goto_marketplace(driver, image_dir, results, url_without_cred):
         except AssertionError as url_error:
             error_ = f"URL check failed: {url_error}"
             
-            raise Exception(error_message)
+            raise Exception(error_)
 
         # Take a screenshot for confirmation
         screenshot_path = os.path.join(image_dir, 'screenshot_after_clicking_go_button.png')
@@ -240,6 +252,19 @@ def unity_management_setup(driver, image_dir, results, text, element_id):
         results.append({'name': test_name, 'status': 'PASSED'})
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
+        
+def eks_module_name(driver, image_dir, results, text):
+    """
+    Wrapper function to setup the EKS module name using unity_management_setup.
+    """
+    unity_management_setup(driver, image_dir, results, text, "unity-cs-selenium-name")
+
+def eks_module_branch(driver, image_dir, results, text):
+    """
+    Wrapper function to setup the EKS module branch using unity_management_setup.
+    :param text: Text to be input as the EKS module branch
+    """
+    unity_management_setup(driver, image_dir, results, text, "main")
 
 def click_button(driver, image_dir, results, button_class):
     test_name = f'Next Button'
@@ -272,7 +297,7 @@ if __name__ == '__main__':
     mc_password = os.getenv('MC_PASSWORD')
     management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
 
-    # Construct the URL with credentials
+    # Construct the URL with credential
     parsed_url = urlparse(management_console_url)
     new_netloc = f"{mc_username}:{mc_password}@{parsed_url.hostname}"
     if parsed_url.port:
@@ -287,19 +312,22 @@ if __name__ == '__main__':
     # Create driver
     driver = create_driver()
 
-    # Run the tests
+    # Login to management console
     navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
+    login_to_MC(driver, IMAGE_DIR, test_results)
     
-    test_login(driver, IMAGE_DIR, test_results)
-    test_click_go_button(driver, IMAGE_DIR, test_results)
-    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
-    core_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
-    core_management_setup_save_btn(driver, IMAGE_DIR, test_results)
+    # Initiate core setup
+    initiate_core_setup(driver, IMAGE_DIR, test_results)
+    input_project_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
+    input_venue_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-venue", "venue")
+    core_setup_save_btn(driver, IMAGE_DIR, test_results)
     grab_terminal_output(driver, ".terminal", test_results)
-    go_back_and_goto_marketplace(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
+
+    #Initiate EKS module Install
+    return_to_MC(driver, IMAGE_DIR, test_results, URL_WITHOUT_CRED)
     install_eks(driver, IMAGE_DIR, test_results)
-    unity_management_setup(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
-    unity_management_setup(driver, IMAGE_DIR, test_results, "main", "branch")
+    eks_module_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
+    eks_module_branch(driver, IMAGE_DIR, test_results, "main", "branch")
     click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
     click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
     click_button(driver, IMAGE_DIR, test_results, 'default-btn.next-step.svelte-1pvzwgg')
