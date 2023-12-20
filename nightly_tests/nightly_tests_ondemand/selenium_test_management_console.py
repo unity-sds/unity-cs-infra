@@ -253,13 +253,13 @@ def unity_management_setup(driver, image_dir, results, text, element_id):
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
         
-def eks_module_name(driver, image_dir, results, text):
+def eks_module_name(driver, image_dir, results, text, element_id):
     """
     Wrapper function to setup the EKS module name using unity_management_setup.
     """
     unity_management_setup(driver, image_dir, results, text, "unity-cs-selenium-name")
 
-def eks_module_branch(driver, image_dir, results, text):
+def eks_module_branch(driver, image_dir, results, text, element_id):
     """
     Wrapper function to setup the EKS module branch using unity_management_setup.
     :param text: Text to be input as the EKS module branch
