@@ -1,10 +1,25 @@
-Repo Hash (Nightly Test):     [dbf2c7f]
+Repo Hash (Nightly Test):     [926e625]
 Repo Hash (Cloudformation):   [12e8d0e]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [400 seconds] - PASS
-Traceback (most recent call last):
-  File "selenium_test_management_console.py", line 329, in <module>
-    eks_module_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-name", "name")
-TypeError: eks_module_name() takes 4 positional arguments but 5 were given
+Stack Creation Time: [380 seconds] - PASS
+
+Test Name                            | Status
+-------------------------------------+--------
+Navigate to URL                      | PASSED
+Login                                | FAILED - The page title should be Unity Management Console
+Click Core Management Btn            | FAILED 
+Enter unity-cs-selenium-project Name | FAILED
+Enter unity-cs-selenium-venue Name   | FAILED
+Core Setup Save Button               | FAILED
+Terminal Output                      | FAILED 
+Return to MC                         | FAILED
+Install EKS                          | FAILED
+Enter unity-cs-selenium-name Name    | FAILED
+Enter main Name                      | FAILED
+Next Button                          | FAILED
+Next Button                          | FAILED
+Next Button                          | FAILED
+Next Button                          | FAILED
+Terminal Output                      | FAILED 
