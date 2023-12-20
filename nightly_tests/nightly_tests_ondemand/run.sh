@@ -111,9 +111,8 @@ mv nightly_output_$TODAYS_DATE.txt nightly_logs/log_$TODAYS_DATE/
 
 git config --global user.email "smolensk@jpl.nasa.gov"
 git config --global user.name "jonathansmolenski"
-# git add "nightly_output_$TODAYS_DATE.txt"
 git add "nightly_logs/log_$TODAYS_DATE/nightly_output_$TODAYS_DATE.txt"
-# git add /selenium_unity_images/*
+git add selenium_unity_images/*
 git commit -m "Add nightly output for $TODAYS_DATE"
 git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
 git push origin main
