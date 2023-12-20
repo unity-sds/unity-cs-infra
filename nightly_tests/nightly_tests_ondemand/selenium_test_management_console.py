@@ -111,13 +111,13 @@ def core_management_setup(driver, image_dir, results, text, element_id):
     except AssertionError as e:
         results.append({'name': test_name, 'status': 'FAILED', 'error': str(e)})
 
-def input_venue_name(driver, image_dir, results, text):
+def input_venue_name(driver, image_dir, results, text, element_id):
     """
     Wrapper function to input venue name using core_management_setup.
     """
     core_management_setup(driver, image_dir, results, text, "unity-cs-selenium-venue")
 
-def input_project_name(driver, image_dir, results, text):
+def input_project_name(driver, image_dir, results, text, element_id):
     """
     Wrapper function to input project name using core_management_setup.
     """
