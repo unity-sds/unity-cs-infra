@@ -1,0 +1,10 @@
+Repo Hash (Nightly Test):     [eeb4c3c]
+Repo Hash (Cloudformation):   [12e8d0e]
+Nightly Test in the unity-cm account
+Stack Name: [unity-cs-nightly-management-console]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [380 seconds] - PASS
+Traceback (most recent call last):
+  File "selenium_test_management_console.py", line 321, in <module>
+    input_project_name(driver, IMAGE_DIR, test_results, "unity-cs-selenium-project", "project")
+TypeError: input_project_name() takes 4 positional arguments but 5 were given
