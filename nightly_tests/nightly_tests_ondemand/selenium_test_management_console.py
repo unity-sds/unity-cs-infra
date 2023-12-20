@@ -84,7 +84,7 @@ def initiate_core_setup(driver, image_dir, results):
         results.append({'name': 'Click Core Management Btn', 'status': 'FAILED '})
         
 def core_management_setup(driver, image_dir, results, text, element_id):
-    test_name = f'Enter {element_id} Name'
+    test_name = f'Enter {element_id}'
     try:
         text_box = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, element_id))
