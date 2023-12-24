@@ -1,0 +1,38 @@
+Repo Hash (Nightly Test):     [de31671]
+Repo Hash (Cloudformation):   [12e8d0e]
+Traceback (most recent call last):
+  File "selenium_test_management_console.py", line 316, in <module>
+    navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
+  File "selenium_test_management_console.py", line 30, in navigate_to_url_with_cred
+    driver.get(url_with_cred)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 356, in get
+    self.execute(Command.GET, {"url": url})
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 347, in execute
+    self.error_handler.check_response(response)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/errorhandler.py", line 229, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.InvalidArgumentException: Message: invalid argument
+  (Session info: chrome=120.0.6099.109)
+Stacktrace:
+#0 0x55945ada9f83 <unknown>
+#1 0x55945aa62b2b <unknown>
+#2 0x55945aa48ff6 <unknown>
+#3 0x55945aa46821 <unknown>
+#4 0x55945aa4701a <unknown>
+#5 0x55945aa65bbe <unknown>
+#6 0x55945aafb7a5 <unknown>
+#7 0x55945aadc0b2 <unknown>
+#8 0x55945aafb006 <unknown>
+#9 0x55945aadbe53 <unknown>
+#10 0x55945aaa3dd4 <unknown>
+#11 0x55945aaa51de <unknown>
+#12 0x55945ad6e531 <unknown>
+#13 0x55945ad72455 <unknown>
+#14 0x55945ad5af55 <unknown>
+#15 0x55945ad730ef <unknown>
+#16 0x55945ad3e99f <unknown>
+#17 0x55945ad97008 <unknown>
+#18 0x55945ad971d7 <unknown>
+#19 0x55945ada9124 <unknown>
+#20 0x7fc7c2bbcac3 <unknown>
+
