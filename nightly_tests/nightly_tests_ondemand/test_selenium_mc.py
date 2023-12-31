@@ -12,35 +12,6 @@ from urllib.parse import urlparse, urlunparse
 # Global variable for the screenshots directory
 IMAGE_DIR = 'selenium_unity_images'
 
-@pytest.fixture(scope="session")
-def test_results(request):
-    request.session.results = []
-    yield request.session.results
-
-@pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    result = outcome.get_result()
-    
-    if result.when == 'call':
-        test_name = item.name
-        status = 'PASSED' if result.passed else 'FAILED'
-        item.session.results.append({'name': test_name, 'status': status})
-
-def pytest_sessionfinish(session, exitstatus):
-    print_table(session.results)
-
-def print_table(results):
-    max_name_length = max(len(result['name']) for result in results)
-    name_width = max(max_name_length, len('Test Name'))
-
-    print(f"\n{'Test Name'.ljust(name_width)} | {'Status'}")
-    print(f"{'-' * name_width}-+--------")
-
-    for result in results:
-        print(f"{result['name'].ljust(name_width)} | {result['status']}")
-
-
 # Function to create a new Selenium driver
 @pytest.fixture(scope="session")
 def driver():
@@ -59,10 +30,13 @@ def driver():
     driver.quit()
 
 # Function to navigate to the management console URL with credentials
-def test_navigate_to_url_with_cred(driver):
-    mc_username = os.getenv('MC_USERNAME')
-    mc_password = os.getenv('MC_PASSWORD')
-    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+def test_navigate_to_url_with_cred(driver, test_results):
+#    mc_username = os.getenv('MC_USERNAME')
+#    mc_password = os.getenv('MC_PASSWORD')
+#    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+    mc_username = 'admin'
+    mc_password = 'unity'
+    management_console_url = 'http://unity-on-demand-alb-sk16y-884072460.us-west-2.elb.amazonaws.com:8080/ui/landing'
 
     # Construct the URL with credentials
     parsed_url = urlparse(management_console_url)
@@ -90,7 +64,7 @@ def url_without_cred():
     return management_console_url
 
 # Function to test login
-def test_login_to_mc_console(driver):
+def test_login_to_mc_console(driver, test_results):
 
     # Take a screenshot after login attempt
     screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_login.png')
@@ -101,7 +75,7 @@ def test_login_to_mc_console(driver):
     assert driver.title == 'Unity Management Console', "The page title should be Unity Management Console"
 
 # Function to test clicking the Go! button
-def test_initiate_core_setup(driver):
+def test_initiate_core_setup(driver, test_results):
     try:
         # Find and click the Go button
         go_button = WebDriverWait(driver, 20).until(
@@ -122,7 +96,7 @@ def test_initiate_core_setup(driver):
     # Assert the current URL ends with '/ui/setup'
     assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
 
-def test_input_venue_name(driver):
+def test_input_venue_name(driver, test_results):
     venue_name = "TEST-VENUE"
     element_id = "venue"
 
@@ -144,7 +118,7 @@ def test_input_venue_name(driver):
     screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_setting_venue_name.png')
     driver.save_screenshot(screenshot_path)
 
-def test_input_project_name(driver):
+def test_input_project_name(driver, test_results):
     project_name = "TEST-PROJECT"
     element_id = "project"
 
@@ -167,7 +141,7 @@ def test_input_project_name(driver):
     driver.save_screenshot(screenshot_path)
 
 
-def test_core_setup_save_btn(driver):
+def test_core_setup_save_btn(driver, test_results):
     try:
         # Find and click the Save button
         save_button = WebDriverWait(driver, 10).until(
@@ -182,7 +156,7 @@ def test_core_setup_save_btn(driver):
     screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_save_button.png')
     driver.save_screenshot(screenshot_path)
         
-def test_return_to_marketplace(driver, url_without_cred):
+def test_return_to_marketplace(driver, url_without_cred, test_results):
     # Navigate to the URL without credentials
     driver.get(url_without_cred)
     time.sleep(5)
@@ -214,7 +188,7 @@ def test_return_to_marketplace(driver, url_without_cred):
     screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_go_button.png')
     driver.save_screenshot(screenshot_path)
 
-def test_grab_terminal_output(driver):
+def test_grab_terminal_output(driver, test_results):
     element_selector = '.terminal'
 
     try:
@@ -236,7 +210,7 @@ def test_grab_terminal_output(driver):
     # Optional
     return output_text
 
-def test_install_eks(driver):
+def test_install_eks(driver, test_results):
     try:
         # Locate and click the Install Application button
         install_button = WebDriverWait(driver, 10).until(
@@ -255,7 +229,7 @@ def test_install_eks(driver):
     screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_install_button.png')
     driver.save_screenshot(screenshot_path)
         
-def test_eks_module_name(driver):
+def test_eks_module_name(driver, test_results):
     module_name = "unity-cs-selenium-name"
     element_id = "module"
 
@@ -273,7 +247,7 @@ def test_eks_module_name(driver):
     screenshot_path = os.path.join(IMAGE_DIR, f'screenshot_after_setting_module_name.png')
     driver.save_screenshot(screenshot_path)
 
-def test_eks_module_branch(driver):
+def test_eks_module_branch(driver, test_results):
     branch_name = "main"
     element_id = "branch"
 
@@ -291,7 +265,7 @@ def test_eks_module_branch(driver):
     screenshot_path = os.path.join(IMAGE_DIR, f'screenshot_after_setting_branch_name.png')
     driver.save_screenshot(screenshot_path)
 
-def test_click_first_button(driver):
+def test_click_first_button(driver, test_results):
     button_class = 'default-btn.next-step.svelte-1pvzwgg'
 
     try:
@@ -307,7 +281,7 @@ def test_click_first_button(driver):
     screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
     driver.save_screenshot(screenshot_path)
 
-def test_click_second_button(driver):
+def test_click_second_button(driver, test_results):
     button_class = 'default-btn.next-step.svelte-1pvzwgg'
 
     try:
@@ -323,22 +297,7 @@ def test_click_second_button(driver):
     screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
     driver.save_screenshot(screenshot_path)
 
-def test_click_third_button(driver):
-    button_class = 'default-btn.next-step.svelte-1pvzwgg'
-
-    try:
-        button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
-        )
-        button.click()
-    except TimeoutException:
-        raise Exception(f"Failed to find or click the third button (class: {button_class}).")
-
-    # Generate a screenshot
-    screenshot_name = 'screenshot_after_clicking_third_button.png'
-    screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
-    driver.save_screenshot(screenshot_path)
-def test_click_fourth_button(driver):
+def test_click_third_button(driver, test_results):
     button_class = 'default-btn.next-step.svelte-1pvzwgg'
 
     try:
@@ -354,7 +313,23 @@ def test_click_fourth_button(driver):
     screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
     driver.save_screenshot(screenshot_path)
 
-def test_click_fith_button(driver):
+def test_click_fourth_button(driver, test_results):
+    button_class = 'default-btn.next-step.svelte-1pvzwgg'
+
+    try:
+        button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+        )
+        button.click()
+    except TimeoutException:
+        raise Exception(f"Failed to find or click the third button (class: {button_class}).")
+
+    # Generate a screenshot
+    screenshot_name = 'screenshot_after_clicking_third_button.png'
+    screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
+    driver.save_screenshot(screenshot_path)
+
+def test_click_fith_button(driver, test_results):
     button_class = 'btn.btn-primary.svelte-1pvzwgg'
 
     try:
@@ -371,7 +346,7 @@ def test_click_fith_button(driver):
     driver.save_screenshot(screenshot_path)
 
 
-def test_click_fourth_button(driver):
+def test_click_fourth_button(driver, test_results):
     button_class = 'btn.btn-primary.svelte-1pvzwgg'
 
     try:
@@ -388,7 +363,7 @@ def test_click_fourth_button(driver):
     driver.save_screenshot(screenshot_path)
 
 
-def test_grab_terminal_output_two(driver):
+def test_grab_terminal_output_two(driver, test_results):
     element_selector = '.terminal'
 
     try:
@@ -406,5 +381,6 @@ def test_grab_terminal_output_two(driver):
     # Assert that the output text contains "success"
     assert "success" in output_text.lower(), "Success not found in terminal output"
 
-    # Optional
     return output_text
+def pytest_sessionfinish(session, exitstatus):
+    print_table(session.results)
