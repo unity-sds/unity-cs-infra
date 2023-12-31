@@ -103,7 +103,7 @@ CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/sta
 sleep 10
 
 cp nightly_output.txt selenium_nightly_output.txt
-pytest test_selenium_mc.py >> selenium_nightly_output.txt 2>&1
+pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
 cat makereport_output.txt >> nightly_output.txt
 
 sudo docker stop $CONTAINER_ID
