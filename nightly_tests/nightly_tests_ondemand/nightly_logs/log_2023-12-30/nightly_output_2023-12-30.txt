@@ -1,0 +1,1390 @@
+Repo Hash (Nightly Test):     [ab2b65a]
+Repo Hash (Cloudformation):   [12e8d0e]
+Nightly Test in the unity-cm account
+Stack Name: [unity-cs-nightly-management-console]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [20 seconds] - PASS
+============================= test session starts ==============================
+platform linux -- Python 3.8.10, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_tests_ondemand
+collecting ... collected 17 items
+
+test_selenium_mc.py::test_navigate_to_url_with_cred PASSED               [  5%]
+test_selenium_mc.py::test_login_to_mc_console FAILED                     [ 11%]
+test_selenium_mc.py::test_initiate_core_setup FAILED                     [ 17%]
+test_selenium_mc.py::test_input_venue_name FAILED                        [ 23%]
+test_selenium_mc.py::test_input_project_name FAILED                      [ 29%]
+test_selenium_mc.py::test_core_setup_save_btn FAILED                     [ 35%]
+test_selenium_mc.py::test_return_to_marketplace FAILED                   [ 41%]
+test_selenium_mc.py::test_grab_terminal_output FAILED                    [ 47%]
+test_selenium_mc.py::test_install_eks FAILED                             [ 52%]
+test_selenium_mc.py::test_eks_module_name FAILED                         [ 58%]
+test_selenium_mc.py::test_eks_module_branch FAILED                       [ 64%]
+test_selenium_mc.py::test_click_first_button FAILED                      [ 70%]
+test_selenium_mc.py::test_click_second_button FAILED                     [ 76%]
+test_selenium_mc.py::test_click_third_button FAILED                      [ 82%]
+test_selenium_mc.py::test_click_fourth_button FAILED                     [ 88%]
+test_selenium_mc.py::test_click_fith_button FAILED                       [ 94%]
+test_selenium_mc.py::test_grab_terminal_output_two FAILED                [100%]
+
+=================================== FAILURES ===================================
+___________________________ test_login_to_mc_console ___________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_login_to_mc_console(driver):
+    
+        # Take a screenshot after login attempt
+        screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_login.png')
+        driver.save_screenshot(screenshot_path)
+    
+        # Assertions to validate successful login
+        assert driver.current_url.endswith('/ui/landing'), "Navigation to home page failed"
+>       assert driver.title == 'Unity Management Console', "The page title should be Unity Management Console"
+E       AssertionError: The page title should be Unity Management Console
+E       assert '' == 'Unity Management Console'
+E         - Unity Management Console
+
+test_selenium_mc.py:101: AssertionError
+___________________________ test_initiate_core_setup ___________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_initiate_core_setup(driver):
+        try:
+            # Find and click the Go button
+>           go_button = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
+            )
+
+test_selenium_mc.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a522ffca0>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_initiate_core_setup(driver):
+        try:
+            # Find and click the Go button
+            go_button = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
+            )
+            go_button.click()
+    
+            # Wait for the URL to change to the setup page
+            WebDriverWait(driver, 10).until(EC.url_contains('/ui/setup'))
+    
+        except TimeoutException:
+>           raise Exception("Failed to navigate to setup page - either the Go button was not clickable or the URL did not change as expected.")
+E           Exception: Failed to navigate to setup page - either the Go button was not clickable or the URL did not change as expected.
+
+test_selenium_mc.py:116: Exception
+____________________________ test_input_venue_name _____________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_input_venue_name(driver):
+        venue_name = "TEST-VENUE"
+        element_id = "venue"
+    
+        try:
+            # Locate the text box and enter the venue name
+>           text_box = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.ID, element_id))
+            )
+
+test_selenium_mc.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function visibility_of_element_located.<locals>._predicate at 0x7f1a522b88b0>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_input_venue_name(driver):
+        venue_name = "TEST-VENUE"
+        element_id = "venue"
+    
+        try:
+            # Locate the text box and enter the venue name
+            text_box = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.ID, element_id))
+            )
+            text_box.clear()
+            text_box.send_keys(venue_name)
+    
+        except TimeoutException:
+>           raise Exception(f"Failed to find or interact with the text box for venue name (ID: {element_id}).")
+E           Exception: Failed to find or interact with the text box for venue name (ID: venue).
+
+test_selenium_mc.py:138: Exception
+___________________________ test_input_project_name ____________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_input_project_name(driver):
+        project_name = "TEST-PROJECT"
+        element_id = "project"
+    
+        try:
+            # Locate the text box and enter the project name
+>           text_box = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.ID, element_id))
+            )
+
+test_selenium_mc.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function visibility_of_element_located.<locals>._predicate at 0x7f1a521a65e0>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_input_project_name(driver):
+        project_name = "TEST-PROJECT"
+        element_id = "project"
+    
+        try:
+            # Locate the text box and enter the project name
+            text_box = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.ID, element_id))
+            )
+            text_box.clear()
+            text_box.send_keys(project_name)
+    
+        except TimeoutException:
+>           raise Exception(f"Failed to find or interact with the text box for project name (ID: {element_id}).")
+E           Exception: Failed to find or interact with the text box for project name (ID: project).
+
+test_selenium_mc.py:160: Exception
+___________________________ test_core_setup_save_btn ___________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_core_setup_save_btn(driver):
+        try:
+            # Find and click the Save button
+>           save_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[@type='submit'][contains(@class, 'st-button large mt-5')]"))
+            )
+
+test_selenium_mc.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a521a6700>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_core_setup_save_btn(driver):
+        try:
+            # Find and click the Save button
+            save_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[@type='submit'][contains(@class, 'st-button large mt-5')]"))
+            )
+            save_button.click()
+    
+        except TimeoutException:
+>           raise Exception("Failed to find or click the core'Save' button within the specified time.")
+E           Exception: Failed to find or click the core'Save' button within the specified time.
+
+test_selenium_mc.py:179: Exception
+__________________________ test_return_to_marketplace __________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+url_without_cred = 'http://unity-on-demand-alb-sk16y-884072460.us-west-2.elb.amazonaws.com:8080/ui/landing'
+
+    def test_return_to_marketplace(driver, url_without_cred):
+        # Navigate to the URL without credentials
+        driver.get(url_without_cred)
+        time.sleep(5)
+        driver.refresh()
+        time.sleep(5)
+        driver.refresh()
+        time.sleep(5)
+    
+        # Take a screenshot after navigating
+        screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_navigating.png')
+        driver.save_screenshot(screenshot_path)
+    
+        try:
+            # Find and click the 'Go to Marketplace' button
+>           go_button = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
+            )
+
+test_selenium_mc.py:200: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a521a6c10>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+url_without_cred = 'http://unity-on-demand-alb-sk16y-884072460.us-west-2.elb.amazonaws.com:8080/ui/landing'
+
+    def test_return_to_marketplace(driver, url_without_cred):
+        # Navigate to the URL without credentials
+        driver.get(url_without_cred)
+        time.sleep(5)
+        driver.refresh()
+        time.sleep(5)
+        driver.refresh()
+        time.sleep(5)
+    
+        # Take a screenshot after navigating
+        screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_navigating.png')
+        driver.save_screenshot(screenshot_path)
+    
+        try:
+            # Find and click the 'Go to Marketplace' button
+            go_button = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
+            )
+            go_button.click()
+    
+            # Wait for the URL to update and check it ends with '/ui/marketplace'
+            WebDriverWait(driver, 20).until(EC.url_contains('/ui/marketplace'))
+    
+        except TimeoutException:
+>           raise Exception("Failed to navigate to the marketplace - either the button was not clickable or the URL did not change as expected.")
+E           Exception: Failed to navigate to the marketplace - either the button was not clickable or the URL did not change as expected.
+
+test_selenium_mc.py:209: Exception
+__________________________ test_grab_terminal_output ___________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_grab_terminal_output(driver):
+        element_selector = '.terminal'
+    
+        try:
+            # Find the terminal output element
+>           terminal_output_element = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
+            )
+
+test_selenium_mc.py:222: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function visibility_of_element_located.<locals>._predicate at 0x7f1a521ba0d0>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_grab_terminal_output(driver):
+        element_selector = '.terminal'
+    
+        try:
+            # Find the terminal output element
+            terminal_output_element = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
+            )
+    
+        except TimeoutException:
+>           raise Exception("Failed to find or load the terminal output element within the specified time.")
+E           Exception: Failed to find or load the terminal output element within the specified time.
+
+test_selenium_mc.py:227: Exception
+_______________________________ test_install_eks _______________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_install_eks(driver):
+        try:
+            # Locate and click the Install Application button
+>           install_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "button.st-button.large.float-end"))
+            )
+
+test_selenium_mc.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a521bad30>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_install_eks(driver):
+        try:
+            # Locate and click the Install Application button
+            install_button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, "button.st-button.large.float-end"))
+            )
+            install_button.click()
+    
+            # Wait for the URL to update
+            WebDriverWait(driver, 10).until(EC.url_contains('/ui/install'))
+    
+        except TimeoutException:
+>           raise Exception("Failed to install EKS - either the button was not clickable or the URL did not update as expected.")
+E           Exception: Failed to install EKS - either the button was not clickable or the URL did not update as expected.
+
+test_selenium_mc.py:251: Exception
+_____________________________ test_eks_module_name _____________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_eks_module_name(driver):
+        module_name = "unity-cs-selenium-name"
+        element_id = "module"
+    
+        try:
+>           text_box = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.ID, element_id))
+            )
+
+test_selenium_mc.py:263: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function visibility_of_element_located.<locals>._predicate at 0x7f1a521bae50>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_eks_module_name(driver):
+        module_name = "unity-cs-selenium-name"
+        element_id = "module"
+    
+        try:
+            text_box = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.ID, element_id))
+            )
+        except TimeoutException:
+>           raise Exception(f"Textbox for module name (ID: {element_id}) not found.")
+E           Exception: Textbox for module name (ID: module) not found.
+
+test_selenium_mc.py:267: Exception
+____________________________ test_eks_module_branch ____________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_eks_module_branch(driver):
+        branch_name = "main"
+        element_id = "branch"
+    
+        try:
+>           text_box = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.ID, element_id))
+            )
+
+test_selenium_mc.py:281: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function visibility_of_element_located.<locals>._predicate at 0x7f1a5262c310>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_eks_module_branch(driver):
+        branch_name = "main"
+        element_id = "branch"
+    
+        try:
+            text_box = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.ID, element_id))
+            )
+        except TimeoutException:
+>           raise Exception(f"Textbox for branch name (ID: {element_id}) not found.")
+E           Exception: Textbox for branch name (ID: branch) not found.
+
+test_selenium_mc.py:285: Exception
+___________________________ test_click_first_button ____________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_first_button(driver):
+        button_class = 'default-btn.next-step.svelte-1pvzwgg'
+    
+        try:
+>           button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+
+test_selenium_mc.py:298: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a521dd4c0>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_first_button(driver):
+        button_class = 'default-btn.next-step.svelte-1pvzwgg'
+    
+        try:
+            button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+            button.click()
+        except TimeoutException:
+>           raise Exception(f"Failed to find or click the first button (class: {button_class}).")
+E           Exception: Failed to find or click the first button (class: default-btn.next-step.svelte-1pvzwgg).
+
+test_selenium_mc.py:303: Exception
+___________________________ test_click_second_button ___________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_second_button(driver):
+        button_class = 'default-btn.next-step.svelte-1pvzwgg'
+    
+        try:
+>           button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+
+test_selenium_mc.py:314: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a521ddb80>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_second_button(driver):
+        button_class = 'default-btn.next-step.svelte-1pvzwgg'
+    
+        try:
+            button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+            button.click()
+        except TimeoutException:
+>           raise Exception(f"Failed to find or click the second button (class: {button_class}).")
+E           Exception: Failed to find or click the second button (class: default-btn.next-step.svelte-1pvzwgg).
+
+test_selenium_mc.py:319: Exception
+___________________________ test_click_third_button ____________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_third_button(driver):
+        button_class = 'default-btn.next-step.svelte-1pvzwgg'
+    
+        try:
+>           button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+
+test_selenium_mc.py:330: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a521bd310>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_third_button(driver):
+        button_class = 'default-btn.next-step.svelte-1pvzwgg'
+    
+        try:
+            button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+            button.click()
+        except TimeoutException:
+>           raise Exception(f"Failed to find or click the third button (class: {button_class}).")
+E           Exception: Failed to find or click the third button (class: default-btn.next-step.svelte-1pvzwgg).
+
+test_selenium_mc.py:335: Exception
+___________________________ test_click_fourth_button ___________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_fourth_button(driver):
+        button_class = 'btn.btn-primary.svelte-1pvzwgg'
+    
+        try:
+>           button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+
+test_selenium_mc.py:378: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a521bd790>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_fourth_button(driver):
+        button_class = 'btn.btn-primary.svelte-1pvzwgg'
+    
+        try:
+            button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+            button.click()
+        except TimeoutException:
+>           raise Exception(f"Failed to find or click the fourth button (class: {button_class}).")
+E           Exception: Failed to find or click the fourth button (class: btn.btn-primary.svelte-1pvzwgg).
+
+test_selenium_mc.py:383: Exception
+____________________________ test_click_fith_button ____________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_fith_button(driver):
+        button_class = 'btn.btn-primary.svelte-1pvzwgg'
+    
+        try:
+>           button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+
+test_selenium_mc.py:361: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function element_to_be_clickable.<locals>._predicate at 0x7f1a521bddc0>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_click_fith_button(driver):
+        button_class = 'btn.btn-primary.svelte-1pvzwgg'
+    
+        try:
+            button = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+            )
+            button.click()
+        except TimeoutException:
+>           raise Exception(f"Failed to find or click the fourth button (class: {button_class}).")
+E           Exception: Failed to find or click the fourth button (class: btn.btn-primary.svelte-1pvzwgg).
+
+test_selenium_mc.py:366: Exception
+________________________ test_grab_terminal_output_two _________________________
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_grab_terminal_output_two(driver):
+        element_selector = '.terminal'
+    
+        try:
+            # Find the terminal output element
+>           terminal_output_element = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
+            )
+
+test_selenium_mc.py:396: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.support.wait.WebDriverWait (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+method = <function visibility_of_element_located.<locals>._predicate at 0x7f1a521ba700>
+message = ''
+
+    def until(self, method: Callable[[WebDriver], Union[Literal[False], T]], message: str = "") -> T:
+        """Calls the method provided with the driver as an argument until the \
+        return value does not evaluate to ``False``.
+    
+        :param method: callable(WebDriver)
+        :param message: optional message for :exc:`TimeoutException`
+        :returns: the result of the last call to `method`
+        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs
+        """
+        screen = None
+        stacktrace = None
+    
+        end_time = time.monotonic() + self._timeout
+        while True:
+            try:
+                value = method(self._driver)
+                if value:
+                    return value
+            except self._ignored_exceptions as exc:
+                screen = getattr(exc, "screen", None)
+                stacktrace = getattr(exc, "stacktrace", None)
+            time.sleep(self._poll)
+            if time.monotonic() > end_time:
+                break
+>       raise TimeoutException(message, screen, stacktrace)
+E       selenium.common.exceptions.TimeoutException: Message: 
+E       Stacktrace:
+E       #0 0x5634f334df83 <unknown>
+E       #1 0x5634f3006cf7 <unknown>
+E       #2 0x5634f305699e <unknown>
+E       #3 0x5634f3056aa1 <unknown>
+E       #4 0x5634f30a1d64 <unknown>
+E       #5 0x5634f30800dd <unknown>
+E       #6 0x5634f309f006 <unknown>
+E       #7 0x5634f307fe53 <unknown>
+E       #8 0x5634f3047dd4 <unknown>
+E       #9 0x5634f30491de <unknown>
+E       #10 0x5634f3312531 <unknown>
+E       #11 0x5634f3316455 <unknown>
+E       #12 0x5634f32fef55 <unknown>
+E       #13 0x5634f33170ef <unknown>
+E       #14 0x5634f32e299f <unknown>
+E       #15 0x5634f333b008 <unknown>
+E       #16 0x5634f333b1d7 <unknown>
+E       #17 0x5634f334d124 <unknown>
+E       #18 0x7f8fdcce9ac3 <unknown>
+
+../../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:101: TimeoutException
+
+During handling of the above exception, another exception occurred:
+
+driver = <selenium.webdriver.remote.webdriver.WebDriver (session="8a8bf9340a272d6a10a6664d2f9d8671")>
+
+    def test_grab_terminal_output_two(driver):
+        element_selector = '.terminal'
+    
+        try:
+            # Find the terminal output element
+            terminal_output_element = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
+            )
+        except TimeoutException:
+>           raise Exception("Failed to find or load the terminal output element within the specified time.")
+E           Exception: Failed to find or load the terminal output element within the specified time.
+
+test_selenium_mc.py:400: Exception
+=========================== short test summary info ============================
+FAILED test_selenium_mc.py::test_login_to_mc_console - AssertionError: The pa...
+FAILED test_selenium_mc.py::test_initiate_core_setup - Exception: Failed to n...
+FAILED test_selenium_mc.py::test_input_venue_name - Exception: Failed to find...
+FAILED test_selenium_mc.py::test_input_project_name - Exception: Failed to fi...
+FAILED test_selenium_mc.py::test_core_setup_save_btn - Exception: Failed to f...
+FAILED test_selenium_mc.py::test_return_to_marketplace - Exception: Failed to...
+FAILED test_selenium_mc.py::test_grab_terminal_output - Exception: Failed to ...
+FAILED test_selenium_mc.py::test_install_eks - Exception: Failed to install E...
+FAILED test_selenium_mc.py::test_eks_module_name - Exception: Textbox for mod...
+FAILED test_selenium_mc.py::test_eks_module_branch - Exception: Textbox for b...
+FAILED test_selenium_mc.py::test_click_first_button - Exception: Failed to fi...
+FAILED test_selenium_mc.py::test_click_second_button - Exception: Failed to f...
+FAILED test_selenium_mc.py::test_click_third_button - Exception: Failed to fi...
+FAILED test_selenium_mc.py::test_click_fourth_button - Exception: Failed to f...
+FAILED test_selenium_mc.py::test_click_fith_button - Exception: Failed to fin...
+FAILED test_selenium_mc.py::test_grab_terminal_output_two - Exception: Failed...
+=================== 16 failed, 1 passed in 200.82s (0:03:20) ===================
