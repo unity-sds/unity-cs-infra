@@ -31,12 +31,9 @@ def driver():
 
 # Function to navigate to the management console URL with credentials
 def test_navigate_to_url_with_cred(driver, test_results):
-#    mc_username = os.getenv('MC_USERNAME')
-#    mc_password = os.getenv('MC_PASSWORD')
-#    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    mc_username = 'admin'
-    mc_password = 'unity'
-    management_console_url = 'http://unity-on-demand-alb-sk16y-884072460.us-west-2.elb.amazonaws.com:8080/ui/landing'
+    mc_username = os.getenv('MC_USERNAME')
+    mc_password = os.getenv('MC_PASSWORD')
+    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
 
     # Construct the URL with credentials
     parsed_url = urlparse(management_console_url)
