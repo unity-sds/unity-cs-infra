@@ -29,6 +29,7 @@ def pytest_runtest_makereport(item, call):
 
 def pytest_sessionfinish(session, exitstatus):
     print_table(session.results)
+    print("PRINTED")
 
 def print_table(results):
     max_name_length = max(len(result['name']) for result in results)
@@ -59,10 +60,13 @@ def driver():
     driver.quit()
 
 # Function to navigate to the management console URL with credentials
-def test_navigate_to_url_with_cred(driver):
-    mc_username = os.getenv('MC_USERNAME')
-    mc_password = os.getenv('MC_PASSWORD')
-    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+def test_navigate_to_url_with_cred(driver, test_results):
+#    mc_username = os.getenv('MC_USERNAME')
+#    mc_password = os.getenv('MC_PASSWORD')
+#    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+    mc_username = 'admin'
+    mc_password = 'unity'
+    management_console_url = 'http://unity-on-demand-alb-sk16y-884072460.us-west-2.elb.amazonaws.com:8080/ui/landing'
 
     # Construct the URL with credentials
     parsed_url = urlparse(management_console_url)
@@ -90,7 +94,7 @@ def url_without_cred():
     return management_console_url
 
 # Function to test login
-def test_login_to_mc_console(driver):
+def test_login_to_mc_console(driver, test_results):
 
     # Take a screenshot after login attempt
     screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_login.png')
