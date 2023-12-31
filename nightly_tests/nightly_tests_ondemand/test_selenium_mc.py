@@ -12,6 +12,35 @@ from urllib.parse import urlparse, urlunparse
 # Global variable for the screenshots directory
 IMAGE_DIR = 'selenium_unity_images'
 
+@pytest.fixture(scope="session")
+def test_results(request):
+    request.session.results = []
+    yield request.session.results
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    result = outcome.get_result()
+    
+    if result.when == 'call':
+        test_name = item.name
+        status = 'PASSED' if result.passed else 'FAILED'
+        item.session.results.append({'name': test_name, 'status': status})
+
+def pytest_sessionfinish(session, exitstatus):
+    print_table(session.results)
+
+def print_table(results):
+    max_name_length = max(len(result['name']) for result in results)
+    name_width = max(max_name_length, len('Test Name'))
+
+    print(f"\n{'Test Name'.ljust(name_width)} | {'Status'}")
+    print(f"{'-' * name_width}-+--------")
+
+    for result in results:
+        print(f"{result['name'].ljust(name_width)} | {result['status']}")
+
+
 # Function to create a new Selenium driver
 @pytest.fixture(scope="session")
 def driver():
