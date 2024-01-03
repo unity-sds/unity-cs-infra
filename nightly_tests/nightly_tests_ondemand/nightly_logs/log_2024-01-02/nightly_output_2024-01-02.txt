@@ -1,0 +1,25 @@
+Repo Hash (Nightly Test):     [d076592]
+Repo Hash (Cloudformation):   [12e8d0e]
+Nightly Test in the unity-cm account
+Stack Name: [unity-cs-nightly-management-console]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [380 seconds] - PASS
+
+Test Name                         | Status
+----------------------------------+--------
+Navigate to URL                   | PASSED
+Login                             | FAILED - The page title should be Unity Management Console
+Click Core Management Btn         | FAILED 
+Enter unity-cs-selenium-project   | FAILED
+Enter unity-cs-selenium-venue     | FAILED
+Core Setup Save Button            | FAILED
+Terminal Output                   | FAILED 
+Return to MC                      | FAILED
+Install EKS                       | FAILED
+Enter unity-cs-selenium-name Name | FAILED
+Enter main Name                   | FAILED
+Next Button                       | FAILED
+Next Button                       | FAILED
+Next Button                       | FAILED
+Next Button                       | FAILED
+Terminal Output                   | FAILED 
