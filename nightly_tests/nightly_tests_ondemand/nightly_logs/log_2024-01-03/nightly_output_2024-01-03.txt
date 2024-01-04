@@ -1,0 +1,41 @@
+Repo Hash (Nightly Test):     [e07f141]
+Repo Hash (Cloudformation):   [12e8d0e]
+Nightly Test in the unity-cm account
+Stack Name: [unity-cs-nightly-management-console]
+Cloudformation Stack creation exceeded 2400 seconds - [FAIL]
+Traceback (most recent call last):
+  File "selenium_test_management_console.py", line 316, in <module>
+    navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
+  File "selenium_test_management_console.py", line 30, in navigate_to_url_with_cred
+    driver.get(url_with_cred)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 356, in get
+    self.execute(Command.GET, {"url": url})
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 347, in execute
+    self.error_handler.check_response(response)
+  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/errorhandler.py", line 229, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.InvalidArgumentException: Message: invalid argument
+  (Session info: chrome=120.0.6099.109)
+Stacktrace:
+#0 0x560675092f83 <unknown>
+#1 0x560674d4bb2b <unknown>
+#2 0x560674d31ff6 <unknown>
+#3 0x560674d2f821 <unknown>
+#4 0x560674d3001a <unknown>
+#5 0x560674d4ebbe <unknown>
+#6 0x560674de47a5 <unknown>
+#7 0x560674dc50b2 <unknown>
+#8 0x560674de4006 <unknown>
+#9 0x560674dc4e53 <unknown>
+#10 0x560674d8cdd4 <unknown>
+#11 0x560674d8e1de <unknown>
+#12 0x560675057531 <unknown>
+#13 0x56067505b455 <unknown>
+#14 0x560675043f55 <unknown>
+#15 0x56067505c0ef <unknown>
+#16 0x56067502799f <unknown>
+#17 0x560675080008 <unknown>
+#18 0x5606750801d7 <unknown>
+#19 0x560675092124 <unknown>
+#20 0x7f2d4fcadac3 <unknown>
+
