@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .env
+
 if [ $# -eq 0 ]
 then
     echo "Usage: ./run.sh <aws_saml_profile_name>"
@@ -8,40 +10,62 @@ fi
 
 ACCOUNT_NAME=$1
 
+
+
+
+## Create vpc id
+VPC_ID=$(aws ec2 describe-vpcs --profile unity-sbg-dev |jq -r '.Vpcs[].VpcId')
+echo "Write parameter vpc-id"
+aws ssm put-parameter --name "/unity/testing/nightly/vpc-id" --value "$VPC_ID" --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+
+## Create subnets
+aws ec2 describe-subnets --profile ${ACCOUNT_NAME} |jq -r '.Subnets[].SubnetId' >subnet_ids.txt
+
+while read subnet_id; do
+  IS_PRIVATE_A=$(aws ec2 describe-subnets --subnet-ids=$subnet_id --profile ${ACCOUNT_NAME} |grep PrivSubnet01)
+  IS_PRIVATE_B=$(aws ec2 describe-subnets --subnet-ids=$subnet_id --profile ${ACCOUNT_NAME} |grep PrivSubnet02)
+  IS_PUBLIC_A=$(aws ec2 describe-subnets --subnet-ids=$subnet_id --profile ${ACCOUNT_NAME} |grep PubSubnet01)
+  IS_PUBLIC_B=$(aws ec2 describe-subnets --subnet-ids=$subnet_id --profile ${ACCOUNT_NAME} |grep PubSubnet02)
+
+  if [[ ! -z "$IS_PRIVATE_A" ]]; then
+    echo "Write parameter privatesubnet1"
+    aws ssm put-parameter --name "/unity/testing/nightly/privatesubnet1" --value "$subnet_id" --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+  elif [[ ! -z "$IS_PRIVATE_B" ]]; then
+    echo "Write parameter privatesubnet2"
+    aws ssm put-parameter --name "/unity/testing/nightly/privatesubnet2" --value "$subnet_id" --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+  elif [[ ! -z "$IS_PUBLIC_A" ]]; then
+    echo "Write parameter publicsubnet1"
+    aws ssm put-parameter --name "/unity/testing/nightly/publicsubnet1" --value "$subnet_id" --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+  elif [[ ! -z "$IS_PUBLIC_B" ]]; then
+    echo "Write parameter publicsubnet2"
+    aws ssm put-parameter --name "/unity/testing/nightly/publicsubnet2" --value "$subnet_id" --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+  fi
+done <subnet_ids.txt
+
+## Read these from from .env file
+echo "Write parameter githubtoken"
+aws ssm put-parameter --name "/unity/testing/nightly/githubtoken"          --value "$GITHUB_TOKEN"           --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+echo "Write parameter mc_username"
+aws ssm put-parameter --name "/unity/testing/nightly/mc_username"          --value "$MC_USERNAME"            --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+echo "Write parameter mc_password"
+aws ssm put-parameter --name "/unity/testing/nightly/mc_password"          --value "$MC_PASSWORD"            --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+echo "Write parameter slack-web-hook-url"
+aws ssm put-parameter --name "/unity/ci/slack-web-hook-url"                --value "$SLACK_WEBHOOK_URL"      --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+echo "Write parameter venue"
+aws ssm put-parameter --name "/unity/testing/nightly/venue"                --value "$VENUE"                  --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+echo "Write parameter privilegedpolicyname"
+aws ssm put-parameter --name "/unity/testing/nightly/privilegedpolicyname" --value "$PRIVILEGED_POLICY_NAME" --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+echo "Write parameter instancetype"
+aws ssm put-parameter --name "/unity/testing/nightly/instancetype"         --value "$INSTANCE_TYPE"          --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+echo "Write parameter accountname"
+aws ssm put-parameter --name "/unity/testing/nightly/accountname"         --value "$ACCOUNT_NAME"            --type String --tags "Key=ServiceArea,Value=U-CS" --profile ${ACCOUNT_NAME}
+
+#exit
+
+
 ROLE_NAME="Unity-CS_Service_Role"
 POLICY_LIST=(AmazonEC2ContainerRegistryPowerUser AmazonS3ReadOnlyAccess AmazonSSMManagedInstanceCore CloudWatchAgentServerPolicy DatalakeKinesisPolicy McpToolsAccessPolicy U-CS_Service_Policy U-CS_Service_Policy_Ondemand)
 DYNAMIC_POLICY_LIST=(U-CS_Service_Policy U-CS_Service_Policy_Ondemand)
-
-
-## Clean up existing roles and policies
-## Detach the proper policies from the role
-aws iam list-policies --profile ${ACCOUNT_NAME} > policies.list
-## Attach the proper policies to the role
-for POLICY_NAME in "${POLICY_LIST[@]}"
-do
-    POLICY_ARN=$(cat policies.list |jq '.Policies[]' |jq 'select(.PolicyName == "'${POLICY_NAME}'")' |jq -r '.Arn')
-    aws iam detach-role-policy --role-name ${ROLE_NAME} --policy-arn ${POLICY_ARN} --profile ${ACCOUNT_NAME}
-done
-
-
-## Delete dynamically created policies
-for POLICY_NAME in "${DYNAMIC_POLICY_LIST[@]}"
-do
-    POLICY_ARN=$(cat policies.list |jq '.Policies[]' |jq 'select(.PolicyName == "'${POLICY_NAME}'")' |jq -r '.Arn')
-    aws iam delete-policy --policy-arn ${POLICY_ARN} --profile ${ACCOUNT_NAME}
-done
-
-
-aws iam delete-role-policy --role-name ${ROLE_NAME} --policy-name U-CS_Minimum_ECS-Policy --profile ${ACCOUNT_NAME}
-
-## Remove the instance profile
-aws iam remove-role-from-instance-profile --instance-profile-name ${ROLE_NAME} --role-name ${ROLE_NAME} --profile ${ACCOUNT_NAME}
-aws iam delete-instance-profile --instance-profile-name ${ROLE_NAME}-instance-profile --profile ${ACCOUNT_NAME}
-
-## Finally, delete the role
-aws iam delete-role --role-name ${ROLE_NAME} --profile ${ACCOUNT_NAME}
-
-
 
 
 
