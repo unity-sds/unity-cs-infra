@@ -52,6 +52,11 @@ git pull origin main
 rm -rf cloudformation
 git clone https://oauth2:$GITHUB_TOKEN@github.com/unity-sds/cfn-ps-jpl-unity-sds.git cloudformation
 cd cloudformation
+
+## This is for testing a specific branch of the cloudformation repo
+git checkout feat/ec2improvements
+git pull origin feat/ec2improvements
+
 CLOUDFORMATION_HASH=$(git rev-parse --short HEAD)
 cd ..
 #echo "Using cfn-ps-jpl-unity-sds repo commit [$CLOUDFORMATION_HASH]" >> nightly_output.txt
