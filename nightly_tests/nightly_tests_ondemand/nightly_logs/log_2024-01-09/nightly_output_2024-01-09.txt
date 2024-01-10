@@ -1,9 +1,9 @@
-Repo Hash (Nightly Test):     [f0089df]
+Repo Hash (Nightly Test):     [1a5468f]
 Repo Hash (Cloudformation):   [a1ec2f8]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [420 seconds] - PASS
+Stack Creation Time: [20 seconds] - PASS
 
 Test Name                         | Status
 ----------------------------------+--------
