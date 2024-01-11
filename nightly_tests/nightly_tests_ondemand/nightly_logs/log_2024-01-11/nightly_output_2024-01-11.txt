@@ -1,4 +1,4 @@
-Repo Hash (Nightly Test):     [3fbae1f]
+Repo Hash (Nightly Test):     [0d68119]
 Repo Hash (Cloudformation):   [d7ba267]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
