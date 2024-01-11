@@ -1,41 +1,25 @@
-Repo Hash (Nightly Test):     [af17d0e]
-Repo Hash (Cloudformation):   [62294f6]
+Repo Hash (Nightly Test):     [3fbae1f]
+Repo Hash (Cloudformation):   [d7ba267]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
-Cloudformation Stack creation exceeded 2400 seconds - [FAIL]
-Traceback (most recent call last):
-  File "selenium_test_management_console.py", line 316, in <module>
-    navigate_to_url_with_cred(driver, URL_WITH_CRED, URL_WITHOUT_CRED, IMAGE_DIR, test_results)  
-  File "selenium_test_management_console.py", line 30, in navigate_to_url_with_cred
-    driver.get(url_with_cred)
-  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 356, in get
-    self.execute(Command.GET, {"url": url})
-  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py", line 347, in execute
-    self.error_handler.check_response(response)
-  File "/home/ubuntu/.local/lib/python3.8/site-packages/selenium/webdriver/remote/errorhandler.py", line 229, in check_response
-    raise exception_class(message, screen, stacktrace)
-selenium.common.exceptions.InvalidArgumentException: Message: invalid argument
-  (Session info: chrome=120.0.6099.109)
-Stacktrace:
-#0 0x562f40db0f83 <unknown>
-#1 0x562f40a69b2b <unknown>
-#2 0x562f40a4fff6 <unknown>
-#3 0x562f40a4d821 <unknown>
-#4 0x562f40a4e01a <unknown>
-#5 0x562f40a6cbbe <unknown>
-#6 0x562f40b027a5 <unknown>
-#7 0x562f40ae30b2 <unknown>
-#8 0x562f40b02006 <unknown>
-#9 0x562f40ae2e53 <unknown>
-#10 0x562f40aaadd4 <unknown>
-#11 0x562f40aac1de <unknown>
-#12 0x562f40d75531 <unknown>
-#13 0x562f40d79455 <unknown>
-#14 0x562f40d61f55 <unknown>
-#15 0x562f40d7a0ef <unknown>
-#16 0x562f40d4599f <unknown>
-#17 0x562f40d9e008 <unknown>
-#18 0x562f40d9e1d7 <unknown>
-#19 0x562f40db0124 <unknown>
-#20 0x7ff172487ac3 <unknown>
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [380 seconds] - PASS
 
+Test Name                         | Status
+----------------------------------+--------
+Navigate to URL                   | PASSED
+Login                             | FAILED - The page title should be Unity Management Console
+Click Core Management Btn         | FAILED 
+Enter unity-cs-selenium-project   | FAILED
+Enter unity-cs-selenium-venue     | FAILED
+Core Setup Save Button            | FAILED
+Terminal Output                   | FAILED 
+Return to MC                      | FAILED
+Install EKS                       | FAILED
+Enter unity-cs-selenium-name Name | FAILED
+Enter main Name                   | FAILED
+Next Button                       | FAILED
+Next Button                       | FAILED
+Next Button                       | FAILED
+Next Button                       | FAILED
+Terminal Output                   | FAILED 
