@@ -22,7 +22,7 @@ resource "aws_api_gateway_method" "root_level_options_method" {
   authorization = "NONE"
 }
 
-# REST API Gateway rot level GET method mock integration
+# REST API Gateway root level GET method mock integration
 resource "aws_api_gateway_integration" "root_level_get_method_mock_integration" {
   rest_api_id          = aws_api_gateway_rest_api.rest_api.id
   resource_id          = aws_api_gateway_rest_api.rest_api.root_resource_id
