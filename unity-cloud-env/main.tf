@@ -37,17 +37,6 @@ resource "aws_ssm_parameter" "eks-service-role" {
   overwrite = true
 }
 
-data "aws_ssm_parameter" "mcp-eks-ami" {
-  name = "/mcp/amis/aml2-eks"
-}
-
-resource "aws_ssm_parameter" "eks-cluster-ami" {
-    name = "/unity/account/ami/eksClusterAmi"
-    type = "String"
-    value = data.aws_ssm_parameter.mcp-eks-ami.value
-    overwrite = true
-}
-
 locals {
   ssm_parameters_map = { for param in var.ssm_parameters : param.name => param }
 }
