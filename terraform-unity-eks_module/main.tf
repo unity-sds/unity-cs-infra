@@ -50,55 +50,55 @@ variable "nodegroups" {
   description = "The nodegroups configuration"
 
   type = map(object({
-    create_iam_role             = optional(bool)
-    iam_role_arn                = optional(string)
-    ami_id                      = optional(string)
-    min_size                    = optional(number)
-    max_size                    = optional(number)
-    desired_size                = optional(number)
-    instance_types              = optional(list(string))
-    capacity_type               = optional(string)
-    enable_bootstrap_user_data  = optional(bool)
+    create_iam_role            = optional(bool)
+    iam_role_arn               = optional(string)
+    ami_id                     = optional(string)
+    min_size                   = optional(number)
+    max_size                   = optional(number)
+    desired_size               = optional(number)
+    instance_types             = optional(list(string))
+    capacity_type              = optional(string)
+    enable_bootstrap_user_data = optional(bool)
   }))
 
   default = {}
 }
 
 variable "cluster_version" {
-  type = string
+  type    = string
   default = "1.26"
 }
 
 
 locals {
-  common_tags = {}
+  common_tags  = {}
   cluster_name = var.deployment_name
-  subnet_map = jsondecode(data.aws_ssm_parameter.subnet_list.value)
+  subnet_map   = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   #ami = "ami-0e3e9697a56f6ba66"
   ami_map = {
-    "1.27" = data.aws_ssm_parameter.eks_ami_1_27.value
-    "1.26" = data.aws_ssm_parameter.eks_ami_1_26.value
-    "1.25" = data.aws_ssm_parameter.eks_ami_1_25.value
+    "1.27"    = data.aws_ssm_parameter.eks_ami_1_27.value
+    "1.26"    = data.aws_ssm_parameter.eks_ami_1_26.value
+    "1.25"    = data.aws_ssm_parameter.eks_ami_1_25.value
     "default" = "ami-0e3e9697a56f6ba66"
   }
   #iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
-  mergednodegroups = {for name, ng in var.nodegroups:
-      name => {
-        use_name_prefix = false
-        create_iam_role = false
-        min_size = ng.min_size != null ? ng.min_size : 1
-        max_size = ng.max_size != null ? ng.max_size : 10
-        desired_size = ng.desired_size != null ? ng.desired_size : 3
-        ami_id = ng.ami_id != null ? ng.ami_id : lookup(local.ami_map, var.cluster_version, local.ami_map["default"])
-        instance_types = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
-        capacity_type = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
-        iam_role_arn = ng.iam_role_arn != null ? ng.iam_role_arn : aws_iam_role.cluster_iam_role.arn
-        enable_bootstrap_user_data = true
-        pre_bootstrap_user_data = <<-EOT
+  mergednodegroups = { for name, ng in var.nodegroups :
+    name => {
+      use_name_prefix            = false
+      create_iam_role            = false
+      min_size                   = ng.min_size != null ? ng.min_size : 1
+      max_size                   = ng.max_size != null ? ng.max_size : 10
+      desired_size               = ng.desired_size != null ? ng.desired_size : 3
+      ami_id                     = ng.ami_id != null ? ng.ami_id : lookup(local.ami_map, var.cluster_version, local.ami_map["default"])
+      instance_types             = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
+      capacity_type              = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
+      iam_role_arn               = ng.iam_role_arn != null ? ng.iam_role_arn : aws_iam_role.cluster_iam_role.arn
+      enable_bootstrap_user_data = true
+      pre_bootstrap_user_data    = <<-EOT
             sudo sed -i 's/^net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf && sudo sysctl -p |true
         EOT
-      }
     }
+  }
 }
 
 
@@ -170,7 +170,7 @@ resource "aws_iam_role_policy_attachment" "cloudwatch-agent" {
   role       = aws_iam_role.cluster_iam_role.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
-data "aws_iam_policy" "datalakekinesis"{
+data "aws_iam_policy" "datalakekinesis" {
   name = "DatalakeKinesisPolicy"
 }
 resource "aws_iam_role_policy_attachment" "kinesis" {
@@ -178,7 +178,7 @@ resource "aws_iam_role_policy_attachment" "kinesis" {
   policy_arn = data.aws_iam_policy.datalakekinesis.arn
 }
 
-data "aws_iam_policy" "mcptools"{
+data "aws_iam_policy" "mcptools" {
   name = "McpToolsAccessPolicy"
 }
 
@@ -195,7 +195,7 @@ resource "aws_iam_role_policy_attachment" "node-policy" {
 
 resource "aws_iam_policy" "custom_policy" {
   name        = "${local.cluster_name}-eks-policy" # Give a unique name to your policy
-  path        = "/" # Optionally, specify a path for the policy
+  path        = "/"                                # Optionally, specify a path for the policy
   description = "A custom policy that provides access to EC2, ECR, SNS, etc."
 
   policy = <<EOF
@@ -462,30 +462,40 @@ module "eks" {
     }
   }
 
-  subnet_ids       = local.subnet_map["private"]
+  subnet_ids = local.subnet_map["private"]
 
   vpc_id = data.aws_ssm_parameter.vpc_id.value
 
   #cluster_security_group_id = data.aws_ssm_parameter.cluster_sg.value
   create_cluster_security_group = true
-  create_node_security_group = true
-  create_iam_role = false
-  enable_irsa = true
-  iam_role_arn = aws_iam_role.cluster_iam_role.arn
+  create_node_security_group    = true
+  create_iam_role               = false
+  enable_irsa                   = true
+  iam_role_arn                  = aws_iam_role.cluster_iam_role.arn
   #node_security_group_id = data.aws_ssm_parameter.node_sg.value
 
   eks_managed_node_group_defaults = {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
-    iam_role_arn              = aws_iam_role.cluster_iam_role.arn
+    iam_role_arn   = aws_iam_role.cluster_iam_role.arn
   }
 
   eks_managed_node_groups = local.mergednodegroups
-  tags = var.tags
+
+  aws_auth_roles = [
+    {
+      rolearn  = "arn:aws:iam::429178552491:role/mcp-tenantOperator"
+      username = "admin"
+      groups   = ["system:masters"]
+    },
+  ]
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = true
+  tags                            = var.tags
 }
 
 resource "aws_launch_template" "node_group_launch_template" {
   image_id = "ami-0e3e9697a56f6ba66"
-  name = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
+  name     = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
   user_data = base64encode(<<EOT
 #!/bin/bash
 set -o xtrace
@@ -505,8 +515,8 @@ set -o xtrace
 
 # TODO: select default node group more intelligently, or remove concept altogether
 resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
-  name = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
-  type = "String"
+  name  = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
+  type  = "String"
   value = aws_launch_template.node_group_launch_template.name
 }
 
@@ -520,8 +530,8 @@ resource "aws_ssm_parameter" "node_group_default_name" {
 }
 
 resource "aws_ssm_parameter" "eks_subnets" {
-  name = "/unity/extensions/eks/${local.cluster_name}/networking/subnets/publicIds"
-  type = "String"
+  name  = "/unity/extensions/eks/${local.cluster_name}/networking/subnets/publicIds"
+  type  = "String"
   value = join(",", local.subnet_map["private"])
 }
 
