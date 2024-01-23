@@ -63,9 +63,3 @@ variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
   description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Groups List"
   default     = "/unity/shared-services-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
 }
-
-variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
-  type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
-  default     = "/unity/shared-services-api-gateway/cs-lambda-authorizer-invoke-role-arn"
-}

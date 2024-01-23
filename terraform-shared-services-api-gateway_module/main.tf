@@ -60,19 +60,53 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_groups_l
   name = var.ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_groups_list
 }
 
-# Unity CS Common Lambda Authorizer Lambda Invoke Role ARN
-data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_invoke_role_arn" {
-  name = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
+# IAM Policy Document for Assume Role
+data "aws_iam_policy_document" "assume_role" {
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com", "apigateway.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+# IAM Policy Document for Inline Policy
+data "aws_iam_policy_document" "inline_policy" {
+  statement {
+    actions   = ["logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "lambda:InvokeFunction"]
+    resources = ["*"]
+  }
+}
+
+# The Policy for Permission Boundary
+data "aws_iam_policy" "mcp_operator_policy" {
+  name = "mcp-tenantOperator-AMI-APIG"
+}
+
+# IAM Role for Lambda Authorizer
+resource "aws_iam_role" "iam_for_lambda_auth" {
+  name = "iam_for_lambda_auth"
+  inline_policy {
+    name   = "unity-cs-lambda-auth-inline-policy"
+    policy = data.aws_iam_policy_document.inline_policy.json
+  }
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  permissions_boundary = data.aws_iam_policy.mcp_operator_policy.arn
 }
 
 # Unity CS Common Auth Lambda
 resource "aws_lambda_function" "cs_common_lambda_auth" {
   filename      = "ucs-common-lambda-auth.zip"
   function_name = var.unity_cs_lambda_authorizer_function_name
-  role          = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_invoke_role_arn.value
+  role          = aws_iam_role.iam_for_lambda_auth.arn
   handler       = "index.handler"
   runtime       = "nodejs14.x"
-  depends_on = [null_resource.download_lambda_zip]
+  depends_on = [null_resource.download_lambda_zip, aws_cloudwatch_log_group.cs_common_lambda_auth_log_group]
 
   environment {
     variables = {
@@ -88,7 +122,7 @@ resource "aws_api_gateway_authorizer" "unity_cs_common_authorizer" {
   name                              = var.unity_cs_api_gateway_authorizer_name
   rest_api_id                       = aws_api_gateway_rest_api.rest_api.id
   authorizer_uri                    = aws_lambda_function.cs_common_lambda_auth.invoke_arn
-  authorizer_credentials            = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_invoke_role_arn.value
+  authorizer_credentials            = aws_iam_role.iam_for_lambda_auth.arn
   authorizer_result_ttl_in_seconds  = 0
   identity_source                   = "method.request.header.Authorization"
   depends_on = [aws_lambda_function.cs_common_lambda_auth, aws_api_gateway_rest_api.rest_api]
