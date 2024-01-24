@@ -1,4 +1,4 @@
-Repo Hash (Nightly Test):     [772eb8e]
+Repo Hash (Nightly Test):     [b793890]
 Repo Hash (Cloudformation):   [d7ba267]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
@@ -44,25 +44,25 @@ test_selenium_mc.py:101: in test_initiate_core_setup
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:110: in test_initiate_core_setup
@@ -75,25 +75,25 @@ test_selenium_mc.py:125: in test_input_venue_name
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:132: in test_input_venue_name
@@ -106,25 +106,25 @@ test_selenium_mc.py:147: in test_input_project_name
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:154: in test_input_project_name
@@ -137,25 +137,25 @@ test_selenium_mc.py:167: in test_core_setup_save_btn
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:173: in test_core_setup_save_btn
@@ -168,25 +168,25 @@ test_selenium_mc.py:194: in test_return_to_marketplace
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:203: in test_return_to_marketplace
@@ -199,25 +199,25 @@ test_selenium_mc.py:216: in test_grab_terminal_output
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:221: in test_grab_terminal_output
@@ -230,25 +230,25 @@ test_selenium_mc.py:236: in test_install_eks
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:245: in test_install_eks
@@ -261,25 +261,25 @@ test_selenium_mc.py:257: in test_eks_module_name
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:261: in test_eks_module_name
@@ -292,25 +292,25 @@ test_selenium_mc.py:275: in test_eks_module_branch
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:279: in test_eks_module_branch
@@ -323,25 +323,25 @@ test_selenium_mc.py:292: in test_click_first_button
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:297: in test_click_first_button
@@ -354,25 +354,25 @@ test_selenium_mc.py:308: in test_click_second_button
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:313: in test_click_second_button
@@ -385,25 +385,25 @@ test_selenium_mc.py:324: in test_click_third_button
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:329: in test_click_third_button
@@ -416,25 +416,25 @@ test_selenium_mc.py:373: in test_click_fourth_button
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:378: in test_click_fourth_button
@@ -447,25 +447,25 @@ test_selenium_mc.py:356: in test_click_fith_button
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:361: in test_click_fith_button
@@ -478,25 +478,25 @@ test_selenium_mc.py:391: in test_grab_terminal_output_two
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x555bd7b21f83 <unknown>
-E   #1 0x555bd77dacf7 <unknown>
-E   #2 0x555bd782a99e <unknown>
-E   #3 0x555bd782aaa1 <unknown>
-E   #4 0x555bd7875d64 <unknown>
-E   #5 0x555bd78540dd <unknown>
-E   #6 0x555bd7873006 <unknown>
-E   #7 0x555bd7853e53 <unknown>
-E   #8 0x555bd781bdd4 <unknown>
-E   #9 0x555bd781d1de <unknown>
-E   #10 0x555bd7ae6531 <unknown>
-E   #11 0x555bd7aea455 <unknown>
-E   #12 0x555bd7ad2f55 <unknown>
-E   #13 0x555bd7aeb0ef <unknown>
-E   #14 0x555bd7ab699f <unknown>
-E   #15 0x555bd7b0f008 <unknown>
-E   #16 0x555bd7b0f1d7 <unknown>
-E   #17 0x555bd7b21124 <unknown>
-E   #18 0x7f2485ddeac3 <unknown>
+E   #0 0x56412ea59f83 <unknown>
+E   #1 0x56412e712cf7 <unknown>
+E   #2 0x56412e76299e <unknown>
+E   #3 0x56412e762aa1 <unknown>
+E   #4 0x56412e7add64 <unknown>
+E   #5 0x56412e78c0dd <unknown>
+E   #6 0x56412e7ab006 <unknown>
+E   #7 0x56412e78be53 <unknown>
+E   #8 0x56412e753dd4 <unknown>
+E   #9 0x56412e7551de <unknown>
+E   #10 0x56412ea1e531 <unknown>
+E   #11 0x56412ea22455 <unknown>
+E   #12 0x56412ea0af55 <unknown>
+E   #13 0x56412ea230ef <unknown>
+E   #14 0x56412e9ee99f <unknown>
+E   #15 0x56412ea47008 <unknown>
+E   #16 0x56412ea471d7 <unknown>
+E   #17 0x56412ea59124 <unknown>
+E   #18 0x7f114c88cac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:395: in test_grab_terminal_output_two
@@ -519,4 +519,4 @@ FAILED test_selenium_mc.py::test_click_third_button - Exception: Failed to fi...
 FAILED test_selenium_mc.py::test_click_fourth_button - Exception: Failed to f...
 FAILED test_selenium_mc.py::test_click_fith_button - Exception: Failed to fin...
 FAILED test_selenium_mc.py::test_grab_terminal_output_two - Exception: Failed...
-=================== 16 failed, 2 passed in 201.76s (0:03:21) ===================
+=================== 16 failed, 2 passed in 202.38s (0:03:22) ===================
