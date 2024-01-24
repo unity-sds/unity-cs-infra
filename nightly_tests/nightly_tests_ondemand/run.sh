@@ -69,11 +69,15 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
 bash deploy.sh
 #bash step2.sh &
-
+sleep 360
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
+# Get MC URL
+export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
+export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+
 # run selenium test on management console
-export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
+# export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
@@ -130,6 +134,7 @@ sleep 10
 bash destroy.sh
 
 OUTPUT=$(cat nightly_output.txt)
+LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/main/nightly_tests/nightly_tests_ondemand/nightly_logs/log_$TODAYS_DATE"
 
 
 cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
@@ -142,4 +147,6 @@ cat CF_EVENTS.txt
 
 CF_EVENTS=$(cat CF_EVENTS.txt)
 
-curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
+# curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
+curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'", "logs_url": "'"${LOGS_URL}"'"}' $SLACK_URL
+
