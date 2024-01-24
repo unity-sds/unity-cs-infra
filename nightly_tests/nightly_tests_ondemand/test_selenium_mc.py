@@ -29,29 +29,6 @@ def driver():
     yield driver
     driver.quit()
 
-# Function to navigate to the management console URL with credentials
-def test_navigate_to_url_with_cred(driver, test_results):
-#    mc_username = os.getenv('MC_USERNAME')
-#    mc_password = os.getenv('MC_PASSWORD')
-    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    # Construct the URL with credentials
-#    parsed_url = urlparse(management_console_url)
-#    new_netloc = f"{mc_username}:{mc_password}@{parsed_url.hostname}"
-#    if parsed_url.port:
-#        new_netloc += f":{parsed_url.port}"
-#    new_url = urlunparse((parsed_url.scheme, new_netloc, parsed_url.path, parsed_url.params, parsed_url.query, parsed_url.fragment))
-#    URL_WITH_CRED = new_url
-    URL_WITHOUT_CRED = management_console_url
-#
-#    driver.get(URL_WITH_CRED)
-    driver.get(URL_WITHOUT_CRED)
-    time.sleep(2)  # Wait for the page to load
-    expected_url = URL_WITHOUT_CRED.rstrip('/') + '/landing'  # Ensures no double slashes if URL_WITHOUT_CRED ends with a slash
-    assert driver.current_url.lower() == expected_url.lower(), f"URL does not match the expected URL without credentials. Expected: {expected_url}, but got: {driver.current_url}"
-
-    # Create directory for images if it doesn't exist
-    if not os.path.exists(IMAGE_DIR):
-        os.makedirs(IMAGE_DIR)
 
 # Fixture to provide the URL without credentials
 @pytest.fixture(scope="session")
@@ -60,11 +37,22 @@ def url_without_cred():
     management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
     return management_console_url
 
-
 # Function to test login
-def test_acess_to_mc_console(driver, test_results):
+def test_navigate_to_mc_console(driver, test_results):
     # Take a screenshot after login attempt
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_login.png')
+    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+    URL_WITHOUT_CRED = management_console_url
+
+    driver.get(URL_WITHOUT_CRED)
+    time.sleep(2)  # Wait for the page to load
+    expected_url = URL_WITHOUT_CRED.rstrip('/') + '/landing'  # Ensures no double slashes if URL_WITHOUT_CRED ends with a slash
+    assert driver.current_url.lower() == expected_url.lower(), f"URL does not match the expected URL without credentials. Expected: {expected_url}, but got: {driver.current_url}"
+
+    # Create directory for images if it doesn't exist
+    if not os.path.exists(IMAGE_DIR):
+        os.makedirs(IMAGE_DIR)
+        
+    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_navigating_to_URL.png')
     driver.save_screenshot(screenshot_path)
 
     # Print the current URL for debugging
@@ -74,25 +62,22 @@ def test_acess_to_mc_console(driver, test_results):
     assert driver.current_url.endswith('/ui/landing'), f"Navigation to home page failed. Current URL: {driver.current_url}"
     assert driver.title == 'Unity Management Console', "The page title should be Unity Management Console"
 
-def test_bootstrap_process(driver, test_results):
+def test_bootstrap_process_status(driver, test_results):
     try:
         # Find the element that contains the bootstrap status message
         bootstrap_status_element = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, 'h5.text-xl'))
         )
         status_message = bootstrap_status_element.text
-
+        # Take a screenshot for documentation
+        screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_bootstrap_check.png')
+        driver.save_screenshot(screenshot_path)
         # Check if the message indicates a failure
+        
         assert "The Bootstrap Process Failed" not in status_message, "Bootstrap process failed"
-        # Additional assertions can be added here if needed
 
     except TimeoutException:
         raise Exception("Failed to find the bootstrap status message within the specified time.")
-
-    # Take a screenshot for documentation
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_bootstrap_check.png')
-    driver.save_screenshot(screenshot_path)
-
 
 # Function to test clicking the Go! button
 def test_initiate_core_setup(driver, test_results):
