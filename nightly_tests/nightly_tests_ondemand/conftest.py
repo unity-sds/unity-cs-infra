@@ -23,8 +23,12 @@ def pytest_sessionfinish(session, exitstatus):
     with open('makereport_output.txt', 'w') as f:
         print_table(session.results, file=f)
 
-# function to print the test results in a table format. The output can be directed to a file.
+# Function to print the test results in a table format. The output can be directed to a file.
 def print_table(results, file=None):
+    # ASCII symbols for pass and fail
+    pass_symbol = '✔'
+    fail_symbol = '✖'
+
     # Determine the maximum length of test names to format the table properly.
     max_name_length = max(len(result['name']) for result in results)
     name_width = max(max_name_length, len('Test Name'))
@@ -33,6 +37,8 @@ def print_table(results, file=None):
     print(f"\n{'Test Name'.ljust(name_width)} | {'Status'}", file=file)
     print(f"{'-' * name_width}-+--------", file=file)
 
-    # Print each test result in the table.
+    # Print each test result in the table with the respective symbol.
     for result in results:
-        print(f"{result['name'].ljust(name_width)} | {result['status']}", file=file)
+        status_symbol = pass_symbol if result['status'] == 'PASSED' else fail_symbol
+        print(f"{result['name'].ljust(name_width)} | {status_symbol}", file=file)
+
