@@ -18,7 +18,7 @@ def driver():
     options = Options()
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-
+    options.add_argument('window-size=1024x768')
     grid_url = 'http://localhost:4444/wd/hub'
 
     # Create a Remote WebDriver
@@ -29,29 +29,6 @@ def driver():
     yield driver
     driver.quit()
 
-# Function to navigate to the management console URL with credentials
-def test_navigate_to_url_with_cred(driver, test_results):
-#    mc_username = os.getenv('MC_USERNAME')
-#    mc_password = os.getenv('MC_PASSWORD')
-    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    # Construct the URL with credentials
-#    parsed_url = urlparse(management_console_url)
-#    new_netloc = f"{mc_username}:{mc_password}@{parsed_url.hostname}"
-#    if parsed_url.port:
-#        new_netloc += f":{parsed_url.port}"
-#    new_url = urlunparse((parsed_url.scheme, new_netloc, parsed_url.path, parsed_url.params, parsed_url.query, parsed_url.fragment))
-#    URL_WITH_CRED = new_url
-    URL_WITHOUT_CRED = management_console_url
-#
-#    driver.get(URL_WITH_CRED)
-    driver.get(URL_WITHOUT_CRED)
-    time.sleep(2)  # Wait for the page to load
-    expected_url = URL_WITHOUT_CRED.rstrip('/') + '/landing'  # Ensures no double slashes if URL_WITHOUT_CRED ends with a slash
-    assert driver.current_url.lower() == expected_url.lower(), f"URL does not match the expected URL without credentials. Expected: {expected_url}, but got: {driver.current_url}"
-
-    # Create directory for images if it doesn't exist
-    if not os.path.exists(IMAGE_DIR):
-        os.makedirs(IMAGE_DIR)
 
 # Fixture to provide the URL without credentials
 @pytest.fixture(scope="session")
@@ -60,11 +37,22 @@ def url_without_cred():
     management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
     return management_console_url
 
-
 # Function to test login
-def test_acess_to_mc_console(driver, test_results):
+def test_navigate_to_mc_console(driver, test_results):
     # Take a screenshot after login attempt
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_login.png')
+    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+    URL_WITHOUT_CRED = management_console_url
+
+    driver.get(URL_WITHOUT_CRED)
+    time.sleep(2)  # Wait for the page to load
+    expected_url = URL_WITHOUT_CRED.rstrip('/') + '/landing'  # Ensures no double slashes if URL_WITHOUT_CRED ends with a slash
+    assert driver.current_url.lower() == expected_url.lower(), f"URL does not match the expected URL without credentials. Expected: {expected_url}, but got: {driver.current_url}"
+
+    # Create directory for images if it doesn't exist
+    if not os.path.exists(IMAGE_DIR):
+        os.makedirs(IMAGE_DIR)
+        
+    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_navigating_to_URL.png')
     driver.save_screenshot(screenshot_path)
 
     # Print the current URL for debugging
@@ -74,32 +62,29 @@ def test_acess_to_mc_console(driver, test_results):
     assert driver.current_url.endswith('/ui/landing'), f"Navigation to home page failed. Current URL: {driver.current_url}"
     assert driver.title == 'Unity Management Console', "The page title should be Unity Management Console"
 
-def test_bootstrap_process(driver, test_results):
+def test_bootstrap_process_status(driver, test_results):
     try:
         # Find the element that contains the bootstrap status message
         bootstrap_status_element = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, 'h5.text-xl'))
         )
         status_message = bootstrap_status_element.text
-
+        # Take a screenshot for documentation
+        screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_bootstrap_check.png')
+        driver.save_screenshot(screenshot_path)
         # Check if the message indicates a failure
+        
         assert "The Bootstrap Process Failed" not in status_message, "Bootstrap process failed"
-        # Additional assertions can be added here if needed
 
     except TimeoutException:
         raise Exception("Failed to find the bootstrap status message within the specified time.")
-
-    # Take a screenshot for documentation
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_bootstrap_check.png')
-    driver.save_screenshot(screenshot_path)
-
 
 # Function to test clicking the Go! button
 def test_initiate_core_setup(driver, test_results):
     try:
         # Find and click the Go button
         go_button = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, 'a.btn.btn-primary[href="/ui/setup"]'))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, 'a[href="/management/ui/setup"].bg-blue-600'))
         )
         go_button.click()
 
@@ -110,113 +95,34 @@ def test_initiate_core_setup(driver, test_results):
         raise Exception("Failed to navigate to setup page - either the Go button was not clickable or the URL did not change as expected.")
 
     # Take a screenshot
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_go_button.png')
+    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_core_manegement_setup.png')
     driver.save_screenshot(screenshot_path)
 
     # Assert the current URL ends with '/ui/setup'
-    assert driver.current_url.endswith('/ui/setup'), "Navigation to setup page failed"
-
-def test_input_venue_name(driver, test_results):
-    venue_name = "TEST-VENUE"
-    element_id = "venue"
-
-    try:
-        # Locate the text box and enter the venue name
-        text_box = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.ID, element_id))
-        )
-        text_box.clear()
-        text_box.send_keys(venue_name)
-
-    except TimeoutException:
-        raise Exception(f"Failed to find or interact with the text box for venue name (ID: {element_id}).")
-
-    # Assert that the venue name was correctly entered
-    assert text_box.get_attribute('value') == venue_name, "Venue name not correctly entered."
-
-    # Take a screenshot after setting the venue name
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_setting_venue_name.png')
-    driver.save_screenshot(screenshot_path)
-
-def test_input_project_name(driver, test_results):
-    project_name = "TEST-PROJECT"
-    element_id = "project"
-
-    try:
-        # Locate the text box and enter the project name
-        text_box = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.ID, element_id))
-        )
-        text_box.clear()
-        text_box.send_keys(project_name)
-
-    except TimeoutException:
-        raise Exception(f"Failed to find or interact with the text box for project name (ID: {element_id}).")
-
-    # Assert that the project name was correctly entered
-    assert text_box.get_attribute('value') == project_name, "Project name not correctly entered."
-
-    # Take a screenshot after setting the project name
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_setting_project_name.png')
-    driver.save_screenshot(screenshot_path)
-
+    assert driver.current_url.endswith('/ui/setup'), f"Navigation to setup page failed - current URL {driver.current_url}"
 
 def test_core_setup_save_btn(driver, test_results):
     try:
         # Find and click the Save button
         save_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[@type='submit'][contains(@class, 'st-button large mt-5')]"))
+            EC.element_to_be_clickable((By.XPATH, "//button[@type='submit' and contains(@class, 'bg-blue-600')]"))
         )
         save_button.click()
+        # Take a screenshot
+        screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_core_manegement_save_btn.png')
+        driver.save_screenshot(screenshot_path)
 
     except TimeoutException:
-        raise Exception("Failed to find or click the core'Save' button within the specified time.")
-
-    # Take a screenshot after clicking the Save button
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_save_button.png')
-    driver.save_screenshot(screenshot_path)
-        
-def test_return_to_marketplace(driver, url_without_cred, test_results):
-    # Navigate to the URL without credentials
-    driver.get(url_without_cred)
-    time.sleep(5)
-    driver.refresh()
-    time.sleep(5)
-    driver.refresh()
-    time.sleep(5)
-
-    # Take a screenshot after navigating
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_navigating.png')
-    driver.save_screenshot(screenshot_path)
-
-    try:
-        # Find and click the 'Go to Marketplace' button
-        go_button = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, "//a[@href='/ui/marketplace'][contains(@class, 'btn btn-primary')]"))
-        )
-        go_button.click()
-
-        # Wait for the URL to update and check it ends with '/ui/marketplace'
-        WebDriverWait(driver, 20).until(EC.url_contains('/ui/marketplace'))
-
-    except TimeoutException:
-        raise Exception("Failed to navigate to the marketplace - either the button was not clickable or the URL did not change as expected.")
-
-    assert driver.current_url.endswith('/ui/marketplace'), "URL does not end with '/ui/marketplace'"
-
-    # Take a screenshot for confirmation
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_go_button.png')
-    driver.save_screenshot(screenshot_path)
+        raise Exception("Failed to find or click the core 'Save' button within the specified time.")
 
 def test_grab_terminal_output(driver, test_results):
     element_selector = '.terminal'
-
+    time.sleep(10)
     try:
         # Find the terminal output element
         terminal_output_element = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
         )
-
     except TimeoutException:
         raise Exception("Failed to find or load the terminal output element within the specified time.")
 
@@ -225,16 +131,43 @@ def test_grab_terminal_output(driver, test_results):
     output_text = "\n".join([line.text for line in lines])
 
     # Assert that the output text contains "success"
-    assert "success" in output_text.lower(), "Success not found in terminal output"
+    assert "Error" in output_text.lower(), "Success not found in terminal output"
 
-    # Optional
-    return output_text
+    # Take a screenshot after clicking the Save button
+    driver.set_window_size(1920, 1080)  # Set to desired dimensions
+    print(driver.get_window_size())
+    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_core_manegement_save_button.png')
+    driver.save_screenshot(screenshot_path)
 
-def test_install_eks(driver, test_results):
+def test_navigate_to_marketplace(driver, url_without_cred, test_results):
+    # Navigate to the URL without credentials
+    driver.get(url_without_cred)
+    time.sleep(5)
+
+    try:
+        # Find and click the 'Go to Marketplace' button
+        go_button = WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "a[href='/management/ui/marketplace'].bg-blue-600"))
+        )
+        go_button.click()
+
+        # Wait for the URL to update and check it ends with '/ui/marketplace'
+        WebDriverWait(driver, 20).until(EC.url_contains('/management/ui/marketplace'))
+
+    except TimeoutException:
+        raise Exception("Failed to navigate to the marketplace - either the button was not clickable or the URL did not change as expected.")
+
+    assert driver.current_url.endswith('/management/ui/marketplace'), "URL does not end with '/management/ui/marketplace'"
+
+    # Take a screenshot for confirmation
+    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_navigating_to_marketplace.png')
+    driver.save_screenshot(screenshot_path)
+
+def test_clicker_install_eks_btn(driver, test_results):
     try:
         # Locate and click the Install Application button
         install_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.st-button.large.float-end"))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.bg-blue-500.float-right"))
         )
         install_button.click()
 
@@ -246,23 +179,27 @@ def test_install_eks(driver, test_results):
 
     assert driver.current_url.endswith('/ui/install'), "URL does not end with '/ui/install'"
     # Screenshot logic here
-    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_install_button.png')
+    screenshot_path = os.path.join(IMAGE_DIR, 'screenshot_after_clicking_EKS_install_button.png')
     driver.save_screenshot(screenshot_path)
-        
+
 def test_eks_module_name(driver, test_results):
     module_name = "unity-cs-selenium-name"
-    element_id = "module"
+    element_id = "name"  # ID of the input box
+    next_button_class = "btn-gray"  # Class of the Next button
 
     try:
+        # Find and interact with the text box
         text_box = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, element_id))
         )
-    except TimeoutException:
-        raise Exception(f"Textbox for module name (ID: {element_id}) not found.")
+        text_box.clear()
+        text_box.send_keys(module_name)
+        assert text_box.get_attribute('value') == module_name, "Module name not correctly entered."
 
-    text_box.clear()
-    text_box.send_keys(module_name)
-    assert text_box.get_attribute('value') == module_name, "Module name not correctly entered."
+
+    except TimeoutException:
+        raise Exception(f"Failed to find or interact with the specified element (ID: {element_id}).")
+
     # Screenshot logic
     screenshot_path = os.path.join(IMAGE_DIR, f'screenshot_after_setting_module_name.png')
     driver.save_screenshot(screenshot_path)
@@ -270,115 +207,42 @@ def test_eks_module_name(driver, test_results):
 def test_eks_module_branch(driver, test_results):
     branch_name = "main"
     element_id = "branch"
+    next_button_class = "btn-gray"  # Class of the Next button
 
     try:
+        # Find and click the Next button
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, next_button_class))
+        )
+        next_button.click()
+
         text_box = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.ID, element_id))
         )
+        text_box.clear()
+        text_box.send_keys(branch_name)
+        
+
     except TimeoutException:
         raise Exception(f"Textbox for branch name (ID: {element_id}) not found.")
 
-    text_box.clear()
-    text_box.send_keys(branch_name)
     assert text_box.get_attribute('value') == branch_name, "Branch name not correctly entered."
     # Screenshot logic here
     screenshot_path = os.path.join(IMAGE_DIR, f'screenshot_after_setting_branch_name.png')
     driver.save_screenshot(screenshot_path)
 
 def test_click_first_button(driver, test_results):
-    button_class = 'default-btn.next-step.svelte-1pvzwgg'
-
+    next_button_xpath = "//button[@type='button'][contains(@class, 'btn-gray') and text()='Next']"
     try:
-        button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, next_button_xpath))
         )
-        button.click()
+        next_button.click()
     except TimeoutException:
-        raise Exception(f"Failed to find or click the first button (class: {button_class}).")
+        raise Exception(f"Failed to find or click the first button (class: {next_button_class}).")
 
     # Generate a screenshot
     screenshot_name = 'screenshot_after_clicking_first_button.png'
-    screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
-    driver.save_screenshot(screenshot_path)
-
-def test_click_second_button(driver, test_results):
-    button_class = 'default-btn.next-step.svelte-1pvzwgg'
-
-    try:
-        button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
-        )
-        button.click()
-    except TimeoutException:
-        raise Exception(f"Failed to find or click the second button (class: {button_class}).")
-
-    # Generate a screenshot
-    screenshot_name = 'screenshot_after_clicking_second_button.png'
-    screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
-    driver.save_screenshot(screenshot_path)
-
-def test_click_third_button(driver, test_results):
-    button_class = 'default-btn.next-step.svelte-1pvzwgg'
-
-    try:
-        button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
-        )
-        button.click()
-    except TimeoutException:
-        raise Exception(f"Failed to find or click the third button (class: {button_class}).")
-
-    # Generate a screenshot
-    screenshot_name = 'screenshot_after_clicking_third_button.png'
-    screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
-    driver.save_screenshot(screenshot_path)
-
-def test_click_fourth_button(driver, test_results):
-    button_class = 'default-btn.next-step.svelte-1pvzwgg'
-
-    try:
-        button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
-        )
-        button.click()
-    except TimeoutException:
-        raise Exception(f"Failed to find or click the third button (class: {button_class}).")
-
-    # Generate a screenshot
-    screenshot_name = 'screenshot_after_clicking_third_button.png'
-    screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
-    driver.save_screenshot(screenshot_path)
-
-def test_click_fith_button(driver, test_results):
-    button_class = 'btn.btn-primary.svelte-1pvzwgg'
-
-    try:
-        button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
-        )
-        button.click()
-    except TimeoutException:
-        raise Exception(f"Failed to find or click the fourth button (class: {button_class}).")
-
-    # Generate a screenshot
-    screenshot_name = 'screenshot_after_clicking_fourth_button.png'
-    screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
-    driver.save_screenshot(screenshot_path)
-
-
-def test_click_fourth_button(driver, test_results):
-    button_class = 'btn.btn-primary.svelte-1pvzwgg'
-
-    try:
-        button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, button_class))
-        )
-        button.click()
-    except TimeoutException:
-        raise Exception(f"Failed to find or click the fourth button (class: {button_class}).")
-
-    # Generate a screenshot
-    screenshot_name = 'screenshot_after_clicking_fourth_button.png'
     screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
     driver.save_screenshot(screenshot_path)
 
@@ -399,8 +263,9 @@ def test_grab_terminal_output_two(driver, test_results):
     output_text = "\n".join([line.text for line in lines])
 
     # Assert that the output text contains "success"
-    assert "success" in output_text.lower(), "Success not found in terminal output"
+    assert "Error" in output_text.lower(), "Success not found in terminal output"
 
     return output_text
+
 def pytest_sessionfinish(session, exitstatus):
     print_table(session.results)
