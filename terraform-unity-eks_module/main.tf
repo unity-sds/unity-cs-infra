@@ -451,13 +451,7 @@ module "eks" {
 
   eks_managed_node_groups = local.mergednodegroups
 
-  aws_auth_roles = [
-    {
-      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/mcp-tenantOperator"
-      username = "admin"
-      groups   = ["system:masters"]
-    },
-  ]
+  aws_auth_roles = var.aws_auth_roles
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   tags                            = var.tags
