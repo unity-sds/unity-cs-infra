@@ -5,7 +5,7 @@ variable "tags" {
 
 variable "deployment_name" {
   type = string
-  default = "unity-dev-ryan"
+  default = "unity-eks"
 }
 
 variable "nodegroups" {
@@ -31,6 +31,16 @@ variable "nodegroups" {
       desired_size = 1
     }
   }
+}
+
+variable "aws_auth_roles" {
+    description = "AWS auth roles to associate with the cluster"
+    type = list(object({
+        rolearn = string
+        username = string
+        groups = list(string)
+    })) 
+    default = [ ]
 }
 
 variable "cluster_version" {

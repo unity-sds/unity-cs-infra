@@ -429,7 +429,7 @@ module "eks" {
     }
     vpc-cni = {
       most_recent = true
-    }
+    } 
   }
 
   subnet_ids = local.subnet_map["private"]
