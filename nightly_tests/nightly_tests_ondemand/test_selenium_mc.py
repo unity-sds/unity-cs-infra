@@ -44,15 +44,13 @@ def save_screenshot(driver, description):
 @pytest.fixture(scope="session")
 def url_without_cred():
     # Get the management console URL from the environment variable
-#    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    management_console_url = 'HTTP://CPeXbD-unity-proxy-httpd-alb-884659539.us-west-2.elb.amazonaws.com:8080/management/ui'
+    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
     return management_console_url
 
 # Function to test login
 def test_navigate_to_mc_console(driver, test_results):
     # Take a screenshot after login attempt
-#    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    management_console_url = 'HTTP://CPeXbD-unity-proxy-httpd-alb-884659539.us-west-2.elb.amazonaws.com:8080/management/ui'
+    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
     URL_WITHOUT_CRED = management_console_url
 
     driver.get(URL_WITHOUT_CRED)
@@ -124,27 +122,6 @@ def test_core_setup_save_btn(driver, test_results):
     except TimeoutException:
         raise Exception("Failed to find or click the core 'Save' button within the specified time.")
 
-def test_grab_terminal_output_EKS(driver, test_results):
-    element_selector = '.terminal'
-    time.sleep(10)
-    try:
-        # Find the terminal output element
-        terminal_output_element = WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
-        )
-    except TimeoutException:
-        raise Exception("Failed to find or load the terminal output element within the specified time.")
-
-    # Retrieve the text from the terminal output
-    lines = terminal_output_element.find_elements(By.TAG_NAME, 'div')
-    output_text = "\n".join([line.text for line in lines])
-
-    # Assert that the output text contains "success"
-    assert "Error" in output_text.lower(), "Success not found in terminal output"
-
-    # Take a screenshot after clicking the Save button
-    save_screenshot(driver, 'screenshot_after_clicking_core_manegement_save_button')
-
 @pytest.fixture
 def test_navigate_to_marketplace(driver, url_without_cred, test_results):
     # Navigate to the URL without credentials
@@ -168,6 +145,124 @@ def test_navigate_to_marketplace(driver, url_without_cred, test_results):
 
     # Take a screenshot for confirmation
     save_screenshot(driver, 'screenshot_after_navigating_to_marketplace')
+
+def test_click_install_EKS_btn(driver, test_results, test_navigate_to_marketplace):
+    try:
+        # Locate and click the Install Application button
+        install_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.bg-blue-500.float-right"))
+        )
+        install_button.click()
+
+        # Wait for the URL to update
+        WebDriverWait(driver, 10).until(EC.url_contains('/ui/install'))
+
+    except TimeoutException:
+        raise Exception("Failed to install EKS - either the button was not clickable or the URL did not update as expected.")
+
+    assert driver.current_url.endswith('/ui/install'), "URL does not end with '/ui/install'"
+    # Screenshot logic here
+    save_screenshot(driver, 'screenshot_after_clicking_EKS_install_button')
+
+def test_EKS_module_name(driver, test_results):
+    module_name = "EKS-unity-selenium-test"
+    element_id = "name"  # ID of the input box
+    next_button_class = "btn-gray"  # Class of the Next button
+
+    try:
+        # Find and interact with the text box
+        text_box = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, element_id))
+        )
+        text_box.clear()
+        text_box.send_keys(module_name)
+        assert text_box.get_attribute('value') == module_name, "Module name not correctly entered."
+
+
+    except TimeoutException:
+        raise Exception(f"Failed to find or interact with the specified element (ID: {element_id}).")
+
+    # Screenshot logic
+    save_screenshot(driver, 'screenshot_after_setting_module_name')
+
+def test_EKS_module_branch(driver, test_results):
+    branch_name = "main"
+    element_id = "branch"
+    next_button_class = "btn-gray"  # Class of the Next button
+
+    try:
+        # Find and click the Next button
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, next_button_class))
+        )
+        next_button.click()
+
+        text_box = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, element_id))
+        )
+        text_box.clear()
+        text_box.send_keys(branch_name)
+        
+
+    except TimeoutException:
+        raise Exception(f"Textbox for branch name (ID: {element_id}) not found.")
+
+    assert text_box.get_attribute('value') == branch_name, "Branch name not correctly entered."
+    # Screenshot logic here
+    save_screenshot(driver, 'screenshot_after_setting_branch_name')
+
+def test_click_EKS_install_btns(driver, test_results):
+    next_button_xpath = "//button[@type='button'][contains(@class, 'btn-gray') and text()='Next']"
+    install_button_xpath = "//button[@type='submit'][contains(@class, 'btn-primary') and text()='Install Software']"
+
+    try:
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, next_button_xpath))
+        )
+        next_button.click()
+
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, next_button_xpath))
+        )
+        next_button.click()
+
+        next_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, next_button_xpath))
+        )
+        next_button.click()
+
+        install_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, install_button_xpath))
+        )
+        install_button.click() 
+
+    except TimeoutException:
+        raise Exception(f"Failed to find or click the first button (class: {next_button_class}).")
+
+    # Generate a screenshot
+    time.sleep(5)
+    save_screenshot(driver, 'screenshot_after_clicking_buttons')
+
+
+def test_grab_terminal_output_EKS(driver, test_results):
+    element_selector = '.terminal'
+
+    try:
+        # Find the terminal output element
+        terminal_output_element = WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
+        )
+    except TimeoutException:
+        raise Exception("Failed to find or load the terminal output element within the specified time.")
+
+    # Retrieve the text from the terminal output
+    lines = terminal_output_element.find_elements(By.TAG_NAME, 'div')
+    output_text = "\n".join([line.text for line in lines])
+
+    # Assert that the output text contains "success"
+    assert "Error" in output_text.lower(), "Success not found in terminal output"
+
+    return output_text
 
 def test_click_install_SPS_btn(driver, test_results, test_navigate_to_marketplace):
     try:
