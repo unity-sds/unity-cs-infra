@@ -49,17 +49,17 @@ variable "unity_cs_lambda_authorizer_zip_path" {
 variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_client_id_list" {
   type        = string
   description = "SSM Param for Shared Services API Gateway CS Lambda Authorizer Lambda Allowed Cognito Client ID List"
-  default     = "/unity/shared-services-api-gateway/cs-lambda-authorizer-cognito-client-id-list"
+  default     = "/unity/cs/routing/shared-api-gateway/cs-lambda-authorizer-cognito-client-id-list"
 }
 
 variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_pool_id" {
   type        = string
   description = "SSM Param for Shared Services API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Pool ID"
-  default     = "/unity/shared-services-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
+  default     = "/unity/cs/routing/shared-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
 }
 
 variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
   type        = string
   description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Groups List"
-  default     = "/unity/shared-services-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
+  default     = "/unity/cs/routing/shared-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
 }
