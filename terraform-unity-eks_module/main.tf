@@ -430,6 +430,12 @@ module "eks" {
     vpc-cni = {
       most_recent = true
     } 
+    aws-ebs-csi-driver = {
+      most_recent = true
+    }
+    aws-efs-csi-driver = {
+      most_recent = true
+    }
   }
 
   subnet_ids = local.subnet_map["private"]
