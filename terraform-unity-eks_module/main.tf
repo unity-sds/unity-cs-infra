@@ -436,9 +436,6 @@ module "eks" {
     aws-efs-csi-driver = {
       most_recent = true
     }
-    aws-mountpoint-s3-csi-driver = {
-      most_recent = true
-    }
   }
 
   subnet_ids = local.subnet_map["private"]
