@@ -3,7 +3,7 @@ output "eks" {
     value = module.eks
 }
 
-output "cluster_iam_role_arn"{
+output "cluster_iam_role"{
     description = "ARN of cluster iam role"
-    value = aws_iam_role.cluster_iam_role.arn
+    value = aws_iam_role.cluster_iam_role.name
 }
