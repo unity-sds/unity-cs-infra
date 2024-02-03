@@ -69,11 +69,15 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
 bash deploy.sh
 #bash step2.sh &
-
+sleep 360
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
+# Get MC URL
+export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
+export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+
 # run selenium test on management console
-export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
+# export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then
@@ -107,11 +111,13 @@ sudo docker pull selenium/standalone-chrome
 CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
 sleep 10
 
-python3 selenium_test_management_console.py >> nightly_output.txt 2>&1
+cp nightly_output.txt selenium_nightly_output.txt
+pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
+cat makereport_output.txt >> nightly_output.txt
 
 sudo docker stop $CONTAINER_ID
 
-cp nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
+cp selenium_nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
 mv nightly_output_$TODAYS_DATE.txt nightly_logs/log_$TODAYS_DATE/
 mv selenium_unity_images/* nightly_logs/log_$TODAYS_DATE/
 
@@ -128,6 +134,7 @@ sleep 10
 bash destroy.sh
 
 OUTPUT=$(cat nightly_output.txt)
+LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/main/nightly_tests/nightly_tests_ondemand/nightly_logs/log_$TODAYS_DATE"
 
 
 cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
@@ -140,4 +147,6 @@ cat CF_EVENTS.txt
 
 CF_EVENTS=$(cat CF_EVENTS.txt)
 
-curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
+# curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
+curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'", "logs_url": "'"${LOGS_URL}"'"}' $SLACK_URL
+

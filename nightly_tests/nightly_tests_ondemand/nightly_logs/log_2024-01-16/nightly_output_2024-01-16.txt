@@ -1,0 +1,7 @@
+Repo Hash (Nightly Test):     [08282a8]
+Repo Hash (Cloudformation):   [d7ba267]
+Nightly Test in the unity-cm account
+Stack Name: [unity-cs-nightly-management-console]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [400 seconds] - PASS
+python3: can't open file 'selenium_test_management_console.py': [Errno 2] No such file or directory
