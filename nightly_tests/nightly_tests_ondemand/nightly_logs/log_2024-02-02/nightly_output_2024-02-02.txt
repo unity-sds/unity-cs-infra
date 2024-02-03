@@ -1,9 +1,9 @@
-Repo Hash (Nightly Test):     [7512d09]
+Repo Hash (Nightly Test):     [30b0b54]
 Repo Hash (Cloudformation):   [d7ba267]
 Nightly Test in the unity-cm account
 Stack Name: [unity-cs-nightly-management-console]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [400 seconds] - PASS
+Stack Creation Time: [20 seconds] - PASS
 ============================= test session starts ==============================
 platform linux -- Python 3.8.10, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3
 cachedir: .pytest_cache
@@ -38,17 +38,17 @@ test_selenium_mc.py:263: in test_grab_terminal_output_EKS
     assert "Error" in output_text.lower(), "Success not found in terminal output"
 E   AssertionError: Success not found in terminal output
 E   assert 'Error' in '\n\n[error]\n\n\n[error]\n[error]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
-E    +  where '\n\n[error]\n\n\n[error]\n[error]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' = <built-in method lower of str object at 0x7f5a4edb7330>()
-E    +    where <built-in method lower of str object at 0x7f5a4edb7330> = '\n\n[ERROR]\n\n\n[ERROR]\n[ERROR]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'.lower
+E    +  where '\n\n[error]\n\n\n[error]\n[error]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' = <built-in method lower of str object at 0x7f410dc13330>()
+E    +    where <built-in method lower of str object at 0x7f410dc13330> = '\n\n[ERROR]\n\n\n[ERROR]\n[ERROR]\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'.lower
 ________________________ test_grab_terminal_output_SPS _________________________
 test_selenium_mc.py:381: in test_grab_terminal_output_SPS
     assert "Error" in output_text.lower(), "Success not found in terminal output"
 E   AssertionError: Success not found in terminal output
 E   assert 'Error' in '\n\nundefined\n\n\nundefined\nundefined\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
-E    +  where '\n\nundefined\n\n\nundefined\nundefined\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' = <built-in method lower of str object at 0x7f5a4ed351e0>()
-E    +    where <built-in method lower of str object at 0x7f5a4ed351e0> = '\n\nundefined\n\n\nundefined\nundefined\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'.lower
+E    +  where '\n\nundefined\n\n\nundefined\nundefined\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' = <built-in method lower of str object at 0x7f410db921e0>()
+E    +    where <built-in method lower of str object at 0x7f410db921e0> = '\n\nundefined\n\n\nundefined\nundefined\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'.lower
 =========================== short test summary info ============================
 FAILED test_selenium_mc.py::test_bootstrap_process_status - AssertionError: B...
 FAILED test_selenium_mc.py::test_grab_terminal_output_EKS - AssertionError: S...
 FAILED test_selenium_mc.py::test_grab_terminal_output_SPS - AssertionError: S...
-======================== 3 failed, 11 passed in 42.75s =========================
+======================== 3 failed, 11 passed in 41.28s =========================
