@@ -9,3 +9,4 @@ utils/tag-report-mcp-test.txt
 utils/tag-report.txt
 *.tfstate
 *.backup
+nightly_tests/nightly_tests_ondemand/nightly_logs/**
