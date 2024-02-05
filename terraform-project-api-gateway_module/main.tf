@@ -34,6 +34,7 @@ resource "aws_api_gateway_integration" "root_level_get_method_mock_integration" 
 resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter" {
   name       = format("/unity/cs/routing/api-gateway/rest-api-id-2")
   type       = "String"
+  overwrite  = true
   value      = aws_api_gateway_rest_api.rest_api.id
   depends_on = [aws_api_gateway_rest_api.rest_api]
 }
