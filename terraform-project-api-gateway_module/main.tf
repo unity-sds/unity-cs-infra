@@ -53,6 +53,7 @@ resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
 
 resource "aws_ssm_parameter" "invoke_role_arn" {
   name  = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
+  overwrite = true
   type  = "String"
   value = aws_iam_role.iam_for_lambda_auth.arn
 }
@@ -153,6 +154,7 @@ resource "aws_api_gateway_deployment" "api-gateway-deployment" {
 
 resource "aws_ssm_parameter" "api_gateway_uri" {
   name = "/unity/cs/management/api-gateway/gateway-uri"
+  overwrite = true
   type = "String"
   value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
 }
