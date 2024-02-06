@@ -48,7 +48,7 @@ resource "null_resource" "download_lambda_zip" {
 
 # CloudWatch Log Group for Unity CS Common Auth Lambda
 resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
-  name              = "/aws/lambda/${var.unity_cs_lambda_authorizer_function_name}"
+  name              = "/aws/lambda/${var.deployment_name}-${var.unity_cs_lambda_authorizer_function_name}"
   retention_in_days = 14
 }
 
