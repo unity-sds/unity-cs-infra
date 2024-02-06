@@ -104,7 +104,7 @@ data "aws_iam_policy" "mcp_operator_policy" {
 
 # IAM Role for Lambda Authorizer
 resource "aws_iam_role" "iam_for_lambda_auth" {
-  name = "iam_for_lambda_auth"
+  name = "${var.deployment_name}-iam_for_lambda_auth"
   inline_policy {
     name   = "unity-cs-lambda-auth-inline-policy"
     policy = data.aws_iam_policy_document.inline_policy.json
@@ -116,7 +116,7 @@ resource "aws_iam_role" "iam_for_lambda_auth" {
 # Unity CS Common Auth Lambda
 resource "aws_lambda_function" "cs_common_lambda_auth" {
   filename      = "ucs-common-lambda-auth.zip"
-  function_name = var.unity_cs_lambda_authorizer_function_name
+  function_name = "${var.deployment_name}-${var.unity_cs_lambda_authorizer_function_name}"
   role          = aws_iam_role.iam_for_lambda_auth.arn
   handler       = "index.handler"
   runtime       = "nodejs14.x"
