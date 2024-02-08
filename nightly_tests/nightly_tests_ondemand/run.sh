@@ -56,7 +56,7 @@ LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 #
 # SSM Parameters
 #
-export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken" # TODO: switch this value out in SSM
+export SSM_GITHUB_TOKEN="/unity/ci/github/token"
 export SSM_SLACK_URL="/unity/ci/slack-web-hook-url"
 export SSM_GITHUB_USERNAME="/unity/ci/github/username"
 export SSM_GITHUB_USEREMAIL="/unity/ci/github/useremail"
@@ -78,6 +78,13 @@ fi
 if [ -z "$GITHUB_USEREMAIL" ] ; then 
     echo "ERROR: Could not read Github user email from SSM.  Does the key [$SSM_GITHUB_USEREMAIL] exist?" ; exit 1
 fi
+
+#
+# Make sure git is properly setup
+#
+git config --global user.email ${GITHUB_USEREMAIL}
+git config --global user.name ${GITHUB_USERNAME}
+git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
 
 rm -f nightly_output.txt
 rm -f cloudformation_events.txt
@@ -180,12 +187,9 @@ mv selenium_unity_images/* ${LOG_DIR}
 # Push the output logs/screenshots to Github for auditing purposes
 #
 echo "Pushing test results to ${LOG_DIR}..."
-git config --global user.email ${GITHUB_USEREMAIL}
-git config --global user.name ${GITHUB_USERNAME}
 git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
 git add ${LOG_DIR}/*
 git commit -m "Add nightly output for $TODAYS_DATE"
-git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
 git pull origin ${GH_BRANCH}
 git checkout ${GH_BRANCH}
 git push origin ${GH_BRANCH}
