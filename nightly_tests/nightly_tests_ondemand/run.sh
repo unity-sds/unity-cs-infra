@@ -181,7 +181,7 @@ while [ $attempt -le $max_attempts ]; do
         echo "Success! HTTP response code $response_code received."
         break
     else
-        echo "Attempt $attempt: Received HTTP response code $response_code. Retrying in $interval seconds..."
+        echo "Attempt $attempt to reach Management Console via httpd -- Received HTTP response code $response_code. Retrying in $interval seconds..."
         sleep $interval
         ((attempt++))
     fi
