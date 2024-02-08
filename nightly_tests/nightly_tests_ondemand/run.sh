@@ -121,7 +121,7 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 #
 bash deploy.sh
 
-echo "Sleeping for 500s to give enough time for stack to fully come up..."
+echo "Sleeping for 360s to give enough time for stack to fully come up..."
 sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
@@ -179,7 +179,7 @@ while [ $attempt -le $max_attempts ]; do
     response_code=$(curl -s -o /dev/null -w "%{http_code}" "$MANAGEMENT_CONSOLE_URL")
     if [[ $response_code =~ ^[2-3][0-9]{2}$ ]]; then
         echo "Success! HTTP response code $response_code received."
-        exit 0
+        break
     else
         echo "Attempt $attempt: Received HTTP response code $response_code. Retrying in $interval seconds..."
         sleep $interval
