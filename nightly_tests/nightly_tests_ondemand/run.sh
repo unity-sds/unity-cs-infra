@@ -27,11 +27,9 @@ fi
 
 rm -f nightly_output.txt
 rm -f cloudformation_events.txt
-mkdir -p nightly_logs/log_$TODAYS_DATE
+mkdir -p ${LOG_DIR}
 
 NIGHTLY_HASH=$(git rev-parse --short HEAD)
-#echo "Using nightly test repo commit [$NIGHTLY_HASH]" >> nightly_output.txt
-#echo"--------------------------------------------------------------------------[PASS]"
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]" >> nightly_output.txt
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
 
@@ -60,8 +58,8 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 # Deploy the Management Console using CloudFormation
 #
 bash deploy.sh
-#bash step2.sh &
 
+echo "Sleeping for 360s to give enough time for stack to full come up..."
 sleep 360  # give enough time for stack to full come up. TODO: revisit this approach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
@@ -115,6 +113,7 @@ pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
 cat makereport_output.txt >> nightly_output.txt
 
 # we are done testing, so don't need the selenium docker anymore
+echo "Stopping Selenium docker container..."
 sudo docker stop $CONTAINER_ID
 
 cp selenium_nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
@@ -124,6 +123,7 @@ mv selenium_unity_images/* ${LOG_DIR}
 #
 # Push the output logs/screenshots to Github for auditing purposes
 #
+echo "Pushing test results to ${LOG_DIR}..."
 # TODO: revisit these below two values
 git config --global user.email "smolensk@jpl.nasa.gov" # CHANGE TO SSM param
 git config --global user.name "jonathansmolenski"      # CHANGE TO SSM param 

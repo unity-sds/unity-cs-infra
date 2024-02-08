@@ -1,3 +1,4 @@
+# TODO: DELETE THIS FILE
 #!/usr/bin/bash
 
 source ./NIGHTLY.ENV

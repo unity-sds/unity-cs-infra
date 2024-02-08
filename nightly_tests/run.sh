@@ -1,3 +1,4 @@
+# TODO: DELETE THIS FILE
 #!/bin/sh
 
 bash deploy.sh
