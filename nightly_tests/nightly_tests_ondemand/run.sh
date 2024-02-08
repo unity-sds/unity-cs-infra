@@ -121,8 +121,8 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 #
 bash deploy.sh
 
-echo "Sleeping for 360s to give enough time for stack to fully come up..."
-sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
+echo "Sleeping for 500s to give enough time for stack to fully come up..."
+sleep 500  # give enough time for stack to fully come up. TODO: revisit this approach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
