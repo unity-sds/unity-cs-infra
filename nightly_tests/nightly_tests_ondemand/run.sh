@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
 export STACK_NAME="unity-cs-nightly-management-console"
 TODAYS_DATE=$(date +%F)
 
@@ -54,8 +55,8 @@ git clone https://oauth2:$GITHUB_TOKEN@github.com/unity-sds/cfn-ps-jpl-unity-sds
 cd cloudformation
 
 ## This is for testing a specific branch of the cloudformation repo
-git checkout feat/ec2improvements
-git pull origin feat/ec2improvements
+#git checkout vpc-ssm-params-addition 
+#git pull origin vpc-ssm-params-addition
 
 CLOUDFORMATION_HASH=$(git rev-parse --short HEAD)
 cd ..
