@@ -1,5 +1,52 @@
 #!/bin/bash
 
+DESTROY=""
+
+# Function to display usage instructions
+usage() {
+    echo "Usage: $0 --destroy <true|false>"
+    exit 1
+}
+
+#
+# It's mandatory to speciy a valid --destroy command argument
+#
+if [[ $# -ne 2 ]]; then
+  usage
+fi
+
+# Parse command line options
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --destroy)
+            case "$2" in
+                true)
+                    DESTROY=true
+                    ;;
+                false)
+                    DESTROY=false
+                    ;;
+                *)
+                    echo "Invalid argument for --destroy. Please specify 'true' or 'false'." >&2
+                    exit 1
+                    ;;
+            esac
+            shift 2
+            ;;
+        *)
+            echo "Invalid option: $1" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# Check if mandatory options are provided
+if [[ -z $DESTROY ]]; then
+    usage
+fi
+
+echo "Destroy stack at end of script?: $DESTROY"
+
 export STACK_NAME="unity-cs-nightly-management-console"
 export GH_BRANCH=main
 export GH_CF_BRANCH=main
@@ -107,6 +154,7 @@ else
 fi
 
 sudo docker pull selenium/standalone-chrome
+echo "Launching selenium docker..."
 CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
 sleep 10
 
@@ -143,7 +191,12 @@ git push origin ${GH_BRANCH}
 # Destroy resources as testing is now complete
 #
 sleep 10 
-bash destroy.sh
+if [[ "$DESTROY" == "true" ]]; then
+  echo "Destroying resources..."
+  bash destroy.sh
+else
+  echo "Not destroying resources..."
+fi
 
 OUTPUT=$(cat nightly_output.txt)
 GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/nightly_tests_ondemand/${LOG_DIR}"
