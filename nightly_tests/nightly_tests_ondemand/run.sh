@@ -89,6 +89,7 @@ echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
 
 ## update self (unity-cs-infra repository)
 git pull origin ${GH_BRANCH}
+git checkout ${GH_BRANCH}
 
 ## update cloudformation scripts
 rm -rf cloudformation
@@ -185,6 +186,8 @@ git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
 git add ${LOG_DIR}/*
 git commit -m "Add nightly output for $TODAYS_DATE"
 git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
+git pull origin ${GH_BRANCH}
+git checkout ${GH_BRANCH}
 git push origin ${GH_BRANCH}
 
 #
