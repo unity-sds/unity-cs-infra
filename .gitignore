@@ -10,3 +10,14 @@ utils/tag-report.txt
 *.tfstate
 *.backup
 utils/.terraform*
+
+nightly_tests/nightly_tests_ondemand/CF_EVENTS.txt
+nightly_tests/nightly_tests_ondemand/NIGHTLY.ENV
+nightly_tests/nightly_tests_ondemand/__pycache__/
+nightly_tests/nightly_tests_ondemand/cloudformation/
+nightly_tests/nightly_tests_ondemand/cloudformation_events.txt
+nightly_tests/nightly_tests_ondemand/makereport_output.txt
+nightly_tests/nightly_tests_ondemand/nightly_output.txt
+nightly_tests/nightly_tests_ondemand/selenium_nightly_output.txt
+nightly_tests/nightly_tests_ondemand/status.txt
+nightly_tests/nightly_tests_ondemand/template.yml
