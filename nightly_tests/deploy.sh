@@ -1,3 +1,4 @@
+# TODO: DELETE THIS FILE
 #!/usr/bin/bash
 
 export SSH_KEY="~/.ssh/ucs-nightly.pem"
