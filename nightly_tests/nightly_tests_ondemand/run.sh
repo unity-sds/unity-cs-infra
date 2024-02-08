@@ -6,24 +6,31 @@ export GH_CF_BRANCH=main
 TODAYS_DATE=$(date '+%F_%H-%M')
 LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
-## Retrieve the github token from SSM
+#
+# SSM Parameters
+#
 export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken" # TODO: switch this value out in SSM
 export SSM_SLACK_URL="/unity/ci/slack-web-hook-url"
+export SSM_GITHUB_USERNAME="/unity/ci/github/username"
+export SSM_GITHUB_USEREMAIL="/unity/ci/github/useremail"
 
 export SLACK_URL=$(aws ssm get-parameter    --name ${SSM_SLACK_URL}    |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 export GITHUB_TOKEN=$(aws ssm get-parameter --name ${SSM_GITHUB_TOKEN} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export GITHUB_USERNAME=$(aws ssm get-parameter --name ${SSM_GITHUB_USERNAME} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export GITHUB_USEREMAIL=$(aws ssm get-parameter --name ${SSM_GITHUB_USEREMAIL} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
-if [ -z "$GITHUB_TOKEN" ] 
-then 
-    echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?"
-    exit
+if [ -z "$GITHUB_TOKEN" ] ; then
+    echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?" ; exit 1
 fi
-if [ -z "$SLACK_URL" ] 
-then 
-    echo "ERROR: Could not read Slack URL from SSM.  Does the key [$SSM_SLACK_URL] exist?"
-    exit
+if [ -z "$SLACK_URL" ] ; then 
+    echo "ERROR: Could not read Slack URL from SSM.  Does the key [$SSM_SLACK_URL] exist?" ; exit 1
 fi
-
+if [ -z "$GITHUB_USERNAME" ] ; then 
+    echo "ERROR: Could not read Github username from SSM.  Does the key [$SSM_GITHUB_USERNAME] exist?" ; exit 1
+fi
+if [ -z "$GITHUB_USEREMAIL" ] ; then 
+    echo "ERROR: Could not read Github user email from SSM.  Does the key [$SSM_GITHUB_USEREMAIL] exist?" ; exit 1
+fi
 
 rm -f nightly_output.txt
 rm -f cloudformation_events.txt
@@ -33,7 +40,7 @@ NIGHTLY_HASH=$(git rev-parse --short HEAD)
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]" >> nightly_output.txt
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
 
-## update self
+## update self (unity-cs-infra repository)
 git pull origin ${GH_BRANCH}
 
 ## update cloudformation scripts
@@ -59,19 +66,19 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 #
 bash deploy.sh
 
-echo "Sleeping for 360s to give enough time for stack to full come up..."
-sleep 360  # give enough time for stack to full come up. TODO: revisit this approach
+echo "Sleeping for 360s to give enough time for stack to fully come up..."
+sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
-# Get MC URL
+# Get MC URL from SSM (Manamgement Console populates this value)
 export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
 export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+echo "MANAGEMENT_CONSOLE_URL = ${MANAGEMENT_CONSOLE_URL}"
 
-# run selenium test on management console
-# export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
-
+#
 # Check if Docker is installed
+#
 if ! command -v docker &> /dev/null; then
     echo "Docker not installed. Installing Docker..."
 
@@ -96,7 +103,7 @@ if ! command -v docker &> /dev/null; then
 
     echo "Docker installed successfully."
 else
-    echo "Docker is already installed."
+    echo "Docker installed [OK]"
 fi
 
 sudo docker pull selenium/standalone-chrome
@@ -124,9 +131,8 @@ mv selenium_unity_images/* ${LOG_DIR}
 # Push the output logs/screenshots to Github for auditing purposes
 #
 echo "Pushing test results to ${LOG_DIR}..."
-# TODO: revisit these below two values
-git config --global user.email "smolensk@jpl.nasa.gov" # CHANGE TO SSM param
-git config --global user.name "jonathansmolenski"      # CHANGE TO SSM param 
+git config --global user.email ${GITHUB_USEREMAIL}
+git config --global user.name ${GITHUB_USERNAME}
 git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
 git add ${LOG_DIR}/*
 git commit -m "Add nightly output for $TODAYS_DATE"
