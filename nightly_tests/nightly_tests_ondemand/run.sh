@@ -150,7 +150,7 @@ if ! command -v docker &> /dev/null; then
 
     echo "Docker installed successfully."
 else
-    echo "Docker installed [OK]"
+    echo "Docker already installed [OK]"
 fi
 
 sudo docker pull selenium/standalone-chrome
