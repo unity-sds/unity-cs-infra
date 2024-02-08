@@ -122,7 +122,7 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 bash deploy.sh
 
 echo "Sleeping for 500s to give enough time for stack to fully come up..."
-sleep 500  # give enough time for stack to fully come up. TODO: revisit this approach
+sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
@@ -167,6 +167,26 @@ CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/sta
 sleep 10
 
 cp nightly_output.txt selenium_nightly_output.txt
+
+#
+# Wait until a succesful HTTP code is being returned
+# from the load balancer, indicating the Management Console is accessible
+#
+interval=10  # polling interval in seconds
+max_attempts=50
+attempt=1
+while [ $attempt -le $max_attempts ]; do
+    response_code=$(curl -s -o /dev/null -w "%{http_code}" "$MANAGEMENT_CONSOLE_URL")
+    if [[ $response_code =~ ^[2-3][0-9]{2}$ ]]; then
+        echo "Success! HTTP response code $response_code received."
+        exit 0
+    else
+        echo "Attempt $attempt: Received HTTP response code $response_code. Retrying in $interval seconds..."
+        sleep $interval
+        ((attempt++))
+    fi
+done
+
 
 #
 # Run the Selenium test suite against the running Management Console
