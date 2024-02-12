@@ -1,52 +1,102 @@
-#!/bin/sh
+#!/bin/bash
+
+DESTROY=""
+
+# Function to display usage instructions
+usage() {
+    echo "Usage: $0 --destroy <true|false>"
+    exit 1
+}
+
+#
+# It's mandatory to speciy a valid --destroy command argument
+#
+if [[ $# -ne 2 ]]; then
+  usage
+fi
+
+# Parse command line options
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --destroy)
+            case "$2" in
+                true)
+                    DESTROY=true
+                    ;;
+                false)
+                    DESTROY=false
+                    ;;
+                *)
+                    echo "Invalid argument for --destroy. Please specify 'true' or 'false'." >&2
+                    exit 1
+                    ;;
+            esac
+            shift 2
+            ;;
+        *)
+            echo "Invalid option: $1" >&2
+            exit 1
+            ;;
+    esac
+done
+
+# Check if mandatory options are provided
+if [[ -z $DESTROY ]]; then
+    usage
+fi
+
+echo "Destroy stack at end of script?: $DESTROY"
+
 export STACK_NAME="unity-cs-nightly-management-console"
-TODAYS_DATE=$(date +%F)
+export GH_BRANCH=main
+export GH_CF_BRANCH=main
+TODAYS_DATE=$(date '+%F_%H-%M')
+LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
-## Retrieve the github token from SSM
-export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken"
-export SSM_MC_USERNAME="/unity/testing/nightly/mc_username"
-export SSM_MC_PASSWORD="/unity/testing/nightly/mc_password"
+#
+# SSM Parameters
+#
+export SSM_GITHUB_TOKEN="/unity/ci/github/token"
 export SSM_SLACK_URL="/unity/ci/slack-web-hook-url"
+export SSM_GITHUB_USERNAME="/unity/ci/github/username"
+export SSM_GITHUB_USEREMAIL="/unity/ci/github/useremail"
 
-export MC_USERNAME=$(aws ssm get-parameter --name ${SSM_MC_USERNAME}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-export MC_PASSWORD=$(aws ssm get-parameter --name ${SSM_MC_PASSWORD}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-SLACK_URL=$(aws ssm get-parameter          --name ${SSM_SLACK_URL}    |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-GITHUB_TOKEN=$(aws ssm get-parameter       --name ${SSM_GITHUB_TOKEN} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export SLACK_URL=$(aws ssm get-parameter    --name ${SSM_SLACK_URL}    |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export GITHUB_TOKEN=$(aws ssm get-parameter --name ${SSM_GITHUB_TOKEN} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export GITHUB_USERNAME=$(aws ssm get-parameter --name ${SSM_GITHUB_USERNAME} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export GITHUB_USEREMAIL=$(aws ssm get-parameter --name ${SSM_GITHUB_USEREMAIL} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
-if [ -z "$GITHUB_TOKEN" ] 
-then 
-    echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?"
-    exit
+if [ -z "$GITHUB_TOKEN" ] ; then
+    echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?" ; exit 1
 fi
-if [ -z "$MC_USERNAME" ] 
-then 
-    echo "ERROR: Could not read MC Username from SSM.  Does the key [$SSM_MC_USERNAME] exist?"
-    exit
+if [ -z "$SLACK_URL" ] ; then 
+    echo "ERROR: Could not read Slack URL from SSM.  Does the key [$SSM_SLACK_URL] exist?" ; exit 1
 fi
-if [ -z "$MC_PASSWORD" ] 
-then 
-    echo "ERROR: Could not read MC Password from SSM.  Does the key [$SSM_MC_PASSWORD] exist?"
-    exit
+if [ -z "$GITHUB_USERNAME" ] ; then 
+    echo "ERROR: Could not read Github username from SSM.  Does the key [$SSM_GITHUB_USERNAME] exist?" ; exit 1
 fi
-if [ -z "$SLACK_URL" ] 
-then 
-    echo "ERROR: Could not read Slack URL from SSM.  Does the key [$SSM_SLACK_URL] exist?"
-    exit
+if [ -z "$GITHUB_USEREMAIL" ] ; then 
+    echo "ERROR: Could not read Github user email from SSM.  Does the key [$SSM_GITHUB_USEREMAIL] exist?" ; exit 1
 fi
 
+#
+# Make sure git is properly setup
+#
+git config --global user.email ${GITHUB_USEREMAIL}
+git config --global user.name ${GITHUB_USERNAME}
+git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
 
 rm -f nightly_output.txt
 rm -f cloudformation_events.txt
-mkdir -p nightly_logs/log_$TODAYS_DATE
+mkdir -p ${LOG_DIR}
 
 NIGHTLY_HASH=$(git rev-parse --short HEAD)
-#echo "Using nightly test repo commit [$NIGHTLY_HASH]" >> nightly_output.txt
-#echo"--------------------------------------------------------------------------[PASS]"
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]" >> nightly_output.txt
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
 
-## update self
-git pull origin main
+## update self (unity-cs-infra repository)
+git pull origin ${GH_BRANCH}
+git checkout ${GH_BRANCH}
 
 ## update cloudformation scripts
 rm -rf cloudformation
@@ -54,8 +104,8 @@ git clone https://oauth2:$GITHUB_TOKEN@github.com/unity-sds/cfn-ps-jpl-unity-sds
 cd cloudformation
 
 ## This is for testing a specific branch of the cloudformation repo
-git checkout feat/ec2improvements
-git pull origin feat/ec2improvements
+git checkout ${GH_CF_BRANCH}
+git pull origin ${GH_CF_BRANCH}
 
 CLOUDFORMATION_HASH=$(git rev-parse --short HEAD)
 cd ..
@@ -66,20 +116,24 @@ echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
 
 cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
-
+#
+# Deploy the Management Console using CloudFormation
+#
 bash deploy.sh
-#bash step2.sh &
-sleep 360
+
+echo "Sleeping for 360s to give enough time for stack to fully come up..."
+sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
+
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
-# Get MC URL
+# Get MC URL from SSM (Manamgement Console populates this value)
 export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
 export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+echo "MANAGEMENT_CONSOLE_URL = ${MANAGEMENT_CONSOLE_URL}"
 
-# run selenium test on management console
-# export MANAGEMENT_CONSOLE_URL=$(aws cloudformation describe-stacks --stack-name unity-cs-nightly-management-console --query "Stacks[0].Outputs[?OutputKey=='ManagementConsoleURL'].OutputValue" --output text)
-
+#
 # Check if Docker is installed
+#
 if ! command -v docker &> /dev/null; then
     echo "Docker not installed. Installing Docker..."
 
@@ -104,37 +158,75 @@ if ! command -v docker &> /dev/null; then
 
     echo "Docker installed successfully."
 else
-    echo "Docker is already installed."
+    echo "Docker already installed [OK]"
 fi
 
 sudo docker pull selenium/standalone-chrome
+echo "Launching selenium docker..."
 CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
 sleep 10
 
 cp nightly_output.txt selenium_nightly_output.txt
+
+#
+# Wait until a succesful HTTP code is being returned
+# from the load balancer, indicating the Management Console is accessible
+#
+interval=10  # polling interval in seconds
+max_attempts=50
+attempt=1
+while [ $attempt -le $max_attempts ]; do
+    response_code=$(curl -s -o /dev/null -w "%{http_code}" "$MANAGEMENT_CONSOLE_URL")
+    if [[ $response_code =~ ^[2-3][0-9]{2}$ ]]; then
+        echo "Success! HTTP response code $response_code received."
+        break
+    else
+        echo "Attempt $attempt to reach Management Console via httpd -- Received HTTP response code $response_code. Retrying in $interval seconds..."
+        sleep $interval
+        ((attempt++))
+    fi
+done
+
+
+#
+# Run the Selenium test suite against the running Management Console
+#
 pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
+# TODO: revisit makereport naming
 cat makereport_output.txt >> nightly_output.txt
 
+# we are done testing, so don't need the selenium docker anymore
+echo "Stopping Selenium docker container..."
 sudo docker stop $CONTAINER_ID
 
 cp selenium_nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
-mv nightly_output_$TODAYS_DATE.txt nightly_logs/log_$TODAYS_DATE/
-mv selenium_unity_images/* nightly_logs/log_$TODAYS_DATE/
+mv nightly_output_$TODAYS_DATE.txt ${LOG_DIR}
+mv selenium_unity_images/* ${LOG_DIR}
 
-git config --global user.email "smolensk@jpl.nasa.gov"
-git config --global user.name "jonathansmolenski"
-git add "nightly_logs/log_$TODAYS_DATE/nightly_output_$TODAYS_DATE.txt"
-git add nightly_logs/log_$TODAYS_DATE/*
+#
+# Push the output logs/screenshots to Github for auditing purposes
+#
+echo "Pushing test results to ${LOG_DIR}..."
+git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
+git add ${LOG_DIR}/*
 git commit -m "Add nightly output for $TODAYS_DATE"
-git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
-git push origin main
+git pull origin ${GH_BRANCH}
+git checkout ${GH_BRANCH}
+git push origin ${GH_BRANCH}
 
-
-sleep 10
-bash destroy.sh
+#
+# Destroy resources as testing is now complete
+#
+sleep 10 
+if [[ "$DESTROY" == "true" ]]; then
+  echo "Destroying resources..."
+  bash destroy.sh
+else
+  echo "Not destroying resources..."
+fi
 
 OUTPUT=$(cat nightly_output.txt)
-LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/main/nightly_tests/nightly_tests_ondemand/nightly_logs/log_$TODAYS_DATE"
+GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/nightly_tests_ondemand/${LOG_DIR}"
 
 
 cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
@@ -147,6 +239,11 @@ cat CF_EVENTS.txt
 
 CF_EVENTS=$(cat CF_EVENTS.txt)
 
+#
+# Post results to Slack
+#
 # curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
-curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'", "logs_url": "'"${LOGS_URL}"'"}' $SLACK_URL
+curl -X POST -H 'Content-type: application/json' \
+--data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'", "logs_url": "'"${GITHUB_LOGS_URL}"'"}' \
+${SLACK_URL}
 
