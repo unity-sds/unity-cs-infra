@@ -1,5 +1,40 @@
 #!/usr/bin/bash
 
+STACK_NAME=""
+
+# Function to display usage instructions
+usage() {
+    echo "Usage: $0 --stack-name <cloudformation_stack_name>"
+    exit 1
+}
+
+#
+# It's mandatory to speciy a valid command arguments
+#
+if [[ $# -ne 2 ]]; then
+  usage
+fi
+
+# Parse command line options
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --stack-name)
+            STACK_NAME="$2"
+            shift 2
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+
+# Check if mandatory options are provided
+if [[ -z $STACK_NAME ]]; then
+    usage
+fi
+
+echo "STACK_NAME: ${STACK_NAME}"
+
 export SSH_KEY="~/.ssh/ucs-nightly.pem"
 
 export SSM_VPC_ID="/unity/testing/nightly/vpc-id"
@@ -13,7 +48,7 @@ export SSM_PRIVILEGED_POLICY="/unity/testing/nightly/privilegedpolicyname"
 export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken"
 export SSM_VENUE="/unity/testing/nightly/venue"
 export SSM_ACCOUNT_NAME="/unity/testing/nightly/accountname"
-export STACK_NAME="unity-cs-nightly-management-console"
+#export STACK_NAME="unity-cs-nightly-management-console"
 
 
 VPCID=$(aws ssm get-parameter                --name ${SSM_VPC_ID}            |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')

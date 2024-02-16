@@ -1,8 +1,43 @@
 #!/usr/bin/bash
 
+STACK_NAME=""
+
+# Function to display usage instructions
+usage() {
+    echo "Usage: $0 --stack-name <cloudformation_stack_name>"
+    exit 1
+}
+
+#
+# It's mandatory to speciy a valid command arguments
+#
+if [[ $# -ne 2 ]]; then
+  usage
+fi
+
+# Parse command line options
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --stack-name)
+            STACK_NAME="$2"
+            shift 2
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+
+# Check if mandatory options are provided
+if [[ -z $STACK_NAME ]]; then
+    usage
+fi
+
+echo "STACK_NAME: ${STACK_NAME}"
+
 source NIGHTLY.ENV
 
-STACK_NAME=unity-cs-nightly-management-console
+#STACK_NAME=unity-cs-nightly-management-console
 
 ## Shutdown Process
 #echo"--------------------------------------------------------------------------[PASS]" 

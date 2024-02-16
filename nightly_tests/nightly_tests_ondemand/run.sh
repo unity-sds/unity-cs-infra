@@ -119,7 +119,7 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh
+bash deploy.sh --stack-name "${STACK_NAME}"
 
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
 sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
@@ -220,7 +220,7 @@ git push origin ${GH_BRANCH}
 sleep 10 
 if [[ "$DESTROY" == "true" ]]; then
   echo "Destroying resources..."
-  bash destroy.sh
+  bash destroy.sh --stack-name "${STACK_NAME}"
 else
   echo "Not destroying resources..."
 fi
