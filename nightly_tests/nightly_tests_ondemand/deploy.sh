@@ -9,7 +9,7 @@ usage() {
 }
 
 #
-# It's mandatory to speciy a valid --destroy command argument
+# It's mandatory to speciy a valid command arguments
 #
 if [[ $# -ne 2 ]]; then
   usage
