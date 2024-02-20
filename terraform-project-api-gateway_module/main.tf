@@ -119,7 +119,7 @@ resource "aws_lambda_function" "cs_common_lambda_auth" {
   function_name = "${var.deployment_name}-${var.unity_cs_lambda_authorizer_function_name}"
   role          = aws_iam_role.iam_for_lambda_auth.arn
   handler       = "index.handler"
-  runtime       = "nodejs14.x"
+  runtime       = "nodejs20.x"
   depends_on = [null_resource.download_lambda_zip]
 
   environment {
