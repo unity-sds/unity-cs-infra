@@ -1,17 +1,18 @@
 #!/bin/bash
 
 DESTROY=""
+RUN_TESTS=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false>"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false>"
     exit 1
 }
 
 #
-# It's mandatory to speciy a valid --destroy command argument
+# It's mandatory to speciy a valid number of command arguments
 #
-if [[ $# -ne 2 ]]; then
+if [[ $# -ne 4 ]]; then
   usage
 fi
 
@@ -33,6 +34,21 @@ while [[ $# -gt 0 ]]; do
             esac
             shift 2
             ;;
+        --run-tests)
+            case "$2" in
+                true)
+                    RUN_TESTS=true
+                    ;;
+                false)
+                    RUN_TESTS=false
+                    ;;
+                *)
+                    echo "Invalid argument for --run-tests. Please specify 'true' or 'false'." >&2
+                    exit 1
+                    ;;
+            esac
+            shift 2
+            ;;
         *)
             echo "Invalid option: $1" >&2
             exit 1
@@ -45,7 +61,9 @@ if [[ -z $DESTROY ]]; then
     usage
 fi
 
-echo "Destroy stack at end of script?: $DESTROY"
+echo "RUN ARGUMENTS: "
+echo "  - Destroy stack at end of script? $DESTROY"
+echo "  - Run tests?                      $DESTROY"
 
 export STACK_NAME="unity-cs-nightly-management-console"
 export GH_BRANCH=main
@@ -131,10 +149,12 @@ export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
 export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 echo "MANAGEMENT_CONSOLE_URL = ${MANAGEMENT_CONSOLE_URL}"
 
-#
-# Check if Docker is installed
-#
-if ! command -v docker &> /dev/null; then
+if [[ "$RUN_TESTS" == "true" ]]; then
+  echo "Checking if Docker is installed..."
+  #
+  # Check if Docker is installed
+  #
+  if ! command -v docker &> /dev/null; then
     echo "Docker not installed. Installing Docker..."
 
     # Add Docker's official GPG key
@@ -146,9 +166,9 @@ if ! command -v docker &> /dev/null; then
 
     # Add the repository to Apt sources
     echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get update
 
     # Install Docker
@@ -157,16 +177,19 @@ if ! command -v docker &> /dev/null; then
     sleep 10
 
     echo "Docker installed successfully."
-else
+  else
     echo "Docker already installed [OK]"
-fi
+  fi
 
-sudo docker pull selenium/standalone-chrome
-echo "Launching selenium docker..."
-CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
-sleep 10
+  sudo docker pull selenium/standalone-chrome
+  echo "Launching selenium docker..."
+  CONTAINER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
+  sleep 10
 
-cp nightly_output.txt selenium_nightly_output.txt
+  cp nightly_output.txt selenium_nightly_output.txt
+else
+  echo "Not checking if docker is installed (--run-tests false)."
+fi # END IF RUN-TESTS
 
 #
 # Wait until a succesful HTTP code is being returned
@@ -187,33 +210,36 @@ while [ $attempt -le $max_attempts ]; do
     fi
 done
 
+if [[ "$RUN_TESTS" == "true" ]]; then
+  #
+  # Run the Selenium test suite against the running Management Console
+  #
+  echo "Running Selenium tests..."
+  pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
+  # TODO: revisit makereport naming
+  cat makereport_output.txt >> nightly_output.txt
 
-#
-# Run the Selenium test suite against the running Management Console
-#
-echo "Running Selenium tests..."
-pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
-# TODO: revisit makereport naming
-cat makereport_output.txt >> nightly_output.txt
+  # we are done testing, so don't need the selenium docker anymore
+  echo "Stopping Selenium docker container..."
+  sudo docker stop $CONTAINER_ID
 
-# we are done testing, so don't need the selenium docker anymore
-echo "Stopping Selenium docker container..."
-sudo docker stop $CONTAINER_ID
+  cp selenium_nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
+  mv nightly_output_$TODAYS_DATE.txt ${LOG_DIR}
+  mv selenium_unity_images/* ${LOG_DIR}
 
-cp selenium_nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
-mv nightly_output_$TODAYS_DATE.txt ${LOG_DIR}
-mv selenium_unity_images/* ${LOG_DIR}
-
-#
-# Push the output logs/screenshots to Github for auditing purposes
-#
-echo "Pushing test results to ${LOG_DIR}..."
-git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
-git add ${LOG_DIR}/*
-git commit -m "Add nightly output for $TODAYS_DATE"
-git pull origin ${GH_BRANCH}
-git checkout ${GH_BRANCH}
-git push origin ${GH_BRANCH}
+  #
+  # Push the output logs/screenshots to Github for auditing purposes
+  #
+  echo "Pushing test results to ${LOG_DIR}..."
+  git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
+  git add ${LOG_DIR}/*
+  git commit -m "Add nightly output for $TODAYS_DATE"
+  git pull origin ${GH_BRANCH}
+  git checkout ${GH_BRANCH}
+  git push origin ${GH_BRANCH}
+else
+  echo "Not running Selenium tests. (--run-tests false)"
+fi # END IF RUN-TESTS
 
 #
 # Destroy resources as testing is now complete
@@ -226,25 +252,26 @@ else
   echo "Not destroying resources..."
 fi
 
-OUTPUT=$(cat nightly_output.txt)
-GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/${LOG_DIR}"
 
-
+#
+# Parse and print out CloudFormation events
+#
 cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
- 
 EVENTS=$(cat CF_EVENTS.txt |grep -v ResourceProperties)
-
 echo "$EVENTS" > CF_EVENTS.txt
-
 cat CF_EVENTS.txt
-
 CF_EVENTS=$(cat CF_EVENTS.txt)
 
-#
-# Post results to Slack
-#
-# curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
-curl -X POST -H 'Content-type: application/json' \
---data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'", "logs_url": "'"${GITHUB_LOGS_URL}"'"}' \
-${SLACK_URL}
-
+if [[ "$RUN_TESTS" == "true" ]]; then
+  OUTPUT=$(cat nightly_output.txt)
+  GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/${LOG_DIR}"
+  #
+  # Post results to Slack
+  #
+  # curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
+  curl -X POST -H 'Content-type: application/json' \
+  --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'", "logs_url": "'"${GITHUB_LOGS_URL}"'"}' \
+  ${SLACK_URL}
+else
+  echo "Not posting results to slack (--run-tests false)."
+fi
