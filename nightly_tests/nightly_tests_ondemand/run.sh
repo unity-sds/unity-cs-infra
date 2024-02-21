@@ -188,7 +188,7 @@ while [ $attempt -le $max_attempts ]; do
 done
 
 # Cloudformation smoke test
-bash smoke_test.sh unity-cs-nightly-management-console > CF_EVENTS.txt
+bash smoke_test.sh "${STACK_NAME}" > CF_EVENTS.txt
 #
 # Run the Selenium test suite against the running Management Console
 #
