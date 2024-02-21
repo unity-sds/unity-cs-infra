@@ -10,9 +10,9 @@ usage() {
 }
 
 #
-# It's mandatory to speciy a valid --destroy command argument
+# It's mandatory to speciy a valid number of command arguments
 #
-if [[ $# -ne 2 ]]; then
+if [[ $# -ne 4 ]]; then
   usage
 fi
 
@@ -61,7 +61,9 @@ if [[ -z $DESTROY ]]; then
     usage
 fi
 
-echo "Destroy stack at end of script?: $DESTROY"
+echo "RUN ARGUMENTS:
+echo "  - Destroy stack at end of script? $DESTROY"
+echo "  - Run tests?                      $DESTROY"
 
 export STACK_NAME="unity-cs-nightly-management-console"
 export GH_BRANCH=main
