@@ -61,7 +61,7 @@ if [[ -z $DESTROY ]]; then
     usage
 fi
 
-echo "RUN ARGUMENTS:
+echo "RUN ARGUMENTS: "
 echo "  - Destroy stack at end of script? $DESTROY"
 echo "  - Run tests?                      $DESTROY"
 
