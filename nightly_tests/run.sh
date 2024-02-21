@@ -191,6 +191,7 @@ done
 #
 # Run the Selenium test suite against the running Management Console
 #
+echo "Running Selenium tests..."
 pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
 # TODO: revisit makereport naming
 cat makereport_output.txt >> nightly_output.txt
@@ -226,7 +227,7 @@ else
 fi
 
 OUTPUT=$(cat nightly_output.txt)
-GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/nightly_tests_ondemand/${LOG_DIR}"
+GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/${LOG_DIR}"
 
 
 cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
