@@ -143,7 +143,7 @@ echo "Sleeping for 360s to give enough time for stack to fully come up..."
 sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
 
 # Cloud formation smoke_test
-bash smoke_test.sh >> cloudformation_events.txt
+bash smoke_test.sh "${STACK_NAME}" >> cloudformation_events.txt
 # aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 # Get MC URL from SSM (Manamgement Console populates this value)
