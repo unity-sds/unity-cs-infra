@@ -71,8 +71,21 @@ ssm_parameters=(
   "/unity/core/venue"
   "/unity/cs/account/network/vpc_id"
   "/mcp/amis/ubuntu2004-cset"
+  "/unity/testing/nightly/vpc-id"
+  "/unity/testing/nightly/publicsubnet1"
+  "/unity/testing/nightly/publicsubnet2"
+  "/unity/testing/nightly/privatesubnet1"
+  "/unity/testing/nightly/privatesubnet2"
+  "/unity/testing/nightly/keypairname"
+  "/unity/testing/nightly/instancetype"
+  "/unity/testing/nightly/privilegedpolicyname"
+  "/unity/testing/nightly/githubtoken"
+  "/unity/testing/nightly/venue"
+  "/unity/testing/nightly/accountname"
 )
 
+echo ""
+echo "SSM Paramaters Accessed by CloudFormation"
 # Loop through the list and fetch each parameter
 for param_name in "${ssm_parameters[@]}"; do
   param_value=$(aws ssm get-parameter --name "${param_name}" --query "Parameter.Value" --output text)
