@@ -191,6 +191,7 @@ done
 #
 # Run the Selenium test suite against the running Management Console
 #
+echo "Running Selenium tests..."
 pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
 # TODO: revisit makereport naming
 cat makereport_output.txt >> nightly_output.txt
