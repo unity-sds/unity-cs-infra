@@ -65,7 +65,7 @@ while read -r resourceType resourceId; do
 done <<< "$resources"
 
 
-# List of SSM Parameter accessed by cloudformation stack
+# List of SSM Parameter accessed  and created by cloudformation stack
 ssm_parameters=(
   "/unity/core/project"
   "/unity/core/venue"
@@ -82,10 +82,11 @@ ssm_parameters=(
   "/unity/testing/nightly/githubtoken"
   "/unity/testing/nightly/venue"
   "/unity/testing/nightly/accountname"
+  "/unity/cs/account/network/subnet_list"
 )
 
 echo ""
-echo "SSM Paramaters Accessed by CloudFormation"
+echo "SSM Paramaters Accessed and Created by CloudFormation"
 # Loop through the list and fetch each parameter
 for param_name in "${ssm_parameters[@]}"; do
   param_value=$(aws ssm get-parameter --name "${param_name}" --query "Parameter.Value" --output text)
