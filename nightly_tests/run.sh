@@ -71,7 +71,6 @@ export GH_CF_BRANCH=main
 TODAYS_DATE=$(date '+%F_%H-%M')
 LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
-
 #
 # SSM Parameters
 #
