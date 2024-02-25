@@ -44,13 +44,15 @@ def save_screenshot(driver, description):
 @pytest.fixture(scope="session")
 def url_without_cred():
     # Get the management console URL from the environment variable
-    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+#     management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+    management_console_url = 'HTTP://XwMDzP-unity-proxy-httpd-alb-1038516320.us-west-2.elb.amazonaws.com:8080/management/ui'
     return management_console_url
 
 # Function to test login
 def test_navigate_to_mc_console(driver, test_results):
     # Take a screenshot after login attempt
-    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+#   management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
+    management_console_url = 'HTTP://XwMDzP-unity-proxy-httpd-alb-1038516320.us-west-2.elb.amazonaws.com:8080/management/ui'
     URL_WITHOUT_CRED = management_console_url
 
     driver.get(URL_WITHOUT_CRED)
@@ -110,12 +112,14 @@ def test_initiate_core_setup(driver, test_results):
     assert driver.current_url.endswith('/ui/setup'), f"Navigation to setup page failed - current URL {driver.current_url}"
 
 def test_core_setup_save_btn(driver, test_results):
+    time.sleep(10)
     try:
         # Find and click the Save button
         save_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[@type='submit' and contains(@class, 'bg-blue-600')]"))
         )
         save_button.click()
+        time.sleep(60)
         # Take a screenshot
         save_screenshot(driver, 'screenshot_after_clicking_core_manegement_save_btn')
 
