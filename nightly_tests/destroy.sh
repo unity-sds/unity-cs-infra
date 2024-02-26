@@ -44,6 +44,12 @@ source NIGHTLY.ENV
 echo "Initiating Cloudformation Teardown..." >> nightly_output.txt
 echo "Initiating Cloudformation Teardown..."
 
+# Uninstall AWS resources through MC
+python3 uninstall_aws_resources_mc.py
+
+#Wait some time for uninstall to complete
+sleep 360
+
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
 STACK_STATUS=""
