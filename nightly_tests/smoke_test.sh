@@ -6,9 +6,7 @@ SPECIFIC_MESSAGE="Setup Has not been run, please go to Core Management"
 # Function to check for a specific message on the management console page
 check_management_console_message() {
     # Use curl to fetch the contents
-#    page_content=$(curl -s "$MANAGEMENT_CONSOLE_URL")
-    page_content=$(curl -s "HTTP://VlNCXr-unity-proxy-httpd-alb-353374939.us-west-2.elb.amazonaws.com:8080/management/ui
-")
+    page_content=$(curl -s "$MANAGEMENT_CONSOLE_URL")
 
     # Check if the message is present in the page content
     if [[ "$page_content" == *"$SPECIFIC_MESSAGE"* ]]; then
