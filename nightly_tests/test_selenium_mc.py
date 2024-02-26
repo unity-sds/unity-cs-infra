@@ -386,29 +386,6 @@ def test_grab_terminal_output_SPS(driver, test_results):
 
     return output_text
 
-def test_uninstall_aws_resources(driver, test_results):
-    try:
-        driver.get(URL_WITHOUT_CRED)
-        time.sleep(2)  # Wait for the page to load
-        # Locate and click the Uninstall link
-        uninstall_link = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "a.inline-flex.items-center.bg-white"))
-        )
-        uninstall_link.click()
-
-        # Explicitly wait for 10 seconds
-        time.sleep(10)
-
-        # Locate and click the Go! button
-        # This assumes "Go!" is uniquely identifying the button; adjust the selector as needed.
-        go_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[text()='Go!']"))
-        )
-        go_button.click()
-
-    except TimeoutException:
-        raise Exception("Failed to perform uninstall and go - either elements were not clickable or not found as expected.")
-
 
 def pytest_sessionfinish(session, exitstatus):
     print_table(session.results)
