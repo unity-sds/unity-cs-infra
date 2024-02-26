@@ -44,15 +44,13 @@ def save_screenshot(driver, description):
 @pytest.fixture(scope="session")
 def url_without_cred():
     # Get the management console URL from the environment variable
-#     management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    management_console_url = 'HTTP://npIPJr-unity-proxy-httpd-alb-103935217.us-west-2.elb.amazonaws.com:8080/management/ui'
+    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
     return management_console_url
 
 # Function to test login
 def test_navigate_to_mc_console(driver, test_results):
     # Take a screenshot after login attempt
-#   management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    management_console_url = 'HTTP://npIPJr-unity-proxy-httpd-alb-103935217.us-west-2.elb.amazonaws.com:8080/management/ui'
+    management_console_url = os.getenv('MANAGEMENT_CONSOLE_URL')
     URL_WITHOUT_CRED = management_console_url
 
     driver.get(URL_WITHOUT_CRED)
