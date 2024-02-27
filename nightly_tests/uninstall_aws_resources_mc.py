@@ -23,25 +23,6 @@ def setup_driver():
 
     return driver
 
-screenshot_counter=0
-IMAGE_DIR= 'test'
-def save_screenshot(driver, description):
-    """
-    Save a screenshot with a given description, adding a global counter prefix.
-    """
-    global screenshot_counter
-    screenshot_name = f'{screenshot_counter:02d}_{description}.png'  # Format with leading zeros
-    screenshot_path = os.path.join(IMAGE_DIR, screenshot_name)
-    driver.save_screenshot(screenshot_path)
-    screenshot_counter += 1  # Increment the counter
-
-
-        # Create directory for images if it doesn't exist
-    if not os.path.exists(IMAGE_DIR):
-        os.makedirs(IMAGE_DIR)
-
-    return screenshot_path
-
 def uninstall_aws_resources():
     url = os.getenv('MANAGEMENT_CONSOLE_URL')
 
@@ -77,9 +58,6 @@ def uninstall_aws_resources():
         print("Failed to perform uninstall - either elements were not clickable or not found as expected.")
     finally:
         driver.quit()
-
-
-
 
 
 if __name__ == "__main__":
