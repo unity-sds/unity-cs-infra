@@ -3,6 +3,7 @@
 DESTROY=""
 RUN_TESTS=""
 PROJECT_NAME=""
+VENUE_NAME=""
 
 # Function to display usage instructions
 usage() {
