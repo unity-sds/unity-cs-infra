@@ -7,14 +7,14 @@ VENUE_NAME=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false> --run-tests <true|false>"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME>"
     exit 1
 }
 
 #
 # It's mandatory to speciy a valid number of command arguments
 #
-if [[ $# -ne 4 ]]; then
+if [[ $# -ne 8 ]]; then
   usage
 fi
 
