@@ -97,8 +97,12 @@ echo "Creating SSM parameter : ${key} = ${value} ..."
 refresh_ssm_param() {
     local key=$1
     local value=$2
+    local capability=$3
+    local capVersion=$4
+    local component=$5
+    local name=$6
     delete_ssm_param "${key}"
-    create_ssm_param "${key}" "${value}"
+    create_ssm_param "${key}" "${value}" "${capability}" "${capVersion}" "${component}" "${name}"
 }
 
 #
