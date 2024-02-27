@@ -42,8 +42,8 @@ if [[ -z $VENUE_NAME ]]; then
     usage
 fi
 
-echo "PROJECT_NAME: ${PROJECT_NAME}"
-echo "VENUE_NAME: ${VENUE_NAME}"
+echo "set_deployment_ssm_params.sh :: PROJECT_NAME: ${PROJECT_NAME}"
+echo "set_deployment_ssm_params.sh :: VENUE_NAME: ${VENUE_NAME}"
 
 #
 # Sub-routine to gracefully delete a SSM parameter
@@ -72,7 +72,7 @@ create_ssm_param() {
     local capVersion=$4
     local component=$5
     local name=$6
-    echo "Creating SSM parameter : ${key} = ${value} ..."
+echo "Creating SSM parameter : ${key} = ${value} ..."
     aws ssm put-parameter --name "${key}" --value "${value}" --type String \
     --tags \
     "Key=Venue,Value=${VENUE_NAME}" \
@@ -95,7 +95,7 @@ refresh_ssm_param() {
     local key=$1
     local value=$2
     delete_ssm_param "${key}"
-    create_ssm_param "${key}" "${val}"
+    create_ssm_param "${key}" "${value}"
 }
 
 #
