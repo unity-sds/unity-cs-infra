@@ -71,7 +71,7 @@ fi
 #
 # Create the SSM parameters required by this deployment
 #
-source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}"
+source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
 
 export SSH_KEY="~/.ssh/ucs-nightly.pem"
 export SSM_KEYPAIR_NAME="/unity/testing/nightly/keypairname"
