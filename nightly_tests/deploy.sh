@@ -1,17 +1,19 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 STACK_NAME=""
+PROJECT_NAME=""
+VENUE_NAME=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name>"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME>"
     exit 1
 }
 
 #
 # It's mandatory to speciy a valid command arguments
 #
-if [[ $# -ne 2 ]]; then
+if [[ $# -ne 6 ]]; then
   usage
 fi
 
@@ -22,6 +24,14 @@ while [[ $# -gt 0 ]]; do
             STACK_NAME="$2"
             shift 2
             ;;
+        --project-name)
+            PROJECT_NAME="$2"
+            shift 2
+            ;;
+        --venue-name)
+            VENUE_NAME="$2"
+            shift 2
+            ;;            
         *)
             usage
             ;;
@@ -32,109 +42,66 @@ done
 if [[ -z $STACK_NAME ]]; then
     usage
 fi
+if [[ -z $PROJECT_NAME ]]; then
+    usage
+fi
+if [[ -z $VENUE_NAME ]]; then
+    usage
+fi
 
-echo "STACK_NAME: ${STACK_NAME}"
+echo "deploy.sh :: STACK_NAME: ${STACK_NAME}"
+echo "deploy.sh :: PROJECT_NAME: ${PROJECT_NAME}"
+echo "deploy.sh :: VENUE_NAME: ${VENUE_NAME}"
+
+#
+# Does a deployment already exist for this project/venue?
+# If so, then don't continue with this deployment.  
+# Warn the user, and bail out.
+#
+echo "Checking for existing deployment for (project=${PROJECT_NAME}, venue=${VENUE_NAME}) ..."
+aws ssm get-parameter --name "/unity/deployment/${PROJECT_NAME}/${VENUE_NAME}/status" 2>ssm_lookup.txt
+if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
+    echo "Existing deployment not found.  Continuing with deployment..."
+else
+    echo "ERROR: A deployment appears to already exist for project=${PROJECT_NAME}, venue=${VENUE_NAME}."
+    echo "       Please cleanup the resources for this deployment, before continuing!"
+    exit 1
+fi
+
+#
+# Create the SSM parameters required by this deployment
+#
+source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
 
 export SSH_KEY="~/.ssh/ucs-nightly.pem"
-
-export SSM_VPC_ID="/unity/testing/nightly/vpc-id"
-export SSM_PUB_SUBNET1="/unity/testing/nightly/publicsubnet1"
-export SSM_PUB_SUBNET2="/unity/testing/nightly/publicsubnet2"
-export SSM_PRIV_SUBNET1="/unity/testing/nightly/privatesubnet1"
-export SSM_PRIV_SUBNET2="/unity/testing/nightly/privatesubnet2"
 export SSM_KEYPAIR_NAME="/unity/testing/nightly/keypairname"
 export SSM_INSTANCE_TYPE="/unity/testing/nightly/instancetype"
 export SSM_PRIVILEGED_POLICY="/unity/testing/nightly/privilegedpolicyname"
 export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken"
-export SSM_VENUE="/unity/testing/nightly/venue"
 export SSM_ACCOUNT_NAME="/unity/testing/nightly/accountname"
-#export STACK_NAME="unity-cs-nightly-management-console"
 
-
-VPCID=$(aws ssm get-parameter                --name ${SSM_VPC_ID}            |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-PublicSubnetID1=$(aws ssm get-parameter      --name ${SSM_PUB_SUBNET1}       |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-PublicSubnetID2=$(aws ssm get-parameter      --name ${SSM_PUB_SUBNET2}       |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-PrivateSubnetID1=$(aws ssm get-parameter     --name ${SSM_PRIV_SUBNET1}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-PrivateSubnetID2=$(aws ssm get-parameter     --name ${SSM_PRIV_SUBNET2}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 InstanceType=$(aws ssm get-parameter         --name ${SSM_INSTANCE_TYPE}     |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 PrivilegedPolicyName=$(aws ssm get-parameter --name ${SSM_PRIVILEGED_POLICY} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 GithubToken=$(aws ssm get-parameter          --name ${SSM_GITHUB_TOKEN}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-Venue=$(aws ssm get-parameter                --name ${SSM_VENUE}             |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 ACCOUNT_NAME=$(aws ssm get-parameter         --name ${SSM_ACCOUNT_NAME}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-#KeyPairName=$(aws ssm get-parameter          --name ${SSM_KEYPAIR_NAME}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
-if [ -z "$VPCID" ] 
-then 
-    echo "ERROR: Could not read VPC ID from SSM.  Does the key [$SSM_VPC_ID] exist?"
-    exit
-fi
-if [ -z "$PublicSubnetID1" ]
-then
-    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PUB_SUBNET1] exist?"
-    exit
-fi
-if [ -z "$PublicSubnetID2" ]
-then
-    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PUB_SUBNET2] exist?"
-    exit
-fi
-if [ -z "$PrivateSubnetID1" ]
-then
-    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PRIV_SUBNET1] exist?"
-    exit
-fi
-if [ -z "$PrivateSubnetID2" ]
-then
-    echo "ERROR: Could not read Subnet ID from SSM.  Does the key [$SSM_PRIV_SUBNET2] exist?"
-    exit
-fi
-if [ -z "$InstanceType" ] 
-then 
-    echo "ERROR: Could not read Instance Type from SSM.  Does the key [$SSM_INSTANCE_TYPE] exist?"
-    exit
-fi
-if [ -z "$PrivilegedPolicyName" ] 
-then 
-    echo "ERROR: Could not read Privileged Policy Name from SSM.  Does the key [$SSM_PRIVILEGED_POLICY] exist?"
-    exit
-fi
-if [ -z "$GithubToken" ] 
-then 
-    echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?"
-    exit
-fi
-if [ -z "$Venue" ] 
-then 
-    echo "ERROR: Could not read Venue from SSM.  Does the key [$SSM_VENUE] exist?"
-    exit
-fi
-if [ -z "$ACCOUNT_NAME" ] 
-then 
-    echo "ERROR: Could not read Account Name from SSM.  Does the key [$SSM_ACCOUNT_NAME] exist?"
-    exit
-fi
-#if [ -z "$KeyPairName" ] 
-#then 
-#    echo "ERROR: Could not read Key Pair Name from SSM.  Does the key [$SSM_KEYPAIR_NAME] exist?"
-#    exit
-#fi
 
 aws cloudformation create-stack \
   --stack-name ${STACK_NAME} \
   --template-body file://template.yml \
   --capabilities CAPABILITY_IAM \
-  --parameters ParameterKey=VPCID,ParameterValue=${VPCID} \
-    ParameterKey=PublicSubnetID1,ParameterValue=${PublicSubnetID1} \
-    ParameterKey=PublicSubnetID2,ParameterValue=${PublicSubnetID2} \
-    ParameterKey=PrivateSubnetID1,ParameterValue=${PrivateSubnetID1} \
-    ParameterKey=PrivateSubnetID2,ParameterValue=${PrivateSubnetID2} \
+  --parameters \
+    ParameterKey=VPCID,ParameterValue=${VPC_ID_VAL} \
+    ParameterKey=PublicSubnetID1,ParameterValue=${PUB_SUBNET_1_VAL} \
+    ParameterKey=PublicSubnetID2,ParameterValue=${PUB_SUBNET_2_VAL} \
+    ParameterKey=PrivateSubnetID1,ParameterValue=${PRIV_SUBNET_1_VAL} \
+    ParameterKey=PrivateSubnetID2,ParameterValue=${PRIV_SUBNET_2_VAL} \
     ParameterKey=InstanceType,ParameterValue=${InstanceType} \
     ParameterKey=PrivilegedPolicyName,ParameterValue=${PrivilegedPolicyName} \
     ParameterKey=GithubToken,ParameterValue=${GithubToken} \
-    ParameterKey=Venue,ParameterValue=${Venue} \
+    ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
   --tags Key=ServiceArea,Value=U-CS
 
-#    ParameterKey=KeyPairName,ParameterValue=${KeyPairName} \
 
 echo "Nightly Test in the $ACCOUNT_NAME account" >> nightly_output.txt
 echo "STACK_NAME=$STACK_NAME">NIGHTLY.ENV
