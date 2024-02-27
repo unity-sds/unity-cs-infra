@@ -117,6 +117,9 @@ def test_core_setup_save_btn(driver, test_results):
             EC.element_to_be_clickable((By.XPATH, "//button[@type='submit' and contains(@class, 'bg-blue-600')]"))
         )
         save_button.click()
+        # Wait some time for the core setup to complete
+        # There is not status on the install for this action
+        # So we have to wait X amount untill it completes.
         time.sleep(60)
         # Take a screenshot
         save_screenshot(driver, 'screenshot_after_clicking_core_manegement_save_btn')
