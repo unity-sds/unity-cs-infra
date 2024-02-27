@@ -68,22 +68,12 @@ else
     exit 1
 fi
 
-# /unity/deployment/<PROJECT_NAME>/<VENUE_NAME>/*
-# /unity/deployment/eurc/dev/proj-name
-# /unity/deployment/eurc/dev/venue-name
-# /unity/deployment/eurc/dev/management-console-alb-url
-# /unity/deployment/eurc/dev/dashboard-url
-# /unity/deployment/eurc/dev/sps/ui-url
-# /unity/deployment/eurc/dev/sps/maxNumNodes
-# /unity/cs/network/vpc_id
-
 #
 # Create the SSM parameters required by this deployment
 #
 source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}"
 
 export SSH_KEY="~/.ssh/ucs-nightly.pem"
-export SSM_VPC_ID="/unity/testing/nightly/vpc-id"
 export SSM_KEYPAIR_NAME="/unity/testing/nightly/keypairname"
 export SSM_INSTANCE_TYPE="/unity/testing/nightly/instancetype"
 export SSM_PRIVILEGED_POLICY="/unity/testing/nightly/privilegedpolicyname"
