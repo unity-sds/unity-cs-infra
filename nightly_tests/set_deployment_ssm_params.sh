@@ -55,7 +55,7 @@ delete_ssm_param() {
     if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
         echo "SSM param ${key} not found.  Not attempting a delete."
     else
-        aws ssm delete-parameter --name "${key}"
+        aws ssm delete-parameter --name "${key}" 2>/dev/null
         if [ $? -ne 0 ]; then
             echo "ERROR: SSM delete failed for $key"
         fi
@@ -84,8 +84,11 @@ echo "Creating SSM parameter : ${key} = ${value} ..."
     "Key=Proj,Value=${PROJECT_NAME}" \
     "Key=CreatedBy,Value=cs" \
     "Key=Env,Value=${VENUE_NAME}" \
-    "Key=Stack,Value=${component}"
+    "Key=Stack,Value=${component}" 2>/dev/null
     # TODO: Is there a SSM Description field (to add above)?
+    if [ $? -ne 0 ]; then
+        echo "ERROR: SSM create failed for $key"
+    fi
 }
 
 #
