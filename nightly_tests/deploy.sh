@@ -6,14 +6,14 @@ VENUE_NAME=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME>"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME>"
     exit 1
 }
 
 #
 # It's mandatory to speciy a valid command arguments
 #
-if [[ $# -ne 2 ]]; then
+if [[ $# -ne 6 ]]; then
   usage
 fi
 
