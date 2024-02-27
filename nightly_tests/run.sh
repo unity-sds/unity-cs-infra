@@ -87,7 +87,7 @@ echo "  - Project Name:                   $PROJECT_NAME"
 echo "  - Venue Name:                     $VENUE_NAME"
 echo "---------------------------------------------------------"
 
-export STACK_NAME="unity-cs-nightly-management-console"
+export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
 export GH_BRANCH=main
 export GH_CF_BRANCH=main
 TODAYS_DATE=$(date '+%F_%H-%M')
