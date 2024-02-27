@@ -2,6 +2,7 @@
 
 DESTROY=""
 RUN_TESTS=""
+PROJECT_NAME=""
 
 # Function to display usage instructions
 usage() {
@@ -49,6 +50,14 @@ while [[ $# -gt 0 ]]; do
             esac
             shift 2
             ;;
+        --project-name)
+            PROJECT_NAME="$2"
+            shift 2
+            ;;
+        --venue-name)
+            VENUE_NAME="$2"
+            shift 2
+            ;;
         *)
             echo "Invalid option: $1" >&2
             exit 1
@@ -60,10 +69,22 @@ done
 if [[ -z $DESTROY ]]; then
     usage
 fi
+if [[ -z $RUN_TESTS ]]; then
+    usage
+fi
+if [[ -z $PROJECT_NAME ]]; then
+    usage
+fi
+if [[ -z $VENUE_NAME ]]; then
+    usage
+fi
 
 echo "RUN ARGUMENTS: "
 echo "  - Destroy stack at end of script? $DESTROY"
-echo "  - Run tests?                      $DESTROY"
+echo "  - Run tests?                      $RUN_TESTS"
+echo "  - Project Name:                   $PROJECT_NAME"
+echo "  - Venue Name:                     $VENUE_NAME"
+echo "---------------------------------------------------------"
 
 export STACK_NAME="unity-cs-nightly-management-console"
 export GH_BRANCH=main
@@ -137,7 +158,7 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}"
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
 
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
 sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
