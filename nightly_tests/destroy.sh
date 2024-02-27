@@ -48,7 +48,7 @@ echo "Initiating Cloudformation Teardown..."
 python3 uninstall_aws_resources_mc.py
 
 # Wait for some time for MC AWS Resources to unistall
-sleep 
+sleep 360
 
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
