@@ -107,7 +107,23 @@ refresh_ssm_param() {
 
 #
 # Create SSM:
-# /unity/deployment/<PROJECT_NAME>/<VENUE_NAME>
+# /unity/deployment/<PROJECT_NAME>/<VENUE_NAME>/project-name
+#
+PROJECT_NAME_SSM="/unity/deployment/${PROJECT_NAME}/${VENUE_NAME}/project-name"
+PROJECT_NAME_VAL="${PROJECT_NAME}"
+refresh_ssm_param "${PROJECT_NAME_SSM}" "${PROJECT_NAME_VAL}" "management" "todo" "console" "${PROJECT_NAME}-${VENUE_NAME}-cs-management-projectNameSsm"
+
+#
+# Create SSM:
+# /unity/deployment/<PROJECT_NAME>/<VENUE_NAME>/venue-name
+#
+VENUE_NAME_SSM="/unity/deployment/${PROJECT_NAME}/${VENUE_NAME}/venue-name"
+VENUE_NAME_VAL="${VENUE_NAME}"
+refresh_ssm_param "${VENUE_NAME_SSM}" "${VENUE_NAME_VAL}" "management" "todo" "console" "${PROJECT_NAME}-${VENUE_NAME}-cs-management-venueNameSsm"
+
+#
+# Create SSM:
+# /unity/deployment/<PROJECT_NAME>/<VENUE_NAME>/status
 #
 DEPLOYMENT_STATUS_SSM="/unity/deployment/${PROJECT_NAME}/${VENUE_NAME}/status"
 DEPLOYMENT_STATUS_VAL="deploying"
