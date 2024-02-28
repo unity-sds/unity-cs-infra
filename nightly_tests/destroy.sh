@@ -109,4 +109,4 @@ then
 
 fi
 
-
+./destroy_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
