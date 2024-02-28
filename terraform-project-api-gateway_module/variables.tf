@@ -32,6 +32,12 @@ variable "project_name" {
   default     = "Unity-SampleProject-Dev"
 }
 
+variable "installprefix" {
+  description = "The management console install prefix"
+  type = string
+  default = "UnknownPrefix"
+}
+
 variable "rest_api_name" {
   type        = string
   description = "REST API Name"
