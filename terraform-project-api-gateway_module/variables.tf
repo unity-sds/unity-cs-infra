@@ -50,12 +50,6 @@ variable "rest_api_description" {
   default     = "Unity Unity-SampleProject-Dev Project REST API Gateway"
 }
 
-variable "venue" {
-  type        = string
-  description = "Venue for deployment"
-  default     = "dev"
-}
-
 variable "rest_api_stage" {
   type        = string
   description = "REST API Stage Name"
