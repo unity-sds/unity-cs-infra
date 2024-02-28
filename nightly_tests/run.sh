@@ -269,7 +269,7 @@ fi # END IF RUN-TESTS
 sleep 10 
 if [[ "$DESTROY" == "true" ]]; then
   echo "Destroying resources..."
-  bash destroy.sh --stack-name "${STACK_NAME}"
+  bash destroy.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
 else
   echo "Not destroying resources..."
 fi
