@@ -99,6 +99,7 @@ aws cloudformation create-stack \
     ParameterKey=InstanceType,ParameterValue=${InstanceType} \
     ParameterKey=PrivilegedPolicyName,ParameterValue=${PrivilegedPolicyName} \
     ParameterKey=GithubToken,ParameterValue=${GithubToken} \
+    ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
   --tags Key=ServiceArea,Value=U-CS
 
