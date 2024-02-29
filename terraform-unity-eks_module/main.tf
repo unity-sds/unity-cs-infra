@@ -67,10 +67,8 @@ locals {
       pre_bootstrap_user_data    = <<-EOT
             sudo sed -i 's/^net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf && sudo sysctl -p |true
         EOT
-      launch_template = {
-        id      = aws_launch_template.node_group_launch_template.id
-        version = "$Latest"
-      }
+      use_custom_launch_template = true
+      launch_template_id         = aws_launch_template.node_group_launch_template.id
     }
   }
 }
