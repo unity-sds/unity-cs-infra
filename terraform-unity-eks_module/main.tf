@@ -473,6 +473,7 @@ set -o xtrace
   EOT
   )
   metadata_options {
+    http_endpoint               = "enabled"
     http_put_response_hop_limit = 3
   }
   tag_specifications {
