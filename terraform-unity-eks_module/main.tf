@@ -102,18 +102,6 @@ resource "aws_iam_role" "cluster_iam_role" {
         Principal = {
           Service = "s3.amazonaws.com" # or the appropriate AWS service
         },
-      },
-      {
-        Effect = "Allow",
-        Principal = {
-          Federated = module.eks.oidc_provider_arn
-        },
-        Action = "sts:AssumeRoleWithWebIdentity",
-        Condition = {
-          StringEquals = {
-            module.eks.oidc_provider : "system:serviceaccount:airflow:airflow-worker"
-          }
-        }
       }
     ],
   })
