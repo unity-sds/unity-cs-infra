@@ -107,7 +107,7 @@ resource "aws_iam_role" "cluster_iam_role" {
         Principal = {
           Service = "s3.amazonaws.com" # or the appropriate AWS service
         },
-      }
+      },
     ],
   })
 
@@ -477,10 +477,6 @@ set -o xtrace
 /etc/eks/bootstrap.sh ${local.cluster_name}
   EOT
   )
-  metadata_options {
-    http_endpoint               = "enabled"
-    http_put_response_hop_limit = 3
-  }
   tag_specifications {
     resource_type = "instance"
     tags = merge(local.common_tags, {
