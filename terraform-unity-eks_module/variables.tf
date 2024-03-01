@@ -21,6 +21,7 @@ variable "nodegroups" {
     instance_types             = optional(list(string))
     capacity_type              = optional(string)
     enable_bootstrap_user_data = optional(bool)
+    metadata_options           = optional(map(any))
   }))
 
   default = {
