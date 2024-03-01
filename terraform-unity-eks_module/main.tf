@@ -65,6 +65,7 @@ locals {
       create_launch_template     = false
       use_custom_launch_template = true
       launch_template_id         = aws_launch_template.node_group_launch_template.id
+      version                    = null
     }
   }
 }
@@ -415,8 +416,8 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.16.0"
 
-  cluster_name = local.cluster_name
-  # cluster_version = var.cluster_version
+  cluster_name    = local.cluster_name
+  cluster_version = var.cluster_version
 
   cluster_addons = {
     coredns = {
