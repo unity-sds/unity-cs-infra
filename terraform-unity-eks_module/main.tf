@@ -68,9 +68,9 @@ locals {
             sudo sed -i 's/^net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf && sudo sysctl -p |true
         EOT
       metadata_options = {
-        "http_endpoint" : lookup(ng.metadata_options, "http_endpoint", null)
-        "http_put_response_hop_limit" : lookup(ng.metadata_options, "http_put_response_hop_limit", null)
-        "http_tokens" : lookup(ng.metadata_options, "http_tokens", null)
+        "http_endpoint" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_endpoint", null) : null
+        "http_put_response_hop_limit" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_put_response_hop_limit", null) : null
+        "http_tokens" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_tokens", null) : null
       }
     }
   }
