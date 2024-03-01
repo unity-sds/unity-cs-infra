@@ -467,7 +467,7 @@ module "eks" {
 }
 
 resource "aws_launch_template" "node_group_launch_template" {
-  image_id = lookup(local.ami_map, var.cluster_version, local.ami_map["default"])
+  image_id = data.aws_ssm_parameter.eks_ami_1_27.value
   name     = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
   user_data = base64encode(<<EOT
 #!/bin/bash
