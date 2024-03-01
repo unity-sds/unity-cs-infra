@@ -472,6 +472,7 @@ resource "aws_launch_template" "node_group_launch_template" {
   user_data = base64encode(<<EOT
 #!/bin/bash
 set -o xtrace
+sudo sed -i 's/^net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf && sudo sysctl -p |true
 /etc/eks/bootstrap.sh ${local.cluster_name}
   EOT
   )
