@@ -1,25 +1,31 @@
 #!/usr/bin/bash
 
-STACK_NAME=""
+# 
+PROJECT_NAME=""
+VENUE_NAME=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name>"
+    echo "Usage: $0 --project-name <PROJECT_NAME> --venue-name <VENUE_NAME>"
     exit 1
 }
 
 #
 # It's mandatory to speciy a valid command arguments
 #
-if [[ $# -ne 2 ]]; then
+if [[ $# -ne 4 ]]; then
   usage
 fi
 
 # Parse command line options
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        --stack-name)
-            STACK_NAME="$2"
+        --project-name)
+            PROJECT_NAME="$2"
+            shift 2
+            ;;
+        --venue-name)
+            VENUE_NAME="$2"
             shift 2
             ;;
         *)
@@ -29,15 +35,19 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Check if mandatory options are provided
-if [[ -z $STACK_NAME ]]; then
+if [[ -z $PROJECT_NAME ]]; then
+    usage
+fi
+if [[ -z $VENUE_NAME ]]; then
     usage
 fi
 
-echo "STACK_NAME: ${STACK_NAME}"
+echo "destroy.sh :: PROJECT_NAME: ${PROJECT_NAME}"
+echo "destroy.sh :: VENUE_NAME: ${VENUE_NAME}"
 
 source NIGHTLY.ENV
 
-#STACK_NAME=unity-cs-nightly-management-console
+export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
 
 ## Shutdown Process
 #echo"--------------------------------------------------------------------------[PASS]" 
@@ -88,4 +98,4 @@ then
 
 fi
 
-
+./destroy_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"

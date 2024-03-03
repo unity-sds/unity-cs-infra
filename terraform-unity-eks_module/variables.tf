@@ -21,6 +21,7 @@ variable "nodegroups" {
     instance_types             = optional(list(string))
     capacity_type              = optional(string)
     enable_bootstrap_user_data = optional(bool)
+    metadata_options           = optional(map(any))
   }))
 
   default = { 
@@ -46,4 +47,22 @@ variable "aws_auth_roles" {
 variable "cluster_version" {
   type    = string
   default = "1.27"
+}
+
+variable "project"{
+  description = "The unity project its installed into"
+  type = string
+  default = "UnknownProject"
+}
+
+variable "venue" {
+  description = "The unity venue its installed into"
+  type = string
+  default = "UnknownVenue"
+}
+
+variable "installprefix" {
+  description = "The management console install prefix"
+  type = string
+  default = "UnknownPrefix"
 }

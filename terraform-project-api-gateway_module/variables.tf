@@ -13,11 +13,29 @@ variable "deployment_name" {
   description = "The deployment name"
   type        = string
 }
+variable "project"{
+  description = "The unity project its installed into"
+  type = string
+  default = "UnknownProject"
+}
+
+variable "venue" {
+  description = "The unity venue its installed into"
+  type = string
+  default = "UnknownVenue"
+}
+
 
 variable "project_name" {
   type        = string
   description = "Project Name"
   default     = "Unity-SampleProject-Dev"
+}
+
+variable "installprefix" {
+  description = "The management console install prefix"
+  type = string
+  default = "UnknownPrefix"
 }
 
 variable "rest_api_name" {
@@ -30,12 +48,6 @@ variable "rest_api_description" {
   type        = string
   description = "REST API Description"
   default     = "Unity Unity-SampleProject-Dev Project REST API Gateway"
-}
-
-variable "venue" {
-  type        = string
-  description = "Venue for deployment"
-  default     = "dev"
 }
 
 variable "rest_api_stage" {
