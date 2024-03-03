@@ -211,7 +211,16 @@ while [ $attempt -le $max_attempts ]; do
 done
 
 # Cloud formation smoke_test
-bash smoke_test.sh "${STACK_NAME}" >> cloudformation_events.txt
+echo "Running Smoke Test"
+python3 smoke_test.py >>  nightly_output.txt 2>&1
+
+
+# Check the exit status of the Python script
+if [ $? -eq 0 ]; then
+    echo "Bootstrap process was successful. Running the next commands."
+else
+    echo "Bootstrap process failed or could not be verified. Aborting the next steps."
+fi
 
 if [[ "$RUN_TESTS" == "true" ]]; then
   #
