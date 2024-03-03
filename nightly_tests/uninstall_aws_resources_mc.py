@@ -57,7 +57,7 @@ def wait_for_uninstall_complete(log_group_name, log_stream_name, completion_mess
             events = response.get('events', [])
             for event in events:
                 if completion_message in event.get('message', ''):
-                    print("Uninstall process completed successfully.")
+                    print("Uninstall of MC AWS Resources completed successfully.")
                     return True
         except Exception as e:
             print(f"Error checking logs: {e}")
@@ -68,8 +68,7 @@ def wait_for_uninstall_complete(log_group_name, log_stream_name, completion_mess
 
 
 def uninstall_aws_resources():
-    # url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    url = 'HTTP://heaUyZ-unity-proxy-httpd-alb-955851503.us-west-2.elb.amazonaws.com:8080/management/ui'
+    url = os.getenv('MANAGEMENT_CONSOLE_URL')
     if not url:
         print("MANAGEMENT_CONSOLE_URL environment variable is not set.")
         return
@@ -98,12 +97,11 @@ def uninstall_aws_resources():
 
     # Retrieve the EC2 instance ID after quitting the driver
     instance_id = get_ec2_instance_id()
-    print(instance_id)
     # Assuming the log stream name follows a specific pattern with the instance ID
     log_stream_name = instance_id  # Adjust if your log stream naming convention differs
     # Call the function to monitor CloudWatch logs after the driver has been quit
+    print("Uninstalling MC AWS Resources")
     wait_for_uninstall_complete("managementconsole", log_stream_name, "UNITY MANAGEMENT CONSOLE UNINSTALL COMPLETE")
-
 
 
 if __name__ == "__main__":
