@@ -39,7 +39,7 @@ def get_ec2_instance_id():
 
 
 def wait_for_uninstall_complete(log_group_name, log_stream_name, completion_message, check_interval=10, timeout=600):
-    cw_client = boto3.client('logs')
+    cw_client = boto3.client('logs', region_name='us-west-2')
     start_time = time.time()
     
     while True:
