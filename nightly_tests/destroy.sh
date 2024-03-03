@@ -44,11 +44,16 @@ source NIGHTLY.ENV
 echo "Initiating Cloudformation Teardown..." >> nightly_output.txt
 echo "Initiating Cloudformation Teardown..."
 
+# Start Selenium docker iamge
+DOCKER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
+sleep 10
 # Uninstall AWS resources through MC
 python3 uninstall_aws_resources_mc.py
 
+# Stop Selenium docker iamge
+echo "Stopping Selenium docker container..."
+sudo docker stop $DOCKER_ID
 # Wait for some time for MC AWS Resources to unistall
-sleep 360
 
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
