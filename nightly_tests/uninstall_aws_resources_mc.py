@@ -20,7 +20,7 @@ def setup_driver():
 
 def get_ec2_instance_id():
     # Initialize a boto3 EC2 resource
-    ec2 = boto3.resource('ec2')
+    ec2 = boto3.resource('ec2', region_name='us-west-2')
 
     # The name of your instance
     instance_name = "Unity Management Console EC2 Instance"
