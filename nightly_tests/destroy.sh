@@ -48,7 +48,7 @@ echo "Initiating Cloudformation Teardown..."
 DOCKER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
 sleep 10
 # Uninstall AWS resources through MC
-python3 uninstall_aws_resources_mc.py
+python3 uninstall_aws_resources_mc.py >> nightly_output.txt 2>&1
 
 # Stop Selenium docker iamge
 echo "Stopping Selenium docker container..."
