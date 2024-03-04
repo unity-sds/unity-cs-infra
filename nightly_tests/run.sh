@@ -164,7 +164,7 @@ bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --v
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
 sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
 
-aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
+# aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 # Get MC URL from SSM (Manamgement Console populates this value)
 export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
@@ -232,68 +232,72 @@ while [ $attempt -le $max_attempts ]; do
     fi
 done
 
-if [[ "$RUN_TESTS" == "true" ]]; then
-  #
-  # Run the Selenium test suite against the running Management Console
-  #
-  echo "Running Selenium tests..."
-  pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
-  # TODO: revisit makereport naming
-  cat makereport_output.txt >> nightly_output.txt
+# Cloud formation smoke_test
+echo "Running Smoke Test"
+python3 smoke_test.py >>  nightly_output.txt 2>&1
 
-  # we are done testing, so don't need the selenium docker anymore
-  echo "Stopping Selenium docker container..."
-  sudo docker stop $CONTAINER_ID
+# Save the exit status of the Python script
+SMOKE_TEST_STATUS=$?
 
-  cp selenium_nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
-  mv nightly_output_$TODAYS_DATE.txt ${LOG_DIR}
-  mv selenium_unity_images/* ${LOG_DIR}
+if [ $SMOKE_TEST_STATUS -eq 0 ]; then
+    echo "Smoke test was successful. Continuing with bootstrap and tests."
+    echo "Smoke test was successful. Continuing with bootstrap and tests." >> nightly_output.txt
+    
+    if [[ "$RUN_TESTS" == "true" ]]; then
+      # Place the rest of your script here that should only run if smoke_test.py succeeds
+      echo "Running Selenium tests..."
+      pytest test_selenium_mc.py -v --tb=short >> selenium_nightly_output.txt 2>&1
+      
+      # Concatenate makereport_output.txt to nightly_output.txt
+      cat makereport_output.txt >> nightly_output.txt
+      
+      # Cleanup and log management
+      echo "Stopping Selenium docker container..."
+      sudo docker stop $CONTAINER_ID
 
-  #
-  # Push the output logs/screenshots to Github for auditing purposes
-  #
-  echo "Pushing test results to ${LOG_DIR}..."
-  git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
-  git add ${LOG_DIR}/*
-  git commit -m "Add nightly output for $TODAYS_DATE"
-  git pull origin ${GH_BRANCH}
-  git checkout ${GH_BRANCH}
-  git push origin ${GH_BRANCH}
+      cp selenium_nightly_output.txt "nightly_output_$TODAYS_DATE.txt"
+      mv nightly_output_$TODAYS_DATE.txt ${LOG_DIR}
+      mv selenium_unity_images/* ${LOG_DIR}
+      
+      #Delete logs older then 2 weeks
+      bash delete_old_logs.sh
+      
+      # Push the output logs/screenshots to Github for auditing purposes
+      echo "Pushing test results to ${LOG_DIR}..."
+      git add nightly_tests/nightly_logs
+      git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
+      git add ${LOG_DIR}/*
+      git commit -m "Add nightly output for $TODAYS_DATE"
+      git pull origin ${GH_BRANCH}
+      git checkout ${GH_BRANCH}
+      git push origin ${GH_BRANCH}
+    else
+      echo "Not running Selenium tests. (--run-tests false)"
+    fi
 else
-  echo "Not running Selenium tests. (--run-tests false)"
-fi # END IF RUN-TESTS
+    echo "Smoke test failed or could not be verified. Skipping tests."
+    echo "Smoke test failed or could not be verified. Skipping tests." >> nightly_output.txt
+fi
 
-#
-# Destroy resources as testing is now complete
-#
-sleep 10 
-if [[ "$DESTROY" == "true" ]]; then
+# Decide on resource destruction based on the smoke test result or DESTROY flag
+if [[ "$DESTROY" == "true" ]] || [ $SMOKE_TEST_STATUS -ne 0 ]; then
   echo "Destroying resources..."
   bash destroy.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
 else
-  echo "Not destroying resources..."
+  echo "Not destroying resources. Smoke tests were successful and no destruction requested."
 fi
 
-
-#
-# Parse and print out CloudFormation events
-#
-cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
-EVENTS=$(cat CF_EVENTS.txt |grep -v ResourceProperties)
-echo "$EVENTS" > CF_EVENTS.txt
-cat CF_EVENTS.txt
-CF_EVENTS=$(cat CF_EVENTS.txt)
-
-if [[ "$RUN_TESTS" == "true" ]]; then
+# The rest of your script, including posting to Slack, can go here
+# Ensure to only post to Slack if tests were run successfully
+if [[ "$RUN_TESTS" == "true" ]] && [ $SMOKE_TEST_STATUS -eq 0 ]; then
   OUTPUT=$(cat nightly_output.txt)
   GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/${LOG_DIR}"
-  #
+  
   # Post results to Slack
-  #
-  # curl -X POST -H 'Content-type: application/json' --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'"}' $SLACK_URL
   curl -X POST -H 'Content-type: application/json' \
   --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'", "logs_url": "'"${GITHUB_LOGS_URL}"'"}' \
   ${SLACK_URL}
 else
-  echo "Not posting results to slack (--run-tests false)."
+    echo "Not posting results to slack (--run-tests)"
 fi
+
