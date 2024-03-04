@@ -54,6 +54,17 @@ export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
 echo "Initiating Cloudformation Teardown..." >> nightly_output.txt
 echo "Initiating Cloudformation Teardown..."
 
+# Start Selenium docker iamge
+DOCKER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
+sleep 10
+# Uninstall AWS resources through MC
+python3 uninstall_aws_resources_mc.py >> nightly_output.txt 2>&1
+
+# Stop Selenium docker iamge
+echo "Stopping Selenium docker container..."
+sudo docker stop $DOCKER_ID
+# Wait for some time for MC AWS Resources to unistall
+
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
 STACK_STATUS=""

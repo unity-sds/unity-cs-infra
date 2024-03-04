@@ -110,12 +110,17 @@ def test_initiate_core_setup(driver, test_results):
     assert driver.current_url.endswith('/ui/setup'), f"Navigation to setup page failed - current URL {driver.current_url}"
 
 def test_core_setup_save_btn(driver, test_results):
+    time.sleep(10)
     try:
         # Find and click the Save button
         save_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, "//button[@type='submit' and contains(@class, 'bg-blue-600')]"))
         )
         save_button.click()
+        # Wait some time for the core setup to complete
+        # There is not status on the install for this action
+        # So we have to wait X amount untill it completes.
+        time.sleep(60)
         # Take a screenshot
         save_screenshot(driver, 'screenshot_after_clicking_core_manegement_save_btn')
 
@@ -381,6 +386,7 @@ def test_grab_terminal_output_SPS(driver, test_results):
     assert "Error" in output_text.lower(), "Success not found in terminal output"
 
     return output_text
+
 
 def pytest_sessionfinish(session, exitstatus):
     print_table(session.results)
