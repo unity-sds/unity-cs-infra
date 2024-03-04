@@ -1,4 +1,5 @@
 import os
+import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -46,8 +47,6 @@ def bootstrap_process_status():
         return False
     finally:
         driver.quit()
-
-
 
 if __name__ == "__main__":
     success = bootstrap_process_status()
