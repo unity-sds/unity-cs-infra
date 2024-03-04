@@ -68,10 +68,20 @@ def wait_for_uninstall_complete(log_group_name, log_stream_name, completion_mess
 
 
 def uninstall_aws_resources():
-    url = os.getenv('MANAGEMENT_CONSOLE_URL')
-    if not url:
-        print("MANAGEMENT_CONSOLE_URL environment variable is not set.")
+
+    ssm = boto3.client('ssm', region_name='us-west-2')
+
+    # Define the SSM parameter name
+    parameter_name = '/unity/cs/management/httpd/loadbalancer-url'
+
+    # Get the parameter without decrypting
+    try:
+        response = ssm.get_parameter(Name=parameter_name)
+        url = response['Parameter']['Value']
+    except Exception as e:
+        print(f"Error retrieving SSM parameter: {e}")
         return
+
     
     driver = setup_driver()
     try:
