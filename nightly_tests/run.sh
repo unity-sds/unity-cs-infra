@@ -79,6 +79,8 @@ fi
 if [[ -z $VENUE_NAME ]]; then
     usage
 fi
+# Install python3-pip
+sudo apt install -y python3-pip
 
 # Install packages required for selenium tests
 #
