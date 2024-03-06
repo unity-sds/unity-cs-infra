@@ -1,0 +1,7 @@
+Repo Hash (Nightly Test):     [8d293c1]
+Repo Hash (Cloudformation):   [6f4be6f]
+Nightly Test in the unity-cm account
+Stack Name: [unity-management-console-galen-dev1]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [400 seconds] - PASS
+./run.sh: line 249: pytest: command not found
