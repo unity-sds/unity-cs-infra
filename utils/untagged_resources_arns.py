@@ -8,12 +8,12 @@ TAG_KEYS = ["Venue", "ServiceArea", "CapVersion", "Component", "Name", "Proj", "
 TAG_KEY_PATTERN_LABELS = [
     # This tuple contains a regex pattern to match against resource ARNs and a label for the category
      ("ucs|hargitay|galen|ryan|tom|hollins|ramesh|rmaddego|molen|apigw|apigateway", "U-CS"),
-#    ("uds|cumulus", "U-DS"),
-#    ("uads|jmcduffi|dockstore|esarkiss|nlahaye|jupyter", "U-ADS"),
-#    ("usps|u-sps|sps-api|luca|ryan|hysds", "U-SPS"),
-#    ("bcdp", "U-AS"),
-#    ("gmanipon|on-demand", "U-OD"),
-#    ("anil|tapella|natha", "U-UI")
+     ("uds|cumulus", "U-DS"),
+    ("uads|jmcduffi|dockstore|esarkiss|nlahaye|jupyter", "U-ADS"),
+    ("usps|u-sps|sps-api|luca|ryan|hysds", "U-SPS"),
+    ("bcdp", "U-AS"),
+    ("gmanipon|on-demand", "U-OD"),
+    ("anil|tapella|natha", "U-UI")
 
 # Additional patterns can be uncommented/added here to extend the functionality
 ]
@@ -50,7 +50,9 @@ def print_untagged_resource_details():
     # Iterate through each pattern/label tuple to find and print untagged resources by category
     for pattern, label in TAG_KEY_PATTERN_LABELS:
         untagged_resources = filter_untagged_resources_by_pattern(pattern)
-        print(f"Category: {label}")
+        print(f"CATEGORY    : {label}")
+        print(f"SEARCH USED : {pattern}")
+        print("-------------------------------------------------")
         if untagged_resources:
             for arn in untagged_resources:
                 print(f"- {arn}")
