@@ -35,7 +35,6 @@ def bootstrap_process_status():
         )
         status_message = bootstrap_status_element.text
         assert "The Bootstrap Process Failed" not in status_message, "Bootstrap process failed"
-        print("Smoke Test Sucessfull")
         return True
     except TimeoutException:
         print("Failed to find the bootstrap status message within the specified time.")

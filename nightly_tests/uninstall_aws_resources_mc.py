@@ -37,11 +37,17 @@ def get_ec2_instance_id():
     # Return None if no instance found
     return None
 
-
 def wait_for_uninstall_complete(log_group_name, log_stream_name, completion_message, check_interval=10, timeout=600):
     cw_client = boto3.client('logs', region_name='us-west-2')
     start_time = time.time()
     
+    # failure messages 
+    failure_messages = [
+        "FAILED TO DESTROY ALL COMPONENTS",
+        "FAILED TO REMOVE S3 BUCKET",
+        "FAILED TO REMOVE DYNAMODB TABLE"
+    ]
+
     while True:
         elapsed_time = time.time() - start_time
         if elapsed_time > timeout:
@@ -56,9 +62,14 @@ def wait_for_uninstall_complete(log_group_name, log_stream_name, completion_mess
             )
             events = response.get('events', [])
             for event in events:
-                if completion_message in event.get('message', ''):
+                message = event.get('message', '')
+                if completion_message in message:
                     print("Uninstall of MC AWS Resources completed successfully.")
                     return True
+                for failure_message in failure_messages:
+                    if failure_message in message:
+                        print(f"Failure detected: {message}")
+                        return False
         except Exception as e:
             print(f"Error checking logs: {e}")
             return False
@@ -110,7 +121,6 @@ def uninstall_aws_resources():
     # Assuming the log stream name follows a specific pattern with the instance ID
     log_stream_name = instance_id  # Adjust if your log stream naming convention differs
     # Call the function to monitor CloudWatch logs after the driver has been quit
-    print("Uninstalling MC AWS Resources")
     wait_for_uninstall_complete("managementconsole", log_stream_name, "UNITY MANAGEMENT CONSOLE UNINSTALL COMPLETE")
 
 
