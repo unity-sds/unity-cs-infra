@@ -80,6 +80,26 @@ if [[ -z $VENUE_NAME ]]; then
     usage
 fi
 
+# Install packages required for selenium tests
+#
+# Install pytest if not installed
+if ! pip3 list | grep -q pytest; then
+    echo "Installing pytest..."
+    pip3 install pytest
+fi
+
+# Install boto3 if not installed
+if ! pip3 list | grep -q boto3; then
+    echo "Installing boto3..."
+    pip3 install boto3
+fi
+
+# Install selenium if not installed
+if ! pip3 list | grep -q selenium; then
+    echo "Installing selenium..."
+    pip3 install selenium
+fi
+
 echo "RUN ARGUMENTS: "
 echo "  - Destroy stack at end of script? $DESTROY"
 echo "  - Run tests?                      $RUN_TESTS"
