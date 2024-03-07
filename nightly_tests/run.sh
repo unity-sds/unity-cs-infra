@@ -85,22 +85,27 @@ sudo apt install -y python3-pip
 # Install packages required for selenium tests
 #
 # Install pytest if not installed
-if ! pip3 list | grep -q pytest; then
+pip3 list | grep pytest > out.txt
+if ! grep -q pytest out.txt; then
     echo "Installing pytest..."
     pip3 install pytest
 fi
 
 # Install boto3 if not installed
-if ! pip3 list | grep -q boto3; then
+pip3 list | grep boto3 > out.txt
+if ! grep -q boto3 out.txt; then
     echo "Installing boto3..."
     pip3 install boto3
 fi
 
 # Install selenium if not installed
-if ! pip3 list | grep -q selenium; then
+pip3 list | grep selenium > out.txt
+if ! grep -q selenium out.txt; then
     echo "Installing selenium..."
     pip3 install selenium
 fi
+
+rm out.txt
 
 echo "RUN ARGUMENTS: "
 echo "  - Destroy stack at end of script? $DESTROY"
