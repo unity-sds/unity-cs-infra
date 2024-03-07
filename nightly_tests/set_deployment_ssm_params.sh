@@ -55,11 +55,12 @@ delete_ssm_param() {
     if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
         echo "SSM param ${key} not found.  Not attempting a delete."
     else
-        aws ssm delete-parameter --name "${key}" 2>/dev/null
+        aws ssm delete-parameter --name "${key}"
         if [ $? -ne 0 ]; then
             echo "ERROR: SSM delete failed for $key"
         fi
     fi
+    rm ssm_lookup.txt
 }
 
 #
@@ -103,6 +104,11 @@ refresh_ssm_param() {
     local name=$6
     delete_ssm_param "${key}"
     create_ssm_param "${key}" "${value}" "${capability}" "${capVersion}" "${component}" "${name}"
+}
+
+get_ssm_val() {
+    local key=$1
+    aws ssm get-parameter --name ${key} --with-decryption --query 'Parameter.Value' --output text
 }
 
 #
@@ -177,3 +183,24 @@ refresh_ssm_param "${PRIV_SUBNET_1_SSM}" "${PRIV_SUBNET_1_VAL}" "networking" "na
 PRIV_SUBNET_2_SSM="/unity/cs/account/network/privatesubnet2"
 PRIV_SUBNET_2_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.private[1]')
 refresh_ssm_param "${PRIV_SUBNET_2_SSM}" "${PRIV_SUBNET_2_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-privateSubnet2Ssm"
+
+#
+# Create SSM:
+# 
+EKS_AMI_25_SSM="/unity/account/eks/amis/aml2-eks-1-25"
+EKS_AMI_25_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-25")
+refresh_ssm_param "${EKS_AMI_25_SSM}" "${EKS_AMI_25_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks125Ssm"
+
+#
+# Create SSM:
+# 
+EKS_AMI_26_SSM="/unity/account/eks/amis/aml2-eks-1-26"
+EKS_AMI_26_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-26")
+refresh_ssm_param "${EKS_AMI_26_SSM}" "${EKS_AMI_26_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks126Ssm"
+
+#
+# Create SSM:
+# 
+EKS_AMI_27_SSM="/unity/account/eks/amis/aml2-eks-1-27"
+EKS_AMI_27_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-27")
+refresh_ssm_param "${EKS_AMI_27_SSM}" "${EKS_AMI_27_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks127Ssm"
