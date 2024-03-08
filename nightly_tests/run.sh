@@ -191,7 +191,7 @@ bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --v
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
 sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
 
-# aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
+aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 # Get MC URL from SSM (Manamgement Console populates this value)
 export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
@@ -314,9 +314,19 @@ else
   echo "Not destroying resources. Smoke tests were successful and no destruction requested."
 fi
 
+#
+# Parse and print out CloudFormation events
+#
+cat cloudformation_events.txt |sed 's/\s*},*//g' |sed 's/\s*{//g' |sed 's/\s*\]//' |sed 's/\\"//g' |sed 's/"//g' |sed 's/\\n//g' |sed 's/\\/-/g' |sed 's./.-.g' |sed 's.\\.-.g' |sed 's/\[//g' |sed 's/\]//g' |sed 's/  */ /g' |sed 's/%//g' |grep -v StackName |grep -v StackId |grep -v PhysicalResourceId > CF_EVENTS.txt
+EVENTS=$(cat CF_EVENTS.txt |grep -v ResourceProperties)
+echo "$EVENTS" > CF_EVENTS.txt
+cat CF_EVENTS.txt
+CF_EVENTS=$(cat CF_EVENTS.txt)
+
 # The rest of your script, including posting to Slack, can go here
 # Ensure to only post to Slack if tests were run successfully
 if [[ "$RUN_TESTS" == "true" ]] && [ $SMOKE_TEST_STATUS -eq 0 ]; then
+
   OUTPUT=$(cat nightly_output.txt)
   GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/${LOG_DIR}"
   
