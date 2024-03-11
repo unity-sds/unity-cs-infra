@@ -129,7 +129,7 @@ export SSM_GITHUB_USERNAME="/unity/ci/github/username"
 export SSM_GITHUB_USEREMAIL="/unity/ci/github/useremail"
 
 export SLACK_URL=$(aws ssm get-parameter    --name ${SSM_SLACK_URL}    |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-export GITHUB_TOKEN=$(aws ssm get-parameter --name ${SSM_GITHUB_TOKEN} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+export GITHUB_TOKEN=$(aws ssm get-parameter --name ${SSM_GITHUB_TOKEN} --with-decryption |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 export GITHUB_USERNAME=$(aws ssm get-parameter --name ${SSM_GITHUB_USERNAME} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 export GITHUB_USEREMAIL=$(aws ssm get-parameter --name ${SSM_GITHUB_USEREMAIL} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 
