@@ -125,6 +125,7 @@ LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 # Create common SSM params
 #
 source ./set_common_ssm_params.sh
+echo "MC_INSTANCETYPE_VAL = ${MC_INSTANCETYPE_VAL}"
 
 #
 # Check values are set
