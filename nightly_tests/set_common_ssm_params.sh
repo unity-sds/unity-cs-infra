@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# 
-PROJECT_NAME="unity"
-VENUE_NAME="aws"
-
 echo "set_common_ssm_params.sh ..."
 
 #
