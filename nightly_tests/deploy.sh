@@ -72,6 +72,7 @@ fi
 # Create the SSM parameters required by this deployment
 #
 source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
+echo "deploying INSTANCE TYPE: ${MC_INSTANCETYPE_VAL} ..."
 
 aws cloudformation create-stack \
   --stack-name ${STACK_NAME} \
