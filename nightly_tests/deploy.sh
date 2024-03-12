@@ -72,19 +72,7 @@ fi
 # Create the SSM parameters required by this deployment
 #
 source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
-
-export SSH_KEY="~/.ssh/ucs-nightly.pem"
-export SSM_KEYPAIR_NAME="/unity/testing/nightly/keypairname"
-export SSM_INSTANCE_TYPE="/unity/testing/nightly/instancetype"
-export SSM_PRIVILEGED_POLICY="/unity/testing/nightly/privilegedpolicyname"
-export SSM_GITHUB_TOKEN="/unity/testing/nightly/githubtoken"
-export SSM_ACCOUNT_NAME="/unity/testing/nightly/accountname"
-
-InstanceType=$(aws ssm get-parameter         --name ${SSM_INSTANCE_TYPE}     |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-PrivilegedPolicyName=$(aws ssm get-parameter --name ${SSM_PRIVILEGED_POLICY} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-GithubToken=$(aws ssm get-parameter          --name ${SSM_GITHUB_TOKEN}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-ACCOUNT_NAME=$(aws ssm get-parameter         --name ${SSM_ACCOUNT_NAME}      |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-
+echo "deploying INSTANCE TYPE: ${MC_INSTANCETYPE_VAL} ..."
 
 aws cloudformation create-stack \
   --stack-name ${STACK_NAME} \
@@ -96,15 +84,15 @@ aws cloudformation create-stack \
     ParameterKey=PublicSubnetID2,ParameterValue=${PUB_SUBNET_2_VAL} \
     ParameterKey=PrivateSubnetID1,ParameterValue=${PRIV_SUBNET_1_VAL} \
     ParameterKey=PrivateSubnetID2,ParameterValue=${PRIV_SUBNET_2_VAL} \
-    ParameterKey=InstanceType,ParameterValue=${InstanceType} \
-    ParameterKey=PrivilegedPolicyName,ParameterValue=${PrivilegedPolicyName} \
-    ParameterKey=GithubToken,ParameterValue=${GithubToken} \
+    ParameterKey=InstanceType,ParameterValue=${MC_INSTANCETYPE_VAL} \
+    ParameterKey=PrivilegedPolicyName,ParameterValue=${CS_PRIVILEGED_POLICY_NAME_VAL} \
+    ParameterKey=GithubToken,ParameterValue=${GITHUB_TOKEN_VAL} \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
   --tags Key=ServiceArea,Value=U-CS
 
 
-echo "Nightly Test in the $ACCOUNT_NAME account" >> nightly_output.txt
+echo "Nightly Test in the (TODO FIXME) account" >> nightly_output.txt
 echo "STACK_NAME=$STACK_NAME">NIGHTLY.ENV
 
 #echo"--------------------------------------------------------------------------[PASS]"
