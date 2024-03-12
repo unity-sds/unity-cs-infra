@@ -125,7 +125,6 @@ LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 # Create common SSM params
 #
 source ./set_common_ssm_params.sh
-
 export MC_INSTANCETYPE_VAL="${MC_INSTANCETYPE_VAL}"
 export CS_PRIVILEGED_POLICY_NAME_VAL="${CS_PRIVILEGED_POLICY_NAME_VAL}"
 export GITHUB_USERNAME_VAL="${GITHUB_USERNAME_VAL}"
@@ -142,8 +141,6 @@ export EKS_AMI_25_VAL="${EKS_AMI_25_VAL}"
 export EKS_AMI_26_VAL="${EKS_AMI_26_VAL}"
 export EKS_AMI_27_VAL="${EKS_AMI_27_VAL}"
 
-echo "MC_INSTANCETYPE_VAL = ${MC_INSTANCETYPE_VAL}"
-
 #
 # Check values are set
 #
@@ -159,6 +156,10 @@ fi
 if [ -z "$GITHUB_USEREMAIL_VAL" ] ; then 
     echo "ERROR: Could not read Github user email from SSM." ; exit 1
 fi
+
+cd ../aws_role_create
+./create_roles_and_policies.sh
+cd ../nightly_tests
 
 #
 # Make sure git is properly setup
