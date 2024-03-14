@@ -141,13 +141,13 @@ GITHUB_TOKEN_VAL=$(get_ssm_val "$GITHUB_TOKEN_SSM")
 
 #
 # Create SSM:
-# /unity/cs/githubtoken
+# /unity/ci/slack-web-hook-url
 #
-SLACK_URL_SSM="/unity/ci/slack-web-hook-url"
-SLACK_URL_VAL="empty" # manually gets overridden on CI account
-refresh_ssm_param "${SLACK_URL_SSM}" "${SLACK_URL_VAL}" \
+SLACK_WEB_HOOK_URL_SSM="/unity/ci/slack-web-hook-url"
+populate_if_not_exists_ssm_param "${SLACK_WEB_HOOK_URL_SSM}" \
     "management" "todo" "console" \
-    "unity-all-cs-slackUrl"
+    "unity-all-cs-slackWebHookUrlSsm"
+SLACK_WEB_HOOK_URL_VAL=$(get_ssm_val "$SLACK_WEB_HOOK_URL_SSM")
 
 #
 # Create SSM:
