@@ -72,7 +72,7 @@ locals {
         "http_put_response_hop_limit" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_put_response_hop_limit", null) : null
         "http_tokens" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_tokens", null) : null
       }
-      ng.disk_size = ng.disk_size
+      disk_size = ng.disk_size
     }
   }
 }
