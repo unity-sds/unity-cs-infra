@@ -42,7 +42,7 @@ locals {
             delete_on_termination = mapping.ebs.delete_on_termination
           }
         }
-      } : null
+      } : {}
     }
   }
   openidc_provider_domain_name = trimprefix(module.eks.cluster_oidc_issuer_url, "https://")
