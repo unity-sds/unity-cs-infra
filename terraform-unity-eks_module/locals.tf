@@ -37,6 +37,7 @@ locals {
           ebs = {
             volume_size           = 100
             volume_type           = "gp2"
+            throughput            = 150
             encrypted             = true
             kms_key_id            = data.aws_ebs_default_kms_key.current.key_arn
             delete_on_termination = true
