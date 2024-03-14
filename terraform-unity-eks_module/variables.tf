@@ -22,6 +22,7 @@ variable "nodegroups" {
     capacity_type              = optional(string)
     enable_bootstrap_user_data = optional(bool)
     metadata_options           = optional(map(any))
+    disk_size                  = optional(number)
   }))
 
   default = { 
