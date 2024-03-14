@@ -31,18 +31,18 @@ locals {
         "http_tokens" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_tokens", null) : null
       }
       disk_size = ng.disk_size
-      block_device_mappings = {
-        xvda = {
-          device_name = "/dev/xvda"
+      block_device_mappings = ng.block_device_mappings != null ? { for device_name, mapping in ng.block_device_mappings :
+        device_name => {
+          device_name = mapping.device_name
           ebs = {
-            volume_size           = 100
-            volume_type           = "gp2"
-            encrypted             = true
+            volume_size           = mapping.ebs.volume_size
+            volume_type           = mapping.ebs.volume_type
+            encrypted             = mapping.ebs.encrypted
             kms_key_id            = data.aws_ebs_default_kms_key.current.key_arn
-            delete_on_termination = true
+            delete_on_termination = mapping.ebs.delete_on_termination
           }
         }
-      }
+      } : null
     }
   }
   openidc_provider_domain_name = trimprefix(module.eks.cluster_oidc_issuer_url, "https://")
