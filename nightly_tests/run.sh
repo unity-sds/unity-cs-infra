@@ -80,6 +80,7 @@ if [[ -z $VENUE_NAME ]]; then
     usage
 fi
 # Install python3-pip
+sudo apt update
 sudo apt install -y python3-pip
 
 # Install packages required for selenium tests
@@ -121,37 +122,51 @@ TODAYS_DATE=$(date '+%F_%H-%M')
 LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
 #
-# SSM Parameters
+# Create common SSM params
 #
-export SSM_GITHUB_TOKEN="/unity/ci/github/token"
-export SSM_SLACK_URL="/unity/ci/slack-web-hook-url"
-export SSM_GITHUB_USERNAME="/unity/ci/github/username"
-export SSM_GITHUB_USEREMAIL="/unity/ci/github/useremail"
+source ./set_common_ssm_params.sh
+export MC_INSTANCETYPE_VAL="${MC_INSTANCETYPE_VAL}"
+export CS_PRIVILEGED_POLICY_NAME_VAL="${CS_PRIVILEGED_POLICY_NAME_VAL}"
+export GITHUB_USERNAME_VAL="${GITHUB_USERNAME_VAL}"
+export GITHUB_USEREMAIL_VAL="${GITHUB_USEREMAIL_VAL}"
+export GITHUB_TOKEN_VAL="${GITHUB_TOKEN_VAL}"
+export SLACK_URL_VAL="${SLACK_URL_VAL}"
+export VPC_ID_VAL="${VPC_ID_VAL}"
+export SUBNET_LIST_VAL="${SUBNET_LIST_VAL}"
+export PUB_SUBNET_1_VAL="${PUB_SUBNET_1_VAL}"
+export PUB_SUBNET_2_VAL="${PUB_SUBNET_2_VAL}"
+export PRIV_SUBNET_1_VAL="${PRIV_SUBNET_1_VAL}"
+export PRIV_SUBNET_2_VAL="${PRIV_SUBNET_2_VAL}"
+export EKS_AMI_25_VAL="${EKS_AMI_25_VAL}"
+export EKS_AMI_26_VAL="${EKS_AMI_26_VAL}"
+export EKS_AMI_27_VAL="${EKS_AMI_27_VAL}"
 
-export SLACK_URL=$(aws ssm get-parameter    --name ${SSM_SLACK_URL}    |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-export GITHUB_TOKEN=$(aws ssm get-parameter --name ${SSM_GITHUB_TOKEN} --with-decryption |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-export GITHUB_USERNAME=$(aws ssm get-parameter --name ${SSM_GITHUB_USERNAME} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-export GITHUB_USEREMAIL=$(aws ssm get-parameter --name ${SSM_GITHUB_USEREMAIL} |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
+#
+# Check values are set
+#
+if [ -z "$GITHUB_TOKEN_VAL" ] ; then
+    echo "ERROR: Could not read Github Token from SSM." ; exit 1
+fi
+if [ -z "$SLACK_URL_VAL" ] ; then 
+    echo "ERROR: Could not read Slack URL from SSM." ; exit 1
+fi
+if [ -z "$GITHUB_USERNAME_VAL" ] ; then 
+    echo "ERROR: Could not read Github username from SSM." ; exit 1
+fi
+if [ -z "$GITHUB_USEREMAIL_VAL" ] ; then 
+    echo "ERROR: Could not read Github user email from SSM." ; exit 1
+fi
 
-if [ -z "$GITHUB_TOKEN" ] ; then
-    echo "ERROR: Could not read Github Token from SSM.  Does the key [$SSM_GITHUB_TOKEN] exist?" ; exit 1
-fi
-if [ -z "$SLACK_URL" ] ; then 
-    echo "ERROR: Could not read Slack URL from SSM.  Does the key [$SSM_SLACK_URL] exist?" ; exit 1
-fi
-if [ -z "$GITHUB_USERNAME" ] ; then 
-    echo "ERROR: Could not read Github username from SSM.  Does the key [$SSM_GITHUB_USERNAME] exist?" ; exit 1
-fi
-if [ -z "$GITHUB_USEREMAIL" ] ; then 
-    echo "ERROR: Could not read Github user email from SSM.  Does the key [$SSM_GITHUB_USEREMAIL] exist?" ; exit 1
-fi
+cd ../aws_role_create
+./create_roles_and_policies.sh
+cd ../nightly_tests
 
 #
 # Make sure git is properly setup
 #
-git config --global user.email ${GITHUB_USEREMAIL}
-git config --global user.name ${GITHUB_USERNAME}
-git remote set-url origin https://oauth2:${GITHUB_TOKEN}@github.com/unity-sds/unity-cs-infra.git
+git config --global user.email ${GITHUB_USEREMAIL_VAL}
+git config --global user.name ${GITHUB_USERNAME_VAL}
+git remote set-url origin https://oauth2:${GITHUB_TOKEN_VAL}@github.com/unity-sds/unity-cs-infra.git
 
 rm -f nightly_output.txt
 rm -f cloudformation_events.txt
@@ -167,7 +182,7 @@ git checkout ${GH_BRANCH}
 
 ## update cloudformation scripts
 rm -rf cloudformation
-git clone https://oauth2:$GITHUB_TOKEN@github.com/unity-sds/cfn-ps-jpl-unity-sds.git cloudformation
+git clone https://oauth2:$GITHUB_TOKEN_VAL@github.com/unity-sds/cfn-ps-jpl-unity-sds.git cloudformation
 cd cloudformation
 
 ## This is for testing a specific branch of the cloudformation repo

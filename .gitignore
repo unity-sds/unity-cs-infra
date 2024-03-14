@@ -21,3 +21,7 @@ nightly_tests/nightly_tests_ondemand/nightly_output.txt
 nightly_tests/nightly_tests_ondemand/selenium_nightly_output.txt
 nightly_tests/nightly_tests_ondemand/status.txt
 nightly_tests/nightly_tests_ondemand/template.yml
+aws_role_create/identity.txt
+aws_role_create/output.txt
+aws_role_create/policies.list
+aws_role_create/role.txt
