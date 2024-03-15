@@ -22,7 +22,6 @@ variable "nodegroups" {
     capacity_type              = optional(string)
     enable_bootstrap_user_data = optional(bool)
     metadata_options           = optional(map(any))
-    disk_size                  = optional(number)
     block_device_mappings      = optional(map(object({
       device_name = string
       ebs = object({
@@ -40,17 +39,6 @@ variable "nodegroups" {
       min_size       = 1
       max_size       = 1
       desired_size   = 1
-      block_device_mappings = {
-        xvda = {
-          device_name = "/dev/xvda"
-          ebs = {
-            volume_size           = 100
-            volume_type           = "gp2"
-            encrypted             = true
-            delete_on_termination = true
-          }
-        }
-      }
     }
   }
 }

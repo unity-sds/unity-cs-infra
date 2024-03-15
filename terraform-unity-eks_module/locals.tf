@@ -30,7 +30,6 @@ locals {
         "http_put_response_hop_limit" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_put_response_hop_limit", null) : null
         "http_tokens" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_tokens", null) : null
       }
-      disk_size = ng.disk_size
       block_device_mappings = ng.block_device_mappings != null ? { for device_name, mapping in ng.block_device_mappings :
         device_name => {
           device_name = mapping.device_name
