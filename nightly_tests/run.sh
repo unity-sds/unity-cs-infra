@@ -157,9 +157,9 @@ if [ -z "$GITHUB_USEREMAIL_VAL" ] ; then
     echo "ERROR: Could not read Github user email from SSM." ; exit 1
 fi
 
-cd ../aws_role_create
-./create_roles_and_policies.sh
-cd ../nightly_tests
+#cd ../aws_role_create
+#./create_roles_and_policies.sh
+#cd ../nightly_tests
 
 #
 # Make sure git is properly setup
