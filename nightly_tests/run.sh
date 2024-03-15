@@ -348,7 +348,7 @@ if [[ "$RUN_TESTS" == "true" ]] && [ $SMOKE_TEST_STATUS -eq 0 ]; then
   # Post results to Slack
   curl -X POST -H 'Content-type: application/json' \
   --data '{"cloudformation_summary": "'"${OUTPUT}"'", "cloudformation_events": "'"${CF_EVENTS}"'", "logs_url": "'"${GITHUB_LOGS_URL}"'"}' \
-  ${SLACK_URL}
+  ${SLACK_URL_VAL}
 else
     echo "Not posting results to slack (--run-tests)"
 fi
