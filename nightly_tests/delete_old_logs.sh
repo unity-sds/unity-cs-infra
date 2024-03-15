@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # Directory containing the log directories
 LOG_DIR="/home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs"
 
@@ -7,5 +7,5 @@ LOG_DIR="/home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs"
 echo "Current date and time: $(date)"
 
 # Find and attempt to delete directories older than 2 weeks 
-find "$LOG_DIR" -mindepth 1 -maxdepth 1 -type d -mtime +14 -exec echo "Deleting directory: {}" \; -exec rm -r {} \;
+find "$LOG_DIR" -mindepth 1 -maxdepth 1 -type d -mtime +7 -exec echo "Deleting directory: {}" \; -exec rm -r {} \;
 
