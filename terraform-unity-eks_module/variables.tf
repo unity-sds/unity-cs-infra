@@ -1,10 +1,10 @@
 variable "tags" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }
 
 variable "deployment_name" {
-  type = string
+  type    = string
   default = "unity-eks"
 }
 
@@ -22,26 +22,35 @@ variable "nodegroups" {
     capacity_type              = optional(string)
     enable_bootstrap_user_data = optional(bool)
     metadata_options           = optional(map(any))
+    block_device_mappings      = optional(map(object({
+      device_name = string
+      ebs = object({
+        volume_size           = number
+        volume_type           = string
+        encrypted             = bool
+        delete_on_termination = bool
+      })
+    })))
   }))
 
-  default = { 
-    defaultGroup ={
+  default = {
+    defaultGroup = {
       instance_types = ["m5.xlarge"]
-      min_size = 1
-      max_size = 1
-      desired_size = 1
+      min_size       = 1
+      max_size       = 1
+      desired_size   = 1
     }
   }
 }
 
 variable "aws_auth_roles" {
-    description = "AWS auth roles to associate with the cluster"
-    type = list(object({
-        rolearn = string
-        username = string
-        groups = list(string)
-    })) 
-    default = [ ]
+  description = "AWS auth roles to associate with the cluster"
+  type = list(object({
+    rolearn  = string
+    username = string
+    groups   = list(string)
+  }))
+  default = []
 }
 
 variable "cluster_version" {
@@ -49,20 +58,20 @@ variable "cluster_version" {
   default = "1.27"
 }
 
-variable "project"{
+variable "project" {
   description = "The unity project its installed into"
-  type = string
-  default = "UnknownProject"
+  type        = string
+  default     = "UnknownProject"
 }
 
 variable "venue" {
   description = "The unity venue its installed into"
-  type = string
-  default = "UnknownVenue"
+  type        = string
+  default     = "UnknownVenue"
 }
 
 variable "installprefix" {
   description = "The management console install prefix"
-  type = string
-  default = "UnknownPrefix"
+  type        = string
+  default     = "UnknownPrefix"
 }
