@@ -14,9 +14,9 @@ usage() {
 #
 # It's mandatory to speciy a valid command arguments
 #
-if [[ $# -ne 6 ]]; then
-  usage
-fi
+# if [[ $# -ne 6 ]]; then
+#  usage
+# fi
 
 # Parse command line options
 while [[ $# -gt 0 ]]; do
