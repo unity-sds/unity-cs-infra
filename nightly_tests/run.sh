@@ -4,13 +4,13 @@ DESTROY=""
 RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
+MC_VERSION="latest"
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME>"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>]"
     exit 1
 }
-
 #
 # It's mandatory to speciy a valid number of command arguments
 #
@@ -57,6 +57,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --venue-name)
             VENUE_NAME="$2"
+            shift 2
+            ;;
+        --mc-version)
+            MC_VERSION="$2"
             shift 2
             ;;
         *)
@@ -201,7 +205,7 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
 
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
 sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
