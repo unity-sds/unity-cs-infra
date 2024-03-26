@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 # Directory containing the log directories
 LOG_DIR="/home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs"
 

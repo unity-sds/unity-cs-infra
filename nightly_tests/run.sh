@@ -117,6 +117,8 @@ echo "  - Destroy stack at end of script? $DESTROY"
 echo "  - Run tests?                      $RUN_TESTS"
 echo "  - Project Name:                   $PROJECT_NAME"
 echo "  - Venue Name:                     $VENUE_NAME"
+echo "  - MC Version:                     $MC_VERSION"
+
 echo "---------------------------------------------------------"
 
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
@@ -306,7 +308,7 @@ if [ $SMOKE_TEST_STATUS -eq 0 ]; then
       mv selenium_unity_images/* ${LOG_DIR}
       
       #Delete logs older then 2 weeks
-      bash delete_old_logs.sh
+      # bash delete_old_logs.sh
       
       # Push the output logs/screenshots to Github for auditing purposes
       echo "Pushing test results to ${LOG_DIR}..."
