@@ -3,19 +3,20 @@
 STACK_NAME=""
 PROJECT_NAME=""
 VENUE_NAME=""
+MC_VERSION="latest"
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME>"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>]"
     exit 1
 }
 
 #
 # It's mandatory to speciy a valid command arguments
 #
-if [[ $# -ne 6 ]]; then
-  usage
-fi
+# if [[ $# -ne 6 ]]; then
+#  usage
+# fi
 
 # Parse command line options
 while [[ $# -gt 0 ]]; do
@@ -32,6 +33,10 @@ while [[ $# -gt 0 ]]; do
             VENUE_NAME="$2"
             shift 2
             ;;            
+        --mc-version)
+            MC_VERSION="$2"
+            shift 2
+            ;;
         *)
             usage
             ;;
@@ -89,6 +94,7 @@ aws cloudformation create-stack \
     ParameterKey=GithubToken,ParameterValue=${GITHUB_TOKEN_VAL} \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
+    ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
   --tags Key=ServiceArea,Value=U-CS
 
 
