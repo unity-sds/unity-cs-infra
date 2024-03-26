@@ -1,0 +1,33 @@
+Repo Hash (Nightly Test):     [bc1581c]
+Repo Hash (Cloudformation):   [1ab98dd]
+Nightly Test in the (TODO FIXME) account
+Stack Name: [unity-management-console-unity-nightly]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [400 seconds] - PASS
+============================= test session starts ==============================
+platform linux -- Python 3.8.10, pytest-8.0.2, pluggy-1.4.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/unity-cs-infra/nightly_tests
+collecting ... collected 9 items
+
+test_selenium_mc.py::test_navigate_to_mc_console PASSED                  [ 11%]
+test_selenium_mc.py::test_bootstrap_process_status PASSED                [ 22%]
+test_selenium_mc.py::test_initiate_core_setup PASSED                     [ 33%]
+test_selenium_mc.py::test_core_setup_save_btn PASSED                     [ 44%]
+test_selenium_mc.py::test_click_install_SPS_btn PASSED                   [ 55%]
+test_selenium_mc.py::test_SPS_module_name PASSED                         [ 66%]
+test_selenium_mc.py::test_SPS_module_branch PASSED                       [ 77%]
+test_selenium_mc.py::test_click_SPS_install_btns PASSED                  [ 88%]
+test_selenium_mc.py::test_grab_terminal_output_SPS FAILED                [100%]
+
+=================================== FAILURES ===================================
+________________________ test_grab_terminal_output_SPS _________________________
+test_selenium_mc.py:269: in test_grab_terminal_output_SPS
+    assert "Error" in output_text.lower(), "Success not found in terminal output"
+E   AssertionError: Success not found in terminal output
+E   assert 'Error' in '\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
+E    +  where '\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' = <built-in method lower of str object at 0x7f5c708473c0>()
+E    +    where <built-in method lower of str object at 0x7f5c708473c0> = '\n\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n\n\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'.lower
+=========================== short test summary info ============================
+FAILED test_selenium_mc.py::test_grab_terminal_output_SPS - AssertionError: S...
+==================== 1 failed, 8 passed in 91.83s (0:01:31) ====================
