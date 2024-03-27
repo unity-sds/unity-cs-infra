@@ -1,9 +1,9 @@
-Repo Hash (Nightly Test):     [13b6a9a]
-Repo Hash (Cloudformation):   [6f4be6f]
+Repo Hash (Nightly Test):     [5633ae6]
+Repo Hash (Cloudformation):   [1ab98dd]
 Nightly Test in the (TODO FIXME) account
 Stack Name: [unity-management-console-unity-nightly]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [400 seconds] - PASS
+Stack Creation Time: [420 seconds] - PASS
 ============================= test session starts ==============================
 platform linux -- Python 3.8.10, pytest-8.0.2, pluggy-1.4.0 -- /usr/bin/python3
 cachedir: .pytest_cache
@@ -26,8 +26,8 @@ test_selenium_mc.py:269: in test_grab_terminal_output_SPS
     assert "Error" in output_text.lower(), "Success not found in terminal output"
 E   AssertionError: Success not found in terminal output
 E   assert 'Error' in '\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
-E    +  where '\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' = <built-in method lower of str object at 0x7f3182eeb4f0>()
-E    +    where <built-in method lower of str object at 0x7f3182eeb4f0> = '\n\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n\n\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'.lower
+E    +  where '\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n[info] apply complete! resources: 6 added, 0 changed, 0 destroyed.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n' = <built-in method lower of str object at 0x7fa0554443c0>()
+E    +    where <built-in method lower of str object at 0x7fa0554443c0> = '\n\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n\n\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n[INFO] Apply complete! Resources: 6 added, 0 changed, 0 destroyed.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'.lower
 =========================== short test summary info ============================
 FAILED test_selenium_mc.py::test_grab_terminal_output_SPS - AssertionError: S...
-==================== 1 failed, 8 passed in 92.10s (0:01:32) ====================
+==================== 1 failed, 8 passed in 92.62s (0:01:32) ====================
