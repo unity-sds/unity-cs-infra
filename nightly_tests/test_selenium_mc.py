@@ -152,11 +152,11 @@ def test_navigate_to_marketplace(driver, url_without_cred, test_results):
     save_screenshot(driver, 'screenshot_after_navigating_to_marketplace')
 
 
-def test_click_install_SPS_btn(driver, test_results, test_navigate_to_marketplace):
+def test_naviate_to_SPS_module(driver, test_results, test_navigate_to_marketplace):
     try:
         # Locate and click the Install Application button
         install_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.bg-blue-500.float-right"))
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button.sps"))
         )
         install_button.click()
 
@@ -164,7 +164,7 @@ def test_click_install_SPS_btn(driver, test_results, test_navigate_to_marketplac
         WebDriverWait(driver, 10).until(EC.url_contains('/ui/install'))
 
     except TimeoutException:
-        raise Exception("Failed to install EKS - either the button was not clickable or the URL did not update as expected.")
+        raise Exception("Failed to naviagate to SPS module - either the button was not clickable or the URL did not update as expected.")
 
     assert driver.current_url.endswith('/ui/install'), "URL does not end with '/ui/install'"
     # Screenshot logic here
@@ -250,26 +250,25 @@ def test_click_SPS_install_btns(driver, test_results):
     save_screenshot(driver, 'screenshot_after_clicking_first_button')
 
 
-def test_grab_terminal_output_SPS(driver, test_results):
+def test_SPS_install_status(driver, test_results):
     element_selector = '.terminal'
 
     try:
-        # Find the terminal output element
-        terminal_output_element = WebDriverWait(driver, 10).until(
+        # Find the status button element
+        install_status_button = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, element_selector))
         )
     except TimeoutException:
-        raise Exception("Failed to find or load the terminal output element within the specified time.")
+        raise Exception("Failed to find or locate the status button")
 
-    # Retrieve the text from the terminal output
-    lines = terminal_output_element.find_elements(By.TAG_NAME, 'div')
+    # Retrieve the text from status button
+    lines = install_status_button.find_elements(By.TAG_NAME, 'div')
     output_text = "\n".join([line.text for line in lines])
 
-    # Assert that the output text contains "success"
-    assert "Error" in output_text.lower(), "Success not found in terminal output"
+    # Assert that the status button has "success"
+    assert "Error" in output_text.lower(), "Installation failed, check logs"
 
     return output_text
-
 
 def pytest_sessionfinish(session, exitstatus):
     print_table(session.results)
