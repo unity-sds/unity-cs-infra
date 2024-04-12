@@ -11,10 +11,13 @@ populate_if_not_exists_ssm_param() {
     local capVersion=$3
     local component=$4
     local name=$5
+    local suggestedDefault=$6
     echo "populate_if_not_exists_ssm_param: ${key} ..."
     aws ssm get-parameter --name "$key" 2>ssm_lookup.txt
     if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
-        echo "SSM param ${key} not found.  Enter Value: "
+        echo "SSM param ${key} not found."
+        echo "Suggested value to use here: ${suggestedDefault}"
+        echo "ENTER VALUE to set for ${key}: "
         read user_input
         create_ssm_param "${key}" "${user_input}" "${capability}" "${capVersion}" "${component}" "${name}"
     else
@@ -42,7 +45,8 @@ delete_ssm_param() {
 }
 
 #
-# Sub-routine to create a SSM parameter, and tag it
+# Sub-routine to create a SSM parameter,
+# and tag it (ensuring mandatory AWS resource tags are applied)
 #
 create_ssm_param() {
     local key=$1
@@ -90,8 +94,7 @@ get_ssm_val() {
 }
 
 #
-# Create SSM:
-# /unity/cs/account/management-console/instancetype
+# SSM:  /unity/cs/account/management-console/instancetype
 #
 MC_INSTANCETYPE_SSM="/unity/cs/account/management-console/instancetype"
 MC_INSTANCETYPE_VAL="c6i.xlarge"
@@ -100,8 +103,7 @@ refresh_ssm_param "${MC_INSTANCETYPE_SSM}" "${MC_INSTANCETYPE_VAL}" \
     "unity-all-cs-managementConsole-instanceTypeSsm"
 
 #
-# Create SSM:
-# /unity/cs/account/privilegedpolicyname
+# SSM:  /unity/cs/account/privilegedpolicyname
 #
 CS_PRIVILEGED_POLICY_NAME_SSM="/unity/cs/account/privilegedpolicyname"
 CS_PRIVILEGED_POLICY_NAME_VAL="mcp-tenantOperator-AMI-APIG"
@@ -110,56 +112,54 @@ refresh_ssm_param "${CS_PRIVILEGED_POLICY_NAME_SSM}" "${CS_PRIVILEGED_POLICY_NAM
     "unity-all-cs-privilegedpolicynameSsm"
 
 #
-# Create SSM:
-# /unity/cs/github/username
+# SSM:  /unity/cs/github/username
 #
 GITHUB_USERNAME_SSM="/unity/cs/github/username"
 populate_if_not_exists_ssm_param "${GITHUB_USERNAME_SSM}" \
     "management" "todo" "console" \
-    "unity-all-cs-githubUsernameSsm"
+    "unity-all-cs-githubUsernameSsm" \
+    "[please consult with team for value]"
 GITHUB_USERNAME_VAL=$(get_ssm_val "$GITHUB_USERNAME_SSM")
 
 #
-# Create SSM:
-# /unity/cs/github/useremail
+# SSM:  /unity/cs/github/useremail
 #
 GITHUB_USEREMAIL_SSM="/unity/cs/github/useremail"
 populate_if_not_exists_ssm_param "${GITHUB_USEREMAIL_SSM}" \
     "management" "todo" "console" \
-    "unity-all-cs-githubUseremailSsm"
+    "unity-all-cs-githubUseremailSsm" \
+    "[please consult with team for value]"
 GITHUB_USEREMAIL_VAL=$(get_ssm_val "$GITHUB_USEREMAIL_SSM")
 
 #
-# Create SSM:
-# /unity/cs/githubtoken
+# SSM:  /unity/cs/githubtoken
 #
 GITHUB_TOKEN_SSM="/unity/cs/githubtoken"
 populate_if_not_exists_ssm_param "${GITHUB_TOKEN_SSM}" \
     "management" "todo" "console" \
-    "unity-all-cs-githubtokenSsm"
+    "unity-all-cs-githubtokenSsm" \
+    "[please consult with team for value]"
 GITHUB_TOKEN_VAL=$(get_ssm_val "$GITHUB_TOKEN_SSM")
 
 #
-# Create SSM:
-# /unity/ci/slack-web-hook-url
+# SSM:  /unity/ci/slack-web-hook-url
 #
 SLACK_WEB_HOOK_URL_SSM="/unity/ci/slack-web-hook-url"
 populate_if_not_exists_ssm_param "${SLACK_WEB_HOOK_URL_SSM}" \
     "management" "todo" "console" \
-    "unity-all-cs-slackWebHookUrlSsm"
+    "unity-all-cs-slackWebHookUrlSsm" \
+    "[please consult with team for value]"
 SLACK_URL_VAL=$(get_ssm_val "$SLACK_WEB_HOOK_URL_SSM")
 
 #
-# Create SSM:
-# /unity/cs/account/network/vpc_id
+# SSM:  /unity/cs/account/network/vpc_id
 #
 VPC_ID_SSM="/unity/cs/account/network/vpc_id"
 VPC_ID_VAL=$(aws ec2 describe-vpcs |jq -r '.Vpcs[].VpcId')
 refresh_ssm_param "${VPC_ID_SSM}" "${VPC_ID_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-vpcIdSsm"
 
 #
-# Create SSM:
-# /unity/cs/account/network/subnet_list
+# SSM:  /unity/cs/account/network/subnet_list
 #
 SUBNET_LIST_SSM="/unity/cs/account/network/subnet_list"
 SUBNET_LIST_VAL=$(./get_subnet_list_json.sh)
@@ -167,54 +167,71 @@ delete_ssm_param "${SUBNET_LIST_SSM}"
 create_ssm_param "${SUBNET_LIST_SSM}" "${SUBNET_LIST_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-subnetListSsm"
 
 #
-# Create SSM:
-# /unity/cs/account/network/publicsubnet1
+# SSM:  /unity/cs/account/network/publicsubnet1
 #
 PUB_SUBNET_1_SSM="/unity/cs/account/network/publicsubnet1"
 PUB_SUBNET_1_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.public[0]')
 refresh_ssm_param "${PUB_SUBNET_1_SSM}" "${PUB_SUBNET_1_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-publicSubnet1Ssm"
 
 #
-# Create SSM:
-# /unity/cs/account/network/publicsubnet2
+# SSM:  /unity/cs/account/network/publicsubnet2
 #
 PUB_SUBNET_2_SSM="/unity/cs/account/network/publicsubnet2"
 PUB_SUBNET_2_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.public[1]')
 refresh_ssm_param "${PUB_SUBNET_2_SSM}" "${PUB_SUBNET_2_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-publicSubnet2Ssm"
 
 #
-# Create SSM:
-# /unity/cs/account/network/privatesubnet1
+# SSM:  /unity/cs/account/network/privatesubnet1
 #
 PRIV_SUBNET_1_SSM="/unity/cs/account/network/privatesubnet1"
 PRIV_SUBNET_1_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.private[0]')
 refresh_ssm_param "${PRIV_SUBNET_1_SSM}" "${PRIV_SUBNET_1_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-privateSubnet1Ssm"
 
 #
-# Create SSM:
-# /unity/cs/account/network/privatesubnet2
+# SSM:  /unity/cs/account/network/privatesubnet2
 #
 PRIV_SUBNET_2_SSM="/unity/cs/account/network/privatesubnet2"
 PRIV_SUBNET_2_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.private[1]')
 refresh_ssm_param "${PRIV_SUBNET_2_SSM}" "${PRIV_SUBNET_2_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-privateSubnet2Ssm"
 
 #
-# Create SSM:
-# 
+# SSM:  /unity/account/eks/amis/aml2-eks-1-25
+#
 EKS_AMI_25_SSM="/unity/account/eks/amis/aml2-eks-1-25"
 EKS_AMI_25_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-25")
 refresh_ssm_param "${EKS_AMI_25_SSM}" "${EKS_AMI_25_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks125Ssm"
 
 #
-# Create SSM:
+# SSM:  /unity/account/eks/amis/aml2-eks-1-26
 # 
 EKS_AMI_26_SSM="/unity/account/eks/amis/aml2-eks-1-26"
 EKS_AMI_26_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-26")
 refresh_ssm_param "${EKS_AMI_26_SSM}" "${EKS_AMI_26_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks126Ssm"
 
 #
-# Create SSM:
+# SSM:  /unity/account/eks/amis/aml2-eks-1-27
 # 
 EKS_AMI_27_SSM="/unity/account/eks/amis/aml2-eks-1-27"
 EKS_AMI_27_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-27")
 refresh_ssm_param "${EKS_AMI_27_SSM}" "${EKS_AMI_27_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks127Ssm"
+
+#
+# SSM:  /unity/shared-services/cognito/domain
+#
+SHARED_SERVICES_COGNITO_DOMAIN_SSM="/unity/shared-services/cognito/domain"
+populate_if_not_exists_ssm_param "${SHARED_SERVICES_COGNITO_DOMAIN_SSM}" \
+    "security" "todo" "cognito" \
+    "unity-all-cs-sharedServicesCognitoDomainSsm" \
+    "[enter the cognito domain URL.  Example:  https://unitysds-test.auth.us-west-2.amazoncognito.com]"
+SHARED_SERVICES_COGNITO_DOMAIN_VAL=$(get_ssm_val "${SHARED_SERVICES_COGNITO_DOMAIN_SSM}")
+
+#
+# SSM:  /unity/shared-services/account
+#
+SHARED_SERVICES_AWS_ACCOUNT_SSM="/unity/shared-services/aws/account"
+populate_if_not_exists_ssm_param "${SHARED_SERVICES_AWS_ACCOUNT_SSM}" \
+    "account" "todo" "aws" \
+    "unity-all-cs-sharedServicesAwsAccountSsm" \
+    "[enter the AWS account ID of the shared services account]"
+SHARED_SERVICES_AWS_ACCOUNT_VAL=$(get_ssm_val "$SHARED_SERVICES_AWS_ACCOUNT_SSM")
+
