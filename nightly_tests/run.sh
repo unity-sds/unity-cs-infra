@@ -24,13 +24,13 @@ while [[ $# -gt 0 ]]; do
         --destroy)
             case "$2" in
                 true)
-                    DESTROY=true
+                    OY=true
                     ;;
                 false)
-                    DESTROY=false
+                    OY=false
                     ;;
                 *)
-                    echo "Invalid argument for --destroy. Please specify 'true' or 'false'." >&2
+                    echo "Invalid argument for --oy. Please specify 'true' or 'false'." >&2
                     exit 1
                     ;;
             esac
@@ -346,7 +346,7 @@ CF_EVENTS=$(cat CF_EVENTS.txt)
 
 # The rest of your script, including posting to Slack, can go here
 # Ensure to only post to Slack if tests were run successfully
-if [[ "$RUN_TESTS" == "true" ]] && [ $SMOKE_TEST_STATUS -eq 0 ]; then
+if [[ "$RUN_TESTS" == "true" ]]; then
 
   OUTPUT=$(cat nightly_output.txt)
   GITHUB_LOGS_URL="https://github.com/unity-sds/unity-cs-infra/tree/${GH_BRANCH}/nightly_tests/${LOG_DIR}"
