@@ -24,13 +24,13 @@ while [[ $# -gt 0 ]]; do
         --destroy)
             case "$2" in
                 true)
-                    OY=true
+                    DESTROY=true
                     ;;
                 false)
-                    OY=false
+                    DESTROY=false
                     ;;
                 *)
-                    echo "Invalid argument for --oy. Please specify 'true' or 'false'." >&2
+                    echo "Invalid argument for --destroy. Please specify 'true' or 'false'." >&2
                     exit 1
                     ;;
             esac
