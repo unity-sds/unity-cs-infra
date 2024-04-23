@@ -308,11 +308,11 @@ if [ $SMOKE_TEST_STATUS -eq 0 ]; then
       mv selenium_unity_images/* ${LOG_DIR}
       
       #Delete logs older then 2 weeks
-      # bash delete_old_logs.sh
+      bash delete_old_logs.sh
       
       # Push the output logs/screenshots to Github for auditing purposes
       echo "Pushing test results to ${LOG_DIR}..."
-      git add nightly_tests/nightly_logs
+      git add nightly_logs/
       git add "${LOG_DIR}/nightly_output_$TODAYS_DATE.txt"
       git add ${LOG_DIR}/*
       git commit -m "Add nightly output for $TODAYS_DATE"
