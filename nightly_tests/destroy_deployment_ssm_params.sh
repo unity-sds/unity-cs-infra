@@ -66,7 +66,7 @@ delete_ssm_param() {
 }
 
 #
-# Create SSM:
+# Delete SSM:
 # /unity/deployment/<PROJECT_NAME>/<VENUE_NAME>/project-name
 #
 PROJECT_NAME_SSM="/unity/deployment/${PROJECT_NAME}/${VENUE_NAME}/project-name"
@@ -74,7 +74,7 @@ PROJECT_NAME_VAL="${PROJECT_NAME}"
 delete_ssm_param "${PROJECT_NAME_SSM}"
 
 #
-# Create SSM:
+# Delete SSM:
 # /unity/deployment/<PROJECT_NAME>/<VENUE_NAME>/venue-name
 #
 VENUE_NAME_SSM="/unity/deployment/${PROJECT_NAME}/${VENUE_NAME}/venue-name"
@@ -82,9 +82,17 @@ VENUE_NAME_VAL="${VENUE_NAME}"
 delete_ssm_param "${VENUE_NAME_SSM}"
 
 #
-# Create SSM:
+# Delete SSM:
 # /unity/deployment/<PROJECT_NAME>/<VENUE_NAME>/status
 #
 DEPLOYMENT_STATUS_SSM="/unity/deployment/${PROJECT_NAME}/${VENUE_NAME}/status"
 DEPLOYMENT_STATUS_VAL="deploying"
 delete_ssm_param "${DEPLOYMENT_STATUS_SSM}"
+
+# Delete SSM:
+# /unity/${project}/${venue}/cs/monitoring/s3/bucketName
+#
+S3_HEALTH_CHECK_NAME_SSM="/unity/${PROJECT_NAME}/${VENUE_NAME}/cs/monitoring/s3/bucketName"
+S3_HEALTH_CHECK_NAME_VAL="${PROJECT_NAME}-${VENUE_NAME}-health-check"
+
+delete_ssm_param "${S3_HEALTH_CHECK_NAME_SSM}"
