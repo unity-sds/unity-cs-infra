@@ -141,7 +141,7 @@ refresh_ssm_param "${DEPLOYMENT_STATUS_SSM}" "${DEPLOYMENT_STATUS_VAL}" "managem
 # Create SSM:
 # /unity/${project}/${venue}/cs/monitoring/s3/bucketName
 #
-S3_HEALTH_CHECK_NAME_SSM="/unity/${PROJECT_NAME}/${VENUE_NAME}/cs/monitoring/s3/bucketName"
+S3_HEALTH_CHECK_NAME_SSM="/unity/deployment/${PROJECT_NAME}/${VENUE_NAME}/cs/monitoring/s3/bucketName"
 S3_HEALTH_CHECK_NAME_VAL="${PROJECT_NAME}-${VENUE_NAME}-health-check"
 refresh_ssm_param "${S3_HEALTH_CHECK_NAME_SSM}" "${S3_HEALTH_CHECK_NAME_VAL}" "management" "todo" "console" \
 "${PROJECT_NAME}-${VENUE_NAME}-cs-management-S3HealthCheckBucketNameSsm"
