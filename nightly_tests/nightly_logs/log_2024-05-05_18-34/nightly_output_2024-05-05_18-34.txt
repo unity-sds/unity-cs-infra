@@ -1,9 +1,9 @@
-Repo Hash (Nightly Test):     [5caea97]
+Repo Hash (Nightly Test):     [b5e0678]
 Repo Hash (Cloudformation):   [a0876b6]
 Nightly Test in the (TODO FIXME) account
 Stack Name: [unity-management-console-unity-nightly]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [380 seconds] - PASS
+Stack Creation Time: [400 seconds] - PASS
 ============================= test session starts ==============================
 platform linux -- Python 3.8.10, pytest-8.0.2, pluggy-1.4.0 -- /usr/bin/python3
 cachedir: .pytest_cache
@@ -28,25 +28,25 @@ test_selenium_mc.py:158: in test_naviate_to_SPS_module
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x55b6d6bf18a3 <unknown>
-E   #1 0x55b6d68e78c6 <unknown>
-E   #2 0x55b6d6932618 <unknown>
-E   #3 0x55b6d69326d1 <unknown>
-E   #4 0x55b6d6975744 <unknown>
-E   #5 0x55b6d69545cd <unknown>
-E   #6 0x55b6d6972c19 <unknown>
-E   #7 0x55b6d6954343 <unknown>
-E   #8 0x55b6d6925593 <unknown>
-E   #9 0x55b6d6925f5e <unknown>
-E   #10 0x55b6d6bb588b <unknown>
-E   #11 0x55b6d6bb97e5 <unknown>
-E   #12 0x55b6d6ba35b1 <unknown>
-E   #13 0x55b6d6bba372 <unknown>
-E   #14 0x55b6d6b888bf <unknown>
-E   #15 0x55b6d6be0768 <unknown>
-E   #16 0x55b6d6be093b <unknown>
-E   #17 0x55b6d6bf09f4 <unknown>
-E   #18 0x7fe0ae613ac3 <unknown>
+E   #0 0x55902812a8a3 <unknown>
+E   #1 0x559027e208c6 <unknown>
+E   #2 0x559027e6b618 <unknown>
+E   #3 0x559027e6b6d1 <unknown>
+E   #4 0x559027eae744 <unknown>
+E   #5 0x559027e8d5cd <unknown>
+E   #6 0x559027eabc19 <unknown>
+E   #7 0x559027e8d343 <unknown>
+E   #8 0x559027e5e593 <unknown>
+E   #9 0x559027e5ef5e <unknown>
+E   #10 0x5590280ee88b <unknown>
+E   #11 0x5590280f27e5 <unknown>
+E   #12 0x5590280dc5b1 <unknown>
+E   #13 0x5590280f3372 <unknown>
+E   #14 0x5590280c18bf <unknown>
+E   #15 0x559028119768 <unknown>
+E   #16 0x55902811993b <unknown>
+E   #17 0x5590281299f4 <unknown>
+E   #18 0x7fd4df449ac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:167: in test_naviate_to_SPS_module
@@ -59,25 +59,25 @@ test_selenium_mc.py:180: in test_SPS_module_name
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x55b6d6bf18a3 <unknown>
-E   #1 0x55b6d68e78c6 <unknown>
-E   #2 0x55b6d6932618 <unknown>
-E   #3 0x55b6d69326d1 <unknown>
-E   #4 0x55b6d6975744 <unknown>
-E   #5 0x55b6d69545cd <unknown>
-E   #6 0x55b6d6972c19 <unknown>
-E   #7 0x55b6d6954343 <unknown>
-E   #8 0x55b6d6925593 <unknown>
-E   #9 0x55b6d6925f5e <unknown>
-E   #10 0x55b6d6bb588b <unknown>
-E   #11 0x55b6d6bb97e5 <unknown>
-E   #12 0x55b6d6ba35b1 <unknown>
-E   #13 0x55b6d6bba372 <unknown>
-E   #14 0x55b6d6b888bf <unknown>
-E   #15 0x55b6d6be0768 <unknown>
-E   #16 0x55b6d6be093b <unknown>
-E   #17 0x55b6d6bf09f4 <unknown>
-E   #18 0x7fe0ae613ac3 <unknown>
+E   #0 0x55902812a8a3 <unknown>
+E   #1 0x559027e208c6 <unknown>
+E   #2 0x559027e6b618 <unknown>
+E   #3 0x559027e6b6d1 <unknown>
+E   #4 0x559027eae744 <unknown>
+E   #5 0x559027e8d5cd <unknown>
+E   #6 0x559027eabc19 <unknown>
+E   #7 0x559027e8d343 <unknown>
+E   #8 0x559027e5e593 <unknown>
+E   #9 0x559027e5ef5e <unknown>
+E   #10 0x5590280ee88b <unknown>
+E   #11 0x5590280f27e5 <unknown>
+E   #12 0x5590280dc5b1 <unknown>
+E   #13 0x5590280f3372 <unknown>
+E   #14 0x5590280c18bf <unknown>
+E   #15 0x559028119768 <unknown>
+E   #16 0x55902811993b <unknown>
+E   #17 0x5590281299f4 <unknown>
+E   #18 0x7fd4df449ac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:189: in test_SPS_module_name
@@ -90,25 +90,25 @@ test_selenium_mc.py:201: in test_SPS_module_branch
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x55b6d6bf18a3 <unknown>
-E   #1 0x55b6d68e78c6 <unknown>
-E   #2 0x55b6d6932618 <unknown>
-E   #3 0x55b6d69326d1 <unknown>
-E   #4 0x55b6d6975744 <unknown>
-E   #5 0x55b6d69545cd <unknown>
-E   #6 0x55b6d6972c19 <unknown>
-E   #7 0x55b6d6954343 <unknown>
-E   #8 0x55b6d6925593 <unknown>
-E   #9 0x55b6d6925f5e <unknown>
-E   #10 0x55b6d6bb588b <unknown>
-E   #11 0x55b6d6bb97e5 <unknown>
-E   #12 0x55b6d6ba35b1 <unknown>
-E   #13 0x55b6d6bba372 <unknown>
-E   #14 0x55b6d6b888bf <unknown>
-E   #15 0x55b6d6be0768 <unknown>
-E   #16 0x55b6d6be093b <unknown>
-E   #17 0x55b6d6bf09f4 <unknown>
-E   #18 0x7fe0ae613ac3 <unknown>
+E   #0 0x55902812a8a3 <unknown>
+E   #1 0x559027e208c6 <unknown>
+E   #2 0x559027e6b618 <unknown>
+E   #3 0x559027e6b6d1 <unknown>
+E   #4 0x559027eae744 <unknown>
+E   #5 0x559027e8d5cd <unknown>
+E   #6 0x559027eabc19 <unknown>
+E   #7 0x559027e8d343 <unknown>
+E   #8 0x559027e5e593 <unknown>
+E   #9 0x559027e5ef5e <unknown>
+E   #10 0x5590280ee88b <unknown>
+E   #11 0x5590280f27e5 <unknown>
+E   #12 0x5590280dc5b1 <unknown>
+E   #13 0x5590280f3372 <unknown>
+E   #14 0x5590280c18bf <unknown>
+E   #15 0x559028119768 <unknown>
+E   #16 0x55902811993b <unknown>
+E   #17 0x5590281299f4 <unknown>
+E   #18 0x7fd4df449ac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:214: in test_SPS_module_branch
@@ -121,25 +121,25 @@ test_selenium_mc.py:225: in test_click_SPS_install_btns
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x55b6d6bf18a3 <unknown>
-E   #1 0x55b6d68e78c6 <unknown>
-E   #2 0x55b6d6932618 <unknown>
-E   #3 0x55b6d69326d1 <unknown>
-E   #4 0x55b6d6975744 <unknown>
-E   #5 0x55b6d69545cd <unknown>
-E   #6 0x55b6d6972c19 <unknown>
-E   #7 0x55b6d6954343 <unknown>
-E   #8 0x55b6d6925593 <unknown>
-E   #9 0x55b6d6925f5e <unknown>
-E   #10 0x55b6d6bb588b <unknown>
-E   #11 0x55b6d6bb97e5 <unknown>
-E   #12 0x55b6d6ba35b1 <unknown>
-E   #13 0x55b6d6bba372 <unknown>
-E   #14 0x55b6d6b888bf <unknown>
-E   #15 0x55b6d6be0768 <unknown>
-E   #16 0x55b6d6be093b <unknown>
-E   #17 0x55b6d6bf09f4 <unknown>
-E   #18 0x7fe0ae613ac3 <unknown>
+E   #0 0x55902812a8a3 <unknown>
+E   #1 0x559027e208c6 <unknown>
+E   #2 0x559027e6b618 <unknown>
+E   #3 0x559027e6b6d1 <unknown>
+E   #4 0x559027eae744 <unknown>
+E   #5 0x559027e8d5cd <unknown>
+E   #6 0x559027eabc19 <unknown>
+E   #7 0x559027e8d343 <unknown>
+E   #8 0x559027e5e593 <unknown>
+E   #9 0x559027e5ef5e <unknown>
+E   #10 0x5590280ee88b <unknown>
+E   #11 0x5590280f27e5 <unknown>
+E   #12 0x5590280dc5b1 <unknown>
+E   #13 0x5590280f3372 <unknown>
+E   #14 0x5590280c18bf <unknown>
+E   #15 0x559028119768 <unknown>
+E   #16 0x55902811993b <unknown>
+E   #17 0x5590281299f4 <unknown>
+E   #18 0x7fd4df449ac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:246: in test_click_SPS_install_btns
@@ -152,25 +152,25 @@ test_selenium_mc.py:258: in test_SPS_install_status
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x55b6d6bf18a3 <unknown>
-E   #1 0x55b6d68e78c6 <unknown>
-E   #2 0x55b6d6932618 <unknown>
-E   #3 0x55b6d69326d1 <unknown>
-E   #4 0x55b6d6975744 <unknown>
-E   #5 0x55b6d69545cd <unknown>
-E   #6 0x55b6d6972c19 <unknown>
-E   #7 0x55b6d6954343 <unknown>
-E   #8 0x55b6d6925593 <unknown>
-E   #9 0x55b6d6925f5e <unknown>
-E   #10 0x55b6d6bb588b <unknown>
-E   #11 0x55b6d6bb97e5 <unknown>
-E   #12 0x55b6d6ba35b1 <unknown>
-E   #13 0x55b6d6bba372 <unknown>
-E   #14 0x55b6d6b888bf <unknown>
-E   #15 0x55b6d6be0768 <unknown>
-E   #16 0x55b6d6be093b <unknown>
-E   #17 0x55b6d6bf09f4 <unknown>
-E   #18 0x7fe0ae613ac3 <unknown>
+E   #0 0x55902812a8a3 <unknown>
+E   #1 0x559027e208c6 <unknown>
+E   #2 0x559027e6b618 <unknown>
+E   #3 0x559027e6b6d1 <unknown>
+E   #4 0x559027eae744 <unknown>
+E   #5 0x559027e8d5cd <unknown>
+E   #6 0x559027eabc19 <unknown>
+E   #7 0x559027e8d343 <unknown>
+E   #8 0x559027e5e593 <unknown>
+E   #9 0x559027e5ef5e <unknown>
+E   #10 0x5590280ee88b <unknown>
+E   #11 0x5590280f27e5 <unknown>
+E   #12 0x5590280dc5b1 <unknown>
+E   #13 0x5590280f3372 <unknown>
+E   #14 0x5590280c18bf <unknown>
+E   #15 0x559028119768 <unknown>
+E   #16 0x55902811993b <unknown>
+E   #17 0x5590281299f4 <unknown>
+E   #18 0x7fd4df449ac3 <unknown>
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:262: in test_SPS_install_status
