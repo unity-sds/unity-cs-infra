@@ -41,7 +41,7 @@ done
 if [[ -z $PROJECT_NAME ]]; then
     usage
 fi
-if [[ -z $V]; then
+if [[ -z $VENUE_NAME]; then
     usage
 fi
 
