@@ -23,6 +23,31 @@ resource "aws_api_gateway_integration" "root_level_get_method_mock_integration" 
   type                 = "MOCK"
 }
 
+# REST API Gateway root level GET method
+resource "aws_api_gateway_method" "root_level_get_method" {
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  resource_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+# REST API Gateway for Management Console Health Checks
+resource "aws_api_gateway_resource" "management_console_api_health_checks" {
+  rest_api_id          = aws_api_gateway_rest_api.rest_api.id
+  parent_id            = = aws_api_gateway_rest_api.rest_api.root_resource_id
+  path_part            = "health_checks"
+}
+
+resource "aws_api_gateway_integration" "management_console_api_health_checks_integration" {
+  rest_api_id          = aws_api_gateway_rest_api.rest_api.id
+  resource_id          = aws_api_gateway_rest_api.rest_api.root_resource_id
+  http_method          = aws_api_gateway_method.root_level_get_method.http_method
+  
+  type                 = "HTTP_PROXY"
+  integration_http_method = "GET"
+  uri                  = "http://api.endpoint.com/api/health_checks"
+}
+
 # REST API ID SSM Param for other resources to modify rest api
 resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter" {
   name       = format("/unity/cs/routing/shared-services-api-gateway/rest-api-id")
