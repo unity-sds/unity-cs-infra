@@ -215,7 +215,7 @@ sleep 360  # give enough time for stack to fully come up. TODO: revisit this app
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 # Get MC URL from SSM (Manamgement Console populates this value)
-export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
+export SSM_MC_URL="/unity/${PROJECT_NAME}/${VENUE_NAME}/management/httpd/loadbalancer-url"
 export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 echo "MANAGEMENT_CONSOLE_URL = ${MANAGEMENT_CONSOLE_URL}"
 
