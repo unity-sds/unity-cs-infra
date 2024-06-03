@@ -195,6 +195,16 @@ PRIV_SUBNET_2_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.private[1]')
 refresh_ssm_param "${PRIV_SUBNET_2_SSM}" "${PRIV_SUBNET_2_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-privateSubnet2Ssm"
 
 #
+# SSM: /unity/cs/account/network/certificate-arn
+#
+CERTIFICATE_ARN_SSM="/unity/cs/account/network/certificate-arn"
+populate_if_not_exists_ssm_param "${CERTIFICATE_ARN_SSM}" \
+    "network" "todo" "certificate" \
+    "unity-all-cs-certificateArnSsm" \
+    "[enter the certificate ARN.  Example:  "
+CERTIFICATE_ARN_VAL=$(get_ssm_val "${CERTIFICATE_ARN_SSM}")
+
+#
 # SSM:  /unity/account/eks/amis/aml2-eks-1-25
 #
 EKS_AMI_25_SSM="/unity/account/eks/amis/aml2-eks-1-25"
@@ -216,16 +226,6 @@ EKS_AMI_27_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-27")
 refresh_ssm_param "${EKS_AMI_27_SSM}" "${EKS_AMI_27_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks127Ssm"
 
 #
-# SSM:  /unity/shared-services/cognito/domain
-#
-SHARED_SERVICES_COGNITO_DOMAIN_SSM="/unity/shared-services/cognito/domain"
-populate_if_not_exists_ssm_param "${SHARED_SERVICES_COGNITO_DOMAIN_SSM}" \
-    "security" "todo" "cognito" \
-    "unity-all-cs-sharedServicesCognitoDomainSsm" \
-    "[enter the cognito domain URL.  Example:  https://unitysds-test.auth.us-west-2.amazoncognito.com]"
-SHARED_SERVICES_COGNITO_DOMAIN_VAL=$(get_ssm_val "${SHARED_SERVICES_COGNITO_DOMAIN_SSM}")
-
-#
 # SSM:  /unity/shared-services/account
 #
 SHARED_SERVICES_AWS_ACCOUNT_SSM="/unity/shared-services/aws/account"
@@ -234,4 +234,3 @@ populate_if_not_exists_ssm_param "${SHARED_SERVICES_AWS_ACCOUNT_SSM}" \
     "unity-all-cs-sharedServicesAwsAccountSsm" \
     "[enter the AWS account ID of the shared services account]"
 SHARED_SERVICES_AWS_ACCOUNT_VAL=$(get_ssm_val "$SHARED_SERVICES_AWS_ACCOUNT_SSM")
-
