@@ -1,7 +1,7 @@
 # REST API Gateway
 resource "aws_api_gateway_rest_api" "rest_api" {
-  name        = var.rest_api_name
-  description = var.rest_api_description
+  name        = "unity-${var.project}-${var.venue}-rest-api-gateway"
+  description = "Unity ${var.project}-${var.venue} Project REST API Gateway"
   endpoint_configuration {
     types = ["REGIONAL"]
   }
