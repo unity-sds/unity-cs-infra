@@ -1,3 +1,4 @@
+import sys
 import os
 import time
 import boto3
@@ -18,12 +19,13 @@ def setup_driver():
     return driver
 
 
-def get_ec2_instance_id():
+def get_ec2_instance_id(project, venue):
     # Initialize a boto3 EC2 resource
     ec2 = boto3.resource('ec2', region_name='us-west-2')
 
     # The name of your instance
-    instance_name = "Unity Management Console EC2 Instance"
+    instance_name = "Unity Management Console (" + project + "/" + venue + ")"
+    print("Looking for EC2 instance with name : " + instance_name)
 
     # Use filters to find instances by their Name tag
     instances = ec2.instances.filter(
@@ -78,12 +80,12 @@ def wait_for_uninstall_complete(log_group_name, log_stream_name, completion_mess
 
 
 
-def uninstall_aws_resources():
+def uninstall_aws_resources(project, venue):
 
     ssm = boto3.client('ssm', region_name='us-west-2')
 
     # Define the SSM parameter name
-    parameter_name = '/unity/cs/management/httpd/loadbalancer-url'
+    parameter_name = '/unity/' + project + '/' + venue + '/management/httpd/loadbalancer-url'
 
     # Get the parameter without decrypting
     try:
@@ -117,7 +119,7 @@ def uninstall_aws_resources():
         driver.quit()  # Quit the driver as soon as the web interactions are done
 
     # Retrieve the EC2 instance ID after quitting the driver
-    instance_id = get_ec2_instance_id()
+    instance_id = get_ec2_instance_id(project, venue)
     # Assuming the log stream name follows a specific pattern with the instance ID
     log_stream_name = instance_id  # Adjust if your log stream naming convention differs
     # Call the function to monitor CloudWatch logs after the driver has been quit
@@ -125,5 +127,14 @@ def uninstall_aws_resources():
 
 
 if __name__ == "__main__":
-    uninstall_aws_resources()
+    # sys.argv[1:] contains the arguments passed to the script
+    arguments = sys.argv[1:]
+    if len(arguments) < 2:
+        print("Usage: python uninstall_aws_resources_mc.py <PROJECT_NAME> <VENUE_NAME>")
+        sys.exit(1)
+
+    project = arguments[0]
+    venue = arguments[1]
+
+    uninstall_aws_resources(project, venue)
 
