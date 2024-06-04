@@ -205,6 +205,23 @@ echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
 cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
 #
+# Does a deployment already exist for this project/venue?
+# If so, then don't continue with this deployment,
+# warn the user, and bail out.
+#
+echo "Checking for existing deployment for (project=${PROJECT_NAME}, venue=${VENUE_NAME}) ..."
+aws ssm get-parameter --name "/unity/${PROJECT_NAME}/${VENUE_NAME}/deployment/status" 2>ssm_lookup.txt
+if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
+    echo "Existing deployment not found.  Continuing with deployment..."
+    rm ssm_lookup.txt
+else
+    echo "ERROR: A deployment appears to already exist for project=${PROJECT_NAME}, venue=${VENUE_NAME}."
+    echo "       Please cleanup the resources for this deployment, before continuing!"
+    rm ssm_lookup.txt
+    exit 1
+fi
+
+#
 # Deploy the Management Console using CloudFormation
 #
 bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
