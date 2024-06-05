@@ -58,7 +58,7 @@ DOCKER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standa
 sleep 10
 # Uninstall AWS resources through MC
 echo "Initiating MC AWS Resource Uninstall..."
-python3 uninstall_aws_resources_mc.py >> nightly_output.txt 2>&1
+python3 uninstall_aws_resources_mc.py "${PROJECT_NAME}" "${VENUE_NAME}" >> nightly_output.txt 2>&1
 
 # Stop Selenium docker iamge
 echo "Stopping Selenium docker container..."
