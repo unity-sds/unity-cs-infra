@@ -51,8 +51,8 @@ echo "set_deployment_ssm_params.sh :: VENUE_NAME: ${VENUE_NAME}"
 delete_ssm_param() {
     local key=$1
     echo "Deleting SSM parameter: ${key} ..."
-    lookup=$(aws ssm get-parameter --name "$key" 1>/dev/null)
-    if [[ `echo "${lookup}" | grep -q "ParameterNotFound" && echo no` == "no" ]]; then
+    local lookup=$(aws ssm get-parameter --name "$key" 1>/dev/null)
+    if [[ "$(echo "${lookup}" | grep -q "ParameterNotFound" && echo no)" == "no" ]]; then
         echo "SSM param ${key} not found.  Not attempting a delete."
     else
         aws ssm delete-parameter --name "${key}" || echo "ERROR: SSM delete failed for $key"
