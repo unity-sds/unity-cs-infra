@@ -32,16 +32,12 @@ populate_if_not_exists_ssm_param() {
 delete_ssm_param() {
     local key=$1
     echo "Deleting SSM parameter: ${key} ..."
-    aws ssm get-parameter --name "$key" 2>ssm_lookup.txt
-    if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
+    local lookup=$(aws ssm get-parameter --name "$key" 2>&1)
+    if [[ "$(echo "${lookup}" | grep -q "ParameterNotFound" && echo no)" == "no" ]]; then
         echo "SSM param ${key} not found.  Not attempting a delete."
     else
-        aws ssm delete-parameter --name "${key}"
-        if [ $? -ne 0 ]; then
-            echo "ERROR: SSM delete failed for $key"
-        fi
+        aws ssm delete-parameter --name "${key}" || echo "ERROR: SSM delete failed for $key"
     fi
-    rm ssm_lookup.txt
 }
 
 #
