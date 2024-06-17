@@ -25,12 +25,6 @@ variable "venue" {
   default = "UnknownVenue"
 }
 
-# tflint-ignore: terraform_unused_declarations
-variable "mgmt_dns" {
-  description = "management dns name"
-  type = string
-}
-
 variable "project_name" {
   type        = string
   description = "Project Name"
