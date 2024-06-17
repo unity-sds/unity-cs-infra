@@ -27,11 +27,11 @@ locals {
 }
 
 
-resource "aws_ssm_parameter" "example" {
-  for_each = local.ssm_parameters_map
-
-  name  = each.key
-  type  = each.value.type
-  value = each.value.value
-  overwrite = true
-}
+# resource "aws_ssm_parameter" "example" {
+#   for_each = local.ssm_parameters_map
+# 
+#   name  = each.key
+#   type  = each.value.type
+#   value = each.value.value
+#   overwrite = true
+# }
