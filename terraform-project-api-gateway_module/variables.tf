@@ -25,6 +25,7 @@ variable "venue" {
   default = "UnknownVenue"
 }
 
+
 variable "project_name" {
   type        = string
   description = "Project Name"
