@@ -1,0 +1,398 @@
+Repo Hash (Nightly Test):     [c56459d]
+Repo Hash (Cloudformation):   [4d280f2]
+Nightly Test in the (TODO FIXME) account
+Stack Name: [unity-management-console-unity-nightly]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [940 seconds] - PASS
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [400 seconds] - PASS
+============================= test session starts ==============================
+platform linux -- Python 3.8.10, pytest-8.2.2, pluggy-1.5.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/unity-cs-infra/nightly_tests
+collecting ... collected 9 items
+
+test_selenium_mc.py::test_navigate_to_mc_console ============================= test session starts ==============================
+platform linux -- Python 3.8.10, pytest-8.2.2, pluggy-1.5.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/unity-cs-infra/nightly_tests
+collecting ... collected 9 items
+
+test_selenium_mc.py::test_navigate_to_mc_console PASSED                  [ 11%]
+test_selenium_mc.py::test_bootstrap_process_status PASSED                [ 22%]
+test_selenium_mc.py::test_initiate_core_setup PASSED                     [ 33%]
+test_selenium_mc.py::test_core_setup_save_btn PASSED                     [ 44%]
+test_selenium_mc.py::test_naviate_to_SPS_module FAILED                   [ 55%]
+test_selenium_mc.py::test_SPS_module_name FAILED                         [ 66%]
+test_selenium_mc.py::test_SPS_module_branch FAILED                       [ 77%]
+test_selenium_mc.py::test_click_SPS_install_btns FAILED                  [ 88%]
+test_selenium_mc.py::test_SPS_install_status FAILED                      [100%]
+
+=================================== FAILURES ===================================
+__________________________ test_naviate_to_SPS_module __________________________
+test_selenium_mc.py:158: in test_naviate_to_SPS_module
+    install_button = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x55f7a85d6e9a <unknown>
+E   #1 0x55f7a82c045c <unknown>
+E   #2 0x55f7a830c5b5 <unknown>
+E   #3 0x55f7a830c671 <unknown>
+E   #4 0x55f7a8350f14 <unknown>
+E   #5 0x55f7a832f4dd <unknown>
+E   #6 0x55f7a834e2cc <unknown>
+E   #7 0x55f7a832f253 <unknown>
+E   #8 0x55f7a82ff1c7 <unknown>
+E   #9 0x55f7a82ffb3e <unknown>
+E   #10 0x55f7a859d2db <unknown>
+E   #11 0x55f7a85a1387 <unknown>
+E   #12 0x55f7a8589e0e <unknown>
+E   #13 0x55f7a85a1e52 <unknown>
+E   #14 0x55f7a856e7af <unknown>
+E   #15 0x55f7a85c6188 <unknown>
+E   #16 0x55f7a85c635b <unknown>
+E   #17 0x55f7a85d5fcc <unknown>
+E   #18 0x7f6b72965ac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:167: in test_naviate_to_SPS_module
+    raise Exception("Failed to naviagate to SPS module - either the button was not clickable or the URL did not update as expected.")
+E   Exception: Failed to naviagate to SPS module - either the button was not clickable or the URL did not update as expected.
+_____________________________ test_SPS_module_name _____________________________
+test_selenium_mc.py:180: in test_SPS_module_name
+    text_box = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x55f7a85d6e9a <unknown>
+E   #1 0x55f7a82c045c <unknown>
+E   #2 0x55f7a830c5b5 <unknown>
+E   #3 0x55f7a830c671 <unknown>
+E   #4 0x55f7a8350f14 <unknown>
+E   #5 0x55f7a832f4dd <unknown>
+E   #6 0x55f7a834e2cc <unknown>
+E   #7 0x55f7a832f253 <unknown>
+E   #8 0x55f7a82ff1c7 <unknown>
+E   #9 0x55f7a82ffb3e <unknown>
+E   #10 0x55f7a859d2db <unknown>
+E   #11 0x55f7a85a1387 <unknown>
+E   #12 0x55f7a8589e0e <unknown>
+E   #13 0x55f7a85a1e52 <unknown>
+E   #14 0x55f7a856e7af <unknown>
+E   #15 0x55f7a85c6188 <unknown>
+E   #16 0x55f7a85c635b <unknown>
+E   #17 0x55f7a85d5fcc <unknown>
+E   #18 0x7f6b72965ac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:189: in test_SPS_module_name
+    raise Exception(f"Failed to find or interact with the specified element (ID: {element_id}).")
+E   Exception: Failed to find or interact with the specified element (ID: name).
+____________________________ test_SPS_module_branch ____________________________
+test_selenium_mc.py:201: in test_SPS_module_branch
+    next_button = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x55f7a85d6e9a <unknown>
+E   #1 0x55f7a82c045c <unknown>
+E   #2 0x55f7a830c5b5 <unknown>
+E   #3 0x55f7a830c671 <unknown>
+E   #4 0x55f7a8350f14 <unknown>
+E   #5 0x55f7a832f4dd <unknown>
+E   #6 0x55f7a834e2cc <unknown>
+E   #7 0x55f7a832f253 <unknown>
+E   #8 0x55f7a82ff1c7 <unknown>
+E   #9 0x55f7a82ffb3e <unknown>
+E   #10 0x55f7a859d2db <unknown>
+E   #11 0x55f7a85a1387 <unknown>
+E   #12 0x55f7a8589e0e <unknown>
+E   #13 0x55f7a85a1e52 <unknown>
+E   #14 0x55f7a856e7af <unknown>
+E   #15 0x55f7a85c6188 <unknown>
+E   #16 0x55f7a85c635b <unknown>
+E   #17 0x55f7a85d5fcc <unknown>
+E   #18 0x7f6b72965ac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:214: in test_SPS_module_branch
+    raise Exception(f"Textbox for branch name (ID: {element_id}) not found.")
+E   Exception: Textbox for branch name (ID: branch) not found.
+_________________________ test_click_SPS_install_btns __________________________
+test_selenium_mc.py:225: in test_click_SPS_install_btns
+    next_button = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x55f7a85d6e9a <unknown>
+E   #1 0x55f7a82c045c <unknown>
+E   #2 0x55f7a830c5b5 <unknown>
+E   #3 0x55f7a830c671 <unknown>
+E   #4 0x55f7a8350f14 <unknown>
+E   #5 0x55f7a832f4dd <unknown>
+E   #6 0x55f7a834e2cc <unknown>
+E   #7 0x55f7a832f253 <unknown>
+E   #8 0x55f7a82ff1c7 <unknown>
+E   #9 0x55f7a82ffb3e <unknown>
+E   #10 0x55f7a859d2db <unknown>
+E   #11 0x55f7a85a1387 <unknown>
+E   #12 0x55f7a8589e0e <unknown>
+E   #13 0x55f7a85a1e52 <unknown>
+E   #14 0x55f7a856e7af <unknown>
+E   #15 0x55f7a85c6188 <unknown>
+E   #16 0x55f7a85c635b <unknown>
+E   #17 0x55f7a85d5fcc <unknown>
+E   #18 0x7f6b72965ac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:246: in test_click_SPS_install_btns
+    raise Exception(f"Failed to find or click the first button (class: {next_button_class}).")
+E   NameError: name 'next_button_class' is not defined
+___________________________ test_SPS_install_status ____________________________
+test_selenium_mc.py:258: in test_SPS_install_status
+    install_status_button = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x55f7a85d6e9a <unknown>
+E   #1 0x55f7a82c045c <unknown>
+E   #2 0x55f7a830c5b5 <unknown>
+E   #3 0x55f7a830c671 <unknown>
+E   #4 0x55f7a8350f14 <unknown>
+E   #5 0x55f7a832f4dd <unknown>
+E   #6 0x55f7a834e2cc <unknown>
+E   #7 0x55f7a832f253 <unknown>
+E   #8 0x55f7a82ff1c7 <unknown>
+E   #9 0x55f7a82ffb3e <unknown>
+E   #10 0x55f7a859d2db <unknown>
+E   #11 0x55f7a85a1387 <unknown>
+E   #12 0x55f7a8589e0e <unknown>
+E   #13 0x55f7a85a1e52 <unknown>
+E   #14 0x55f7a856e7af <unknown>
+E   #15 0x55f7a85c6188 <unknown>
+E   #16 0x55f7a85c635b <unknown>
+E   #17 0x55f7a85d5fcc <unknown>
+E   #18 0x7f6b72965ac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:262: in test_SPS_install_status
+    raise Exception("Failed to find or locate the status button")
+E   Exception: Failed to find or locate the status button
+=========================== short test summary info ============================
+FAILED test_selenium_mc.py::test_naviate_to_SPS_module - Exception: Failed to...
+FAILED test_selenium_mc.py::test_SPS_module_name - Exception: Failed to find ...
+FAILED test_selenium_mc.py::test_SPS_module_branch - Exception: Textbox for b...
+FAILED test_selenium_mc.py::test_click_SPS_install_btns - NameError: name 'ne...
+FAILED test_selenium_mc.py::test_SPS_install_status - Exception: Failed to fi...
+=================== 5 failed, 4 passed in 179.15s (0:02:59) ====================
+PASSED                  [ 11%]
+test_selenium_mc.py::test_bootstrap_process_status FAILED                [ 22%]
+test_selenium_mc.py::test_initiate_core_setup PASSED                     [ 33%]
+test_selenium_mc.py::test_core_setup_save_btn PASSED                     [ 44%]
+test_selenium_mc.py::test_naviate_to_SPS_module FAILED                   [ 55%]
+test_selenium_mc.py::test_SPS_module_name FAILED                         [ 66%]
+test_selenium_mc.py::test_SPS_module_branch FAILED                       [ 77%]
+test_selenium_mc.py::test_click_SPS_install_btns FAILED                  [ 88%]
+test_selenium_mc.py::test_SPS_install_status FAILED                      [100%]
+
+=================================== FAILURES ===================================
+________________________ test_bootstrap_process_status _________________________
+test_selenium_mc.py:77: in test_bootstrap_process_status
+    bootstrap_status_element = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x562ad1b6ae9a <unknown>
+E   #1 0x562ad185445c <unknown>
+E   #2 0x562ad18a05b5 <unknown>
+E   #3 0x562ad18a0671 <unknown>
+E   #4 0x562ad18e4f14 <unknown>
+E   #5 0x562ad18c34dd <unknown>
+E   #6 0x562ad18e22cc <unknown>
+E   #7 0x562ad18c3253 <unknown>
+E   #8 0x562ad18931c7 <unknown>
+E   #9 0x562ad1893b3e <unknown>
+E   #10 0x562ad1b312db <unknown>
+E   #11 0x562ad1b35387 <unknown>
+E   #12 0x562ad1b1de0e <unknown>
+E   #13 0x562ad1b35e52 <unknown>
+E   #14 0x562ad1b027af <unknown>
+E   #15 0x562ad1b5a188 <unknown>
+E   #16 0x562ad1b5a35b <unknown>
+E   #17 0x562ad1b69fcc <unknown>
+E   #18 0x7fba870abac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:89: in test_bootstrap_process_status
+    raise Exception("Failed to find the bootstrap status message within the specified time.")
+E   Exception: Failed to find the bootstrap status message within the specified time.
+__________________________ test_naviate_to_SPS_module __________________________
+test_selenium_mc.py:158: in test_naviate_to_SPS_module
+    install_button = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x562ad1b6ae9a <unknown>
+E   #1 0x562ad185445c <unknown>
+E   #2 0x562ad18a05b5 <unknown>
+E   #3 0x562ad18a0671 <unknown>
+E   #4 0x562ad18e4f14 <unknown>
+E   #5 0x562ad18c34dd <unknown>
+E   #6 0x562ad18e22cc <unknown>
+E   #7 0x562ad18c3253 <unknown>
+E   #8 0x562ad18931c7 <unknown>
+E   #9 0x562ad1893b3e <unknown>
+E   #10 0x562ad1b312db <unknown>
+E   #11 0x562ad1b35387 <unknown>
+E   #12 0x562ad1b1de0e <unknown>
+E   #13 0x562ad1b35e52 <unknown>
+E   #14 0x562ad1b027af <unknown>
+E   #15 0x562ad1b5a188 <unknown>
+E   #16 0x562ad1b5a35b <unknown>
+E   #17 0x562ad1b69fcc <unknown>
+E   #18 0x7fba870abac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:167: in test_naviate_to_SPS_module
+    raise Exception("Failed to naviagate to SPS module - either the button was not clickable or the URL did not update as expected.")
+E   Exception: Failed to naviagate to SPS module - either the button was not clickable or the URL did not update as expected.
+_____________________________ test_SPS_module_name _____________________________
+test_selenium_mc.py:180: in test_SPS_module_name
+    text_box = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x562ad1b6ae9a <unknown>
+E   #1 0x562ad185445c <unknown>
+E   #2 0x562ad18a05b5 <unknown>
+E   #3 0x562ad18a0671 <unknown>
+E   #4 0x562ad18e4f14 <unknown>
+E   #5 0x562ad18c34dd <unknown>
+E   #6 0x562ad18e22cc <unknown>
+E   #7 0x562ad18c3253 <unknown>
+E   #8 0x562ad18931c7 <unknown>
+E   #9 0x562ad1893b3e <unknown>
+E   #10 0x562ad1b312db <unknown>
+E   #11 0x562ad1b35387 <unknown>
+E   #12 0x562ad1b1de0e <unknown>
+E   #13 0x562ad1b35e52 <unknown>
+E   #14 0x562ad1b027af <unknown>
+E   #15 0x562ad1b5a188 <unknown>
+E   #16 0x562ad1b5a35b <unknown>
+E   #17 0x562ad1b69fcc <unknown>
+E   #18 0x7fba870abac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:189: in test_SPS_module_name
+    raise Exception(f"Failed to find or interact with the specified element (ID: {element_id}).")
+E   Exception: Failed to find or interact with the specified element (ID: name).
+____________________________ test_SPS_module_branch ____________________________
+test_selenium_mc.py:201: in test_SPS_module_branch
+    next_button = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x562ad1b6ae9a <unknown>
+E   #1 0x562ad185445c <unknown>
+E   #2 0x562ad18a05b5 <unknown>
+E   #3 0x562ad18a0671 <unknown>
+E   #4 0x562ad18e4f14 <unknown>
+E   #5 0x562ad18c34dd <unknown>
+E   #6 0x562ad18e22cc <unknown>
+E   #7 0x562ad18c3253 <unknown>
+E   #8 0x562ad18931c7 <unknown>
+E   #9 0x562ad1893b3e <unknown>
+E   #10 0x562ad1b312db <unknown>
+E   #11 0x562ad1b35387 <unknown>
+E   #12 0x562ad1b1de0e <unknown>
+E   #13 0x562ad1b35e52 <unknown>
+E   #14 0x562ad1b027af <unknown>
+E   #15 0x562ad1b5a188 <unknown>
+E   #16 0x562ad1b5a35b <unknown>
+E   #17 0x562ad1b69fcc <unknown>
+E   #18 0x7fba870abac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:214: in test_SPS_module_branch
+    raise Exception(f"Textbox for branch name (ID: {element_id}) not found.")
+E   Exception: Textbox for branch name (ID: branch) not found.
+_________________________ test_click_SPS_install_btns __________________________
+test_selenium_mc.py:225: in test_click_SPS_install_btns
+    next_button = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x562ad1b6ae9a <unknown>
+E   #1 0x562ad185445c <unknown>
+E   #2 0x562ad18a05b5 <unknown>
+E   #3 0x562ad18a0671 <unknown>
+E   #4 0x562ad18e4f14 <unknown>
+E   #5 0x562ad18c34dd <unknown>
+E   #6 0x562ad18e22cc <unknown>
+E   #7 0x562ad18c3253 <unknown>
+E   #8 0x562ad18931c7 <unknown>
+E   #9 0x562ad1893b3e <unknown>
+E   #10 0x562ad1b312db <unknown>
+E   #11 0x562ad1b35387 <unknown>
+E   #12 0x562ad1b1de0e <unknown>
+E   #13 0x562ad1b35e52 <unknown>
+E   #14 0x562ad1b027af <unknown>
+E   #15 0x562ad1b5a188 <unknown>
+E   #16 0x562ad1b5a35b <unknown>
+E   #17 0x562ad1b69fcc <unknown>
+E   #18 0x7fba870abac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:246: in test_click_SPS_install_btns
+    raise Exception(f"Failed to find or click the first button (class: {next_button_class}).")
+E   NameError: name 'next_button_class' is not defined
+___________________________ test_SPS_install_status ____________________________
+test_selenium_mc.py:258: in test_SPS_install_status
+    install_status_button = WebDriverWait(driver, 10).until(
+../../.local/lib/python3.8/site-packages/selenium/webdriver/support/wait.py:105: in until
+    raise TimeoutException(message, screen, stacktrace)
+E   selenium.common.exceptions.TimeoutException: Message: 
+E   Stacktrace:
+E   #0 0x562ad1b6ae9a <unknown>
+E   #1 0x562ad185445c <unknown>
+E   #2 0x562ad18a05b5 <unknown>
+E   #3 0x562ad18a0671 <unknown>
+E   #4 0x562ad18e4f14 <unknown>
+E   #5 0x562ad18c34dd <unknown>
+E   #6 0x562ad18e22cc <unknown>
+E   #7 0x562ad18c3253 <unknown>
+E   #8 0x562ad18931c7 <unknown>
+E   #9 0x562ad1893b3e <unknown>
+E   #10 0x562ad1b312db <unknown>
+E   #11 0x562ad1b35387 <unknown>
+E   #12 0x562ad1b1de0e <unknown>
+E   #13 0x562ad1b35e52 <unknown>
+E   #14 0x562ad1b027af <unknown>
+E   #15 0x562ad1b5a188 <unknown>
+E   #16 0x562ad1b5a35b <unknown>
+E   #17 0x562ad1b69fcc <unknown>
+E   #18 0x7fba870abac3 <unknown>
+
+During handling of the above exception, another exception occurred:
+test_selenium_mc.py:262: in test_SPS_install_status
+    raise Exception("Failed to find or locate the status button")
+E   Exception: Failed to find or locate the status button
+=========================== short test summary info ============================
+FAILED test_selenium_mc.py::test_bootstrap_process_status - Exception: Failed...
+FAILED test_selenium_mc.py::test_naviate_to_SPS_module - Exception: Failed to...
+FAILED test_selenium_mc.py::test_SPS_module_name - Exception: Failed to find ...
+FAILED test_selenium_mc.py::test_SPS_module_branch - Exception: Textbox for b...
+FAILED test_selenium_mc.py::test_click_SPS_install_btns - NameError: name 'ne...
+FAILED test_selenium_mc.py::test_SPS_install_status - Exception: Failed to fi...
+=================== 6 failed, 3 passed in 283.17s (0:04:43) ====================
