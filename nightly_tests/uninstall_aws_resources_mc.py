@@ -36,7 +36,9 @@ def get_ec2_instance_id(project, venue):
     instances = ec2.instances.filter(
         Filters=[{'Name': 'tag:Name', 'Values': [instance_name]}]
     )
-
+    logging.info(f"List of instances: {instances}")
+    print(f"List of instances: {instances}")
+  
     instance_ids = [instance.id for instance in instances]
 
     if instance_ids:
