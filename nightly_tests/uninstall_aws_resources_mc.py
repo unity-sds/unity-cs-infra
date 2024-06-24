@@ -33,8 +33,11 @@ def get_ec2_instance_id(project, venue):
     )
 
     for instance in instances:
-        # Assuming there's only one instance with this name
-        return instance.id
+        instance_id = instance.id
+        return instance_id
+
+    print("EC2 ID: "+ instance_id)
+
 
     # Return None if no instance found
     return None
@@ -77,8 +80,6 @@ def wait_for_uninstall_complete(log_group_name, log_stream_name, completion_mess
             return False
 
         time.sleep(check_interval)
-
-
 
 def uninstall_aws_resources(project, venue):
 
