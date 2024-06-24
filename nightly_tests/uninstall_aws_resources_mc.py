@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-log_file = f'/home/ubuntu/uninstall_aws_resources_mc_{timestamp}.log'
+log_file = f'/home/ubuntu/uninstall_mc_logs/uninstall_aws_resources_mc_{timestamp}.log'
 
 # Configure logging
 logging.basicConfig(filename=log_file, level=logging.DEBUG,
