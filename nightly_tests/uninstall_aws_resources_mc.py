@@ -34,7 +34,10 @@ def get_ec2_instance_id(project, venue):
     print(f"Looking for EC2 instance with name: {instance_name}")
 
     instances = ec2.instances.filter(
-        Filters=[{'Name': 'tag:Name', 'Values': [instance_name]}]
+        Filters=[
+            {'Name': 'tag:Name', 'Values': [instance_name]},
+            {'Name': 'instance-state-name', 'Values': ['running']}
+        ]
     )
     logging.info(f"List of instances: {instances}")
     print(f"List of instances: {instances}")
