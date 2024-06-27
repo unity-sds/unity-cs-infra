@@ -230,3 +230,12 @@ populate_if_not_exists_ssm_param "${SHARED_SERVICES_AWS_ACCOUNT_SSM}" \
     "unity-all-cs-sharedServicesAwsAccountSsm" \
     "[enter the AWS account ID of the shared services account]"
 SHARED_SERVICES_AWS_ACCOUNT_VAL=$(get_ssm_val "$SHARED_SERVICES_AWS_ACCOUNT_SSM")
+
+#
+# SSM:  /unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list
+#
+CS_LAMBD_CLIENT_ID_LIST_SSM="/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list"
+populate_if_not_exists_ssm_param "${CS_LAMBD_CLIENT_ID_LIST_SSM}" \
+    "n/a" "todo" "aws" \
+    "unity-all-cs-sharedServicesAwsAccountSsm" \
+    "[enter the cs lambda authorizer cognito client id list]"
