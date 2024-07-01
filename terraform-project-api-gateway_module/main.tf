@@ -118,7 +118,8 @@ resource "aws_iam_role" "iam_for_lambda_auth" {
   inline_policy {
     name   = "unity-cs-lambda-auth-inline-policy"
     policy = data.aws_iam_policy_document.inline_policy.json
-  } assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  } 
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
   permissions_boundary = data.aws_iam_policy.mcp_operator_policy.arn
 }
 
