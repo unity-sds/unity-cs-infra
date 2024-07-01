@@ -235,7 +235,12 @@ SHARED_SERVICES_AWS_ACCOUNT_VAL=$(get_ssm_val "$SHARED_SERVICES_AWS_ACCOUNT_SSM"
 # SSM:  /unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list
 #
 CS_LAMBD_CLIENT_ID_LIST_SSM="/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list"
-populate_if_not_exists_ssm_param "${CS_LAMBD_CLIENT_ID_LIST_SSM}" \
-    "n/a" "todo" "aws" \
-    "unity-all-cs-sharedServicesAwsAccountSsm" \
-    "[enter the cs lambda authorizer cognito client id list]"
+CS_LAMBD_CLIENT_ID_LIST_VAL="na"
+refresh_ssm_param "${CS_LAMBD_CLIENT_ID_LIST_SSM}" "${CS_LAMBD_CLIENT_ID_LIST_VAL}" "account" "na" "aws" "unity-all-cs-processing-lambdaAuthCognitoClientId"
+
+#
+# SSM:  /unity/shared-services/aws/account/region
+# 
+ACCOUNT_REGION_SSM="/unity/shared-services/aws/account/region"
+ACCOUNT_REGION_VAL=$(aws ec2 describe-availability-zones --query "AvailabilityZones[0].RegionName" --output text)
+refresh_ssm_param "${ACCOUNT_REGION_SSM}" "${ACCOUNT_REGION_VAL}" "account" "na" "aws" "unity-all-cs-processing-sharedServicesAwsAccountRegion"
