@@ -61,7 +61,7 @@ resource "aws_ssm_parameter" "invoke_role_arn" {
 
 #Unity shared serive account id
 data "aws_ssm_parameter" "shared_service_account_id"{
-  name = var.ssm_account_name
+  name = var.ssm_account_id
 }
 
 #Unity shared serive account region
@@ -167,5 +167,5 @@ resource "aws_ssm_parameter" "api_gateway_uri" {
   name = "/unity/cs/management/api-gateway/gateway-uri"
   overwrite = true
   type = "String"
-  value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${var.region}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
+  value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
 }
