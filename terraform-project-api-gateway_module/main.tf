@@ -59,6 +59,16 @@ resource "aws_ssm_parameter" "invoke_role_arn" {
   value = aws_iam_role.iam_for_lambda_auth.arn
 }
 
+#Unity shared serive account id
+data "aws_ssm_parameter" "shared_service_account_id"{
+  name = var.ssm_account_name
+}
+
+#Unity shared serive account region
+data "aws_ssm_parameter" "shared_service_region"{
+  name = var.ssm_region
+}
+
 # Unity CS Common Lambda Authorizer Allowed Cognito Client ID List (Command Seperated)
 data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_client_id_list" {
   name = var.ssm_param_api_gateway_cs_lambda_authorizer_cognito_client_id_list
@@ -66,12 +76,12 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_client_id_lis
 
 # Unity CS Common Lambda Authorizer Allowed Cognito User Pool ID
 data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_pool_id" {
-  name = var.ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_pool_id
+  name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
 }
 
 # Unity CS Common Lambda Authorizer Allowed Cognito User Groups List (Command Seperated)
 data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
-  name = var.ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_groups_list
+  name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
 }
 
 # IAM Policy Document for Assume Role
@@ -108,8 +118,7 @@ resource "aws_iam_role" "iam_for_lambda_auth" {
   inline_policy {
     name   = "unity-cs-lambda-auth-inline-policy"
     policy = data.aws_iam_policy_document.inline_policy.json
-  }
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  } assume_role_policy = data.aws_iam_policy_document.assume_role.json
   permissions_boundary = data.aws_iam_policy.mcp_operator_policy.arn
 }
 
