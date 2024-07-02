@@ -35,7 +35,7 @@ variable "venue" {
 variable "project_name" {
   type        = string
   description = "Project Name"
-  default     = "Unity-SampleProject-Dev"
+  default     = "unity-${var.project}-${var.venue}-sample-project"
 }
 
 variable "installprefix" {
