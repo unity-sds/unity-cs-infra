@@ -31,13 +31,6 @@ variable "venue" {
   default = "UnknownVenue"
 }
 
-
-variable "project_name" {
-  type        = string
-  description = "Project Name"
-  default     = "unity-${var.project}-${var.venue}-sample-project"
-}
-
 variable "installprefix" {
   description = "The management console install prefix"
   type = string
