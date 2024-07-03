@@ -4,6 +4,9 @@ ROLE_NAME="Unity-CS_Service_Role"
 POLICY_LIST=(AmazonEC2ContainerRegistryPowerUser AmazonS3ReadOnlyAccess AmazonSSMManagedInstanceCore CloudWatchAgentServerPolicy DatalakeKinesisPolicy McpToolsAccessPolicy U-CS_Service_Policy U-CS_Service_Policy_Ondemand)
 #DYNAMIC_POLICY_LIST=(U-CS_Service_Policy U-CS_Service_Policy_Ondemand)
 
+# Required role for spot ec2/fleet creation
+aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
+
 ## Get the account number
 aws sts get-caller-identity > identity.txt
 ACCOUNT_NUMBER=$(cat identity.txt|jq -r '.Account')
