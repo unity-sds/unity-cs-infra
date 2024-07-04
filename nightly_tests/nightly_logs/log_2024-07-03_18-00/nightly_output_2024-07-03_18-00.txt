@@ -1,4 +1,4 @@
-Repo Hash (Nightly Test):     [01702c7]
+Repo Hash (Nightly Test):     [95272cc]
 Repo Hash (Cloudformation):   [fdf350a]
 Nightly Test in the (TODO FIXME) account
 Stack Name: [unity-management-console-unity-nightly]
@@ -15,4 +15,4 @@ test_selenium_mc.py::test_bootstrap_process_status PASSED                [ 50%]
 test_selenium_mc.py::test_initiate_core_setup PASSED                     [ 75%]
 test_selenium_mc.py::test_core_setup_save_btn PASSED                     [100%]
 
-========================= 4 passed in 78.00s (0:01:17) =========================
+========================= 4 passed in 78.38s (0:01:18) =========================
