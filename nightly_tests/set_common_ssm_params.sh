@@ -216,10 +216,17 @@ refresh_ssm_param "${EKS_AMI_26_SSM}" "${EKS_AMI_26_VAL}" "processing" "na" "vpc
 
 #
 # SSM:  /unity/account/eks/amis/aml2-eks-1-27
-# 
+#
 EKS_AMI_27_SSM="/unity/account/eks/amis/aml2-eks-1-27"
 EKS_AMI_27_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-27")
 refresh_ssm_param "${EKS_AMI_27_SSM}" "${EKS_AMI_27_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks127Ssm"
+
+#
+# SSM:  /unity/account/eks/amis/aml2-eks-1-29
+#
+EKS_AMI_29_SSM="/unity/account/eks/amis/aml2-eks-1-29"
+EKS_AMI_29_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-29")
+refresh_ssm_param "${EKS_AMI_29_SSM}" "${EKS_AMI_29_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks129Ssm"
 
 #
 # SSM:  /unity/shared-services/account
