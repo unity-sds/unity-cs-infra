@@ -1,9 +1,9 @@
-Repo Hash (Nightly Test):     [0c39697]
-Repo Hash (Cloudformation):   [fdf350a]
+Repo Hash (Nightly Test):     [901673a]
+Repo Hash (Cloudformation):   [ddba36e]
 Nightly Test in the (TODO FIXME) account
 Stack Name: [unity-management-console-unity-nightly]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [460 seconds] - PASS
+Stack Creation Time: [400 seconds] - PASS
 ============================= test session starts ==============================
 platform linux -- Python 3.8.10, pytest-8.2.2, pluggy-1.5.0 -- /usr/bin/python3
 cachedir: .pytest_cache
@@ -15,4 +15,4 @@ test_selenium_mc.py::test_bootstrap_process_status PASSED                [ 50%]
 test_selenium_mc.py::test_initiate_core_setup PASSED                     [ 75%]
 test_selenium_mc.py::test_core_setup_save_btn PASSED                     [100%]
 
-========================= 4 passed in 79.86s (0:01:19) =========================
+========================= 4 passed in 78.12s (0:01:18) =========================
