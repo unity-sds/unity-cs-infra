@@ -29,7 +29,8 @@ def bootstrap_process_status():
     url = os.getenv('MANAGEMENT_CONSOLE_URL')
     driver = setup_driver()
     try:
-        driver.get(url)        
+        driver.get(url)
+        time.sleep(40)
         bootstrap_status_element = WebDriverWait(driver, 10).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, 'h5.text-xl'))
         )

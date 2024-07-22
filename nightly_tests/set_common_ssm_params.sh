@@ -32,16 +32,12 @@ populate_if_not_exists_ssm_param() {
 delete_ssm_param() {
     local key=$1
     echo "Deleting SSM parameter: ${key} ..."
-    aws ssm get-parameter --name "$key" 2>ssm_lookup.txt
-    if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
+    local lookup=$(aws ssm get-parameter --name "$key" 2>&1)
+    if [[ "$(echo "${lookup}" | grep -q "ParameterNotFound" && echo no)" == "no" ]]; then
         echo "SSM param ${key} not found.  Not attempting a delete."
     else
-        aws ssm delete-parameter --name "${key}"
-        if [ $? -ne 0 ]; then
-            echo "ERROR: SSM delete failed for $key"
-        fi
+        aws ssm delete-parameter --name "${key}" || echo "ERROR: SSM delete failed for $key"
     fi
-    rm ssm_lookup.txt
 }
 
 #
@@ -195,6 +191,16 @@ PRIV_SUBNET_2_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.private[1]')
 refresh_ssm_param "${PRIV_SUBNET_2_SSM}" "${PRIV_SUBNET_2_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-privateSubnet2Ssm"
 
 #
+# SSM: /unity/cs/account/network/certificate-arn
+#
+CERTIFICATE_ARN_SSM="/unity/cs/account/network/certificate-arn"
+populate_if_not_exists_ssm_param "${CERTIFICATE_ARN_SSM}" \
+    "network" "todo" "certificate" \
+    "unity-all-cs-certificateArnSsm" \
+    "[enter the certificate ARN.  Example:  "
+CERTIFICATE_ARN_VAL=$(get_ssm_val "${CERTIFICATE_ARN_SSM}")
+
+#
 # SSM:  /unity/account/eks/amis/aml2-eks-1-25
 #
 EKS_AMI_25_SSM="/unity/account/eks/amis/aml2-eks-1-25"
@@ -210,20 +216,17 @@ refresh_ssm_param "${EKS_AMI_26_SSM}" "${EKS_AMI_26_VAL}" "processing" "na" "vpc
 
 #
 # SSM:  /unity/account/eks/amis/aml2-eks-1-27
-# 
+#
 EKS_AMI_27_SSM="/unity/account/eks/amis/aml2-eks-1-27"
 EKS_AMI_27_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-27")
 refresh_ssm_param "${EKS_AMI_27_SSM}" "${EKS_AMI_27_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks127Ssm"
 
 #
-# SSM:  /unity/shared-services/cognito/domain
+# SSM:  /unity/account/eks/amis/aml2-eks-1-29
 #
-SHARED_SERVICES_COGNITO_DOMAIN_SSM="/unity/shared-services/cognito/domain"
-populate_if_not_exists_ssm_param "${SHARED_SERVICES_COGNITO_DOMAIN_SSM}" \
-    "security" "todo" "cognito" \
-    "unity-all-cs-sharedServicesCognitoDomainSsm" \
-    "[enter the cognito domain URL.  Example:  https://unitysds-test.auth.us-west-2.amazoncognito.com]"
-SHARED_SERVICES_COGNITO_DOMAIN_VAL=$(get_ssm_val "${SHARED_SERVICES_COGNITO_DOMAIN_SSM}")
+EKS_AMI_29_SSM="/unity/account/eks/amis/aml2-eks-1-29"
+EKS_AMI_29_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-29")
+refresh_ssm_param "${EKS_AMI_29_SSM}" "${EKS_AMI_29_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks129Ssm"
 
 #
 # SSM:  /unity/shared-services/account
@@ -235,3 +238,16 @@ populate_if_not_exists_ssm_param "${SHARED_SERVICES_AWS_ACCOUNT_SSM}" \
     "[enter the AWS account ID of the shared services account]"
 SHARED_SERVICES_AWS_ACCOUNT_VAL=$(get_ssm_val "$SHARED_SERVICES_AWS_ACCOUNT_SSM")
 
+#
+# SSM:  /unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list
+#
+CS_LAMBD_CLIENT_ID_LIST_SSM="/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list"
+CS_LAMBD_CLIENT_ID_LIST_VAL="na"
+refresh_ssm_param "${CS_LAMBD_CLIENT_ID_LIST_SSM}" "${CS_LAMBD_CLIENT_ID_LIST_VAL}" "account" "na" "aws" "unity-all-cs-processing-lambdaAuthCognitoClientId"
+
+#
+# SSM:  /unity/shared-services/aws/account/region
+# 
+ACCOUNT_REGION_SSM="/unity/shared-services/aws/account/region"
+ACCOUNT_REGION_VAL=$(aws ec2 describe-availability-zones --query "AvailabilityZones[0].RegionName" --output text)
+refresh_ssm_param "${ACCOUNT_REGION_SSM}" "${ACCOUNT_REGION_VAL}" "account" "na" "aws" "unity-all-cs-processing-sharedServicesAwsAccountRegion"

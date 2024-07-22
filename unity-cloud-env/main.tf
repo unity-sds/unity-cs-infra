@@ -1,27 +1,12 @@
 variable "default_tags" {
   default = {
     Owner   = "Unity CS"
-    Project = "Unity CS"
   }
   description = "Default Tags"
   type        = map(string)
 }
 
 data "aws_caller_identity" "current" {}
-
-resource "aws_ssm_parameter" "unity-venue" {
-  name  = "/unity/core/venue"
-  type  = "String"
-  value = var.venue
-  overwrite = true
-}
-
-resource "aws_ssm_parameter" "unity-project" {
-  name  = "/unity/core/project"
-  type  = "String"
-  value = var.project
-  overwrite = true
-}
 
 resource "aws_ssm_parameter" "eks-instance-role" {
   name = "/unity/account/roles/eksInstanceRoleArn"
@@ -42,11 +27,11 @@ locals {
 }
 
 
-resource "aws_ssm_parameter" "example" {
-  for_each = local.ssm_parameters_map
-
-  name  = each.key
-  type  = each.value.type
-  value = each.value.value
-  overwrite = true
-}
+# resource "aws_ssm_parameter" "example" {
+#   for_each = local.ssm_parameters_map
+# 
+#   name  = each.key
+#   type  = each.value.type
+#   value = each.value.value
+#   overwrite = true
+# }

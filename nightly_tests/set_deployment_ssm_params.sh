@@ -51,16 +51,12 @@ echo "set_deployment_ssm_params.sh :: VENUE_NAME: ${VENUE_NAME}"
 delete_ssm_param() {
     local key=$1
     echo "Deleting SSM parameter: ${key} ..."
-    aws ssm get-parameter --name "$key" 2>ssm_lookup.txt
-    if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
+    local lookup=$(aws ssm get-parameter --name "$key" 2>&1)
+    if [[ "$(echo "${lookup}" | grep -q "ParameterNotFound" && echo no)" == "no" ]]; then
         echo "SSM param ${key} not found.  Not attempting a delete."
     else
-        aws ssm delete-parameter --name "${key}"
-        if [ $? -ne 0 ]; then
-            echo "ERROR: SSM delete failed for $key"
-        fi
+        aws ssm delete-parameter --name "${key}" || echo "ERROR: SSM delete failed for $key"
     fi
-    rm ssm_lookup.txt
 }
 
 #
@@ -142,6 +138,6 @@ refresh_ssm_param "${DEPLOYMENT_STATUS_SSM}" "${DEPLOYMENT_STATUS_VAL}" "managem
 # /unity/${project}/${venue}/cs/monitoring/s3/bucketName
 #
 S3_HEALTH_CHECK_NAME_SSM="/unity/${PROJECT_NAME}/${VENUE_NAME}/cs/monitoring/s3/bucketName"
-S3_HEALTH_CHECK_NAME_VAL="${PROJECT_NAME}-${VENUE_NAME}-monitoring-bucket"
+S3_HEALTH_CHECK_NAME_VAL="unity-${PROJECT_NAME}-${VENUE_NAME}-bucket"
 refresh_ssm_param "${S3_HEALTH_CHECK_NAME_SSM}" "${S3_HEALTH_CHECK_NAME_VAL}" "management" "todo" "console" \
 "${PROJECT_NAME}-${VENUE_NAME}-cs-management-S3HealthCheckBucketNameSsm"

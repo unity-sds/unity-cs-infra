@@ -83,6 +83,24 @@ fi
 if [[ -z $VENUE_NAME ]]; then
     usage
 fi
+
+#
+# Does a deployment already exist for this project/venue?
+# If so, then don't continue with this deployment,
+# warn the user, and bail out.
+#
+echo "Checking for existing deployment for (project=${PROJECT_NAME}, venue=${VENUE_NAME}) ..."
+aws ssm get-parameter --name "/unity/${PROJECT_NAME}/${VENUE_NAME}/deployment/status" 2>ssm_lookup.txt
+if [[ `grep "ParameterNotFound" ssm_lookup.txt | wc -l` == "1" ]]; then
+    echo "Existing deployment not found.  Continuing with deployment..."
+    rm ssm_lookup.txt
+else
+    echo "ERROR: A deployment appears to already exist for project=${PROJECT_NAME}, venue=${VENUE_NAME}."
+    echo "       Please cleanup the resources for this deployment, before continuing!"
+    rm ssm_lookup.txt
+    exit 1
+fi
+
 # Install python3-pip
 sudo apt update
 sudo apt install -y python3-pip
@@ -210,12 +228,12 @@ cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
 
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
-sleep 360  # give enough time for stack to fully come up. TODO: revisit this approach
+sleep 420  # give enough time for stack to fully come up. TODO: revisit this approach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
 # Get MC URL from SSM (Manamgement Console populates this value)
-export SSM_MC_URL="/unity/cs/management/httpd/loadbalancer-url"
+export SSM_MC_URL="/unity/${PROJECT_NAME}/${VENUE_NAME}/management/httpd/loadbalancer-url"
 export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 echo "MANAGEMENT_CONSOLE_URL = ${MANAGEMENT_CONSOLE_URL}"
 

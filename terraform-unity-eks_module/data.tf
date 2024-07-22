@@ -24,6 +24,10 @@ data "aws_ssm_parameter" "subnet_list" {
 #  name = "/unity/account/eks/eks_iam_role"
 #}
 
+data "aws_ssm_parameter" "eks_ami_1_29" {
+  name = "/unity/account/eks/amis/aml2-eks-1-29"
+}
+
 data "aws_ssm_parameter" "eks_ami_1_27" {
   name = "/unity/account/eks/amis/aml2-eks-1-27"
 }
