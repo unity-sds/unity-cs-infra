@@ -84,3 +84,9 @@ variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
   description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
   default     = "/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-invoke-role-arn"
 }
+
+variable "health_checks_api_internal_endpoint" {
+  type        = string
+  description = "Health Checks API Internal Endpoint"
+  default     = ""
+}

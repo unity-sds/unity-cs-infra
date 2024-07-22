@@ -174,12 +174,6 @@ resource "aws_ssm_parameter" "api_gateway_uri" {
 # Updater to add the API Heath Check Routing
 # ------------------------------------------
 
-resource "aws_lb" "venue_load_balancer" {
-  name               = "venue_load_balancer"
-  load_balancer_type = "network"
-  subnets            = [for subnet in aws_subnet.public : subnet.id]
-}
-
 resource "aws_api_gateway_resource" "api_endpoint_management" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
