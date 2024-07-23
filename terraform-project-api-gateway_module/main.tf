@@ -174,47 +174,18 @@ resource "aws_ssm_parameter" "api_gateway_uri" {
 # Updater to add the API Heath Check Routing
 # ------------------------------------------
 
-resource "aws_api_gateway_resource" "api_endpoint_management" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
-  path_part   = "management"
-}
+resource "aws_lb" "internal_lb" {
+  name               = "internal_lb"
+  internal           = true
+  load_balancer_type = "network"
 
-resource "aws_api_gateway_resource" "api_endpoint_api" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  parent_id   = aws_api_gateway_resource.api_endpoint_management.id
-  path_part   = "api"
-}
-
-resource "aws_api_gateway_resource" "api_endpoint_health_check" {
-  rest_api_id = aws_api_gateway_rest_api.rest_api.id
-  parent_id   = aws_api_gateway_resource.api_endpoint_api.id
-  path_part   = "health_checks"
-}
-
-resource "aws_api_gateway_method" "api_endpoint_health_check_method" {
-  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  resource_id   = aws_api_gateway_resource.api_endpoint_health_check.id
-  http_method   = "GET"
-  authorization = "NONE"
-  request_parameters = {
-    "method.request.path.proxy" = true
+  subnet_mapping {
+    subnet_id = var.privatesubnets
   }
 }
 
-resource "aws_api_gateway_integration" "rest_api_resource_for_project_proxy_resource_method_integration" {
-  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  resource_id          = aws_api_gateway_resource.api_endpoint_health_check.id
-  http_method          = aws_api_gateway_method.api_endpoint_health_check_method.http_method
-  type                 = "HTTP_PROXY"
-  uri                  = var.health_checks_api_internal_endpoint
-  integration_http_method = "ANY"
-
-  cache_key_parameters = ["method.request.path.proxy"]
-
-  timeout_milliseconds = 29000
-  request_parameters = {
-    "integration.request.path.proxy" = "method.request.path.proxy"
-  }
-
+resource "aws_api_gateway_vpc_link" "example" {
+  name        = "vpc_link"
+  description = "VPC Link for Internal API Gateway"
+  target_arns = [aws_lb.internal_lb.arn]
 }

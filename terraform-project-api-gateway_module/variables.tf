@@ -85,8 +85,7 @@ variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
   default     = "/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-invoke-role-arn"
 }
 
-variable "health_checks_api_internal_endpoint" {
+variable "privatesubnets" {
+  description = "The preferred private subnets"
   type        = string
-  description = "Health Checks API Internal Endpoint"
-  default     = ""
 }
