@@ -36,10 +36,6 @@ variable "installprefix" {
   type = string
   default = "UnknownPrefix"
 }
-variable "privatesubnets" {
-  description = "Private subnets"
-  type        = string
-}
 
 variable "rest_api_stage" {
   type        = string
