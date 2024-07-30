@@ -217,7 +217,7 @@ echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
 bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
 
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
-sleep 420  # give enough time for stack to fully come up. TODO: revisit this api-0dcab4bf4414c80d2proach
+sleep 420  # give enough time for stack to fully come up. TODO: revisit this appproach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
