@@ -141,7 +141,6 @@ echo "---------------------------------------------------------"
 
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
 export GH_BRANCH=main
-export GH_CF_BRANCH=main
 TODAYS_DATE=$(date '+%F_%H-%M')
 LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
@@ -204,31 +203,21 @@ echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
 git pull origin ${GH_BRANCH}
 git checkout ${GH_BRANCH}
 
-## update cloudformation scripts
-rm -rf cloudformation
-git clone https://oauth2:$GITHUB_TOKEN_VAL@github.com/unity-sds/cfn-ps-jpl-unity-sds.git cloudformation
-cd cloudformation
-
-## This is for testing a specific branch of the cloudformation repo
-git checkout ${GH_CF_BRANCH}
-git pull origin ${GH_CF_BRANCH}
-
-CLOUDFORMATION_HASH=$(git rev-parse --short HEAD)
-cd ..
+#
 #echo "Using cfn-ps-jpl-unity-sds repo commit [$CLOUDFORMATION_HASH]" >> nightly_output.txt
 #echo"--------------------------------------------------------------------------[PASS]"
 echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]" >> nightly_output.txt
 echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
 
-cp ./cloudformation/templates/unity-mc.main.template.yaml template.yml
 
+#
 #
 # Deploy the Management Console using CloudFormation
 #
 bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
 
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
-sleep 420  # give enough time for stack to fully come up. TODO: revisit this approach
+sleep 420  # give enough time for stack to fully come up. TODO: revisit this appproach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
