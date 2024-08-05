@@ -16,17 +16,6 @@
 
 <!-- Header block for project -->
 
-[INSERT YOUR BADGES HERE (SEE: https://shields.io)] [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
-<!-- ☝️ Add badges via: https://shields.io e.g. ![](https://img.shields.io/github/your_chosen_action/your_org/your_repo) ☝️ -->
-
-[INSERT SCREENSHOT OF YOUR SOFTWARE, IF APPLICABLE]
-<!-- ☝️ Screenshot of your software (if applicable) via ![](https://uri-to-your-screenshot) ☝️ -->
-
-[INSERT LIST OF IMPORTANT PROJECT / REPO LINKS HERE]
-<!-- example links>
-[Website](INSERT WEBSITE LINK HERE) | [Docs/Wiki](INSERT DOCS/WIKI SITE LINK HERE) | [Discussion Board](INSERT DISCUSSION BOARD LINK HERE) | [Issue Tracker](INSERT ISSUE TRACKER LINK HERE)
--->
-
 ## Introduction
 
 ### What is Unity CS?
