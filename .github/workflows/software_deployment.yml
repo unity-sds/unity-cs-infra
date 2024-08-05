@@ -1,0 +1,204 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Software Deployment Redux
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      distinct_id:
+      deploymentProject:
+        description: 'Deployment Project'
+        required: true 
+        type: choice
+        default: 'UNITY'
+        options: 
+        - UNITY
+        - SIPS
+      deploymentStage:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+      deploymentOwner:
+        description: 'Deployment Owner'
+        required: true 
+        type: string
+        default: 'nightly'
+      deploymentName:
+        descrition: 'Unique Deployment Name'
+        required: true
+        type: string
+      sourceRepository:
+        description: 'Service Area Repository'
+        required: true 
+        type: string
+        default: 'unity-sds/unity-sps-prototype'
+      sourceBranch:
+        description: 'Repository Branch'
+        required: true 
+        type: string
+        default: 'main'
+      eksClusterName:
+        description: 'EKS Cluster Name'
+        required: true 
+        type: string
+        default: 'testtommon6'
+      awsConnection:
+        description: 'Method of AWS connection'
+        required: true
+        type: choice
+        default: 'oidc'
+        options:
+        - oidc
+        - keys
+        - iam
+      deploymentSource:
+        description: 'Where the action is being run'
+        required: true
+        type: choice
+        default: 'github'
+        options:
+          - github
+          - act
+      teardown:
+        description: 'Teardown software deployment'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deployment"
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: SCM CHeckout
+        uses: actions/checkout@v2
+
+      - name: install tools github
+        if: ${{ inputs.deploymentSource == 'github' }}
+        run: ./utils/install_utils.sh
+
+      - name: install tools act
+        if: ${{ inputs.deploymentSource == 'act' }}
+        run: ./utils/install_utils.sh true
+
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}    
+
+      - name: Configure default variables
+        env:
+          DEFAULT_TARGET: 'mcp'
+          DEFAULT_REPO: 'unity-sds/unity-cs-sps-demo'
+          DEFAULT_COMMIT: 'smolenski_tf_test_mcp'
+          DEFAULT_STAGE: 'DEV'
+          DEFAULT_PROJECT: 'UNITY'
+          DEFAULT_OWNER: 'nightly'
+          DEFAULT_EKSCLUSTERNAME: 'testtommon6'
+        run: |
+          echo "TARGET_ENV=${{ github.event.inputs.deploymentTarget || env.DEFAULT_TARGET }}" >> $GITHUB_ENV
+          echo "TARGET_STAGE=${{ github.event.inputs.deploymentStage || env.DEFAULT_STAGE }}" >> $GITHUB_ENV
+          echo "REPO_NAME=${{ github.event.inputs.sourceRepository || env.DEFAULT_REPO }}" >> $GITHUB_ENV
+          echo "COMMIT_HASH=${{ github.event.inputs.sourceBranch || env.DEFAULT_COMMIT }}" >> $GITHUB_ENV
+          echo "TARGET_PROJECT=${{ github.event.inputs.deploymentProject || env.DEFAULT_PROJECT }}" >> $GITHUB_ENV
+          echo "TARGET_OWNER=${{ github.event.inputs.deploymentOwner || env.DEFAULT_OWNER }}" >> $GITHUB_ENV
+          echo "TARGET_CLUSTER=${{ github.event.inputs.eksClusterName || env.DEFAULT_EKSCLUSTERNAME }}" >> $GITHUB_ENV
+          echo "TARGET_NAME=${{ github.event.inputs.deploymentName || env.DEFAULT_NAME }}" >> $GITHUB_ENV
+          
+      - name: Configure token
+        if: ${{ inputs.deploymentSource == 'act' }}
+        run: echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Display deployment configuration
+        run :
+          echo "Target ENV ${{ env.TARGET_ENV }}"
+          echo "Target STAGE ${{ env.TARGET_STAGE }}"
+          echo "Target PROJECT ${{ env.TARGET_PROJECT }}"
+          echo "Target OWNER ${{ env.TARGET_OWNER }}"
+          echo "Target EKS Cluster ${{ env.TARGET_CLUSTER }}"
+          echo "Repo Name ${{ env.REPO_NAME }}"
+          echo "Commit Hash ${{ env.COMMIT_HASH }}"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        if: ${{ inputs.awsConnection == 'oidc' }}
+        with:
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', env.TARGET_STAGE)] }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Get AWS Caller Identity
+        run: aws sts get-caller-identity
+
+      - name: Temporary Connect to EKS
+        run: |
+          aws eks --region us-west-2 update-kubeconfig --name ${{ env.TARGET_CLUSTER }} && \
+          kubectl version
+      # Checks-out the repo to deploy
+      # While cloning the repository:
+      #   - it clones the repo into the given `path`
+      #   - it checks out the branch defined at `ref`
+      - name: Clone the service repository for deployment github
+        uses: actions/checkout@v3
+        if: ${{ inputs.deploymentSource == 'github' }}
+        with:
+          repository: ${{ env.REPO_NAME }}
+          path: resources/deployable
+          ref: ${{ env.COMMIT_HASH }}
+          
+      - name: Clone the service repository for deployment act
+        uses: actions/checkout@v3
+        if: ${{ inputs.deploymentSource == 'act' }}
+        with:
+          repository: ${{ env.REPO_NAME }}
+          path: resources/deployable
+          ref: ${{ env.COMMIT_HASH }}
+          token: ${{ env.GITHUB_TOKEN }}
+      - name: Configure app for install
+        run: |
+          echo 'eks_cluster_name = "${{ env.TARGET_CLUSTER }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
+          echo 'kubeconfig_filepath = "~/.kube/config"' >> resources/deployable/terraform-unity/gh_actions.tfvars
+          echo 'deployment_name = "${{ env.TARGET_NAME }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
+          echo 'release = "${{ env.COMMIT_HASH }}"' >> resources/deployable/terraform-unity/gh_actions.tfvars
+    
+      - name: Run Terraform scripts apply
+        if: "${{ ! inputs.teardown }}"
+        run: |
+          ./utils/run_terraform.sh resources/deployable/terraform-unity apply
+
+      - name: Run Terraform scripts destroy
+        if: ${{ inputs.teardown }}
+        run: |
+          ./utils/run_terraform.sh resources/deployable/terraform-unity destroy
+
+      - name: Send custom JSON data to Slack workflow
+        id: slack
+        if: always()
+        uses: slackapi/slack-github-action@v1.19.0
+        with:
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+            {
+              "status": "Smoke Test Exists = ${{ steps.smoke_test_file.outputs.files_exists }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_CI_DEPLOY }}
+      # - name: Negative Smoke Test Check
+      #   run: |
+      #     cd ./resources/deployable/smoketest
+      #     sh smokefail.sh

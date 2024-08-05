@@ -1,0 +1,85 @@
+name: deployment-api-gateway-and-cognito
+on:
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      distinct_id:
+      deploymentStage:
+        description: 'Deployment Stage'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+  
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', github.event.inputs.deploymentStage) ] }}
+#          role-to-assume: ${{ secrets.OIDC_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Get AWS Caller Identity
+        run: aws sts get-caller-identity
+        
+      ## Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        uses: actions/checkout@v2
+
+      ## Check Terraform formatting
+#      - name: Terraform Format
+#        working-directory: ./terraform-api-gateway-cognito
+#        id: fmt
+#        run: terraform fmt -check
+
+      # Runs a single command using the runners shell
+      - name: Display state of working directory root
+        run: ls -al
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+
+      ## Init Terraform
+      - name: Terraform Init
+        working-directory: ./terraform-api-gateway-cognito
+        id: init
+        run: terraform init
+
+      ## Validate Terraform
+      - name: Terraform Validate
+        working-directory: ./terraform-api-gateway-cognito
+        id: validate
+        run: terraform validate -no-color
+
+      ## Plan Terraform
+      - name: Terraform Plan
+        working-directory: ./terraform-api-gateway-cognito
+        id: plan
+        run: terraform plan -no-color
+        continue-on-error: true
+
+      ## Fail the job if terraform plan doesn't succeed
+      - name: Terraform Plan Status
+        working-directory: ./terraform-api-gateway-cognito
+        id: plan_status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      ## Apply Terraform
+      - name: Terraform Apply
+        working-directory: ./terraform-api-gateway-cognito
+        id: apply
+        run: terraform apply -auto-approve

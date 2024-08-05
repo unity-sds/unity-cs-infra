@@ -1,0 +1,128 @@
+# This workflow deploys a project account REST API in API Gateway
+# author: ryan.g.hunter@jpl.nasa.gov
+
+name: Project REST API Gateway Deployment
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      teardown:
+        description: 'Teardown Project Api Gateway?'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deployment"
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: install tform
+        run: |
+             wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+             echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list && \
+             sudo apt update && sudo apt install terraform
+      - name: Install apps
+        run: |
+          sudo apt update && sudo apt install -y curl git jq unzip && \
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo  ./aws/install && \
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      - name: Display deployment configuration
+        run :
+          echo "Target ENV ${{ env.TARGET_ENV }}"
+          echo "Target STAGE ${{ env.TARGET_STAGE }}"
+          echo "Target PROJECT ${{ env.TARGET_PROJECT }}"
+          echo "Target OWNER ${{ env.TARGET_OWNER }}"
+          echo "Target API ${{ env.TARGET_API }}"
+          echo "Commit Hash ${{ env.COMMIT_HASH }}"
+
+      - name: Select the proper Terraform Workspace
+        run :
+          terraform workspace select ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }} || terraform workspace new ${{ env.TARGET_ENV }}_${{ env.TARGET_STAGE }}_${{ env.TARGET_PROJECT }}_${{ env.TARGET_OWNER }}
+
+      - name: Get AWS Caller Identity
+        run: aws sts get-caller-identity
+
+      # Check out the repository under $GITHUB_WORKSPACE
+      - name: cs-infra checkout
+        uses: actions/checkout@v3
+
+      ## Install Terraform docs
+      - name: Install Terraform-Docs
+        working-directory: ${{ env.TF_DIRECTORY }}
+        run: |
+          curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz
+          chmod +x terraform-docs
+
+      ## Check Terraform formatting
+      - name: Terraform Format
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Auto-generate tfvars file for the deployable repository
+        working-directory: ${{ env.TF_DIRECTORY }}
+        run: ./terraform-docs tfvars hcl . > project_api_gateway.tfvars
+
+      ## Init terraform
+      - name: Terraform Init
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        id: init
+        run: terraform init
+
+      ## Set terraform log level
+      - name: Set Terraform Log Level
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        id: log_level
+        run: export TF_LOG="TRACE"
+
+      ## Validate Terraform
+      - name: Terraform Validate
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        id: validate
+        run: |
+          ls -al
+          terraform validate -no-color
+      
+      - name: Copy in Global TFVARS
+        id: copy_tfvars
+        run: |
+          cp terraform-unity/TFVARS/${{ env.TARGET_STAGE }}/${{ env.TARGET_ENV }}.tfvars ${{ env.TF_DIRECTORY }}/global.tfvars
+
+      ## Plan Terraform
+      - name: Terraform Plan
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        id: plan
+        run: terraform plan -no-color -var-file="project_api_gateway.tfvars" -var="rest_api_name=${{ env.TARGET_API }}" -var-file="global.tfvars" 
+        continue-on-error: true
+
+      ## Fail the job if terraform plan doesn't succeed
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: "${{ ! inputs.teardown }}"
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        run: terraform apply -auto-approve -var-file="project_api_gateway.tfvars" -var="rest_api_name=${{ env.TARGET_API }}" -var-file="global.tfvars" 
+
+      # Teardown API GW
+      - name: Teardown API GW
+        if: ${{ inputs.teardown }}
+        working-directory: ${{ env.TF_DIRECTORY }} 
+        run: terraform destroy -auto-approve -var-file="project_api_gateway.tfvars" -var="rest_api_name=${{ env.TARGET_API }}" -var-file="global.tfvars" 

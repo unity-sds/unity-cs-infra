@@ -1,0 +1,7 @@
+jetbrains:
+  intellij:
+    plugins:
+      - org.jetbrains.plugins.go
+      - org.intellij.plugins.hcl
+    prebuilds:
+      version: both

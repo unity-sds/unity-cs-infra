@@ -1,0 +1,122 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Tform MCP Dev - EKS Deployment via OIDC
+env:
+  EKSClusterRegion: us-west-2
+  EKSClusterVersion: 1.21
+  EKSClusterAMI: ami-01fe93a8bc6cb9bef
+  EKSKubeProxyVersion: v1.21.2-eksbuild.2
+  EKSCoreDNSVersion: v1.8.4-eksbuild.1
+  EKSSubnetConfigA: "us-west-2a: { id: subnet-00db2965967acb6b1 }"
+  EKSSubnetConfigB: "us-west-2b: { id: subnet-092597c48cfec3f04 }"
+  EKSSecurityGroup: "sg-09bd8de0af1c3c99a"
+  EKSSharedNodeSecurityGroup: "sg-09bd8de0af1c3c99a"
+  EKSServiceArn: ${{ secrets.EKSSERVICEARN }}
+  EKSInstanceRoleArn: ${{ secrets.EKSINSTANCEROLEARN }}
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  # push:
+  #   branches: [ ucs-template ]
+  # pull_request:
+  #   branches: [ ucs-template ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      OWNER:
+        description: 'Service Owner'
+        required: true
+        type: string
+        default: 'U-CS'
+      CLUSTERNAME:
+        description: 'EKS Cluster Name'
+        required: true
+        type: string
+      MINNODES:
+        description: 'Minimum Cluster Nodes'
+        required: true
+        type: string
+        default: '1'
+      MAXNODES:
+        description: 'Max Cluster Nodes'
+        required: true
+        type: string
+        default: '3'
+      DESIREDNODES:
+        description: 'Desired Cluster Nodes'
+        required: true
+        type: string
+        default: '1'
+      INSTANCETYPE:
+        description: 'EC2 Instance Type'
+        type: string
+        required: true
+        default: 'm5.xlarge'
+
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deployment"
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Configure AWS Credentials through OIDC
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.OIDC_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # # Use the OIDC Client package
+      # - name: Install OIDC Client from Core Package
+      #   run: npm install @actions/core@1.6.0 @actions/http-client
+
+      # # Generate a token to use with eksctl
+      # - name: Get Id Token
+      #   uses: actions/github-script@v6
+      #   id: idtoken
+      #   with:
+      #     script: |
+      #       const coredemo = require('@actions/core')
+      #       let id_token = await coredemo.getIDToken()   
+      #       coredemo.setOutput('id_token', id_token)  
+      - name: Request JWT using environment variables
+        uses: actions/github-script@v6
+        id: script
+        timeout-minutes: 10
+        with:
+          debug: true
+          script: |
+            const token = process.env['ACTIONS_RUNTIME_TOKEN']
+            const runtimeUrl = process.env['ACTIONS_ID_TOKEN_REQUEST_URL']
+            core.setOutput('TOKEN', token.trim())
+            core.setOutput('IDTOKENURL', runtimeUrl.trim())
+
+
+
+      - name: Get AWS Caller Identity
+        run: aws sts get-caller-identity
+
+      # Set up current working directory with the repo contents
+      - name: SCM CHeckout
+        uses: actions/checkout@v2
+
+      # Determine contents of working directory
+      - name: Display contents of working directory
+        run: ls -al
+
+      # Launch EKS
+      - name: Launch EKS cluster
+        working-directory: ekstest
+        run: | 
+          terraform init
+          terraform apply -auto-approve

@@ -1,7 +1,9 @@
-# This is a basic workflow to help you get started with Actions
-
-name: AWS EKS Deployment
-
+name: EKS Deployment
+env:
+  EKSClusterRegion: us-west-2
+  EKSKubeProxyVersion: latest
+  EKSCoreDNSVersion: latest
+  EKSEBSCSIVersion: latest
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
@@ -12,63 +14,261 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-    branches: [ ucs-template ]
+    branches: [ main ]
+    inputs:
+      distinct_id:
+      TEARDOWN:
+        description: 'Teardown EKS Cluster?'
+        required: false
+        type: boolean
+        default: false
+      KEY:
+        description: 'Access Key ID'
+        required: false
+        type: string
+        default: ''
+      SECRET:
+        description: 'Access Secret Key ID'
+        required: false
+        type: string
+        default: ''
+      TOKEN:
+        description: 'AWS Session Token'
+        required: false
+        type: string
+        default: ''
+      METADATA:
+        description: 'metadata description'
+        required: true
+        type: string
+      AWSCONNECTION:
+        description: 'Method of AWS connection'
+        required: true
+        type: choice
+        default: 'oidc'
+        options:
+        - oidc
+        - keys
+        - iam
+      DEPLOYMENTPROJECT:
+        description: 'Deployment Project'
+        required: true 
+        type: choice
+        default: 'UNITY'
+        options: 
+        - UNITY
+        - SIPS
+      DEPLOYMENTSTAGE:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+      DEPLOYMENTSOURCE:
+        description: 'Where the action is being run'
+        required: true
+        type: choice
+        default: 'github'
+        options:
+          - github
+          - act
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "deployment"
   deployment:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}
       # Set up current working directory with the repo contents
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Install aws
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          sudo ./aws/install --update
 
-      # Determine contents of working directory
-      - name: Display contents of working directory
-        run: ls -al
-
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl      
+      - name: Set env vars github
+        if: ${{ INPUTS.DEPLOYMENTSOURCE == 'github'  }} 
+        run: |
+          if [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "DEV" ];
+          then
+            echo "EKSClusterVersion=${{ vars.MCP_DEV_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
+            echo "EKSClusterAMI=${{ vars.MCP_DEV_EKSCLUSTERAMI }}" >> $GITHUB_ENV
+            echo "EKSSecurityGroup=${{ vars.MCP_DEV_EKSSECURITYGROUP }}" >> $GITHUB_ENV
+            echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_DEV_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetA=${{ vars.MCP_DEV_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetB=${{ vars.MCP_DEV_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetA=${{ vars.MCP_DEV_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetB=${{ vars.MCP_DEV_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
+            echo "EKSInstanceRoleArn=${{ vars.MCP_DEV_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
+            echo "EKSServiceArn=${{ vars.MCP_DEV_EKSSERVICEARN }}" >> $GITHUB_ENV
+            echo "EKSUserArn=${{ vars.MCP_DEV_EKSUSERARN }}" >> $GITHUB_ENV
+          elif [ "${{ INPUTS.DEPLOYMENTSTAGE }}" == "TEST" ];
+          then
+            echo "EKSClusterVersion=${{ vars.MCP_TEST_EKSCLUSTERVERSION }}" >> $GITHUB_ENV
+            echo "EKSClusterAMI=${{ vars.MCP_TEST_EKSCLUSTERAMI }}" >> $GITHUB_ENV
+            echo "EKSSecurityGroup=${{ vars.MCP_TEST_EKSSECURITYGROUP }}" >> $GITHUB_ENV
+            echo "EKSSharedNodeSecurityGroup=${{ vars.MCP_TEST_EKSSHAREDNODESECURITYGROUP }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetA=${{ vars.MCP_TEST_EKSPUBLICSUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPublicSubnetB=${{ vars.MCP_TEST_EKSPUBLICSUBNETB }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetA=${{ vars.MCP_TEST_EKSPRIVATESUBNETA }}" >> $GITHUB_ENV
+            echo "EKSPrivateSubnetB=${{ vars.MCP_TEST_EKSPRIVATESUBNETB }}" >> $GITHUB_ENV
+            echo "EKSInstanceRoleArn=${{ vars.MCP_TEST_EKSINSTANCEROLEARN }}" >> $GITHUB_ENV
+            echo "EKSServiceArn=${{ vars.MCP_TEST_EKSSERVICEARN }}" >> $GITHUB_ENV
+            echo "EKSUserArn=${{ vars.MCP_TEST_EKSUSERARN }}" >> $GITHUB_ENV
+          fi
+      - name: Set env vars act
+        if: ${{ INPUTS.DEPLOYMENTSOURCE == 'act' }}
+        run: |
+          echo "EKSClusterVersion=1.24" >> $GITHUB_ENV
+          echo "EKSClusterAMI=$(utils/get-ssm-param.sh /unity/account/ami/eksClusterAmi)" >> $GITHUB_ENV
+          echo "EKSSecurityGroup=$(utils/get-ssm-param.sh /unity/account/securityGroups/eksSecurityGroup)" >> $GITHUB_ENV
+          echo "EKSSharedNodeSecurityGroup=$(utils/get-ssm-param.sh /unity/account/securityGroups/eksSharedNodeSecurityGroup)" >> $GITHUB_ENV
+          echo "EKSPublicSubnetA=$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/publicA)" >> $GITHUB_ENV
+          echo "EKSPublicSubnetB=$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/publicB)" >> $GITHUB_ENV
+          echo "EKSPrivateSubnetA=$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/privateA)" >> $GITHUB_ENV
+          echo "EKSPrivateSubnetB=$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/privateB)" >> $GITHUB_ENV
+          echo "EKSInstanceRoleArn=$(utils/get-ssm-param.sh /unity/account/roles/eksInstanceRoleArn)" >> $GITHUB_ENV
+          echo "EKSServiceArn=$(utils/get-ssm-param.sh /unity/account/roles/eksServiceRoleArn)" >> $GITHUB_ENV
+          echo "EKSUserArn=$(utils/get-ssm-param.sh /unity/account/roles/mcpRoleArns)" >> $GITHUB_ENV
+      # Configure AWS Credentials through OIDC
+      - name: Configure AWS credentials
+        if: ${{ INPUTS.AWSCONNECTION == 'oidc' }}
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          # terraform_version: 0.13.0
-          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+          #role-to-assume: ${{ secrets.OIDC_ROLE }}
+          role-to-assume: ${{ secrets[format('OIDC_{0}_ROLE', INPUTS.DEPLOYMENTSTAGE)] }}
+          aws-region: ${{ vars.AWS_REGION }}
 
-      ## Check Terraform formatting
-      - name: Terraform Format
-        working-directory: ./terraform-unity
-        id: fmt
-        run: terraform fmt -check
+      # Install eksctl to launch EKS
+      - name: Install eksctl
+        run: |
+         curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.132.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp && \
+         sudo mv /tmp/eksctl /usr/local/bin && \
+         eksctl version
 
-      ## Init terraform
-      - name: Terraform Init
-        working-directory: ./terraform-unity
-        id: init
-        run: terraform init
+      - name: Install Unity Transformer
+        run: |
+          curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.26-Alpha/unity-cs-manager-0.1.26-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
+          sudo mv /tmp/unity-cs-manager /usr/local/bin
 
-      ## Validate Terraform
-      - name: Terraform Validate
-        working-directory: ./terraform-unity
-        id: validate
-        run: terraform validate -no-color
+      - name: Install Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
 
-      ## Plan Terraform
-      - name: Terraform Plan
-        working-directory: ./terraform-unity
-        id: plan
-        run: terraform plan -no-color
-        continue-on-error: true
+      # Render template
+      - name: Render Template
+        run: |
+          export owner=$(echo '${{ inputs.METADATA }}' | jq -r .owner)
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          export minnodes=$(echo '${{ inputs.METADATA }}' | jq -r .nodegroups.group1.nodecount)
+          export maxnodes=$(echo '${{ inputs.METADATA }}' | jq -r .nodegroups.group1.nodecount)
+          export desirednodes=$(echo '${{ inputs.METADATA }}' | jq -r .nodegroups.group1.nodecount)
+          export instancetype=$(echo '${{ inputs.METADATA }}' | jq -r .nodegroups.group1.instancetype)
+          export private=$(echo '${{ inputs.METADATA }}' | jq -r .private)
+          if [ $private == "true" ]
+          then
+            unset EKSPublicSubnetA
+            unset EKSPublicSubnetB
+          fi
+          
+          nodegroups=$(echo '${{ inputs.METADATA }}' | jq -r '.nodegroups')
 
-      ## Fail the job if terraform plan doesn't succeed
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+          # iterate over the node groups
+          output=""
+          comma=""
+          for key in $(echo $nodegroups | jq -r 'keys[]'); do
+            instancetype=$(echo $nodegroups | jq -r ".[\"$key\"].instancetype")
+            nodecount=$(echo $nodegroups | jq -r ".[\"$key\"].nodecount")
+            echo "Debug: Key: $key"
+            echo "Debug: Instancetype: $instancetype"
+            echo "Debug: Nodecount: $nodecount"
 
-      - name: Terraform Apply
-        working-directory: ./terraform-unity
-#        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
-        run: terraform apply -auto-approve
+            output+="--managenodegroups $key,$nodecount,$nodecount,$nodecount,$instancetype "
+          done
+
+          echo "Output: $output"
+          unity-cs-manager eks --name ${cluster} --owner ${owner} ${output} --instancetype ${instancetype} --projectname ${owner} --servicename ${owner}  --capability unset --capversion unset --component unset --creator unset --critinfra unset --experimental unset --exposed unset --pocs test --release unset --securityplan unset --sourcecontrol unset --userfacing unset --venue unset --servicearea unset --resourcename=${cluster} --applicationname unset --applicationversion unset > /tmp/eksctl-config.yaml
+          cat /tmp/eksctl-config.yaml
+
+      # Launch EKS
+      - name: Launch EKS cluster
+        if: "${{ ! inputs.TEARDOWN }}"
+        run: |
+          if [ "${{inputs.AWSCONNECTION}}" == "keys" ]
+          then
+              export AWS_ACCESS_KEY_ID=${{ inputs.KEY }}
+              export AWS_SECRET_ACCESS_KEY=${{ inputs.SECRET }}
+              export AWS_SESSION_TOKEN=${{ inputs.TOKEN }}
+              export AWS_PAGER=""
+          fi
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          eksctl create cluster -f /tmp/eksctl-config.yaml
+          aws eks update-kubeconfig --region us-west-2 --name $cluster
+          kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+          export IFS=";"
+          sentence="$EKSUserArn"
+          for word in $sentence; do
+            echo "$word"
+            #eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantDeveloper --group system:masters --username admin
+            #eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantOperator --group system:masters --username adminOp
+            eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn $word --group system:masters --username admin
+          done
+          helm repo add fairwinds-stable https://charts.fairwinds.com/stable
+          helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
+          helm install goldilocks --namespace goldilocks --create-namespace fairwinds-stable/goldilocks
+
+      - name: Write SSM Params
+        if: "${{ ! inputs.TEARDOWN }}"
+        run: |
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name --type String --value defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName --type String --value eksctl-${cluster}-nodegroup-defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds --type StringList --value "$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/private)"
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/publicIds --type StringList --value "$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/public)"
+
+      # Teardown EKS
+      - name: Teardown EKS cluster
+        if: ${{ inputs.TEARDOWN }}
+        run: |
+          if [ "${{inputs.AWSCONNECTION}}" == "keys" ]
+          then
+              export AWS_ACCESS_KEY_ID=${{ inputs.KEY }}
+              export AWS_SECRET_ACCESS_KEY=${{ inputs.SECRET }}
+              export AWS_SESSION_TOKEN=${{ inputs.TOKEN }}
+              export AWS_PAGER=""
+          fi
+          export IFS=";"
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          aws eks update-kubeconfig --region us-west-2 --name $cluster
+          helm repo add fairwinds-stable https://charts.fairwinds.com/stable
+          helm uninstall vpa --namespace vpa
+          helm uninstall goldilocks --namespace goldilocks
+          eksctl delete nodegroup defaultgroupNodeGroup --cluster $cluster --drain=false --disable-eviction
+          eksctl delete cluster --name $cluster
+          
+      - name: Delete SSM Params
+        if: ${{ inputs.TEARDOWN }}
+        run: |
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/publicIds

@@ -1,0 +1,18 @@
+Repo Hash (Nightly Test):     [d9e1b6b]
+Repo Hash (Cloudformation):   [087ccc8]
+Nightly Test in the (TODO FIXME) account
+Stack Name: [unity-management-console-unity-nightly]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [400 seconds] - PASS
+============================= test session starts ==============================
+platform linux -- Python 3.8.10, pytest-8.2.2, pluggy-1.5.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/ubuntu/unity-cs-infra/nightly_tests
+collecting ... collected 4 items
+
+test_selenium_mc.py::test_navigate_to_mc_console PASSED                  [ 25%]
+test_selenium_mc.py::test_bootstrap_process_status PASSED                [ 50%]
+test_selenium_mc.py::test_initiate_core_setup PASSED                     [ 75%]
+test_selenium_mc.py::test_core_setup_save_btn PASSED                     [100%]
+
+========================= 4 passed in 78.46s (0:01:18) =========================

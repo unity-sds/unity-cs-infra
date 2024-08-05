@@ -1,0 +1,18 @@
+name: test-oidc
+on:
+  workflow_dispatch:
+    branches: [ main ]
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.OIDC_ROLE }}
+          aws-region: us-west-2

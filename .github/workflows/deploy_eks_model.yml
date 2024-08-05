@@ -1,0 +1,171 @@
+name: EKS Deployment
+env:
+  EKSClusterRegion: us-west-2
+  EKSKubeProxyVersion: latest
+  EKSCoreDNSVersion: latest
+  EKSEBSCSIVersion: latest
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  # push:
+  #   branches: [ ucs-template ]
+  # pull_request:
+  #   branches: [ ucs-template ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      distinct_id:
+      TEARDOWN:
+        description: 'Teardown EKS Cluster?'
+        required: false
+        type: boolean
+        default: false
+      KEY:
+        description: 'Access Key ID'
+        required: false
+        type: string
+        default: ''
+      SECRET:
+        description: 'Access Secret Key ID'
+        required: false
+        type: string
+        default: ''
+      TOKEN:
+        description: 'AWS Session Token'
+        required: false
+        type: string
+        default: ''
+      METADATA:
+        description: 'metadata description'
+        required: true
+        type: string
+      AWSCONNECTION:
+        description: 'Method of AWS connection'
+        required: true
+        type: choice
+        default: 'oidc'
+        options:
+        - oidc
+        - keys
+        - iam
+      DEPLOYMENTPROJECT:
+        description: 'Deployment Project'
+        required: true 
+        type: choice
+        default: 'UNITY'
+        options: 
+        - UNITY
+        - SIPS
+      DEPLOYMENTSTAGE:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'DEV'
+        options: 
+        - DEV
+        - TEST
+        - OPS
+        - SIPS
+      DEPLOYMENTSOURCE:
+        description: 'Where the action is being run'
+        required: true
+        type: choice
+        default: 'github'
+        options:
+          - github
+          - act
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Set up current working directory with the repo contents
+      - uses: actions/checkout@v3
+      - name: Install aws
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          sudo ./aws/install --update
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      # Install eksctl to launch EKS
+      - name: Install eksctl
+        run: |
+         curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/v0.132.0/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp && \
+         sudo mv /tmp/eksctl /usr/local/bin && \
+         eksctl version
+
+      - name: Install Helm
+        run: |
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+
+      # Launch EKS
+      - name: Launch EKS cluster
+        if: "${{ ! inputs.TEARDOWN }}"
+        run: |
+          export cluster=$(echo '${{ env.CLUSTERNAME }}')
+          echo '${{env.EKSTEMPLATE}}' > /tmp/eksctl-config.yaml
+          eksctl create cluster -f /tmp/eksctl-config.yaml
+          aws eks update-kubeconfig --region us-west-2 --name $cluster
+          kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+          export IFS=";"
+          sentence="$EKSUserArn"
+          for word in $sentence; do
+            echo "$word"
+            #eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantDeveloper --group system:masters --username admin
+            #eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantOperator --group system:masters --username adminOp
+            eksctl create iamidentitymapping --cluster ${cluster} --region=us-west-2 --arn $word --group system:masters --username admin
+          done
+          helm repo add fairwinds-stable https://charts.fairwinds.com/stable
+          helm install vpa fairwinds-stable/vpa --namespace vpa --create-namespace
+          helm install goldilocks --namespace goldilocks --create-namespace fairwinds-stable/goldilocks
+
+      - name: Write SSM Params
+        if: "${{ ! inputs.TEARDOWN }}"
+        run: |
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name --type String --value defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName --type String --value eksctl-${cluster}-nodegroup-defaultgroupNodeGroup
+          aws ssm put-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds --type StringList --value "$(utils/get-ssm-param.sh /unity/account/network/subnets/eks/private)"
+
+      # Teardown EKS
+      - name: Teardown EKS cluster
+        if: ${{ inputs.TEARDOWN }}
+        run: |
+          if [ "${{inputs.AWSCONNECTION}}" == "keys" ]
+          then
+              export AWS_ACCESS_KEY_ID=${{ inputs.KEY }}
+              export AWS_SECRET_ACCESS_KEY=${{ inputs.SECRET }}
+              export AWS_SESSION_TOKEN=${{ inputs.TOKEN }}
+              export AWS_PAGER=""
+          fi
+          export IFS=";"
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          aws eks update-kubeconfig --region us-west-2 --name $cluster
+          helm repo add fairwinds-stable https://charts.fairwinds.com/stable
+          helm uninstall vpa --namespace vpa
+          helm uninstall goldilocks --namespace goldilocks
+          eksctl delete nodegroup defaultgroupNodeGroup --cluster $cluster --drain=false --disable-eviction
+          eksctl delete cluster --name $cluster
+          
+      - name: Delete SSM Params
+        if: ${{ inputs.TEARDOWN }}
+        run: |
+          export cluster=$(echo '${{ inputs.METADATA }}' | jq -r .clustername)
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/name
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/nodeGroups/default/launchTemplateName
+          aws ssm delete-parameter --name /unity/extensions/eks/${cluster}/networking/subnets/privateIds

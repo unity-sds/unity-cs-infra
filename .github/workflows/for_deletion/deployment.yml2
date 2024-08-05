@@ -1,0 +1,171 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI Deployment
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  # push:
+  #   branches: [ ucs-template ]
+  # pull_request:
+  #   branches: [ ucs-template ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ smolensk_0.2_mcp ]
+    inputs:
+      distinct_id:
+      deploymentTarget:
+        description: 'Deployment Target'
+        required: true 
+        type: choice
+        default: 'jpl'
+        options: 
+        - jpl
+        - mcp
+      sourceRepository:
+        description: 'Repository Source'
+        required: true 
+        type: string
+        default: 'unity-sds/unity-cs-sps-demo'
+      sourceBranch:
+        description: 'Repository Branch'
+        required: true 
+        type: string
+        default: 'smolenski_tf_test_mcp'
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deployment"
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: echo distinct ID ${{ github.event.inputs.distinct_id }}
+        run: echo ${{ github.event.inputs.distinct_id }}    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Checks-out the repo to deploy
+      # While cloning the repository:
+      #   - it clones the repo into the given `path`
+      #   - it checks out the branch defined at `ref`
+      - name: Clone the service repository for deployment
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.event.inputs.sourceRepository }}
+          path: resources/deployable
+          ref: ${{ github.event.inputs.sourceBranch }}
+
+      # Copy the appropriate TF files, depending on the deployment target
+      - name: Apply target-specific Terraform Configs
+        run: |
+          cp -f terraform-unity/main.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/main-unity.tf
+          cp -f terraform-unity/variables.${{ github.event.inputs.deploymentTarget }}.tf resources/deployable/terraform-unity/variables-unity.tf
+
+      # Apply special env-specific configs (mostly used for MCP limitations)
+      - name: Apply target-specific configurations
+        # Remove dynamic networking configurations if this is MCP
+        if: ${{ github.event.inputs.deploymentTarget == 'mcp' }}
+        run: rm resources/deployable/terraform-unity/networking.tf
+
+      # Runs a single command using the runners shell
+      - name: Display state of working directory root
+        run: ls -al resources/deployable
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          # terraform_version: 0.13.0
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+
+
+      ## Verify that the Terraform directory exists in the remote repo
+      - name: Check for Terraform Directory
+        id: terraform_directory
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./resources/deployable/terraform-unity"
+      - name: Terraform Directory Exists
+        if: steps.terraform_directory.outputs.files_exists != 'true'
+        run: exit 1
+
+      ## Check Terraform formatting
+      - name: Terraform Format
+        working-directory: ./resources/deployable/terraform-unity
+        id: fmt
+        run: terraform fmt -check
+
+      ## Init terraform
+      - name: Terraform Init
+        working-directory: ./resources/deployable/terraform-unity
+        id: init
+        run: terraform init
+
+      ## Validate Terraform
+      - name: Terraform Validate
+        working-directory: ./resources/deployable/terraform-unity
+        id: validate
+        run: terraform validate -no-color
+
+      ## Plan Terraform
+      - name: Terraform Plan
+        working-directory: ./resources/deployable/terraform-unity
+        id: plan
+        run: terraform plan -no-color
+        continue-on-error: true
+
+      ## Fail the job if terraform plan doesn't succeed
+      - name: Terraform Plan Status
+        working-directory: ./resources/deployable/terraform-unity
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        working-directory: ./resources/deployable/terraform-unity
+#        if: github.ref == 'refs/heads/smolenski_tf_test' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+
+
+      ## Verify that the smoke test exists
+      - name: Check for Smoke Tests
+        id: smoke_test_file
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "./resources/deployable/smoketest/smoketest.sh"
+      - name: Smoke Test Exists
+        if: steps.smoke_test_file.outputs.files_exists != 'true'
+        run: exit 1
+
+
+      - name: Post-Deployment Smoke Test
+        uses: actions/setup-python@v2
+        with: 
+          python-version: '3.x'
+          architecture: 'x64'
+      - run: |
+          cd ./resources/deployable/smoketest
+          python3 smoketest.sh
+
+      # - name: Negative Smoke Test Check
+      #   run: |
+      #     cd ./resources/deployable/smoketest
+      #     sh smokefail.sh
+
+
+
+      # Runs a set of commands using the runners shell
+#      - name: Only run this if the test running script exists
+#        run: '(test -f build/tests/run.sh && sh build/tests/run.sh && cat build/tests/report.xml) || echo No test script, skipping step'
+
+      # Run terraform scripts
+#      - name: Run terraform scripts in a docker container
+#        run: docker run --rm --privileged aptman/qus -s -- -p
+
+#      - name: build
+#        uses: docker://hashicorp/terraform:latest
+#        with:
+#          args: make

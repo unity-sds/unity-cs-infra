@@ -1,0 +1,98 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Test EKS connection via OIDC
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  # push:
+  #   branches: [ ucs-template ]
+  # pull_request:
+  #   branches: [ ucs-template ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deployment"
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Configure AWS Credentials through OIDC
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.OIDC_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # # Use the OIDC Client package
+      # - name: Install OIDC Client from Core Package
+      #   run: npm install @actions/core@1.6.0 @actions/http-client
+
+      # # Generate a token to use with eksctl
+      # - name: Get Id Token
+      #   uses: actions/github-script@v6
+      #   id: idtoken
+      #   with:
+      #     script: |
+      #       const coredemo = require('@actions/core')
+      #       let id_token = await coredemo.getIDToken()   
+      #       coredemo.setOutput('id_token', id_token)  
+#      - name: Request JWT using environment variables
+#        uses: actions/github-script@v6
+#        id: script
+#        timeout-minutes: 10
+#        with:
+#          debug: true
+#          script: |
+#            const token = process.env['ACTIONS_RUNTIME_TOKEN']
+#            const runtimeUrl = process.env['ACTIONS_ID_TOKEN_REQUEST_URL']
+#            core.setOutput('TOKEN', token.trim())
+#            core.setOutput('IDTOKENURL', runtimeUrl.trim())
+#
+#      - name: Request Token via Curl
+#        run: |
+#          IDTOKEN=$(curl -H "Authorization: bearer $" $ -H "Accept: application/json; api-version=2.0" -H "Content-Type: application/json" -d "{}" | jq -r '.value')
+#          echo $IDTOKEN
+#          jwtd() {
+#              if [[ -x $(command -v jq) ]]; then
+#                  jq -R 'split(".") | .[0],.[1] | @base64d | fromjson' <<< "${1}"
+#                  echo "Signature: $(echo "${1}" | awk -F'.' '{print $3}')"
+#              fi
+#          }
+#          jwtd $IDTOKEN
+#          echo "::set-output name=idToken::${IDTOKEN}"
+#        id: tokenid
+
+
+      - name: Get AWS Caller Identity
+        run: aws sts get-caller-identity
+
+      # Set up current working directory with the repo contents
+      - name: SCM CHeckout
+        uses: actions/checkout@v2
+
+
+      # Install eksctl to launch EKS
+      - name: Install eksctl
+        run: |
+         curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && \
+         curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+         sudo mv /tmp/eksctl /usr/local/bin && \
+         eksctl version
+
+      - name: Connect to EKS
+        run: |
+          aws eks --region us-west-2 update-kubeconfig --name ucstestcluster4 && \
+          kubectl version

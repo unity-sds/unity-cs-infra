@@ -1,3 +1,4 @@
+
 <!-- Header block for project -->
 <hr>
 
@@ -30,15 +31,9 @@
 
 ### What is Unity CS?
 
-Unity CS is a framework of common components for the Unity project.  These components include (but are not limited to):
-* Software deployment workflows
-* Smoke Test workflows
-* Environment teardown workflows
-* Software build workflows
+<pre align="center">A framework for configuring AWS environments for Unity CS operations.</pre>
 
-The goal of Unity CS is to remove much of the hassle of build and deploy work 
-from developers and implement it in an automated manner that is both 
-transparent and executes seamlessly.
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md) [![SLIM](https://img.shields.io/badge/Best%20Practices%20from-SLIM-blue)](https://nasa-ammos.github.io/slim/)
 
 ### How does Unity CS achieve its' goals?
 - tools
@@ -79,11 +74,11 @@ to find them.
 ## Quick Start
 
 This guide provides a quick way to get started with our project. Please see our [docs]([INSERT LINK TO DOCS SITE / WIKI HERE]) for a more comprehensive overview.
+Unity CS is a set of common components for the Unity project. The aim is to automate the process of building and deploying, providing developers with a transparent and seamless experience.
 
-### Automated Builds
-Automated builds rely on a common build entry point such as a build.sh script 
-and a set of credentials plus a destination for publishing.  These credentials 
-are stored in environment variables for security and accessed at runtime.
+[Unity Docs](https://unity-sds.gitbook.io/docs/) | [Unity-CS Docs](https://unity-sds.gitbook.io/docs/developer-docs/common-services) | [Issue Tracker](https://github.com/unity-sds/unity-cs-infra/issues)
+
+## Features
 
 #### Requirements
 
@@ -165,6 +160,63 @@ Deployments are handled through Terraform.  Terraform scripts are stored in the
 terraform-unity directory in a repositorys root directory.  At deployment time 
 the terraform scripts are validated and 
 
+* Configurable AWS environment setup
+* Build, Test, and Deploy automation
+* Integration with GitHub actions
+* Support for Automated Builds, Testing, Deployments, and Teardowns
+
+## Contents
+
+* [Quick Start](#quick-start)
+* [Changelog](#changelog)
+* [FAQ](#frequently-asked-questions-faq)
+* [Contributing Guide](#contributing)
+* [License](#license)
+* [Support](#support)
+
+## Quick Start
+
+### Requirements
+
+* AWS Account
+* GitHub Actions setup
+* Docker for running Unity workflows locally
+  
+### Setup Instructions
+
+1. Clone the `unity-cs-infra` repository.
+2. Configure your AWS credentials and environment variables.
+3. Ensure your repository adheres to standardized file paths for Unity recognition.
+
+### Run Instructions
+
+1. Trigger the GitHub actions to initiate build, test, or deploy.
+2. For local execution, pull the docker image and execute workflows using [Act](https://github.com/nektos/act). Act also makes use of docker so you need to pass the docker sock into the platform to be able to run it, as follows on a linux host:
+   ```
+   docker pull ghcr.io/unity-sds/unity-cs-infra:main 
+   docker run -it -v //var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker ghcr.io/unity-sds/unity-cs-infra:main
+   ```
+
+### Usage Examples
+
+* Automated Build: Set up `build.sh` as the common entry point for building.
+* Deployments: Use Terraform scripts and maintain them in the `terraform-unity` directory.
+* Testing: Ensure unit tests, smoketests, and integration tests are set up correctly.
+
+### Build Instructions
+
+1. Follow the standard Unity CS structure for your repository.
+2. Utilize the `build.sh` script for a common build entry point.
+
+### Test Instructions
+
+1. Use `test.sh` for unit testing.
+2. For smoke tests, ensure the tests are located in the `smoketest` directory.
+3. Follow the directory structure for testing requirements.
+
+### Deployment Instructions
+
+Deployments are handled through Terraform. Terraform scripts are stored in the terraform-unity directory in a repositorys root directory. At deployment time the terraform scripts are validated.
 ```
 .
 └── terraform-unity
@@ -173,55 +225,6 @@ the terraform scripts are validated and
     └── variables.tf
 ```
 
-#### Requirements
-
-* [INSERT LIST OF REQUIREMENTS HERE]
-  
-<!-- ☝️ Replace with a numbered list of your requirements, including hardware if applicable ☝️ -->
-
-#### Setup Instructions
-
-1. [INSERT STEP-BY-STEP SETUP INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
-   
-<!-- ☝️ Replace with a numbered list of how to set up your software prior to running ☝️ -->
-
-#### Run Instructions
-
-1. [INSERT STEP-BY-STEP RUN INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
-
-<!-- ☝️ Replace with a numbered list of your run instructions, including expected results ☝️ -->
-
-#### Usage Examples
-
-* [INSERT LIST OF COMMON USAGE EXAMPLES HERE, WITH OPTIONAL SCREENSHOTS]
-
-<!-- ☝️ Replace with a list of your usage examples, including screenshots if possible, and link to external documentation for details ☝️ -->
-
-#### Build Instructions (if applicable)
-
-1. [INSERT STEP-BY-STEP BUILD INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
-
-<!-- ☝️ Replace with a numbered list of your build instructions, including expected results / outputs with optional screenshots ☝️ -->
-
-#### Test Instructions (if applicable)
-
-1. [INSERT STEP-BY-STEP TEST INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
-
-<!-- ☝️ Replace with a numbered list of your test instructions, including expected results / outputs with optional screenshots ☝️ -->
-
-### Smoke Testing
-Smoke tests are a simple test to validate a successful deployment.  While they 
-may not test all the functionality of a system, they should be comprehensive 
-enough to fail if the deployment has failed.
-
-In order for Unity to find the smoke tests, they must live in the smoketest 
-directory.  Currently python smoktetests are supported, but additional formats 
-will be supported in the future.
-```
-.
-└── smoketest
-    └── smoketest.py
-```
 
 #### Requirements
 
@@ -258,75 +261,19 @@ will be supported in the future.
 1. [INSERT STEP-BY-STEP TEST INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
 
 <!-- ☝️ Replace with a numbered list of your test instructions, including expected results / outputs with optional screenshots ☝️ -->
+### Teardown Instructions
 
-### Teardown
-Teardowns are managed in the same way as deployments, through Terraform.  The
-teardown workflow is supplied by Unity and requires no additional files in the 
-target repository as long as the terraform-unity directory is set up correctly.
-
-#### Requirements
-
-* [INSERT LIST OF REQUIREMENTS HERE]
-  
-<!-- ☝️ Replace with a numbered list of your requirements, including hardware if applicable ☝️ -->
-
-#### Setup Instructions
-
-1. [INSERT STEP-BY-STEP SETUP INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
-   
-<!-- ☝️ Replace with a numbered list of how to set up your software prior to running ☝️ -->
-
-#### Run Instructions
-
-1. [INSERT STEP-BY-STEP RUN INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
-
-<!-- ☝️ Replace with a numbered list of your run instructions, including expected results ☝️ -->
-
-#### Usage Examples
-
-* [INSERT LIST OF COMMON USAGE EXAMPLES HERE, WITH OPTIONAL SCREENSHOTS]
-
-<!-- ☝️ Replace with a list of your usage examples, including screenshots if possible, and link to external documentation for details ☝️ -->
-
-#### Build Instructions (if applicable)
-
-1. [INSERT STEP-BY-STEP BUILD INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
-
-<!-- ☝️ Replace with a numbered list of your build instructions, including expected results / outputs with optional screenshots ☝️ -->
-
-#### Test Instructions (if applicable)
-
-1. [INSERT STEP-BY-STEP TEST INSTRUCTIONS HERE, WITH OPTIONAL SCREENSHOTS]
-
-<!-- ☝️ Replace with a numbered list of your test instructions, including expected results / outputs with optional screenshots ☝️ -->
+Teardowns are managed in the same way as deployments, through Terraform. The teardown workflow is supplied by Unity and requires no additional files in the target repository as long as the terraform-unity directory is set up correctly.
 
 ## Changelog
 
 See our [CHANGELOG.md](CHANGELOG.md) for a history of our changes.
 
-See our [releases page]([INSERT LINK TO YOUR RELEASES PAGE]) for our key versioned releases.
-
-<!-- ☝️ Replace with links to your changelog and releases page ☝️ -->
+See our [releases page](https://github.com/unity-cs-infra/releases) for our key versioned releases.
 
 ## Frequently Asked Questions (FAQ)
 
-[INSERT LINK TO FAQ PAGE OR PROVIDE FAQ INLINE HERE]
-<!-- example link to FAQ PAGE>
-Questions about our project? Please see our: [FAQ]([INSERT LINK TO FAQ / DISCUSSION BOARD])
--->
-
-<!-- example FAQ inline format>
-1. Question 1
-   - Answer to question 1
-2. Question 2
-   - Answer to question 2
--->
-
-<!-- example FAQ inline with no questions yet>
-No questions yet. Propose a question to be added here by reaching out to our contributors! See support section below.
--->
-
-<!-- ☝️ Replace with a list of frequently asked questions from your project, or post a link to your FAQ on a discussion board ☝️ -->
+No questions yet. Propose a question to be added here by reaching out to our contributors! See the support section below.
 
 ## Contributing
 
@@ -338,11 +285,4 @@ See our: [LICENSE](LICENSE)
 
 ## Support
 
-[INSERT CONTACT INFORMATION OR PROFILE LINKS TO MAINTAINERS AMONG COMMITTER LIST]
-
-<!-- example list of contacts>
-Key points of contact are: [@github-user-1](link to github profile) [@github-user-2](link to github profile)
--->
-
-<!-- ☝️ Replace with the key individuals who should be contacted for questions ☝️ -->
-
+Key points of contact are: [@galenatjpl]https://github.com/galenatjpl

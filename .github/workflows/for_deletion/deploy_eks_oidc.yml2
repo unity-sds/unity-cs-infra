@@ -1,0 +1,130 @@
+# This is a basic workflow to help you get started with Actions
+
+name: MCP Dev - EKS Deployment via OIDC
+env:
+  EKSClusterRegion: us-west-2
+  EKSClusterVersion: 1.24
+  EKSClusterAMI: ami-0886544fa915698f0
+#  EKSClusterAMI: ami-06b4f03f7dd146e31
+  EKSKubeProxyVersion: latest
+  EKSCoreDNSVersion: latest
+  EKSEBSCSIVersion: latest
+  EKSSubnetConfigA: "us-west-2a: { id: subnet-087b54673c7549e2d }"
+  EKSSubnetConfigB: "us-west-2b: { id: subnet-009c32904a8bf3b92 }"
+#  EKSSubnetConfigA: "us-west-2a: { id: subnet-00db2965967acb6b1 }"
+#  EKSSubnetConfigB: "us-west-2b: { id: subnet-092597c48cfec3f04 }"
+  EKSSecurityGroup: "sg-09bd8de0af1c3c99a"
+  EKSSharedNodeSecurityGroup: "sg-09bd8de0af1c3c99a"
+  EKSServiceArn: ${{ secrets.EKSSERVICEARN }}
+  EKSInstanceRoleArn: ${{ secrets.EKSINSTANCEROLEARN }}
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  # push:
+  #   branches: [ ucs-template ]
+  # pull_request:
+  #   branches: [ ucs-template ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    branches: [ main ]
+    inputs:
+      OWNER:
+        description: 'Service Owner'
+        required: true
+        type: string
+        default: 'U-CS'
+      CLUSTERNAME:
+        description: 'EKS Cluster Name'
+        required: true
+        type: string
+      MINNODES:
+        description: 'Minimum Cluster Nodes'
+        required: true
+        type: string
+        default: '1'
+      MAXNODES:
+        description: 'Max Cluster Nodes'
+        required: true
+        type: string
+        default: '3'
+      DESIREDNODES:
+        description: 'Desired Cluster Nodes'
+        required: true
+        type: string
+        default: '1'
+      INSTANCETYPE:
+        description: 'EC2 Instance Type'
+        type: string
+        required: true
+        default: 'm5.xlarge'
+
+
+permissions:
+  id-token: write # required to use OIDC authentication
+  contents: read # required to checkout the code from the repo
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deployment"
+  deployment:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Check for Secret availability
+        id: secret-check
+        # perform secret check & put boolean result as an output
+        shell: bash
+        run: |
+          if [ "${{ secrets.OIDC_ROLE }}" != '' ]; then
+            echo "available=true" >> $GITHUB_OUTPUT;
+          else
+            echo "available=false" >> $GITHUB_OUTPUT;
+          fi
+      # Configure AWS Credentials through OIDC
+      - name: Configure AWS credentials
+        if: ${{ steps.secret-check.outputs.available == 'true' }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.OIDC_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+
+      - name: Get AWS Caller Identity
+        run: aws sts get-caller-identity
+
+      # Set up current working directory with the repo contents
+      - name: SCM CHeckout
+        uses: actions/checkout@v2
+
+      # Determine contents of working directory
+      - name: Display contents of working directory
+        run: ls -al
+
+      # Install eksctl to launch EKS
+      - name: Install eksctl
+        run: |
+         curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && \
+         sudo mv /tmp/eksctl /usr/local/bin && \
+         eksctl version
+
+      - name: Install Unity Transformer
+        run: |
+          curl --silent --location https://github.com/unity-sds/unity-cs-manager/releases/download/0.1.15-Alpha/unity-cs-manager-0.1.15-Alpha-linux-amd64.tar.gz | tar xz -C /tmp
+          sudo mv /tmp/unity-cs-manager /usr/local/bin
+
+      # Render template
+      - name: Render Template
+        run: |
+          unity-cs-manager eks --clustername ${{ INPUTS.CLUSTERNAME }} --owner ${{ INPUTS.OWNER }} --managenodegroups dafaultgroup,${{ INPUTS.MINNODES }},${{ INPUTS.MAXNODES }},${{ INPUTS.DESIREDNODES }},m5.xlarge --instancetype ${{ INPUTS.INSTANCETYPE }} --projectname ${{ INPUTS.CLUSTERNAME }} --servicename ${{ INPUTS.OWNER }} > build/eksctl/eksctl-config.yaml
+          cat build/eksctl/eksctl-config.yaml
+      # Launch EKS
+      - name: Launch EKS cluster
+        run: | 
+          eksctl create cluster -f build/eksctl/eksctl-config.yaml
+          eksctl create iamidentitymapping --cluster ${{ inputs.CLUSTERNAME }} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantDeveloper --group system:masters --username admin
+          eksctl create iamidentitymapping --cluster ${{ inputs.CLUSTERNAME }} --region=us-west-2 --arn arn:aws:iam::237868187491:role/mcp-tenantOperator --group system:masters --username adminOp
+          aws eks update-kubeconfig --region us-west-2 --name ${{ inputs.CLUSTERNAME }}
+          kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+          #aws ssm put-parameter --name /${{ inputs.CLUSTERNAME }}/eks --value ${{ inputs.CLUSTERNAME }} --tags=Key=project,Value=u-cs --type String
