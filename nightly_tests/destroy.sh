@@ -66,7 +66,7 @@ echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} AWS resources..."
 
 # Initialize Terraform
 echo "Initializing Terraform..."
-if ! terraform init; then
+if ! terraform init -reconfigure; then
     echo "Error: Could not initialize Terraform for ${PROJECT_NAME}/${VENUE_NAME}."
     exit 1
 fi
