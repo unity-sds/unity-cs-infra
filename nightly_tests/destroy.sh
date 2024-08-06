@@ -48,7 +48,6 @@ echo "destroy.sh :: VENUE_NAME: ${VENUE_NAME}"
 source NIGHTLY.ENV
 
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
-
 # Create Terraform configuration file
 CONFIG_FILE="${PROJECT_NAME}-${VENUE_NAME}.tf"
 
@@ -67,14 +66,14 @@ echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} AWS resources..."
 
 # Initialize Terraform
 echo "Initializing Terraform..."
-if ! terraform init -backend-config="${CONFIG_FILE}"; then
+if ! terraform init; then
     echo "Error: Could not initialize Terraform for ${PROJECT_NAME}/${VENUE_NAME}."
     exit 1
 fi
 
 # Run Terraform Destroy
 echo "Destroying resources..."
-if ! terraform destroy -auto-approve -var-file="${CONFIG_FILE}"; then
+if ! terraform destroy -auto-approve; then
     echo "Error: Could not delete ${PROJECT_NAME}/${VENUE_NAME} AWS resources."
     exit 1
 fi
