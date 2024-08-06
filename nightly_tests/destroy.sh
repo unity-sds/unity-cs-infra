@@ -62,7 +62,7 @@ terraform {
 }
 EOF
 
-echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} AWS resources..."
+echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources..."
 
 # Initialize Terraform
 echo "Initializing Terraform..."
@@ -80,11 +80,15 @@ fi
 
 # Delete the Terraform configuration file
 rm -f "${CONFIG_FILE}"
+rm -f .terraform.lock.hcl
+rm -rf .terraform/
 echo "Terraform configuration file ${CONFIG_FILE} has been deleted."
 
 
-echo "${PROJECT_NAME}-${VENUE_NAME} AWS resources destruction complete"
+echo "${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources destruction complete"
 
+
+echo "Destroying cloudformation stack"
 
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
