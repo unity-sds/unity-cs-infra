@@ -49,21 +49,41 @@ source NIGHTLY.ENV
 
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
 
-## Shutdown Process
-#echo"--------------------------------------------------------------------------[PASS]" 
-echo "Initiating Cloudformation Teardown..." >> nightly_output.txt
+# Create Terraform configuration file
+CONFIG_FILE="${PROJECT_NAME}-${VENUE_NAME}.tf"
 
-# Start Selenium docker iamge
-DOCKER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
-sleep 10
-# Uninstall AWS resources through MC
-echo "Initiating MC AWS Resource Uninstall..."
-python3 uninstall_aws_resources_mc.py "${PROJECT_NAME}" "${VENUE_NAME}" >> nightly_output.txt 2>&1
+cat <<EOF > "${CONFIG_FILE}"
+terraform {
+  backend "s3" {
+    bucket         = "${PROJECT_NAME}-${VENUE_NAME}-dev-bucket"
+    key            = "default"
+    region         = "us-west-2"
+    dynamodb_table = "${PROJECT_NAME}-${VENUE_NAME}-terraform_state"
+  }
+}
+EOF
 
-# Stop Selenium docker iamge
-echo "Stopping Selenium docker container..."
-sudo docker stop $DOCKER_ID
-# Wait for some time for MC AWS Resources to unistall
+echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} AWS resources..."
+
+# Initialize Terraform
+echo "Initializing Terraform..."
+if ! terraform init -backend-config="${CONFIG_FILE}"; then
+    echo "Error: Could not initialize Terraform for ${PROJECT_NAME}/${VENUE_NAME}."
+    exit 1
+fi
+
+# Run Terraform Destroy
+echo "Destroying resources..."
+if ! terraform destroy -auto-approve -var-file="${CONFIG_FILE}"; then
+    echo "Error: Could not delete ${PROJECT_NAME}/${VENUE_NAME} AWS resources."
+    exit 1
+fi
+
+# Delete the Terraform configuration file
+rm -f "${CONFIG_FILE}"
+echo "Terraform configuration file ${CONFIG_FILE} has been deleted."
+
+echo "${PROJECT_NAME}-${VENUE_NAME} AWS resources destruction complete."
 
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
