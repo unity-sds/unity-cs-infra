@@ -57,7 +57,7 @@ terraform {
     bucket         = "unity-${PROJECT_NAME}-${VENUE_NAME}-bucket"
     key            = "default"
     region         = "us-west-2"
-    dynamodb_table = "${PROJECT_NAME}-${VENUE_NAME}-terraform_state"
+    dynamodb_table = "${PROJECT_NAME}-${VENUE_NAME}-terraform-state"
   }
 }
 EOF
