@@ -54,7 +54,7 @@ CONFIG_FILE="${PROJECT_NAME}-${VENUE_NAME}.tf"
 cat <<EOF > "${CONFIG_FILE}"
 terraform {
   backend "s3" {
-    bucket         = "${PROJECT_NAME}-${VENUE_NAME}-dev-bucket"
+    bucket         = "unity-${PROJECT_NAME}-${VENUE_NAME}bucket"
     key            = "default"
     region         = "us-west-2"
     dynamodb_table = "${PROJECT_NAME}-${VENUE_NAME}-terraform_state"
