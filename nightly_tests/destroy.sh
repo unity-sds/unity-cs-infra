@@ -82,7 +82,16 @@ fi
 rm -f "${CONFIG_FILE}"
 echo "Terraform configuration file ${CONFIG_FILE} has been deleted."
 
-echo "${PROJECT_NAME}-${VENUE_NAME} AWS resources destruction complete."
+# Delete the DynamoDB table
+DYNAMODB_TABLE="${PROJECT_NAME}-${VENUE_NAME}-terraform-state"
+echo "Deleting DynamoDB table ${DYNAMODB_TABLE}..."
+if ! aws dynamodb delete-table --table-name "${DYNAMODB_TABLE}"; then
+    echo "Error: Could not delete DynamoDB table ${DYNAMODB_TABLE}."
+    exit 1
+fi
+
+echo "${PROJECT_NAME}-${VENUE_NAME} AWS resources destruction complete, including DynamoDB table ${DYNAMODB_TABLE}."
+
 
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
