@@ -95,6 +95,9 @@ EOF
 
 echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources..."
 
+# Start the timer
+START_TIME=$(date +%s)
+
 # Initialize Terraform
 echo "Initializing Terraform..."
 if ! terraform init -reconfigure; then
@@ -109,6 +112,10 @@ if ! terraform destroy -auto-approve; then
     exit 1
 fi
 
+# End the timer
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
 # Delete the Terraform configuration file
 rm -f "${CONFIG_FILE}"
 rm -f .terraform.lock.hcl
@@ -117,6 +124,7 @@ echo "Terraform configuration file ${CONFIG_FILE} has been deleted."
 
 
 echo "${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources destruction complete"
+echo "MC Destruction: Completed in ${DURATION}s - [PASS]"
 
 
 echo "Destroying cloudformation stack..."
