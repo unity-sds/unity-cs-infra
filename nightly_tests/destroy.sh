@@ -119,7 +119,7 @@ echo "Terraform configuration file ${CONFIG_FILE} has been deleted."
 echo "${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources destruction complete"
 
 
-echo "Destroying cloudformation stack"
+echo "Destroying cloudformation stack..."
 
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
