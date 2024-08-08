@@ -47,6 +47,37 @@ echo "destroy.sh :: VENUE_NAME: ${VENUE_NAME}"
 
 source NIGHTLY.ENV
 
+
+# Check if Terraform is installed
+if command -v terraform &> /dev/null
+then
+    echo "Terraform is already installed."
+else
+    echo "Terraform is not installed. Installing Terraform..."
+
+    
+    sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+
+    # Install the HashiCorp 
+    wget -O- https://apt.releases.hashicorp.com/gpg | \
+    gpg --dearmor | \
+    sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+
+    # Add the HashiCorp repository
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+    https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+    sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+    # Update package and install Terraform
+    sudo apt-get update
+    sudo apt-get install -y terraform
+
+    echo "Terraform installation completed."
+fi
+
+
+
+
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
 # Create Terraform configuration file
 CONFIG_FILE="${PROJECT_NAME}-${VENUE_NAME}.tf"
