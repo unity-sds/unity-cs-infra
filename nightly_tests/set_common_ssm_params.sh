@@ -201,20 +201,6 @@ populate_if_not_exists_ssm_param "${CERTIFICATE_ARN_SSM}" \
 CERTIFICATE_ARN_VAL=$(get_ssm_val "${CERTIFICATE_ARN_SSM}")
 
 #
-# SSM:  /unity/account/eks/amis/aml2-eks-1-25
-#
-EKS_AMI_25_SSM="/unity/account/eks/amis/aml2-eks-1-25"
-EKS_AMI_25_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-25")
-refresh_ssm_param "${EKS_AMI_25_SSM}" "${EKS_AMI_25_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks125Ssm"
-
-#
-# SSM:  /unity/account/eks/amis/aml2-eks-1-26
-# 
-EKS_AMI_26_SSM="/unity/account/eks/amis/aml2-eks-1-26"
-EKS_AMI_26_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-26")
-refresh_ssm_param "${EKS_AMI_26_SSM}" "${EKS_AMI_26_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks126Ssm"
-
-#
 # SSM:  /unity/account/eks/amis/aml2-eks-1-27
 #
 EKS_AMI_27_SSM="/unity/account/eks/amis/aml2-eks-1-27"
