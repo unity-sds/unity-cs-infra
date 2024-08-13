@@ -14,7 +14,7 @@ usage() {
 #
 # It's mandatory to speciy a valid command arguments
 #
-if [[ $# -ne 4 ]]; then
+if [[ $# -ne 5 ]]; then
   usage
 fi
 
