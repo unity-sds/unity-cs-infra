@@ -15,6 +15,7 @@ Metadata:
           - Venue
           - GithubToken
           - MCVersion
+          - BucketLifecycleInDays
       - Label:
           default: Network configuration
         Parameters:
@@ -52,6 +53,8 @@ Metadata:
         default: Github token with repo:read access.
       MCVersion:
         default: latest
+      BucketLifecycleInDays:
+        default: 7
       Venue:
         default: Name of the venue being setup
       Project:
@@ -112,6 +115,11 @@ Parameters:
     Type: String
     Default: latest
     ConstraintDescription: The version of unity-sds/unity-management-console to install.
+
+  BucketLifecycleInDays:
+    Description: Lifecycle (in days) for S3 bucket (health checks JSON, etc.)
+    Type: String
+    Default: 7
 
   Venue:
     Description: e.g. Dev, Test, Ops. See https://unity-sds.gitbook.io/docs/architecture/deployments-projects-and-venues

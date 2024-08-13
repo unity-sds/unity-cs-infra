@@ -4,10 +4,11 @@ STACK_NAME=""
 PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
+BUCKET_LIFECYCLE_IN_DAYS="7"
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>]"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--bucket-lifecycle <BUCKET_LIFECYCLE_IN_DAYS>]"
     exit 1
 }
 
@@ -35,6 +36,10 @@ while [[ $# -gt 0 ]]; do
             ;;            
         --mc-version)
             MC_VERSION="$2"
+            shift 2
+            ;;
+        --bucket-lifecycle)
+            BUCKET_LIFECYCLE_IN_DAYS="$2"
             shift 2
             ;;
         *)
@@ -80,6 +85,7 @@ aws cloudformation create-stack \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
+    ParameterKey=BucketLifecycleInDays,ParameterValue=${BUCKET_LIFECYCLE_IN_DAYS} \
   --tags Key=ServiceArea,Value=U-CS
 
 

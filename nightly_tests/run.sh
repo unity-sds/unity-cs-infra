@@ -5,10 +5,11 @@ RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
+BUCKET_LIFECYCLE_IN_DAYS="7"
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>]"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--bucket-lifecycle <BUCKET_LIFECYCLE_IN_DAYS>]"
     exit 1
 }
 #
@@ -61,6 +62,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --mc-version)
             MC_VERSION="$2"
+            shift 2
+            ;;
+        --bucket-lifecycle)
+            BUCKET_LIFECYCLE_IN_DAYS="$2"
             shift 2
             ;;
         *)
@@ -214,7 +219,7 @@ echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --bucket-lifecycle "${BUCKET_LIFECYCLE_IN_DAYS}"
 
 echo "Sleeping for 360s to give enough time for stack to fully come up..."
 sleep 420  # give enough time for stack to fully come up. TODO: revisit this appproach
