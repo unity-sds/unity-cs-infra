@@ -47,23 +47,89 @@ echo "destroy.sh :: VENUE_NAME: ${VENUE_NAME}"
 
 source NIGHTLY.ENV
 
+
+# Check if Terraform is installed
+if command -v terraform &> /dev/null
+then
+    echo "Terraform is already installed."
+else
+    echo "Terraform is not installed. Installing Terraform..."
+
+    
+    sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+
+    # Install the HashiCorp 
+    wget -O- https://apt.releases.hashicorp.com/gpg | \
+    gpg --dearmor | \
+    sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+
+    # Add the HashiCorp repository
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+    https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+    sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+    # Update package and install Terraform
+    sudo apt-get update
+    sudo apt-get install -y terraform
+
+    echo "Terraform installation completed."
+fi
+
+
+
+
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
+# Create Terraform configuration file
+CONFIG_FILE="${PROJECT_NAME}-${VENUE_NAME}.tf"
 
-## Shutdown Process
-#echo"--------------------------------------------------------------------------[PASS]" 
-echo "Initiating Cloudformation Teardown..." >> nightly_output.txt
+cat <<EOF > "${CONFIG_FILE}"
+terraform {
+  backend "s3" {
+    bucket         = "unity-${PROJECT_NAME}-${VENUE_NAME}-bucket"
+    key            = "default"
+    region         = "us-west-2"
+    dynamodb_table = "${PROJECT_NAME}-${VENUE_NAME}-terraform-state"
+  }
+}
+EOF
 
-# Start Selenium docker iamge
-DOCKER_ID=$(sudo docker run -d -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome)
-sleep 10
-# Uninstall AWS resources through MC
-echo "Initiating MC AWS Resource Uninstall..."
-python3 uninstall_aws_resources_mc.py "${PROJECT_NAME}" "${VENUE_NAME}" >> nightly_output.txt 2>&1
+echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources..."
 
-# Stop Selenium docker iamge
-echo "Stopping Selenium docker container..."
-sudo docker stop $DOCKER_ID
-# Wait for some time for MC AWS Resources to unistall
+# Start the timer
+START_TIME=$(date +%s)
+
+# Initialize Terraform
+echo "Initializing Terraform..."
+if ! terraform init -reconfigure; then
+    echo "Error: Could not initialize Terraform for ${PROJECT_NAME}/${VENUE_NAME}."
+    rm -f "${CONFIG_FILE}"
+    exit 1
+fi
+
+# Run Terraform Destroy
+echo "Destroying resources..."
+if ! terraform destroy -auto-approve; then
+    echo "Error: Could not delete ${PROJECT_NAME}/${VENUE_NAME} AWS resources."
+    rm -f "${CONFIG_FILE}"
+    exit 1
+fi
+
+# End the timer
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+# Delete the Terraform configuration file
+rm -f "${CONFIG_FILE}"
+rm -f .terraform.lock.hcl
+rm -rf .terraform/
+echo "Terraform configuration file ${CONFIG_FILE} has been deleted."
+
+
+echo "${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources destruction complete"
+echo "MC Destruction: Completed in ${DURATION}s - [PASS]"
+
+
+echo "Destroying cloudformation stack..."
 
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
@@ -110,3 +176,13 @@ then
 fi
 
 ./destroy_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
+
+# Delete the DynamoDB table
+DYNAMODB_TABLE="${PROJECT_NAME}-${VENUE_NAME}-terraform-state"
+echo "Deleting DynamoDB table ${DYNAMODB_TABLE}..."
+if ! aws dynamodb delete-table --table-name "${DYNAMODB_TABLE}"; then
+    echo "Error: Could not delete DynamoDB table ${DYNAMODB_TABLE}."
+    exit 1
+fi
+
+echo "DynamoDB table ${DYNAMODB_TABLE} was deleted successfully"
