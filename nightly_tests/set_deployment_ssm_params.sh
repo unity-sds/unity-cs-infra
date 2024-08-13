@@ -3,10 +3,11 @@
 # 
 PROJECT_NAME=""
 VENUE_NAME=""
+BUCKET_LIFECYCLE_IN_DAYS=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --project-name <PROJECT_NAME> --venue-name <VENUE_NAME>"
+    echo "Usage: $0 --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> --bucket-lifecycle <BUCKET_LIFECYCLE_IN_DAYS>"
     exit 1
 }
 
@@ -26,6 +27,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --venue-name)
             VENUE_NAME="$2"
+            shift 2
+            ;;
+        --bucket-lifecycle)
+            BUCKET_LIFECYCLE_IN_DAYS="$2"
             shift 2
             ;;
         *)
@@ -141,3 +146,11 @@ S3_HEALTH_CHECK_NAME_SSM="/unity/${PROJECT_NAME}/${VENUE_NAME}/cs/monitoring/s3/
 S3_HEALTH_CHECK_NAME_VAL="unity-${PROJECT_NAME}-${VENUE_NAME}-bucket"
 refresh_ssm_param "${S3_HEALTH_CHECK_NAME_SSM}" "${S3_HEALTH_CHECK_NAME_VAL}" "management" "todo" "console" \
 "${PROJECT_NAME}-${VENUE_NAME}-cs-management-S3HealthCheckBucketNameSsm"
+
+# Create SSM:
+# /unity/${project}/${venue}/cs/monitoring/s3/bucketLifecycleInDays
+#
+S3_BUCKET_LIFECYCLE_SSM="/unity/${PROJECT_NAME}/${VENUE_NAME}/cs/monitoring/s3/bucketLifecycleInDays"
+S3_BUCKET_LIFECYCLE_VAL="${BUCKET_LIFECYCLE_IN_DAYS}"
+refresh_ssm_param "${S3_BUCKET_LIFECYCLE_SSM}" "${S3_BUCKET_LIFECYCLE_VAL}" "management" "todo" "console" \
+"${PROJECT_NAME}-${VENUE_NAME}-cs-management-S3BucketLifecycleInDaysSsm"

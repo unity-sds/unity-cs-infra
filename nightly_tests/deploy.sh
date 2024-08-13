@@ -62,11 +62,12 @@ fi
 echo "deploy.sh :: STACK_NAME: ${STACK_NAME}"
 echo "deploy.sh :: PROJECT_NAME: ${PROJECT_NAME}"
 echo "deploy.sh :: VENUE_NAME: ${VENUE_NAME}"
+echo "deploy.sh :: BUCKET_LIFECYCLE_IN_DAYS: ${BUCKET_LIFECYCLE_IN_DAYS}"
 
 #
 # Create the SSM parameters required by this deployment
 #
-source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
+source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --bucket-lifecycle "${BUCKET_LIFECYCLE_IN_DAYS}"
 echo "deploying INSTANCE TYPE: ${MC_INSTANCETYPE_VAL} ..."
 
 aws cloudformation create-stack \
@@ -85,7 +86,6 @@ aws cloudformation create-stack \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
-    ParameterKey=BucketLifecycleInDays,ParameterValue=${BUCKET_LIFECYCLE_IN_DAYS} \
   --tags Key=ServiceArea,Value=U-CS
 
 
