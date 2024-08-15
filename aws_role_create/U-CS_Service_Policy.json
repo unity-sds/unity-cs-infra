@@ -14,7 +14,8 @@
                 "iam:CreateRole",
                 "logs:ListTagsForResource",
                 "events:ListTargetsByRule",
-                "events:DescribeRule"
+                "events:DescribeRule",
+                "events:ListTagsForResource"
             ],
             "Resource": [
                 "arn:aws:ec2:*:*:subnet/*",
@@ -28,9 +29,8 @@
                 "arn:aws:iam::*:role/U-CS_Service_Role",
                 "arn:aws:iam::*:role/unity-cs-nightly-*",
                 "arn:aws:iam::*:role/u-cs-ecs-use-eks",
-                "arn:aws:logs:us-west-2::log-group:*",
-                "arn:aws:events:*:*:rule/*"
-
+                "arn:aws:logs:*:*:log-group:*",
+                "arn:aws:events:*:*:rule/*",
             ]
         },
         {
