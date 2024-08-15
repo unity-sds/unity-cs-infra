@@ -15,7 +15,8 @@
                 "logs:ListTagsForResource",
                 "events:ListTargetsByRule",
                 "events:DescribeRule",
-                "events:ListTagsForResource"
+                "events:ListTagsForResource",
+                "events:RemoveTargets"
             ],
             "Resource": [
                 "arn:aws:ec2:*:*:subnet/*",
