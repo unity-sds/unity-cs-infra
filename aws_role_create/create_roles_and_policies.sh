@@ -1,8 +1,14 @@
 #!/bin/bash
 
+# ================================================
+# This bash script automates the process of
+# creating an IAM role (Unity-CS_Service_Role)
+# for MDPS, attaching multiple policies to it,
+# and creating an instance profile for that role.
+# ================================================
+
 ROLE_NAME="Unity-CS_Service_Role"
 POLICY_LIST=(AmazonEC2ContainerRegistryPowerUser AmazonS3ReadOnlyAccess AmazonSSMManagedInstanceCore CloudWatchAgentServerPolicy DatalakeKinesisPolicy McpToolsAccessPolicy U-CS_Service_Policy U-CS_Service_Policy_Ondemand)
-#DYNAMIC_POLICY_LIST=(U-CS_Service_Policy U-CS_Service_Policy_Ondemand)
 
 # Required role for spot ec2/fleet creation
 aws iam create-service-linked-role --aws-service-name spot.amazonaws.com
@@ -59,8 +65,8 @@ done
 
 rm policies.list
 
-
 ## Attach 
+aws iam delete-instance-profile --instance-profile-name ${ROLE_NAME}-instance-profile
 aws iam create-instance-profile --instance-profile-name ${ROLE_NAME}-instance-profile
 aws iam add-role-to-instance-profile \
     --instance-profile-name ${ROLE_NAME}-instance-profile \
