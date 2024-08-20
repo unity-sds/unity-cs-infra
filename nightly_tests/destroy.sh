@@ -103,6 +103,7 @@ echo "Initializing Terraform..."
 if ! terraform init -reconfigure; then
     echo "Error: Could not initialize Terraform for ${PROJECT_NAME}/${VENUE_NAME}."
     rm -f "${CONFIG_FILE}"
+    rm -rf .terraform/
     exit 1
 fi
 
@@ -111,6 +112,7 @@ echo "Destroying resources..."
 if ! terraform destroy -auto-approve; then
     echo "Error: Could not delete ${PROJECT_NAME}/${VENUE_NAME} AWS resources."
     rm -f "${CONFIG_FILE}"
+    rm -rf .terraform/
     exit 1
 fi
 
