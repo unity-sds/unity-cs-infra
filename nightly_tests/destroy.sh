@@ -79,14 +79,18 @@ export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
 
 # Check CloudFormation stack status
 echo "Checking CloudFormation stack status..."
+echo "Checking CloudFormation stack status..." >> nightly_output.txt
 INITIAL_STACK_STATUS=$(aws cloudformation describe-stacks --stack-name "${STACK_NAME}" --query 'Stacks[0].StackStatus' --output text 2>/dev/null)
 
 if [ $? -ne 0 ]; then
     echo "Error: Unable to retrieve stack status. The stack ${STACK_NAME} may not exist."
+    echo "Error: Unable to retrieve stack status. The stack ${STACK_NAME} may not exist." >> nightly_output.txt
+
     INITIAL_STACK_STATUS="DOES_NOT_EXIST"
 fi
 
 echo "Current stack status: ${INITIAL_STACK_STATUS}"
+echo "Current stack status: ${INITIAL_STACK_STATUS}" >> nightly_output.txt
 
 if [ "${INITIAL_STACK_STATUS}" == "CREATE_COMPLETE" ]; then
     # Create namespace directory
@@ -108,6 +112,7 @@ terraform {
 EOF
 
     echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources..."
+    echo "Destroying ${PROJECT_NAME}-${VENUE_NAME} Management Console and AWS resources..." >> nightly_output.txt
     # Start the timer
     START_TIME=$(date +%s)
 
@@ -115,6 +120,7 @@ EOF
     echo "Initializing Terraform..."
     if ! terraform init -reconfigure; then
         echo "Error: Could not initialize Terraform for ${PROJECT_NAME}/${VENUE_NAME}."
+        echo "Error: Could not initialize Terraform for ${PROJECT_NAME}/${VENUE_NAME}." >> nightly_output.txt
         cd - || exit 1
         rm -rf "name-spaces/${PROJECT_NAME}-${VENUE_NAME}"
         exit 1
@@ -124,6 +130,7 @@ EOF
     echo "Destroying resources..."
     if ! terraform destroy -auto-approve; then
         echo "Error: Could not delete ${PROJECT_NAME}/${VENUE_NAME} AWS resources."
+        echo "Error: Could not delete ${PROJECT_NAME}/${VENUE_NAME} AWS resources." >> nightly_output.txt
         cd - || exit 1
         rm -rf "name-spaces/${PROJECT_NAME}-${VENUE_NAME}"
         exit 1
@@ -137,11 +144,14 @@ EOF
     cd - || exit 1
     rm -rf "name-spaces/${PROJECT_NAME}-${VENUE_NAME}"
     echo "Terraform operations completed. Namespace directory and all Terraform files have been deleted."
+    echo "Terraform operations completed. Namespace directory and all Terraform files have been deleted." >> nightly_output.txt
     echo "Total duration: $DURATION seconds"
+    echo "Total duration: $DURATION seconds" >> nightly_output.txt
 fi
 
 # Delete CloudFormation stack
 echo "Destroying cloudformation stack..."
+echo "Destroying cloudformation stack..." >> nightly_output.txt
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
 STACK_STATUS=""
@@ -152,6 +162,7 @@ WAIT_BLOCK=20
 while [ -z "$STACK_STATUS" ]
 do
     echo "Waiting for Cloudformation Stack Termination..............................[$WAIT_TIME]"
+    echo "Waiting for Cloudformation Stack Termination..............................[$WAIT_TIME]" >> nightly_output.txt
     aws cloudformation describe-stacks --stack-name ${STACK_NAME} > status.txt
     STACK_STATUS=""
     if [ -s status.txt ]
@@ -191,9 +202,11 @@ echo "Running destroy_deployment_ssm_params.sh script..."
 if [ "${INITIAL_STACK_STATUS}" == "CREATE_COMPLETE" ]; then
     DYNAMODB_TABLE="${PROJECT_NAME}-${VENUE_NAME}-terraform-state"
     echo "Deleting DynamoDB table ${DYNAMODB_TABLE}..."
+    echo "Deleting DynamoDB table ${DYNAMODB_TABLE}..." >> nightly_output.txt
     if ! aws dynamodb delete-table --table-name "${DYNAMODB_TABLE}"; then
         echo "Error: Could not delete DynamoDB table ${DYNAMODB_TABLE}."
         exit 1
     fi
     echo "DynamoDB table ${DYNAMODB_TABLE} was deleted successfully"
+    echo "DynamoDB table ${DYNAMODB_TABLE} was deleted successfully" >> nightly_output.txt
 fi
