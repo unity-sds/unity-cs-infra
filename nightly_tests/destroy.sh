@@ -116,7 +116,7 @@ EOF
     if ! terraform init -reconfigure; then
         echo "Error: Could not initialize Terraform for ${PROJECT_NAME}/${VENUE_NAME}."
         cd - || exit 1
-        rm -rf "$NAMESPACE_DIR"
+        rm -rf "name-spaces/${PROJECT_NAME}-${VENUE_NAME}"
         exit 1
     fi
 
@@ -125,7 +125,7 @@ EOF
     if ! terraform destroy -auto-approve; then
         echo "Error: Could not delete ${PROJECT_NAME}/${VENUE_NAME} AWS resources."
         cd - || exit 1
-        rm -rf "$NAMESPACE_DIR"
+        rm -rf "name-spaces/${PROJECT_NAME}-${VENUE_NAME}"
         exit 1
     fi
 
@@ -135,7 +135,7 @@ EOF
 
     # Clean up
     cd - || exit 1
-    rm -rf "$NAMESPACE_DIR"
+    rm -rf "name-spaces/${PROJECT_NAME}-${VENUE_NAME}"
     echo "Terraform operations completed. Namespace directory and all Terraform files have been deleted."
     echo "Total duration: $DURATION seconds"
 fi
