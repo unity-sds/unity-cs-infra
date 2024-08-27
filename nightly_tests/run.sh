@@ -216,7 +216,11 @@ echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
 #
 bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
 
-echo "Sleeping for 360s to give enough time for stack to fully come up..."
+echo "Sleeping for 360s to give enough time for MC bootstrap process to complete..."
+
+# Start the timer
+start_time=$(date +%s)
+
 sleep 420  # give enough time for stack to fully come up. TODO: revisit this appproach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
@@ -286,6 +290,14 @@ while [ $attempt -le $max_attempts ]; do
         ((attempt++))
     fi
 done
+# End the timer
+end_time=$(date +%s)
+
+# Calculate the duration
+duration=$((end_time - start_time))
+
+# Output the result
+echo "The bootstrap process took $duration seconds to complete."
 
 # Cloud formation smoke_test
 echo "Running Smoke Test"
