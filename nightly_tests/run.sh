@@ -204,24 +204,16 @@ git pull origin ${GH_BRANCH}
 git checkout ${GH_BRANCH}
 
 #
-#echo "Using cfn-ps-jpl-unity-sds repo commit [$CLOUDFORMATION_HASH]" >> nightly_output.txt
-#echo"--------------------------------------------------------------------------[PASS]"
-echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]" >> nightly_output.txt
-echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
-
-
-#
-#
 # Deploy the Management Console using CloudFormation
 #
 bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
 
-echo "Sleeping for 360s to give enough time for MC bootstrap process to complete..."
+echo "Deploying Management Console..." >> nightly_output.txt
+echo "Deploying Management Console..." >>
 
 # Start the timer
 start_time=$(date +%s)
 
-sleep 420  # give enough time for stack to fully come up. TODO: revisit this appproach
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
 
@@ -297,7 +289,8 @@ end_time=$(date +%s)
 duration=$((end_time - start_time))
 
 # Output the result
-echo "The bootstrap process took $duration seconds to complete."
+echo "Management Console Creation Time: $duration seconds"
+echo "Management Console Creation Time: $duration seconds" >> nightly_output.txt
 
 # Cloud formation smoke_test
 echo "Running Smoke Test"

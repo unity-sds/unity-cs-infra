@@ -136,6 +136,18 @@ EOF
         exit 1
     fi
 
+    # Delete the DynamoDB table only if the initial stack status was CREATE_COMPLETE
+
+    DYNAMODB_TABLE="${PROJECT_NAME}-${VENUE_NAME}-terraform-state"
+    echo "Deleting DynamoDB table ${DYNAMODB_TABLE}..."
+    echo "Deleting DynamoDB table ${DYNAMODB_TABLE}..." >> nightly_output.txt
+    if ! aws dynamodb delete-table --table-name "${DYNAMODB_TABLE}"; then
+        echo "Error: Could not delete DynamoDB table ${DYNAMODB_TABLE}."
+        exit 1
+    fi
+    echo "DynamoDB table ${DYNAMODB_TABLE} was deleted successfully"
+    echo "DynamoDB table ${DYNAMODB_TABLE} was deleted successfully" >> nightly_output.txt
+
     # End the timer
     END_TIME=$(date +%s)
     DURATION=$((END_TIME - START_TIME))
@@ -145,8 +157,8 @@ EOF
     rm -rf "name-spaces/${PROJECT_NAME}-${VENUE_NAME}"
     echo "Terraform operations completed. Namespace directory and all Terraform files have been deleted."
     echo "Terraform operations completed. Namespace directory and all Terraform files have been deleted." >> nightly_output.txt
-    echo "Total duration: $DURATION seconds"
-    echo "Total duration: $DURATION seconds" >> nightly_output.txt
+    echo "MC Teardown: Completed in $DURATION seconds"
+    echo "MC Teardown: Completed in $DURATION seconds" >> nightly_output.txt
 fi
 
 # Delete CloudFormation stack
@@ -198,15 +210,3 @@ fi
 echo "Running destroy_deployment_ssm_params.sh script..."
 ./destroy_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
 
-# Delete the DynamoDB table only if the initial stack status was CREATE_COMPLETE
-if [ "${INITIAL_STACK_STATUS}" == "CREATE_COMPLETE" ]; then
-    DYNAMODB_TABLE="${PROJECT_NAME}-${VENUE_NAME}-terraform-state"
-    echo "Deleting DynamoDB table ${DYNAMODB_TABLE}..."
-    echo "Deleting DynamoDB table ${DYNAMODB_TABLE}..." >> nightly_output.txt
-    if ! aws dynamodb delete-table --table-name "${DYNAMODB_TABLE}"; then
-        echo "Error: Could not delete DynamoDB table ${DYNAMODB_TABLE}."
-        exit 1
-    fi
-    echo "DynamoDB table ${DYNAMODB_TABLE} was deleted successfully"
-    echo "DynamoDB table ${DYNAMODB_TABLE} was deleted successfully" >> nightly_output.txt
-fi

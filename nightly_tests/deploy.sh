@@ -64,6 +64,9 @@ echo "deploy.sh :: VENUE_NAME: ${VENUE_NAME}"
 source ./set_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
 echo "deploying INSTANCE TYPE: ${MC_INSTANCETYPE_VAL} ..."
 
+echo "Deploying Cloudformation stack..." >> nightly_output.txt
+echo "Deploying Cloudformation stack..."
+
 aws cloudformation create-stack \
   --stack-name ${STACK_NAME} \
   --template-body file://../cloudformation-template/unity-mc.main.template.yaml \
