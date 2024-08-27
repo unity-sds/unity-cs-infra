@@ -210,7 +210,7 @@ git checkout ${GH_BRANCH}
 bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
 
 echo "Deploying Management Console..." >> nightly_output.txt
-echo "Deploying Management Console..." >>
+echo "Deploying Management Console..."
 
 # Start the timer
 start_time=$(date +%s)
