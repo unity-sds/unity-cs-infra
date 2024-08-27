@@ -5,6 +5,7 @@ RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
+DEPLOYMENT_START_TIME=$(date +%s)
 
 # Function to display usage instructions
 usage() {
@@ -288,9 +289,17 @@ end_time=$(date +%s)
 # Calculate the duration
 duration=$((end_time - start_time))
 
-# Output the result
+# MC Creation Time
 echo "Management Console Creation Time: $duration seconds"
 echo "Management Console Creation Time: $duration seconds" >> nightly_output.txt
+
+
+# SSM Creation, CloudFormation, Bootstrap time
+DEPLOYMENT_END_TIME=$(date +%s)
+DEPLOYMENT_DURATION=$((end_time - start_time))
+
+echo "Total Creation Time(SMM params, CloudFormation, MC): $DEPLOYMENT_DURATION seconds"
+echo "Total Creation Time(SMM params, CloudFormation, MC): $DEPLOYMENT_DURATION seconds" >> nightly_output.txt
 
 # Cloud formation smoke_test
 echo "Running Smoke Test"
