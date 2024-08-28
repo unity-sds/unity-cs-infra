@@ -148,52 +148,52 @@ populate_if_not_exists_ssm_param "${SLACK_WEB_HOOK_URL_SSM}" \
 SLACK_URL_VAL=$(get_ssm_val "$SLACK_WEB_HOOK_URL_SSM")
 
 #
-# SSM:  /unity/cs/account/network/vpc_id
+# SSM:  /unity/account/network/vpc_id
 #
-VPC_ID_SSM="/unity/cs/account/network/vpc_id"
+VPC_ID_SSM="/unity/account/network/vpc_id"
 VPC_ID_VAL=$(aws ec2 describe-vpcs |jq -r '.Vpcs[].VpcId')
 refresh_ssm_param "${VPC_ID_SSM}" "${VPC_ID_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-vpcIdSsm"
 
 #
-# SSM:  /unity/cs/account/network/subnet_list
+# SSM:  /unity/account/network/subnet_list
 #
-SUBNET_LIST_SSM="/unity/cs/account/network/subnet_list"
+SUBNET_LIST_SSM="/unity/account/network/subnet_list"
 SUBNET_LIST_VAL=$(./get_subnet_list_json.sh)
 delete_ssm_param "${SUBNET_LIST_SSM}"
 create_ssm_param "${SUBNET_LIST_SSM}" "${SUBNET_LIST_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-subnetListSsm"
 
 #
-# SSM:  /unity/cs/account/network/publicsubnet1
+# SSM:  /unity/account/network/publicsubnet1
 #
-PUB_SUBNET_1_SSM="/unity/cs/account/network/publicsubnet1"
+PUB_SUBNET_1_SSM="/unity/account/network/publicsubnet1"
 PUB_SUBNET_1_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.public[0]')
 refresh_ssm_param "${PUB_SUBNET_1_SSM}" "${PUB_SUBNET_1_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-publicSubnet1Ssm"
 
 #
-# SSM:  /unity/cs/account/network/publicsubnet2
+# SSM:  /unity/account/network/publicsubnet2
 #
-PUB_SUBNET_2_SSM="/unity/cs/account/network/publicsubnet2"
+PUB_SUBNET_2_SSM="/unity/account/network/publicsubnet2"
 PUB_SUBNET_2_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.public[1]')
 refresh_ssm_param "${PUB_SUBNET_2_SSM}" "${PUB_SUBNET_2_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-publicSubnet2Ssm"
 
 #
-# SSM:  /unity/cs/account/network/privatesubnet1
+# SSM:  /unity/account/network/privatesubnet1
 #
-PRIV_SUBNET_1_SSM="/unity/cs/account/network/privatesubnet1"
+PRIV_SUBNET_1_SSM="/unity/account/network/privatesubnet1"
 PRIV_SUBNET_1_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.private[0]')
 refresh_ssm_param "${PRIV_SUBNET_1_SSM}" "${PRIV_SUBNET_1_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-privateSubnet1Ssm"
 
 #
-# SSM:  /unity/cs/account/network/privatesubnet2
+# SSM:  /unity/account/network/privatesubnet2
 #
-PRIV_SUBNET_2_SSM="/unity/cs/account/network/privatesubnet2"
+PRIV_SUBNET_2_SSM="/unity/account/network/privatesubnet2"
 PRIV_SUBNET_2_VAL=$(echo "${SUBNET_LIST_VAL}" | jq -r '.private[1]')
 refresh_ssm_param "${PRIV_SUBNET_2_SSM}" "${PRIV_SUBNET_2_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-privateSubnet2Ssm"
 
 #
-# SSM: /unity/cs/account/network/certificate-arn
+# SSM: /unity/account/network/certificate-arn
 #
-CERTIFICATE_ARN_SSM="/unity/cs/account/network/certificate-arn"
+CERTIFICATE_ARN_SSM="/unity/account/network/certificate-arn"
 populate_if_not_exists_ssm_param "${CERTIFICATE_ARN_SSM}" \
     "network" "todo" "certificate" \
     "unity-all-cs-certificateArnSsm" \
