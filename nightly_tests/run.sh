@@ -298,7 +298,7 @@ echo "Management Console Creation Time: $duration seconds" >> nightly_output.txt
 
 # SSM Creation, CloudFormation, Bootstrap time
 DEPLOYMENT_END_TIME=$(date +%s)
-DEPLOYMENT_DURATION=$((end_time - start_time))
+DEPLOYMENT_DURATION=$((DEPLOYMENT_END_TIME - DEPLOYMENT_START_TIME))
 
 echo "Total Creation Time(SMM params, CloudFormation, MC): $DEPLOYMENT_DURATION seconds"
 echo "Total Creation Time(SMM params, CloudFormation, MC): $DEPLOYMENT_DURATION seconds" >> nightly_output.txt
