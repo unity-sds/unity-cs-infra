@@ -5,6 +5,7 @@ RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
+DEPLOYMENT_START_TIME=$(date +%s)
 
 # Function to display usage instructions
 usage() {
@@ -204,22 +205,20 @@ git pull origin ${GH_BRANCH}
 git checkout ${GH_BRANCH}
 
 #
-#echo "Using cfn-ps-jpl-unity-sds repo commit [$CLOUDFORMATION_HASH]" >> nightly_output.txt
-#echo"--------------------------------------------------------------------------[PASS]"
-echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]" >> nightly_output.txt
-echo "Repo Hash (Cloudformation):   [$CLOUDFORMATION_HASH]"
-
-
-#
-#
 # Deploy the Management Console using CloudFormation
 #
 bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
 
-echo "Sleeping for 360s to give enough time for stack to fully come up..."
-sleep 420  # give enough time for stack to fully come up. TODO: revisit this appproach
+echo "Deploying Management Console..." >> nightly_output.txt
+echo "Deploying Management Console..."
+
+# Start the timer
+start_time=$(date +%s)
+
 
 aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudformation_events.txt
+
+sleep 420
 
 # Get MC URL from SSM (Manamgement Console populates this value)
 export SSM_MC_URL="/unity/${PROJECT_NAME}/${VENUE_NAME}/management/httpd/loadbalancer-url"
@@ -286,6 +285,23 @@ while [ $attempt -le $max_attempts ]; do
         ((attempt++))
     fi
 done
+# End the timer
+end_time=$(date +%s)
+
+# Calculate the duration
+duration=$((end_time - start_time))
+
+# MC Creation Time
+echo "Management Console Creation Time: $duration seconds"
+echo "Management Console Creation Time: $duration seconds" >> nightly_output.txt
+
+
+# SSM Creation, CloudFormation, Bootstrap time
+DEPLOYMENT_END_TIME=$(date +%s)
+DEPLOYMENT_DURATION=$((DEPLOYMENT_END_TIME - DEPLOYMENT_START_TIME))
+
+echo "Total Creation Time(SMM params, CloudFormation, MC): $DEPLOYMENT_DURATION seconds"
+echo "Total Creation Time(SMM params, CloudFormation, MC): $DEPLOYMENT_DURATION seconds" >> nightly_output.txt
 
 # Cloud formation smoke_test
 echo "Running Smoke Test"
