@@ -345,7 +345,6 @@ Resources:
           packages:
             apt:
               docker.io: []
-              git: []
           services:
             systemd:
               docker:
