@@ -629,11 +629,6 @@ Resources:
     Properties:
       GroupDescription: Security group for unity management console load balancer
       VpcId: !Ref VPCID
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: !Ref Port
-          ToPort: !Ref Port
-          CidrIp: 0.0.0.0/0
       Tags:
         - Key: Venue
           Value: !Ref Venue
