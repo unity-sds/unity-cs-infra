@@ -91,7 +91,7 @@ done <<< "$resources"
 # List of SSM Parameter accessed  and created by cloudformation stack
 # TODO Dynamically check variables
 ssm_parameters=(
-  "/unity/cs/account/network/vpc_id"
+  "/unity/account/network/vpc_id"
   "/mcp/amis/ubuntu2004-cset"
   "/unity/testing/nightly/vpc-id"
   "/unity/testing/nightly/publicsubnet1"
@@ -104,7 +104,7 @@ ssm_parameters=(
   "/unity/testing/nightly/githubtoken"
   "/unity/testing/nightly/venue"
   "/unity/testing/nightly/accountname"
-  "/unity/cs/account/network/subnet_list"
+  "/unity/account/network/subnet_list"
 )
 
 echo ""

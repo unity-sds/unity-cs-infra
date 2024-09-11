@@ -148,16 +148,16 @@ populate_if_not_exists_ssm_param "${SLACK_WEB_HOOK_URL_SSM}" \
 SLACK_URL_VAL=$(get_ssm_val "$SLACK_WEB_HOOK_URL_SSM")
 
 #
-# SSM:  /unity/cs/account/network/vpc_id
+# SSM:  /unity/account/network/vpc_id
 #
-VPC_ID_SSM="/unity/cs/account/network/vpc_id"
+VPC_ID_SSM="/unity/account/network/vpc_id"
 VPC_ID_VAL=$(aws ec2 describe-vpcs |jq -r '.Vpcs[].VpcId')
 refresh_ssm_param "${VPC_ID_SSM}" "${VPC_ID_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-vpcIdSsm"
 
 #
-# SSM:  /unity/cs/account/network/subnet_list
+# SSM:  /unity/account/network/subnet_list
 #
-SUBNET_LIST_SSM="/unity/cs/account/network/subnet_list"
+SUBNET_LIST_SSM="/unity/account/network/subnet_list"
 SUBNET_LIST_VAL=$(./get_subnet_list_json.sh)
 delete_ssm_param "${SUBNET_LIST_SSM}"
 create_ssm_param "${SUBNET_LIST_SSM}" "${SUBNET_LIST_VAL}" "networking" "na" "vpc" "unity-all-cs-networking-subnetListSsm"
@@ -203,23 +203,23 @@ CERTIFICATE_ARN_VAL=$(get_ssm_val "${CERTIFICATE_ARN_SSM}")
 #
 # SSM:  /unity/account/eks/amis/aml2-eks-1-25
 #
-EKS_AMI_25_SSM="/unity/account/eks/amis/aml2-eks-1-25"
-EKS_AMI_25_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-25")
-refresh_ssm_param "${EKS_AMI_25_SSM}" "${EKS_AMI_25_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks125Ssm"
+#EKS_AMI_25_SSM="/unity/account/eks/amis/aml2-eks-1-25"
+#EKS_AMI_25_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-25")
+#refresh_ssm_param "${EKS_AMI_25_SSM}" "${EKS_AMI_25_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks125Ssm"
 
 #
 # SSM:  /unity/account/eks/amis/aml2-eks-1-26
 # 
-EKS_AMI_26_SSM="/unity/account/eks/amis/aml2-eks-1-26"
-EKS_AMI_26_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-26")
-refresh_ssm_param "${EKS_AMI_26_SSM}" "${EKS_AMI_26_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks126Ssm"
+#EKS_AMI_26_SSM="/unity/account/eks/amis/aml2-eks-1-26"
+#EKS_AMI_26_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-26")
+#refresh_ssm_param "${EKS_AMI_26_SSM}" "${EKS_AMI_26_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks126Ssm"
 
 #
 # SSM:  /unity/account/eks/amis/aml2-eks-1-27
 #
-EKS_AMI_27_SSM="/unity/account/eks/amis/aml2-eks-1-27"
-EKS_AMI_27_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-27")
-refresh_ssm_param "${EKS_AMI_27_SSM}" "${EKS_AMI_27_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks127Ssm"
+#EKS_AMI_27_SSM="/unity/account/eks/amis/aml2-eks-1-27"
+#EKS_AMI_27_VAL=$(get_ssm_val "/mcp/amis/aml2-eks-1-27")
+#refresh_ssm_param "${EKS_AMI_27_SSM}" "${EKS_AMI_27_VAL}" "processing" "na" "vpc" "unity-all-cs-processing-aml2Eks127Ssm"
 
 #
 # SSM:  /unity/account/eks/amis/aml2-eks-1-29
