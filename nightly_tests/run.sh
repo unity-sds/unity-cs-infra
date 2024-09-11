@@ -6,18 +6,13 @@ PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
 DEPLOYMENT_START_TIME=$(date +%s)
+CONFIG_FILE=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>]"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--config-file <CONFIG_FILE>]"
     exit 1
 }
-#
-# It's mandatory to speciy a valid number of command arguments
-#
-# if [[ $# -ne 10 ]]; then
-#  usage
-# fi
 
 # Parse command line options
 while [[ $# -gt 0 ]]; do
@@ -62,6 +57,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --mc-version)
             MC_VERSION="$2"
+            shift 2
+            ;;
+        --config-file)
+            CONFIG_FILE="$2"
             shift 2
             ;;
         *)
@@ -137,6 +136,7 @@ echo "  - Run tests?                      $RUN_TESTS"
 echo "  - Project Name:                   $PROJECT_NAME"
 echo "  - Venue Name:                     $VENUE_NAME"
 echo "  - MC Version:                     $MC_VERSION"
+echo "  - Config File:                    $CONFIG_FILE"
 
 echo "---------------------------------------------------------"
 
@@ -207,7 +207,7 @@ git checkout ${GH_BRANCH}
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}"
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" ${CONFIG_FILE:+--config-file "$CONFIG_FILE"}
 
 echo "Deploying Management Console..." >> nightly_output.txt
 echo "Deploying Management Console..."

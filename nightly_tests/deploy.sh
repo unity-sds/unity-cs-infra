@@ -4,10 +4,11 @@ STACK_NAME=""
 PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
+CONFIG_FILE=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>]"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--config-file <CONFIG_FILE>]"
     exit 1
 }
 
@@ -35,6 +36,10 @@ while [[ $# -gt 0 ]]; do
             ;;            
         --mc-version)
             MC_VERSION="$2"
+            shift 2
+            ;;
+        --config-file)
+            CONFIG_FILE="$2"
             shift 2
             ;;
         *)
@@ -83,6 +88,7 @@ aws cloudformation create-stack \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
+    ${CONFIG_FILE:+--parameters ParameterKey=ConfigFile,ParameterValue="$CONFIG_FILE"} \
   --tags Key=ServiceArea,Value=U-CS
 
 
