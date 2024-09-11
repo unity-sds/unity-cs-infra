@@ -135,17 +135,16 @@ Parameters:
     Description: Name of SSM parameter containing Latest Ubuntu MCP AMI ID
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
 
-  ConfigFile:
+  MarketplaceItems:
     Type: String
-    Description: Path to the configuration file containing marketplace items
-    Default: ""
+    Description: YAML string containing marketplace items
+    Default: "[]"
 
 Conditions:
   IsLatestMCVersion:
     Fn::Equals:
       - !Ref MCVersion
       - latest
-  HasConfigFile: !Not [!Equals [!Ref ConfigFile, ""]]
 
 Resources:
   LambdaExecutionRole:
@@ -458,10 +457,8 @@ Resources:
                 ConsoleHost: ${PrivateApplicationLoadBalancer.DNSName}:${Port}
                 Project: ${Project}
                 Venue: ${Venue}
-                MarketplaceItems: !If 
-                  - HasConfigFile
-                  - !ImportYaml ${ConfigFile}
-                  - {}
+                MarketplaceItems:
+                  ${MarketplaceItems}
               group: ubuntu
               mode: "000644"
               owner: ubuntu
