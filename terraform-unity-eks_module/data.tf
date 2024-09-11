@@ -28,18 +28,18 @@ data "aws_ssm_parameter" "eks_ami_1_29" {
   name = "/unity/account/eks/amis/aml2-eks-1-29"
 }
 
-# data "aws_ssm_parameter" "eks_ami_1_27" {
-#   name = "/unity/account/eks/amis/aml2-eks-1-27"
-# }
-#
-# data "aws_ssm_parameter" "eks_ami_1_26" {
-#   name = "/unity/account/eks/amis/aml2-eks-1-26"
-# }
-#
-# data "aws_ssm_parameter" "eks_ami_1_25" {
-#   name = "/unity/account/eks/amis/aml2-eks-1-25"
-# }
-#
+data "aws_ssm_parameter" "eks_ami_1_27" {
+  name = "/unity/account/eks/amis/aml2-eks-1-27"
+}
+
+data "aws_ssm_parameter" "eks_ami_1_26" {
+  name = "/unity/account/eks/amis/aml2-eks-1-26"
+}
+
+data "aws_ssm_parameter" "eks_ami_1_25" {
+  name = "/unity/account/eks/amis/aml2-eks-1-25"
+}
+
 #data "aws_ssm_parameter" "eks_ami_1_24" {
 #  name = "/unity/account/eks/amis/aml2-eks-1-24"
 #}
