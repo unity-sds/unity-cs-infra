@@ -1,6 +1,7 @@
-- name: unity-cs-monitoring-lambda
-  version: 0.1
-- name: another-marketplace-item
-  version: 1.2
-- name: another-marketplace-item
-  version: 1.4
+MarketplaceItems:
+  - name: unity-cs-monitoring-lambda
+    version: 0.1
+  - name: another-marketplace-item
+    version: 1.2
+  - name: another-marketplace-item
+    version: 1.4

@@ -457,7 +457,6 @@ Resources:
                 ConsoleHost: ${PrivateApplicationLoadBalancer.DNSName}:${Port}
                 Project: ${Project}
                 Venue: ${Venue}
-                MarketplaceItems:
                 ${MarketplaceItems}
               group: ubuntu
               mode: "000644"

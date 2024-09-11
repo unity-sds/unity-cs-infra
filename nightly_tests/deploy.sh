@@ -78,10 +78,8 @@ format_config_file() {
     if [ -f "$1" ]; then
         # Read the file and format it as a YAML string, preserving indentation
         content=$(sed 's/^/  /' "$1" | sed 's/^  -/-/')
-        echo "CONTENT:::"
         echo "$content"
     else
-        echo "CONTENT:::"
         echo "[]"
     fi
 }
