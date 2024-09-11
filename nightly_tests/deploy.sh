@@ -88,7 +88,7 @@ aws cloudformation create-stack \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
-    ${CONFIG_FILE:+--parameters ParameterKey=ConfigFile,ParameterValue="$CONFIG_FILE"} \
+    ${CONFIG_FILE:+ParameterKey=ConfigFile,ParameterValue="$CONFIG_FILE"} \
   --tags Key=ServiceArea,Value=U-CS
 
 
