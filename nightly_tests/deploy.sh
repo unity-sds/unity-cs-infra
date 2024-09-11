@@ -77,7 +77,8 @@ echo "Deploying Cloudformation stack..."
 format_config_file() {
     if [ -f "$1" ]; then
         # Read the file and format it as a YAML string, preserving indentation
-        echo "  $(sed 's/^/  /' "$1" | sed 's/^  - /- /')"
+        content=$(sed 's/^/  /' "$1" | sed 's/^  MarketplaceItems:/MarketplaceItems:/' | sed 's/^    -/  -/')
+        echo "$content"
     else
         echo "[]"
     fi
