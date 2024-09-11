@@ -57,7 +57,7 @@ Metadata:
       Project:
         default: Name of the project that owns and operates the account
       Port:
-        default: Port used for the Managmente Console ALB
+        default: Port used for the Managmente Console NLB
       AMI:
         default: AMI id used for deploying the Management Console
 
@@ -449,7 +449,7 @@ Resources:
                 GithubToken: ${GithubToken}
                 WorkflowBasePath: /home/ubuntu/management-console/workflowresources/.github/workflows
                 Workdir: /home/ubuntu/management-console/workdir/
-                ConsoleHost: ${PrivateApplicationLoadBalancer.DNSName}:${Port}
+                ConsoleHost: ${PrivateNetworkLoadBalancer.DNSName}:${Port}
                 Project: ${Project}
                 Venue: ${Venue}
               group: ubuntu
@@ -605,7 +605,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: !Ref Port
           ToPort: !Ref Port
-          SourceSecurityGroupId: !GetAtt ALBSecurityGroup.GroupId
+          SourceSecurityGroupId: !GetAtt NLBSecurityGroup.GroupId
       Tags:
         - Key: Venue
           Value: !Ref Venue
@@ -624,7 +624,7 @@ Resources:
         - Key: Stack
           Value: Unity Management Console
 
-  ALBSecurityGroup:
+  NLBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Security group for unity management console load balancer
@@ -679,7 +679,7 @@ Resources:
         - Key: Stack
           Value: Unity Management Console
 
-  PrivateApplicationLoadBalancer:
+  PrivateNetworkLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
@@ -688,14 +688,14 @@ Resources:
           Value: "false"
         - Key: idle_timeout.timeout_seconds
           Value: "300"
-      Name: !Sub "unity-mc-alb-${RandomStringResource.RandomString}"
+      Name: !Sub "unity-mc-nlb-${RandomStringResource.RandomString}"
       Scheme: internal
       SecurityGroups:
-        - !GetAtt ALBSecurityGroup.GroupId
+        - !GetAtt NLBSecurityGroup.GroupId
       Subnets:
         - !Ref PublicSubnetID1
         - !Ref PublicSubnetID2
-      Type: application
+      Type: network
       Tags:
         - Key: Venue
           Value: !Ref Venue
@@ -704,7 +704,7 @@ Resources:
         - Key: Component
           Value: Unity Management Console
         - Key: Name
-          Value: Unity Management Console ALB
+          Value: Unity Management Console NLB
         - Key: Proj
           Value: !Ref Project
         - Key: CreatedBy
@@ -720,10 +720,10 @@ Resources:
       DefaultActions:
         - TargetGroupArn: !Ref ManagementConsoleTargetGroup
           Type: "forward"
-      LoadBalancerArn: !Ref PrivateApplicationLoadBalancer
+      LoadBalancerArn: !Ref PrivateNetworkLoadBalancer
       Port: !Ref Port
       Protocol: HTTP
 Outputs:
   ManagementConsoleURL:
     Description: The URL for the Unity Management Console
-    Value: !Sub "http://${PrivateApplicationLoadBalancer.DNSName}:${Port}/ui/landing"
+    Value: !Sub "http://${PrivateNetworkLoadBalancer.DNSName}:${Port}/ui/landing"
