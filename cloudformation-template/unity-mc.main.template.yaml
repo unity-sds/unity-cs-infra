@@ -652,7 +652,6 @@ Resources:
     Properties:
       HealthCheckIntervalSeconds: 90
       HealthCheckProtocol: TCP
-      HealthCheckPath: /ping
       HealthCheckPort: !Ref Port
       HealthCheckTimeoutSeconds: 60
       HealthyThresholdCount: 5
