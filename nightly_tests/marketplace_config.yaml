@@ -2,3 +2,5 @@
   version: 0.1
 - name: another-marketplace-item
   version: 1.2
+- name: another-marketplace-item
+  version: 1.4

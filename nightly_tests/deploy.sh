@@ -73,10 +73,11 @@ echo "Deploying Cloudformation stack..." >> nightly_output.txt
 echo "Deploying Cloudformation stack..."
 
 
+# Function to read and format the config file
 format_config_file() {
     if [ -f "$1" ]; then
-        # Read the file and format it as a YAML string
-        content=$(sed 's/^/      /' "$1")
+        # Read the file and format it as a YAML string, preserving indentation
+        content=$(sed 's/^/  /' "$1")
         echo "$content"
     else
         echo "[]"
