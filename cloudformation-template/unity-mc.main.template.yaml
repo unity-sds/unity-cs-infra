@@ -458,7 +458,7 @@ Resources:
                 Project: ${Project}
                 Venue: ${Venue}
                 MarketplaceItems:
-                  ${MarketplaceItems}
+                ${MarketplaceItems}
               group: ubuntu
               mode: "000644"
               owner: ubuntu

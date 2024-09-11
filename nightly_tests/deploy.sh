@@ -75,28 +75,19 @@ echo "Deploying Cloudformation stack..."
 
 format_config_file() {
     if [ -f "$1" ]; then
-        # Read the file and format it as a JSON string
-        content=$(cat "$1" | jq -c .)
+        # Read the file and format it as a YAML string
+        content=$(sed 's/^/      /' "$1")
         echo "$content"
     else
         echo "[]"
     fi
 }
 
-# Function to read the config file
-read_config_file() {
-    if [ -f "$1" ]; then
-        cat "$1"
-    else
-        echo "[]"
-    fi
-}
-
-# Read the config file content
-config_content=$(read_config_file "$CONFIG_FILE")
+# Read and format the config file content
+config_content=$(format_config_file "$CONFIG_FILE")
 
 # Escape any special characters in the config content
-escaped_config_content=$(echo "$config_content" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+escaped_config_content=$(echo "$config_content" | sed 's/"/\\"/g')
 
 # Modify the CloudFormation create-stack command
 aws cloudformation create-stack \
@@ -115,7 +106,7 @@ aws cloudformation create-stack \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
-    ParameterKey=MarketplaceItems,ParameterValue="$escaped_config_content" \
+    ParameterKey=MarketplaceItems,ParameterValue="${escaped_config_content}" \
   --tags Key=ServiceArea,Value=U-CS
 
 
