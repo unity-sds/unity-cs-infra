@@ -81,7 +81,7 @@ format_config_file() {
         echo "CONTENT:::"
         echo "$content"
     else
-        echo "CONTENT:::EMPTY"
+        echo "CONTENT:::"
         echo "[]"
     fi
 }
@@ -91,6 +91,9 @@ config_content=$(format_config_file "$CONFIG_FILE")
 
 # Escape any special characters in the config content
 escaped_config_content=$(echo "$config_content" | sed 's/"/\\"/g')
+
+echo "ESCAPED_CONTENT:::"
+echo "$escaped_config_content"
 
 # Modify the CloudFormation create-stack command
 aws cloudformation create-stack \
