@@ -686,8 +686,6 @@ Resources:
       LoadBalancerAttributes:
         - Key: deletion_protection.enabled
           Value: "false"
-        - Key: idle_timeout.timeout_seconds
-          Value: "300"
       Name: !Sub "unity-mc-nlb-${RandomStringResource.RandomString}"
       Scheme: internal
       SecurityGroups:
