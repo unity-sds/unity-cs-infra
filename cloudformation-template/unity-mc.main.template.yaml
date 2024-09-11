@@ -651,14 +651,14 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 90
-      HealthCheckProtocol: HTTP
+      HealthCheckProtocol: TCP
       HealthCheckPath: /ping
       HealthCheckPort: !Ref Port
       HealthCheckTimeoutSeconds: 60
       HealthyThresholdCount: 5
       UnhealthyThresholdCount: 5
       Port: !Ref Port
-      Protocol: HTTP
+      Protocol: TCP
       TargetType: instance
       VpcId: !Ref VPCID
       Tags:
@@ -720,7 +720,7 @@ Resources:
           Type: "forward"
       LoadBalancerArn: !Ref PrivateNetworkLoadBalancer
       Port: !Ref Port
-      Protocol: HTTP
+      Protocol: TCP
 Outputs:
   ManagementConsoleURL:
     Description: The URL for the Unity Management Console
