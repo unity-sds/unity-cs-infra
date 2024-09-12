@@ -36,7 +36,7 @@ locals {
             volume_size           = mapping.ebs.volume_size
             volume_type           = mapping.ebs.volume_type
             encrypted             = mapping.ebs.encrypted
-            kms_key_id            = data.aws_ebs_default_kms_key.current.key_arn
+            kms_key_id            = data.aws_kms_key.current.arn
             delete_on_termination = mapping.ebs.delete_on_termination
           }
         }
