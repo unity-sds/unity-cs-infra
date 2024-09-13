@@ -12,7 +12,7 @@ usage() {
 }
 
 #
-# It's mandatory to speciy a valid command arguments
+# It's mandatory to specify a valid command arguments
 #
 # if [[ $# -ne 6 ]]; then
 #  usage
