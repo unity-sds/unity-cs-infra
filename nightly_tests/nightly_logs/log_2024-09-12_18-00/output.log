@@ -13,14 +13,24 @@ Hit:7 https://apt.vector.dev stable Release
 Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
 Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
 Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
-Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
-Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
-Hit:14 http://security.ubuntu.com/ubuntu focal-security InRelease
-Fetched 162 kB in 5s (29.6 kB/s)
+Get:11 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3563 kB]
+Get:12 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
+Get:13 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main Translation-en [550 kB]
+Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [3236 kB]
+Get:15 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
+Get:16 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/restricted Translation-en [453 kB]
+Get:17 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1230 kB]
+Get:18 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe Translation-en [295 kB]
+Get:20 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+Get:21 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [3195 kB]
+Get:22 http://security.ubuntu.com/ubuntu focal-security/main Translation-en [472 kB]
+Get:23 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [3117 kB]
+Get:24 http://security.ubuntu.com/ubuntu focal-security/restricted Translation-en [436 kB]
+Fetched 16.8 MB in 26s (653 kB/s)
 Reading package lists...
 Building dependency tree...
 Reading state information...
-22 packages can be upgraded. Run 'apt list --upgradable' to see them.
+21 packages can be upgraded. Run 'apt list --upgradable' to see them.
 
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
@@ -28,7 +38,7 @@ Reading package lists...
 Building dependency tree...
 Reading state information...
 python3-pip is already the newest version (20.0.2-5ubuntu1.10).
-0 upgraded, 0 newly installed, 0 to remove and 22 not upgraded.
+0 upgraded, 0 newly installed, 0 to remove and 21 not upgraded.
 RUN ARGUMENTS: 
   - Destroy stack at end of script? true
   - Run tests?                      true
@@ -188,11 +198,12 @@ Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 .
     "Version": 1,
     "Tier": "Standard"
 }
-Repo Hash (Nightly Test):     [7c1c3a1]
+Repo Hash (Nightly Test):     [232d8d5]
 From https://github.com/unity-sds/unity-cs-infra
  * branch            mc-feature-flag -> FETCH_HEAD
 Already up to date.
 Already on 'mc-feature-flag'
+M	nightly_tests/nightly_logs/log_2024-09-11_18-00/output.log
 M	nightly_tests/run.sh
 Your branch is up to date with 'origin/mc-feature-flag'.
 deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
@@ -665,66 +676,13 @@ Attempt 48 to reach Management Console via httpd -- Received HTTP response code 
 Attempt 49 to reach Management Console via httpd -- Received HTTP response code 000. Retrying in 10 seconds...
 Attempt 50 to reach Management Console via httpd -- Received HTTP response code 000. Retrying in 10 seconds...
 Management Console Creation Time: 936 seconds
-Total Creation Time(SMM params, CloudFormation, MC): 3492 seconds
+Total Creation Time(SMM params, CloudFormation, MC): 3513 seconds
 Running Smoke Test
 Smoke test was successful. Continuing with bootstrap and tests.
 Running Selenium tests...
 Stopping Selenium docker container...
-483ea91ca55e625996cecf8b9473270fc27401de3c50e4933d452279a06e6064
+56ded0b57c7a90523538df09363e26583f3076f2da778012a2422d6f16a64a80
 mv: cannot stat 'selenium_unity_images/*': No such file or directory
-Current date and time: Wed Sep 11 18:59:13 PDT 2024
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-02_18-00
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-08-31_18-00
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-01_18-00
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-08-30_18-00
-Pushing test results to nightly_logs/log_2024-09-11_18-00...
-[mc-feature-flag 232d8d5] Add nightly output for 2024-09-11_18-00
- 14 files changed, 834 insertions(+), 344 deletions(-)
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-30_18-00/01_screenshot_after_navigating_to_URL.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-30_18-00/02_screenshot_after_bootstrap_check.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-30_18-00/nightly_output_2024-08-30_18-00.txt
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-31_18-00/01_screenshot_after_navigating_to_URL.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-31_18-00/02_screenshot_after_bootstrap_check.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-31_18-00/nightly_output_2024-08-31_18-00.txt
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-01_18-00/01_screenshot_after_navigating_to_URL.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-01_18-00/02_screenshot_after_bootstrap_check.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-01_18-00/nightly_output_2024-09-01_18-00.txt
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-02_18-00/01_screenshot_after_navigating_to_URL.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-02_18-00/02_screenshot_after_bootstrap_check.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-02_18-00/nightly_output_2024-09-02_18-00.txt
- create mode 100644 nightly_tests/nightly_logs/log_2024-09-11_18-00/nightly_output_2024-09-11_18-00.txt
- create mode 100644 nightly_tests/nightly_logs/log_2024-09-11_18-00/output.log
-From https://github.com/unity-sds/unity-cs-infra
- * branch            mc-feature-flag -> FETCH_HEAD
-Already up to date.
-Already on 'mc-feature-flag'
-M	nightly_tests/nightly_logs/log_2024-09-11_18-00/output.log
-M	nightly_tests/run.sh
-Your branch is ahead of 'origin/mc-feature-flag' by 1 commit.
-  (use "git push" to publish your local commits)
-To https://github.com/unity-sds/unity-cs-infra.git
-   7c1c3a1..232d8d5  mc-feature-flag -> mc-feature-flag
-Destroying resources...
-destroy.sh :: PROJECT_NAME: unity
-destroy.sh :: VENUE_NAME: nightly
-Terraform is already installed.
-Checking CloudFormation stack status...
-Error: Unable to retrieve stack status. The stack unity-management-console-unity-nightly may not exist.
-Current stack status: DOES_NOT_EXIST
-Destroying cloudformation stack...
-Waiting for Cloudformation Stack Termination..............................[0]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
-Stack Teardown: Completed in 20s - [PASS]
-Running destroy_deployment_ssm_params.sh script...
-destroy_deployment_ssm_params.sh :: PROJECT_NAME: unity
-destroy_deployment_ssm_params.sh :: VENUE_NAME: nightly
-Deleting SSM parameter: /unity/unity/nightly/project-name ...
-Deleting SSM parameter: /unity/unity/nightly/venue-name ...
-Deleting SSM parameter: /unity/unity/nightly/deployment/status ...
-Deleting SSM parameter: /unity/unity/nightly/cs/monitoring/s3/bucketName ...
-
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1194  100    11  100  1183     70   7535 --:--:-- --:--:-- --:--:--  7556
-{"ok":true}
+Current date and time: Thu Sep 12 18:59:34 PDT 2024
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-04_09-51
+Pushing test results to nightly_logs/log_2024-09-12_18-00...
