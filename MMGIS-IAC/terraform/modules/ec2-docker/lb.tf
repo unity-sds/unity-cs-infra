@@ -5,7 +5,7 @@ resource "aws_lb_target_group" "unity_mmgis_tg_tf" {
   protocol    = "TCP"
   target_type = "instance"
   #vpc_id      = data.aws_vpc.default.id
-  vpc_id      = var.vpc_id
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
 
   health_check {
     enabled             = true
@@ -39,7 +39,7 @@ resource "aws_lb" "unity-mmgis-lb-tf" {
   #security_groups    = [var.sg_id]
   #security_groups    = []
   #subnets            = [for subnet in aws_subnet.public : subnet.id]
-  subnets            = var.subnet_ids
+  subnets            = jsondecode(data.aws_ssm_parameter.subnet_list.value).public
 
   enable_deletion_protection = false
 

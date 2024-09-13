@@ -2,16 +2,38 @@ locals {
     block_device_path = "/dev/sdh"
 }
 
+data "aws_iam_role" "existing_role" {
+  name = "Unity-CS_Service_Role"
+}
+
+data "aws_ssm_parameter" "mmgis_ami_id" {
+  name = "/mcp/amis/ubuntu2004-cset"
+}
+
+data "aws_ssm_parameter" "subnet_id" {
+  name = "/unity/account/network/publicsubnet1"
+}
+
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic and all outbound traffic"
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
+
+  tags = {
+    Name = "allow_tls"
+  }
+}
+
 resource "aws_iam_instance_profile" "unity_mmgis_instance_profile" {
   name = "unity-mmgis-instance-profile-tf"
 
-  role = var.role
+  role = data.aws_iam_role.existing_role.name
 
   tags = {
     Name = "unity_mmgis_instance_profile"
   }
 }
-
+ 
 resource "aws_ebs_volume" "persistent" {
     availability_zone = aws_instance.unity_mmgis_instance.availability_zone
     size = var.persistent_volume_size_gb
@@ -25,18 +47,16 @@ resource "aws_volume_attachment" "persistent" {
 
 
 resource "aws_instance" "unity_mmgis_instance" {
-  ami           = var.ami
+  ami           = data.aws_ssm_parameter.mmgis_ami_id.value
   instance_type = var.instance_type
 
   tags = {
     Name = "unity-mmgis-instance-tf"
   }
 
-  key_name = var.key_name
+  vpc_security_group_ids = [ aws_security_group.allow_tls.id ]
 
-  vpc_security_group_ids = [var.sg_id]
-
-  subnet_id = var.subnet_id
+  subnet_id = data.aws_ssm_parameter.subnet_id.value
 
   iam_instance_profile = aws_iam_instance_profile.unity_mmgis_instance_profile.name
 
