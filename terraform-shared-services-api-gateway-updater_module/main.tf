@@ -26,7 +26,7 @@ resource "aws_api_gateway_resource" "rest_api_resource_for_project_proxy_resourc
   path_part   = "{proxy+}"
 }
 
-resource "aws_api_gateway_method" "rest_api_resource_for_project_proxy_resource_method" {
+resource "aws_api_gateway_method" "rest_api_method_for_project_proxy_resource_method" {
   rest_api_id   = data.aws_api_gateway_rest_api.rest_api.id
   resource_id   = aws_api_gateway_resource.rest_api_resource_for_project_proxy_resource.id
   http_method   = "ANY"
@@ -39,7 +39,7 @@ resource "aws_api_gateway_method" "rest_api_resource_for_project_proxy_resource_
 resource "aws_api_gateway_integration" "rest_api_resource_for_project_proxy_resource_method_integration" {
   rest_api_id   = data.aws_api_gateway_rest_api.rest_api.id
   resource_id          = aws_api_gateway_resource.rest_api_resource_for_project_proxy_resource.id
-  http_method          = aws_api_gateway_method.rest_api_resource_for_project_proxy_resource_method.http_method
+  http_method          = aws_api_gateway_method.rest_api_method_for_project_proxy_resource_method.http_method
   type                 = "HTTP_PROXY"
   uri                  = var.project_leveL_rest_api_integration_uri
   integration_http_method = "ANY"
