@@ -59,12 +59,12 @@ resource "aws_ssm_parameter" "invoke_role_arn" {
   value = aws_iam_role.iam_for_lambda_auth.arn
 }
 
-#Unity shared serive account id
+# Unity shared services account id
 data "aws_ssm_parameter" "shared_service_account_id"{
   name = var.ssm_account_id
 }
 
-#Unity shared serive account region
+# Unity shared services account region
 data "aws_ssm_parameter" "shared_service_region"{
   name = var.ssm_region
 }
@@ -168,4 +168,33 @@ resource "aws_ssm_parameter" "api_gateway_uri" {
   overwrite = true
   type = "String"
   value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
+}
+
+
+# Management Console Health Check API Integration Code
+
+resource "aws_api_gateway_resource" "rest_api_resource_management_path" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
+  path_part   = "management"
+}
+
+resource "aws_api_gateway_resource" "rest_api_resource_api_path" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  parent_id   = aws_api_gateway_resource.rest_api_resource_management_path.id
+  path_part   = "api"
+}
+
+resource "aws_api_gateway_resource" "rest_api_resource_health_checks_path" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  parent_id   = aws_api_gateway_resource.rest_api_resource_api_path.id
+  path_part   = "health_checks"
+}
+
+resource "aws_api_gateway_method" "rest_api_method_for_project_proxy_resource_method" {
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  resource_id   = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
+  http_method   = "GET"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.unity_cs_common_authorizer.id
 }
