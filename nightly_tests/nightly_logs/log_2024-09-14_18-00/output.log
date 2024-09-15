@@ -6,20 +6,19 @@ WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 Hit:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal InRelease
 Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
 Hit:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease
-Get:4 https://download.docker.com/linux/ubuntu focal InRelease [57.7 kB]
-Get:5 https://apt.releases.hashicorp.com focal InRelease [12.9 kB]
+Hit:4 https://download.docker.com/linux/ubuntu focal InRelease
+Hit:5 https://apt.releases.hashicorp.com focal InRelease
 Ign:6 https://apt.vector.dev stable InRelease
 Hit:7 https://apt.vector.dev stable Release
 Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
 Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
 Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
 Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
-Get:12 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3563 kB]
-Get:13 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
-Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1230 kB]
-Get:15 https://apt.releases.hashicorp.com focal/main amd64 Packages [149 kB]
-Hit:17 http://security.ubuntu.com/ubuntu focal-security InRelease
-Fetched 5175 kB in 6s (875 kB/s)
+Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
+Get:13 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3563 kB]
+Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1231 kB]
+Hit:15 http://security.ubuntu.com/ubuntu focal-security InRelease
+Fetched 4955 kB in 7s (749 kB/s)
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -191,12 +190,12 @@ Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 .
     "Version": 1,
     "Tier": "Standard"
 }
-Repo Hash (Nightly Test):     [68a724c]
+Repo Hash (Nightly Test):     [3386bef]
 From https://github.com/unity-sds/unity-cs-infra
  * branch            mc-feature-flag -> FETCH_HEAD
 Already up to date.
 Already on 'mc-feature-flag'
-M	nightly_tests/nightly_logs/log_2024-09-12_18-00/output.log
+M	nightly_tests/nightly_logs/log_2024-09-13_18-00/output.log
 M	nightly_tests/run.sh
 Your branch is up to date with 'origin/mc-feature-flag'.
 deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
@@ -674,45 +673,7 @@ Running Smoke Test
 Smoke test was successful. Continuing with bootstrap and tests.
 Running Selenium tests...
 Stopping Selenium docker container...
-f42856fe3c04f52b64e73734affbe375de50a02f40700442754dbd2592eb9ece
+0927252bae05947239396193cc80c89210552945bd3f6c9474d603fb1d601fad
 mv: cannot stat 'selenium_unity_images/*': No such file or directory
-Current date and time: Fri Sep 13 18:59:12 PDT 2024
-Pushing test results to nightly_logs/log_2024-09-13_18-00...
-[mc-feature-flag 3386bef] Add nightly output for 2024-09-13_18-00
- 3 files changed, 872 insertions(+)
- create mode 100644 nightly_tests/nightly_logs/log_2024-09-13_18-00/nightly_output_2024-09-13_18-00.txt
- create mode 100644 nightly_tests/nightly_logs/log_2024-09-13_18-00/output.log
-From https://github.com/unity-sds/unity-cs-infra
- * branch            mc-feature-flag -> FETCH_HEAD
-Already up to date.
-Already on 'mc-feature-flag'
-M	nightly_tests/nightly_logs/log_2024-09-13_18-00/output.log
-M	nightly_tests/run.sh
-Your branch is ahead of 'origin/mc-feature-flag' by 1 commit.
-  (use "git push" to publish your local commits)
-To https://github.com/unity-sds/unity-cs-infra.git
-   68a724c..3386bef  mc-feature-flag -> mc-feature-flag
-Destroying resources...
-destroy.sh :: PROJECT_NAME: unity
-destroy.sh :: VENUE_NAME: nightly
-Terraform is already installed.
-Checking CloudFormation stack status...
-Error: Unable to retrieve stack status. The stack unity-management-console-unity-nightly may not exist.
-Current stack status: DOES_NOT_EXIST
-Destroying cloudformation stack...
-Waiting for Cloudformation Stack Termination..............................[0]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
-Stack Teardown: Completed in 20s - [PASS]
-Running destroy_deployment_ssm_params.sh script...
-destroy_deployment_ssm_params.sh :: PROJECT_NAME: unity
-destroy_deployment_ssm_params.sh :: VENUE_NAME: nightly
-Deleting SSM parameter: /unity/unity/nightly/project-name ...
-Deleting SSM parameter: /unity/unity/nightly/venue-name ...
-Deleting SSM parameter: /unity/unity/nightly/deployment/status ...
-Deleting SSM parameter: /unity/unity/nightly/cs/monitoring/s3/bucketName ...
-
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1194  100    11  100  1183     58   6326 --:--:-- --:--:-- --:--:--  6351100  1194  100    11  100  1183     58   6326 --:--:-- --:--:-- --:--:--  6351
-{"ok":true}
+Current date and time: Sat Sep 14 18:59:12 PDT 2024
+Pushing test results to nightly_logs/log_2024-09-14_18-00...
