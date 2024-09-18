@@ -685,7 +685,7 @@ Resources:
       LoadBalancerAttributes:
         - Key: deletion_protection.enabled
           Value: "false"
-      Name: !Sub "unity-mc-nlb-${RandomStringResource.RandomString}"
+      Name: !Sub "unity-mc-nlb-${Project}-${Venue}"
       Scheme: internal
       SecurityGroups:
         - !GetAtt NLBSecurityGroup.GroupId
