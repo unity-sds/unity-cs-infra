@@ -4,7 +4,7 @@ Existing deployment not found.  Continuing with deployment...
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
 Hit:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal InRelease
-Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+Hit:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease
 Hit:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease
 Hit:4 https://download.docker.com/linux/ubuntu focal InRelease
 Hit:5 https://apt.releases.hashicorp.com focal InRelease
@@ -14,17 +14,13 @@ Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
 Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
 Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
 Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
-Get:12 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3594 kB]
-Get:13 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
-Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main Translation-en [553 kB]
-Get:15 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [3275 kB]
-Get:16 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/restricted Translation-en [458 kB]
-Hit:17 http://security.ubuntu.com/ubuntu focal-security InRelease
-Fetched 8041 kB in 7s (1229 kB/s)
+Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
+Hit:14 http://security.ubuntu.com/ubuntu focal-security InRelease
+Fetched 33.8 kB in 8s (4498 B/s)
 Reading package lists...
 Building dependency tree...
 Reading state information...
-31 packages can be upgraded. Run 'apt list --upgradable' to see them.
+32 packages can be upgraded. Run 'apt list --upgradable' to see them.
 
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
@@ -32,7 +28,7 @@ Reading package lists...
 Building dependency tree...
 Reading state information...
 python3-pip is already the newest version (20.0.2-5ubuntu1.10).
-0 upgraded, 0 newly installed, 0 to remove and 31 not upgraded.
+0 upgraded, 0 newly installed, 0 to remove and 32 not upgraded.
 RUN ARGUMENTS: 
   - Destroy stack at end of script? true
   - Run tests?                      true
@@ -192,11 +188,12 @@ Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 .
     "Version": 1,
     "Tier": "Standard"
 }
-Repo Hash (Nightly Test):     [c97c760]
+Repo Hash (Nightly Test):     [c8795b4]
 From https://github.com/unity-sds/unity-cs-infra
  * branch            mc-feature-flag -> FETCH_HEAD
 Already up to date.
 Already on 'mc-feature-flag'
+M	nightly_tests/nightly_logs/log_2024-09-16_18-00/output.log
 M	nightly_tests/run.sh
 Your branch is up to date with 'origin/mc-feature-flag'.
 deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
@@ -668,51 +665,13 @@ Attempt 47 to reach Management Console via httpd -- Received HTTP response code 
 Attempt 48 to reach Management Console via httpd -- Received HTTP response code 000. Retrying in 10 seconds...
 Attempt 49 to reach Management Console via httpd -- Received HTTP response code 000. Retrying in 10 seconds...
 Attempt 50 to reach Management Console via httpd -- Received HTTP response code 000. Retrying in 10 seconds...
-Management Console Creation Time: 936 seconds
-Total Creation Time(SMM params, CloudFormation, MC): 3492 seconds
+Management Console Creation Time: 935 seconds
+Total Creation Time(SMM params, CloudFormation, MC): 3487 seconds
 Running Smoke Test
 Smoke test was successful. Continuing with bootstrap and tests.
 Running Selenium tests...
 Stopping Selenium docker container...
-1632001c2957dca3718edf818d1df80aa089960ed13b5521dfd17616e45434f5
+b8cfabc353709f8e6c7cf886ccd0830a451a171e5dad23ab86862615078fdfe2
 mv: cannot stat 'selenium_unity_images/*': No such file or directory
-Current date and time: Mon Sep 16 18:59:12 PDT 2024
-Pushing test results to nightly_logs/log_2024-09-16_18-00...
-[mc-feature-flag c8795b4] Add nightly output for 2024-09-16_18-00
- 2 files changed, 834 insertions(+)
- create mode 100644 nightly_tests/nightly_logs/log_2024-09-16_18-00/nightly_output_2024-09-16_18-00.txt
- create mode 100644 nightly_tests/nightly_logs/log_2024-09-16_18-00/output.log
-From https://github.com/unity-sds/unity-cs-infra
- * branch            mc-feature-flag -> FETCH_HEAD
-Already up to date.
-Already on 'mc-feature-flag'
-M	nightly_tests/nightly_logs/log_2024-09-16_18-00/output.log
-M	nightly_tests/run.sh
-Your branch is ahead of 'origin/mc-feature-flag' by 1 commit.
-  (use "git push" to publish your local commits)
-To https://github.com/unity-sds/unity-cs-infra.git
-   c97c760..c8795b4  mc-feature-flag -> mc-feature-flag
-Destroying resources...
-destroy.sh :: PROJECT_NAME: unity
-destroy.sh :: VENUE_NAME: nightly
-Terraform is already installed.
-Checking CloudFormation stack status...
-Error: Unable to retrieve stack status. The stack unity-management-console-unity-nightly may not exist.
-Current stack status: DOES_NOT_EXIST
-Destroying cloudformation stack...
-Waiting for Cloudformation Stack Termination..............................[0]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
-Stack Teardown: Completed in 20s - [PASS]
-Running destroy_deployment_ssm_params.sh script...
-destroy_deployment_ssm_params.sh :: PROJECT_NAME: unity
-destroy_deployment_ssm_params.sh :: VENUE_NAME: nightly
-Deleting SSM parameter: /unity/unity/nightly/project-name ...
-Deleting SSM parameter: /unity/unity/nightly/venue-name ...
-Deleting SSM parameter: /unity/unity/nightly/deployment/status ...
-Deleting SSM parameter: /unity/unity/nightly/cs/monitoring/s3/bucketName ...
-
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1194  100    11  100  1183     62   6721 --:--:-- --:--:-- --:--:--  6822
-{"ok":true}
+Current date and time: Tue Sep 17 18:59:09 PDT 2024
+Pushing test results to nightly_logs/log_2024-09-17_18-00...
