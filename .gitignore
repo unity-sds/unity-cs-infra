@@ -27,3 +27,6 @@ aws_role_create/identity.txt
 aws_role_create/output.txt
 aws_role_create/policies.list
 aws_role_create/role.txt
+
+MMGIS-IAC/terraform/.terraform
+MMGIS-IAC/terraform/.terraform*

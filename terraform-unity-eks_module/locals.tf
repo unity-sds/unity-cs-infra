@@ -4,8 +4,9 @@ locals {
   subnet_map   = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   #ami = "ami-0e3e9697a56f6ba66"
   ami_map = {
+    "1.30"    = data.aws_ssm_parameter.eks_ami_1_30.value
     "1.29"    = data.aws_ssm_parameter.eks_ami_1_29.value
-    "1.27"    = data.aws_ssm_parameter.eks_ami_1_27.value
+    "1.28"    = data.aws_ssm_parameter.eks_ami_1_28.value
     "default" = "ami-0f4319b351ce92b6e"
   }
   #iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
@@ -36,7 +37,7 @@ locals {
             volume_size           = mapping.ebs.volume_size
             volume_type           = mapping.ebs.volume_type
             encrypted             = mapping.ebs.encrypted
-            kms_key_id            = data.aws_ebs_default_kms_key.current.key_arn
+            kms_key_id            = data.aws_kms_key.current.arn
             delete_on_termination = mapping.ebs.delete_on_termination
           }
         }

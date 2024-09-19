@@ -104,7 +104,7 @@ if [ "${INITIAL_STACK_STATUS}" == "CREATE_COMPLETE" ]; then
 terraform {
   backend "s3" {
     bucket         = "unity-${PROJECT_NAME}-${VENUE_NAME}-bucket"
-    key            = "default"
+    key            = "${PROJECT_NAME}-${VENUE_NAME}-tfstate"
     region         = "us-west-2"
     dynamodb_table = "${PROJECT_NAME}-${VENUE_NAME}-terraform-state"
   }
