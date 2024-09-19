@@ -3,3 +3,7 @@ MarketplaceItems:
     version: 0.1
   - name: unity-cloud-env
     version: 0.1
+  - name: unity-apigateway
+    version: 0.4
+  - name: unity-proxy
+    version: 0.14
