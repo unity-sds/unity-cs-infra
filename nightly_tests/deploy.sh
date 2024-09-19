@@ -87,11 +87,22 @@ format_config_file() {
 # Read and format the config file content
 config_content=$(format_config_file "$CONFIG_FILE")
 
+# Output the marketplace items table to both console and nightly_output.txt
+{
+    echo "Marketplace Items:"
+    echo "Marketplace Item                | Version"
+    echo "--------------------------------+--------"
+    echo "$config_content" | grep -E '^\s*-' | sed -E 's/^\s*-\s*name:\s*(.*)/\1/' | while read -r line; do
+        name=$(echo "$line" | cut -d' ' -f1)
+        version=$(echo "$config_content" | grep -A1 "name: $name" | grep 'version:' | sed -E 's/^\s*version:\s*//')
+        printf "%-30s | %s\n" "$name" "$version"
+    done
+} | tee -a nightly_output.txt
+
 # Escape any special characters in the config content
 escaped_config_content=$(echo "$config_content" | sed 's/"/\\"/g')
 
-echo "ESCAPED_CONTENT:::"
-echo "$escaped_config_content"
+
 
 # Modify the CloudFormation create-stack command
 aws cloudformation create-stack \
