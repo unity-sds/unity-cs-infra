@@ -135,6 +135,11 @@ Parameters:
     Description: Name of SSM parameter containing Latest Ubuntu MCP AMI ID
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
 
+  MarketplaceItems:
+    Type: String
+    Description: YAML string containing marketplace items
+    Default: "[]"
+
 Conditions:
   IsLatestMCVersion:
     Fn::Equals:
@@ -452,6 +457,7 @@ Resources:
                 ConsoleHost: ${PrivateNetworkLoadBalancer.DNSName}:${Port}
                 Project: ${Project}
                 Venue: ${Venue}
+                ${MarketplaceItems}
               group: ubuntu
               mode: "000644"
               owner: ubuntu

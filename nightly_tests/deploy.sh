@@ -4,10 +4,11 @@ STACK_NAME=""
 PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
+CONFIG_FILE=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>]"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--config-file <CONFIG_FILE>]"
     exit 1
 }
 
@@ -35,6 +36,10 @@ while [[ $# -gt 0 ]]; do
             ;;            
         --mc-version)
             MC_VERSION="$2"
+            shift 2
+            ;;
+        --config-file)
+            CONFIG_FILE="$2"
             shift 2
             ;;
         *)
@@ -67,6 +72,39 @@ echo "deploying INSTANCE TYPE: ${MC_INSTANCETYPE_VAL} ..."
 echo "Deploying Cloudformation stack..." >> nightly_output.txt
 echo "Deploying Cloudformation stack..."
 
+
+# Function to read and format the config file
+format_config_file() {
+    if [ -f "$1" ]; then
+        # Read the file and format it as a YAML string, preserving indentation
+        content=$(sed 's/^//' "$1")
+        echo "$content"
+    else
+        echo "[]"
+    fi
+}
+
+# Read and format the config file content
+config_content=$(format_config_file "$CONFIG_FILE")
+
+# Output the marketplace items table to both console and nightly_output.txt
+{
+    echo "Marketplace Items:"
+    echo "Marketplace Item                | Version"
+    echo "--------------------------------+--------"
+    echo "$config_content" | grep -E '^\s*-' | sed -E 's/^\s*-\s*name:\s*(.*)/\1/' | while read -r line; do
+        name=$(echo "$line" | cut -d' ' -f1)
+        version=$(echo "$config_content" | grep -A1 "name: $name" | grep 'version:' | sed -E 's/^\s*version:\s*//')
+        printf "%-30s | %s\n" "$name" "$version"
+    done
+} | tee -a nightly_output.txt
+
+# Escape any special characters in the config content
+escaped_config_content=$(echo "$config_content" | sed 's/"/\\"/g')
+
+
+
+# Modify the CloudFormation create-stack command
 aws cloudformation create-stack \
   --stack-name ${STACK_NAME} \
   --template-body file://../cloudformation-template/unity-mc.main.template.yaml \
@@ -83,6 +121,7 @@ aws cloudformation create-stack \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
+    ParameterKey=MarketplaceItems,ParameterValue="${escaped_config_content}" \
   --tags Key=ServiceArea,Value=U-CS
 
 
