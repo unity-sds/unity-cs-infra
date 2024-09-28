@@ -6,36 +6,37 @@ WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 Hit:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal InRelease
 Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
 Hit:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease
-Hit:4 https://download.docker.com/linux/ubuntu focal InRelease
-Hit:5 https://apt.releases.hashicorp.com focal InRelease
-Ign:6 https://apt.vector.dev stable InRelease
-Hit:7 https://apt.vector.dev stable Release
+Hit:4 https://apt.releases.hashicorp.com focal InRelease
+Ign:5 https://apt.vector.dev stable InRelease
+Hit:6 https://apt.vector.dev stable Release
+Hit:7 https://download.docker.com/linux/ubuntu focal InRelease
 Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
 Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
 Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
 Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
 Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
-Hit:14 http://security.ubuntu.com/ubuntu focal-security InRelease
-Fetched 162 kB in 5s (29.6 kB/s)
+Get:13 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3605 kB]
+Hit:15 http://security.ubuntu.com/ubuntu focal-security InRelease
+Fetched 3766 kB in 6s (650 kB/s)
 Reading package lists...
 Building dependency tree...
 Reading state information...
-22 packages can be upgraded. Run 'apt list --upgradable' to see them.
+35 packages can be upgraded. Run 'apt list --upgradable' to see them.
 
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
 Reading package lists...
 Building dependency tree...
 Reading state information...
-python3-pip is already the newest version (20.0.2-5ubuntu1.10).
-0 upgraded, 0 newly installed, 0 to remove and 22 not upgraded.
+python3-pip is already the newest version (20.0.2-5ubuntu1.10+esm2).
+0 upgraded, 0 newly installed, 0 to remove and 35 not upgraded.
 RUN ARGUMENTS: 
   - Destroy stack at end of script? true
   - Run tests?                      true
   - Project Name:                   unity
   - Venue Name:                     nightly
   - MC Version:                     latest
-  - Config File:                    
+  - Config File:                    marketplace_config.yaml
 ---------------------------------------------------------
 set_common_ssm_params.sh ...
 Deleting SSM parameter: /unity/cs/account/management-console/instancetype ...
@@ -151,14 +152,20 @@ populate_if_not_exists_ssm_param: /unity/account/network/certificate-arn ...
     }
 }
 SSM param /unity/account/network/certificate-arn exists. Continuing...
-
-An error occurred (ParameterNotFound) when calling the GetParameter operation: 
-Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-27 ...
-SSM param /unity/account/eks/amis/aml2-eks-1-27 not found.  Not attempting a delete.
-Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-27 =  ...
-ERROR: SSM create failed for /unity/account/eks/amis/aml2-eks-1-27
+Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-28 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-28 = ami-072024b2be782a185 ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
 Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-29 ...
-Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-29 = ami-0cba07c4730f227d3 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-29 = ami-04f6a0ee958557055 ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-30 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-30 = ami-0c15f691ece263cae ...
 {
     "Version": 1,
     "Tier": "Standard"
@@ -188,13 +195,13 @@ Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 .
     "Version": 1,
     "Tier": "Standard"
 }
-Repo Hash (Nightly Test):     [7c1c3a1]
+Repo Hash (Nightly Test):     [418d6ae]
 From https://github.com/unity-sds/unity-cs-infra
- * branch            mc-feature-flag -> FETCH_HEAD
+ * branch            main       -> FETCH_HEAD
 Already up to date.
-Already on 'mc-feature-flag'
-M	nightly_tests/run.sh
-Your branch is up to date with 'origin/mc-feature-flag'.
+Already on 'main'
+M	nightly_tests/nightly_logs/log_2024-09-26_18-00/output.log
+Your branch is up to date with 'origin/main'.
 deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
 deploy.sh :: PROJECT_NAME: unity
 deploy.sh :: VENUE_NAME: nightly
@@ -230,379 +237,139 @@ Creating SSM parameter : /unity/unity/nightly/cs/monitoring/s3/bucketName = unit
 }
 deploying INSTANCE TYPE: c6i.xlarge ...
 Deploying Cloudformation stack...
-ESCAPED_CONTENT:::
-[]
-
-Parameter validation failed:
-Invalid type for parameter Parameters[11].ParameterValue, value: [], type: <class 'list'>, valid types: <class 'str'>
+Marketplace Items:
+Marketplace Item                | Version
+--------------------------------+--------
+unity-cs-monitoring-lambda     | 0.1
+unity-apigateway               | 0.4
+unity-proxy                    | 0.14
+{
+    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/233e5140-7d35-11ef-92fa-02f2a785cdd1"
+}
 Stack Name: [unity-management-console-unity-nightly]
 Waiting for Cloudformation Stack..........................................[0]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[20]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[40]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[60]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[80]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[100]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[120]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[140]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[160]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[180]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[200]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[220]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[240]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[260]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[280]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[300]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[320]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[340]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[360]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[380]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[400]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[420]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[440]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[460]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[480]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[500]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[520]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[540]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[560]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[580]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[600]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[620]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[640]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[660]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[680]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[700]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[720]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[740]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[760]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[780]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[800]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[820]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[840]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[860]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[880]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[900]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[920]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[940]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[960]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[980]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1000]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1020]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1040]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1060]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1080]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1100]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1120]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1140]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1160]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1180]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1200]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1220]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1240]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1260]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1280]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1300]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1320]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1340]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1360]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1380]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1400]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1420]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1440]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1460]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1480]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1500]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1520]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1540]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1560]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1580]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1600]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1620]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1640]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1660]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1680]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1700]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1720]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1740]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1760]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1780]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1800]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1820]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1840]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1860]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1880]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1900]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1920]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1940]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1960]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[1980]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2000]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2020]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2040]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2060]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2080]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2100]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2120]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2140]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2160]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2180]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2200]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2220]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2240]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2260]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2280]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2300]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2320]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2340]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2360]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2380]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Waiting for Cloudformation Stack..........................................[2400]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
 Cloudformation Stack creation exceeded 2400 seconds - [FAIL]
 Deploying Management Console...
-
-An error occurred (ValidationError) when calling the DescribeStackEvents operation: Stack [unity-management-console-unity-nightly] does not exist
 
 An error occurred (ParameterNotFound) when calling the GetParameter operation: 
 MANAGEMENT_CONSOLE_URL = 
@@ -610,7 +377,7 @@ Checking if Docker is installed...
 Docker already installed [OK]
 Using default tag: latest
 latest: Pulling from selenium/standalone-chrome
-Digest: sha256:624e863422e5e66cb8e42a4da218cbdc13e704051d4885f89b2719539a40e9ba
+Digest: sha256:3e48c9040f1948ee07283c18b7efc2b1687ce8513e4d3aeb3e34fa6058a61abc
 Status: Image is up to date for selenium/standalone-chrome:latest
 docker.io/selenium/standalone-chrome:latest
 Launching selenium docker...
@@ -664,67 +431,25 @@ Attempt 47 to reach Management Console via httpd -- Received HTTP response code 
 Attempt 48 to reach Management Console via httpd -- Received HTTP response code 000. Retrying in 10 seconds...
 Attempt 49 to reach Management Console via httpd -- Received HTTP response code 000. Retrying in 10 seconds...
 Attempt 50 to reach Management Console via httpd -- Received HTTP response code 000. Retrying in 10 seconds...
-Management Console Creation Time: 936 seconds
-Total Creation Time(SMM params, CloudFormation, MC): 3492 seconds
+Management Console Creation Time: 935 seconds
+Total Creation Time(SMM params, CloudFormation, MC): 3496 seconds
 Running Smoke Test
 Smoke test was successful. Continuing with bootstrap and tests.
 Running Selenium tests...
 Stopping Selenium docker container...
-483ea91ca55e625996cecf8b9473270fc27401de3c50e4933d452279a06e6064
+2d68bf0104dfd620333e16dc484cfb8e23659aa87ee0472e1f713c5c00dbc24f
 mv: cannot stat 'selenium_unity_images/*': No such file or directory
-Current date and time: Wed Sep 11 18:59:13 PDT 2024
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-02_18-00
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-08-31_18-00
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-01_18-00
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-08-30_18-00
-Pushing test results to nightly_logs/log_2024-09-11_18-00...
-[mc-feature-flag 232d8d5] Add nightly output for 2024-09-11_18-00
- 14 files changed, 834 insertions(+), 344 deletions(-)
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-30_18-00/01_screenshot_after_navigating_to_URL.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-30_18-00/02_screenshot_after_bootstrap_check.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-30_18-00/nightly_output_2024-08-30_18-00.txt
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-31_18-00/01_screenshot_after_navigating_to_URL.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-31_18-00/02_screenshot_after_bootstrap_check.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-08-31_18-00/nightly_output_2024-08-31_18-00.txt
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-01_18-00/01_screenshot_after_navigating_to_URL.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-01_18-00/02_screenshot_after_bootstrap_check.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-01_18-00/nightly_output_2024-09-01_18-00.txt
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-02_18-00/01_screenshot_after_navigating_to_URL.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-02_18-00/02_screenshot_after_bootstrap_check.png
- delete mode 100644 nightly_tests/nightly_logs/log_2024-09-02_18-00/nightly_output_2024-09-02_18-00.txt
- create mode 100644 nightly_tests/nightly_logs/log_2024-09-11_18-00/nightly_output_2024-09-11_18-00.txt
- create mode 100644 nightly_tests/nightly_logs/log_2024-09-11_18-00/output.log
-From https://github.com/unity-sds/unity-cs-infra
- * branch            mc-feature-flag -> FETCH_HEAD
-Already up to date.
-Already on 'mc-feature-flag'
-M	nightly_tests/nightly_logs/log_2024-09-11_18-00/output.log
-M	nightly_tests/run.sh
-Your branch is ahead of 'origin/mc-feature-flag' by 1 commit.
-  (use "git push" to publish your local commits)
-To https://github.com/unity-sds/unity-cs-infra.git
-   7c1c3a1..232d8d5  mc-feature-flag -> mc-feature-flag
-Destroying resources...
-destroy.sh :: PROJECT_NAME: unity
-destroy.sh :: VENUE_NAME: nightly
-Terraform is already installed.
-Checking CloudFormation stack status...
-Error: Unable to retrieve stack status. The stack unity-management-console-unity-nightly may not exist.
-Current stack status: DOES_NOT_EXIST
-Destroying cloudformation stack...
-Waiting for Cloudformation Stack Termination..............................[0]
-
-An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
-Stack Teardown: Completed in 20s - [PASS]
-Running destroy_deployment_ssm_params.sh script...
-destroy_deployment_ssm_params.sh :: PROJECT_NAME: unity
-destroy_deployment_ssm_params.sh :: VENUE_NAME: nightly
-Deleting SSM parameter: /unity/unity/nightly/project-name ...
-Deleting SSM parameter: /unity/unity/nightly/venue-name ...
-Deleting SSM parameter: /unity/unity/nightly/deployment/status ...
-Deleting SSM parameter: /unity/unity/nightly/cs/monitoring/s3/bucketName ...
-
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  1194  100    11  100  1183     70   7535 --:--:-- --:--:-- --:--:--  7556
-{"ok":true}
+Current date and time: Fri Sep 27 18:59:18 PDT 2024
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-14_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-19_12-24
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-18_20-26
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-18_20-29
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-13_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-11_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-17_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-12_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-16_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-15_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-18_19-18
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-19_18-00
+Pushing test results to nightly_logs/log_2024-09-27_18-00...
