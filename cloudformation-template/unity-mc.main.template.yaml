@@ -385,8 +385,8 @@ Resources:
                 && git clone --depth=1 https://github.com/tfutils/tfenv.git /home/ubuntu/.tfenv \
                 && chown -R ubuntu:ubuntu /home/ubuntu/.tfenv \
                 && ln -s /home/ubuntu/.tfenv/bin/* /usr/local/bin \
-                && tfenv install 1.6.6 \
-                && tfenv use 1.6.6
+                && tfenv install 1.8.2 \
+                && tfenv use 1.8.2
             05_install_awscli:
               command: !Sub |
                 set -ex \
