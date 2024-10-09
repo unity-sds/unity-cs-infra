@@ -26,7 +26,10 @@ create_or_update_policy() {
     if aws iam get-policy --policy-arn arn:aws:iam::${ACCOUNT_NUMBER}:policy/${policy_name} 2>/dev/null; then
         echo "Updating policy ${policy_name}..."
         policy_version=$(aws iam create-policy-version --policy-arn arn:aws:iam::${ACCOUNT_NUMBER}:policy/${policy_name} --policy-document file://${policy_file} --set-as-default --query 'PolicyVersion.VersionId' --output text)
-        aws iam delete-policy-versions --policy-arn arn:aws:iam::${ACCOUNT_NUMBER}:policy/${policy_name} --versions-to-delete $(aws iam list-policy-versions --policy-arn arn:aws:iam::${ACCOUNT_NUMBER}:policy/${policy_name} --query 'Versions[?IsDefaultVersion==`false`].VersionId' --output text)
+        OLD_VERSIONS=$(aws iam list-policy-versions --policy-arn arn:aws:iam::${ACCOUNT_NUMBER}:policy/${policy_name} --query 'Versions[?IsDefaultVersion==`false`].VersionId' --output text)
+        for VERSION in $OLD_VERSIONS; do
+            aws iam delete-policy-version --policy-arn arn:aws:iam::${ACCOUNT_NUMBER}:policy/${policy_name} --version-id $VERSION
+        done
     else
         echo "Creating policy ${policy_name}..."
         aws iam create-policy \
