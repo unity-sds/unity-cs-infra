@@ -17,7 +17,10 @@
                 "events:DescribeRule",
                 "events:ListTagsForResource",
                 "events:RemoveTargets",
-                "events:DeleteRule"
+                "events:DeleteRule",
+                "iam:CreatePolicyVersion",
+               "iam:DeletePolicyVersion",
+               "iam:ListPolicyVersions"
             ],
             "Resource": [
                 "arn:aws:ec2:*:*:subnet/*",
@@ -32,7 +35,8 @@
                 "arn:aws:iam::*:role/unity-cs-nightly-*",
                 "arn:aws:iam::*:role/u-cs-ecs-use-eks",
                 "arn:aws:logs:*:*:log-group:*",
-                "arn:aws:events:*:*:rule/*"
+                "arn:aws:events:*:*:rule/*",
+                "arn:aws:iam::*:policy/*"
             ]
         },
         {
