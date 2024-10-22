@@ -24,10 +24,10 @@ resource "aws_api_gateway_method" "root_level_options_method" {
 
 # REST API Gateway root level GET method mock integration
 resource "aws_api_gateway_integration" "root_level_get_method_mock_integration" {
-  rest_api_id          = aws_api_gateway_rest_api.rest_api.id
-  resource_id          = aws_api_gateway_rest_api.rest_api.root_resource_id
-  http_method          = aws_api_gateway_method.root_level_options_method.http_method
-  type                 = "MOCK"
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  resource_id = aws_api_gateway_rest_api.rest_api.root_resource_id
+  http_method = aws_api_gateway_method.root_level_options_method.http_method
+  type        = "MOCK"
 }
 
 # REST API ID SSM Param for other resources to modify rest api
@@ -48,24 +48,24 @@ resource "null_resource" "download_lambda_zip" {
 
 # CloudWatch Log Group for Unity CS Common Auth Lambda
 resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
-  name              = "/aws/lambda/${var.deployment_name}-${var.unity_cs_lambda_authorizer_function_name}"
+  name              = "/aws/lambda/${var.project}-${var.venue}-${var.unity_cs_lambda_authorizer_function_name}"
   retention_in_days = 14
 }
 
 resource "aws_ssm_parameter" "invoke_role_arn" {
-  name  = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
+  name      = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
   overwrite = true
-  type  = "String"
-  value = aws_iam_role.iam_for_lambda_auth.arn
+  type      = "String"
+  value     = aws_iam_role.iam_for_lambda_auth.arn
 }
 
 # Unity shared services account id
-data "aws_ssm_parameter" "shared_service_account_id"{
+data "aws_ssm_parameter" "shared_service_account_id" {
   name = var.ssm_account_id
 }
 
 # Unity shared services account region
-data "aws_ssm_parameter" "shared_service_region"{
+data "aws_ssm_parameter" "shared_service_region" {
   name = var.ssm_region
 }
 
@@ -99,10 +99,10 @@ data "aws_iam_policy_document" "assume_role" {
 # IAM Policy Document for Inline Policy
 data "aws_iam_policy_document" "inline_policy" {
   statement {
-    actions   = ["logs:CreateLogGroup",
+    actions = ["logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "lambda:InvokeFunction"]
+    "lambda:InvokeFunction"]
     resources = ["*"]
   }
 }
@@ -114,28 +114,28 @@ data "aws_iam_policy" "mcp_operator_policy" {
 
 # IAM Role for Lambda Authorizer
 resource "aws_iam_role" "iam_for_lambda_auth" {
-  name = "${var.deployment_name}-iam_for_lambda_auth"
+  name = "${var.project}-${var.venue}-iam_for_lambda_auth"
   inline_policy {
     name   = "unity-cs-lambda-auth-inline-policy"
     policy = data.aws_iam_policy_document.inline_policy.json
-  } 
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  }
+  assume_role_policy   = data.aws_iam_policy_document.assume_role.json
   permissions_boundary = data.aws_iam_policy.mcp_operator_policy.arn
 }
 
 # Unity CS Common Auth Lambda
 resource "aws_lambda_function" "cs_common_lambda_auth" {
   filename      = "ucs-common-lambda-auth.zip"
-  function_name = "${var.deployment_name}-${var.unity_cs_lambda_authorizer_function_name}"
+  function_name = "${var.project}-${var.venue}-${var.unity_cs_lambda_authorizer_function_name}"
   role          = aws_iam_role.iam_for_lambda_auth.arn
   handler       = "index.handler"
   runtime       = "nodejs20.x"
-  depends_on = [null_resource.download_lambda_zip]
+  depends_on    = [null_resource.download_lambda_zip]
 
   environment {
     variables = {
       COGNITO_CLIENT_ID_LIST = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_client_id_list.value
-      COGNITO_USER_POOL_ID = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_user_pool_id.value
+      COGNITO_USER_POOL_ID   = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_user_pool_id.value
       COGNITO_GROUPS_ALLOWED = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_user_groups_list.value
     }
   }
@@ -143,13 +143,13 @@ resource "aws_lambda_function" "cs_common_lambda_auth" {
 
 # Unity CS Common Auth Lambda Authorizer (in API Gateway)
 resource "aws_api_gateway_authorizer" "unity_cs_common_authorizer" {
-  name                              = "Unity_CS_Common_Authorizer"
-  rest_api_id                       = aws_api_gateway_rest_api.rest_api.id
-  authorizer_uri                    = aws_lambda_function.cs_common_lambda_auth.invoke_arn
-  authorizer_credentials            = aws_iam_role.iam_for_lambda_auth.arn
-  authorizer_result_ttl_in_seconds  = 0
-  identity_source                   = "method.request.header.Authorization"
-depends_on = [aws_lambda_function.cs_common_lambda_auth, aws_api_gateway_rest_api.rest_api]
+  name                             = "Unity_CS_Common_Authorizer"
+  rest_api_id                      = aws_api_gateway_rest_api.rest_api.id
+  authorizer_uri                   = aws_lambda_function.cs_common_lambda_auth.invoke_arn
+  authorizer_credentials           = aws_iam_role.iam_for_lambda_auth.arn
+  authorizer_result_ttl_in_seconds = 0
+  identity_source                  = "method.request.header.Authorization"
+  depends_on                       = [aws_lambda_function.cs_common_lambda_auth, aws_api_gateway_rest_api.rest_api]
 }
 
 data "aws_region" "current" {}
@@ -159,15 +159,15 @@ data "aws_caller_identity" "current" {}
 resource "aws_api_gateway_deployment" "api-gateway-deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   stage_name  = var.rest_api_stage
-  depends_on = [aws_api_gateway_integration.root_level_get_method_mock_integration]
+  depends_on  = [aws_api_gateway_integration.root_level_get_method_mock_integration]
 }
 
 
 resource "aws_ssm_parameter" "api_gateway_uri" {
-  name = "/unity/cs/management/api-gateway/gateway-uri"
+  name      = "/unity/cs/management/api-gateway/gateway-uri"
   overwrite = true
-  type = "String"
-  value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
+  type      = "String"
+  value     = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
 }
 
 
