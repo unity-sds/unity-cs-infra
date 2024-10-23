@@ -61,16 +61,3 @@ data "aws_ebs_default_kms_key" "current" {}
 data "aws_kms_key" "current" {
   key_id = data.aws_ebs_default_kms_key.current.key_arn
 }
-
-# Find the MC's ALB's security group so we can allow connections to the cluster
-data "aws_security_groups" "mc_sg" {
-  filter {
-    name   = "tag:aws:cloudformation:logical-id"
-    values = ["ManagementConsoleSecurityGroup"]
-  }
-  tags = {
-    ServiceArea = "cs"
-    Venue       = var.venue
-    Proj        = var.project
-  }
-}

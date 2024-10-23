@@ -404,6 +404,18 @@ resource "aws_security_group" "mc_ingress_sg" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
 }
 
+# Find the MC's ALB's security group so we can allow connections to the cluster
+data "aws_security_groups" "mc_sg" {
+  filter {
+    name   = "group-name"
+    values = ["*-ManagementConsoleSecurityGroup-*"]
+  }
+  tags = {
+    Proj  = var.project
+    Venue = var.venue
+  }
+}
+
 resource "aws_vpc_security_group_ingress_rule" "mc_ingress_rule" {
   count                        = length(data.aws_security_groups.mc_sg) > 0 ? 1 : 0
   security_group_id            = aws_security_group.mc_ingress_sg.id
