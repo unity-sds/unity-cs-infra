@@ -24,12 +24,41 @@ chmod 0755 $DEST
 # Now we install docker and docker-compose.
 # Adapted from:
 # https://gist.github.com/npearce/6f3c7826c7499587f00957fee62f8ee9
-yum update -y
-amazon-linux-extras install docker
+#
+# Check if Docker is installed
+#
+if ! command -v docker &> /dev/null; then
+echo "Docker not installed. Installing Docker..."
+
+# Add Docker's official GPG key
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add the repository to Apt sources
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+$(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+# Install Docker
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl start docker
+sleep 10
+
+echo "Docker installed successfully."
+else
+echo "Docker already installed [OK]"
+fi
 systemctl start docker.service
 usermod -a -G docker ec2-user
 chkconfig docker on
-yum install -y python3-pip
+# Install python3-pip
+sudo apt update
+sudo apt install -y python3-pip
 python3 -m pip install docker-compose
 
 # Put the docker-compose.yml file at the root of our persistent volume
