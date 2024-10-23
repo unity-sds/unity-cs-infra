@@ -404,24 +404,24 @@ resource "aws_security_group" "mc_ingress_sg" {
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
 }
 
-# Find the MC's ALB's security group so we can allow connections to the cluster
-data "aws_security_groups" "mc_sg" {
-  filter {
-    name   = "group-name"
-    values = ["*-ManagementConsoleSecurityGroup-*"]
-  }
+# todo: get this lookup to actually work
+# i've spent a day on it and it only seems to return no entries in this
+# module- it works fine on its own. likely iam policy magic
+/* data "aws_security_groups" "mc_sg" {
   tags = {
+    Name  = "Unity Management Console Instance SG"
     Proj  = var.project
     Venue = var.venue
   }
-}
+} */
 
 resource "aws_vpc_security_group_ingress_rule" "mc_ingress_rule" {
-  count                        = length(data.aws_security_groups.mc_sg) > 0 ? 1 : 0
+  #count                        = length(data.aws_security_groups.mc_sg) > 0 ? 1 : 0
   security_group_id            = aws_security_group.mc_ingress_sg.id
   description                  = "SecurityGroup ingress rule for management console"
   ip_protocol                  = -1
-  referenced_security_group_id = data.aws_security_groups.mc_sg.ids[0]
+  cidr_ipv4                    = "0.0.0.0/0"
+  #referenced_security_group_id = data.aws_security_groups.mc_sg.ids[0]
 }
 
 # TODO: select default node group more intelligently, or remove concept altogether
