@@ -64,9 +64,12 @@ data "aws_kms_key" "current" {
 
 # Find the MC's ALB's security group so we can allow connections to the cluster
 data "aws_security_groups" "mc_sg" {
+  filter {
+    name   = "tag:aws:cloudformation:logical-id"
+    values = ["ManagementConsoleSecurityGroup"]
+  }
   tags = {
     ServiceArea = "cs"
-    Name        = "Unity Management Console Instance SG"
     Venue       = var.venue
     Proj        = var.project
   }
