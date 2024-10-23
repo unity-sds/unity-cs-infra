@@ -61,3 +61,22 @@ data "aws_ebs_default_kms_key" "current" {}
 data "aws_kms_key" "current" {
   key_id = data.aws_ebs_default_kms_key.current.key_arn
 }
+
+# Find the MC's ALB's security group so we can allow connections to the cluster
+data "aws_security_groups" "mc_sg" {
+  filter {
+    name   = "tag:Name"
+    values = ["Unity Management Console Instance SG"]
+  }
+  filter {
+    name   = "tag:Venue"
+    values = [var.venue]
+  }
+  filter {
+    name   = "tag:Proj"
+    values = [var.project]
+  }
+  tags = {
+    ServiceArea = "cs"
+  }
+}
