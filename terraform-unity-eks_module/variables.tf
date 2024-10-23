@@ -22,7 +22,7 @@ variable "nodegroups" {
     capacity_type              = optional(string)
     enable_bootstrap_user_data = optional(bool)
     metadata_options           = optional(map(any))
-    block_device_mappings      = optional(map(object({
+    block_device_mappings = optional(map(object({
       device_name = string
       ebs = object({
         volume_size           = number
