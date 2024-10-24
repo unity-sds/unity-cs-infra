@@ -24,8 +24,8 @@ services:
       - mmgis.db
     environment:
       SERVER                    : ${var.server}
-      AUTH                      : "none"
-      NODE_ENV                  : "production"
+      AUTH                      : none
+      NODE_ENV                  : production
       DB_HOST                   : ${var.db_host}
       DB_PORT                   : ${var.db_port}
       DB_NAME                   : ${var.db_name}
