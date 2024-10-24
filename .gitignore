@@ -1,3 +1,4 @@
+.terraform
 
 .idea/misc.xml
 .idea/modules.xml
@@ -30,3 +31,5 @@ aws_role_create/role.txt
 
 MMGIS-IAC/terraform/.terraform
 MMGIS-IAC/terraform/.terraform*
+MMGIS-IAC/terraform2/.terraform.lock.hcl
+MMGIS-IAC/terraform2/.terraform/modules/modules.json

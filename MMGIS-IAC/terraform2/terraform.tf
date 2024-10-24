@@ -103,7 +103,7 @@ EOF
 
 # Allow port 80 so we can connect to the container.
 resource "aws_security_group" "allow_http" {
-    name = "allow_http"
+    name = "${var.venue}-${var.project}-allow_http-sg"
     description = "Show off how we run a docker-compose file."
     vpc_id = data.aws_ssm_parameter.vpc_id.value
 
@@ -132,6 +132,8 @@ module "run-mmgis-ec2-docker" {
     docker_compose_str = var.docker-compose
     subnet_id = var.subnet_id
     availability_zone = var.availability_zone
+    project = var.project
+    venue = var.venue
     vpc_security_group_ids = [aws_security_group.allow_http.id]
     associate_public_ip_address = true
     persistent_volume_size_gb = 20 

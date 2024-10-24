@@ -1,6 +1,6 @@
 # target group
 resource "aws_lb_target_group" "unity_mmgis_tg_tf" {
-  name        = "unity-mmgis-tg-tf"
+  name        = "${var.venue}-${var.project}-mmgis-tg-tf"
   port        = 8080
   protocol    = "TCP"
   target_type = "instance"
