@@ -111,6 +111,10 @@ variable "port" {
   description = "Port to run on"
   default = 3000
 }
+variable "app_listening_port" {
+  description = "Port to listen on"
+  default = 8888
+}
 variable "db_pool_max" {
   description = "Max number connections in the database's pool. CPUs * 4 is a good number"
   default = 10
@@ -170,8 +174,8 @@ variable "force_config_path" {
 }
 variable "leads" {
   description = "array of strings - default [] - when not using AUTH=csso, this is a list of usernames to be treated as leads (users with elevated permissions)"
-  type        = list(string)
-  default     = []
+  type        = string
+  default     = ""
 }
 variable "enable_mmgis_websockets" {
   description = "enables websockets so that clients can immediately respond to backend configuration changes"
