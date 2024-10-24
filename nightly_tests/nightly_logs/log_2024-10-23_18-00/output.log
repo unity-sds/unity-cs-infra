@@ -5,7 +5,7 @@ WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
 Hit:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal InRelease
 Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
-Hit:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease
+Get:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
 Hit:4 https://download.docker.com/linux/ubuntu focal InRelease
 Hit:5 https://apt.releases.hashicorp.com focal InRelease
 Ign:6 https://apt.vector.dev stable InRelease
@@ -14,18 +14,13 @@ Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
 Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
 Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
 Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
-Get:12 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3606 kB]
-Get:13 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
-Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1236 kB]
-Get:15 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe Translation-en [297 kB]
-Get:16 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe amd64 c-n-f Metadata [28.3 kB]
-Get:18 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
-Get:19 http://security.ubuntu.com/ubuntu focal-security/universe amd64 c-n-f Metadata [21.4 kB]
-Fetched 5479 kB in 6s (897 kB/s)
+Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
+Get:14 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+Fetched 417 kB in 8s (49.3 kB/s)
 Reading package lists...
 Building dependency tree...
 Reading state information...
-35 packages can be upgraded. Run 'apt list --upgradable' to see them.
+37 packages can be upgraded. Run 'apt list --upgradable' to see them.
 
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
@@ -33,7 +28,7 @@ Reading package lists...
 Building dependency tree...
 Reading state information...
 python3-pip is already the newest version (20.0.2-5ubuntu1.10+esm2).
-0 upgraded, 0 newly installed, 0 to remove and 35 not upgraded.
+0 upgraded, 0 newly installed, 0 to remove and 37 not upgraded.
 RUN ARGUMENTS: 
   - Destroy stack at end of script? true
   - Run tests?                      true
@@ -157,19 +152,19 @@ populate_if_not_exists_ssm_param: /unity/account/network/certificate-arn ...
 }
 SSM param /unity/account/network/certificate-arn exists. Continuing...
 Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-28 ...
-Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-28 = ami-072024b2be782a185 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-28 = ami-020cb5866b5e21a51 ...
 {
     "Version": 1,
     "Tier": "Standard"
 }
 Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-29 ...
-Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-29 = ami-04f6a0ee958557055 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-29 = ami-081be5e531628c021 ...
 {
     "Version": 1,
     "Tier": "Standard"
 }
 Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-30 ...
-Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-30 = ami-0c15f691ece263cae ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-30 = ami-0598af94cecc73f18 ...
 {
     "Version": 1,
     "Tier": "Standard"
@@ -199,12 +194,18 @@ Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 .
     "Version": 1,
     "Tier": "Standard"
 }
-Repo Hash (Nightly Test):     [267f935]
+Repo Hash (Nightly Test):     [fe096c1]
 From https://github.com/unity-sds/unity-cs-infra
  * branch            main       -> FETCH_HEAD
-Already up to date.
+   fe096c1..81db9bd  main       -> origin/main
+Updating fe096c1..81db9bd
+Fast-forward
+ .../unity-mc.main.template.yaml                    |  4 +-
+ terraform-project-api-gateway_module/main.tf       | 58 +++++++++++-----------
+ terraform-project-api-gateway_module/variables.tf  | 20 ++++----
+ 3 files changed, 41 insertions(+), 41 deletions(-)
 Already on 'main'
-M	nightly_tests/nightly_logs/log_2024-10-09_18-00/output.log
+M	nightly_tests/nightly_logs/log_2024-10-10_18-00/output.log
 Your branch is up to date with 'origin/main'.
 deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
 deploy.sh :: PROJECT_NAME: unity
@@ -248,7 +249,7 @@ unity-cs-monitoring-lambda     | 0.1
 unity-apigateway               | 0.4
 unity-proxy                    | 0.14
 {
-    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/4c68a980-876c-11ef-875d-02ba7a24403f"
+    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/7c2faa10-91a3-11ef-8a24-0274eb98e71f"
 }
 Stack Name: [unity-management-console-unity-nightly]
 Waiting for Cloudformation Stack..........................................[0]
@@ -268,13 +269,10 @@ Waiting for Cloudformation Stack..........................................[260]
 Waiting for Cloudformation Stack..........................................[280]
 Waiting for Cloudformation Stack..........................................[300]
 Waiting for Cloudformation Stack..........................................[320]
-Waiting for Cloudformation Stack..........................................[340]
-Waiting for Cloudformation Stack..........................................[360]
-Waiting for Cloudformation Stack..........................................[380]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [400 seconds] - PASS
+Stack Creation Time: [340 seconds] - PASS
 Deploying Management Console...
-MANAGEMENT_CONSOLE_URL = HTTP://unity-nightly-httpd-alb-260528165.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
+MANAGEMENT_CONSOLE_URL = HTTP://unity-nightly-httpd-alb-169948317.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
 Checking if Docker is installed...
 Docker already installed [OK]
 Using default tag: latest
@@ -328,10 +326,10 @@ a44ca215042c: Waiting
 95e3b4ae7e39: Download complete
 954d19b3fd54: Verifying Checksum
 954d19b3fd54: Download complete
-69ab5fc9c2c1: Verifying Checksum
-69ab5fc9c2c1: Download complete
 eda6120e237e: Verifying Checksum
 eda6120e237e: Download complete
+69ab5fc9c2c1: Verifying Checksum
+69ab5fc9c2c1: Download complete
 c64d8f605a34: Verifying Checksum
 c64d8f605a34: Download complete
 e05902c0f0fe: Verifying Checksum
@@ -350,29 +348,29 @@ dda53194a636: Download complete
 02d649d94c1b: Download complete
 22339c4385fa: Verifying Checksum
 22339c4385fa: Download complete
-eda6120e237e: Pull complete
 e22947a99691: Verifying Checksum
 e22947a99691: Download complete
 c27e0309c3d6: Verifying Checksum
 c27e0309c3d6: Download complete
 915ccbc56c70: Verifying Checksum
 915ccbc56c70: Download complete
-0daf49db8516: Verifying Checksum
-0daf49db8516: Download complete
 6a5d453a98df: Verifying Checksum
 6a5d453a98df: Download complete
-811b9dc8d768: Verifying Checksum
-811b9dc8d768: Download complete
+0daf49db8516: Verifying Checksum
+0daf49db8516: Download complete
 56ed64b5259e: Verifying Checksum
 56ed64b5259e: Download complete
 202ff9ed6374: Verifying Checksum
 202ff9ed6374: Download complete
 7fa451653c9b: Verifying Checksum
 7fa451653c9b: Download complete
-39e2d88525ca: Verifying Checksum
-39e2d88525ca: Download complete
 a44ca215042c: Verifying Checksum
 a44ca215042c: Download complete
+39e2d88525ca: Verifying Checksum
+39e2d88525ca: Download complete
+811b9dc8d768: Verifying Checksum
+811b9dc8d768: Download complete
+eda6120e237e: Pull complete
 9020db8d4214: Pull complete
 95e3b4ae7e39: Pull complete
 954d19b3fd54: Pull complete
@@ -404,14 +402,26 @@ Attempt 1 to reach Management Console via httpd -- Received HTTP response code 5
 Attempt 2 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
 Attempt 3 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
 Success! HTTP response code 200 received.
-Management Console Creation Time: 672 seconds
-Total Creation Time(SMM params, CloudFormation, MC): 1152 seconds
+Management Console Creation Time: 677 seconds
+Total Creation Time(SMM params, CloudFormation, MC): 1112 seconds
 Running Smoke Test
 Smoke test was successful. Continuing with bootstrap and tests.
 Running Selenium tests...
 Stopping Selenium docker container...
-453e64f677156cfded7cfea0ef8b11398fe06349707cee11bc73a050101625a2
+37b1346a57f735967584705ea8d9d627bd932d0b28e3d650a5920f2e177a0ceb
 mv: cannot stat 'selenium_unity_images/*': No such file or directory
-Current date and time: Thu Oct 10 18:20:18 PDT 2024
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-01_18-00
-Pushing test results to nightly_logs/log_2024-10-10_18-00...
+Current date and time: Wed Oct 23 18:19:41 PDT 2024
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-07_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-12_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-05_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-15_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-06_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-14_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-03_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-10_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-11_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-13_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-04_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-09_18-00
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-02_18-00
+Pushing test results to nightly_logs/log_2024-10-23_18-00...
