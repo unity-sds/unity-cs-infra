@@ -89,6 +89,82 @@ sudo snap install amazon-ssm-agent --classic
 sudo systemctl enable amazon-ssm-agent
 sudo systemctl start amazon-ssm-agent
 
+#DEVICE=${local.block_device_path}
+#DEST=${var.persistent_volume_mount_path}
+#devpath=$(readlink -f $DEVICE)
+#
+#if [[ $(file -s $devpath) != *ext4* && -b $devpath ]]; then
+#    # Filesystem has not been created. Create it!
+#    mkfs -t ext4 $devpath
+#fi
+## add to fstab if not present
+#if ! egrep "^$devpath" /etc/fstab; then
+#  echo "$devpath $DEST ext4 defaults,nofail,noatime,nodiratime,barrier=0,data=writeback 0 2" | tee -a /etc/fstab > /dev/null
+#fi
+#mkdir -p $DEST
+#mount $DEST
+#chown ec2-user:ec2-user $DEST
+#chmod 0755 $DEST
+
+# Filesystem code is over
+
+# Now we install docker and docker-compose.
+# See:
+# https://docs.docker.com/engine/install/ubuntu/
+#
+# Uninstall all conflicting packages
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+# Add Docker's official GPG key:
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+# Install docker & docker compose
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+
+# Start Docker and add user to docker group
+systemctl start docker.service
+usermod -a -G docker ubuntu
+
+#
+# DON'T NEED PYTHON??
+#
+#yum install -y python3-pip
+#python3 -m pip install docker-compose
+
+# Put the docker-compose.yml file at the root of our persistent volume
+cat > /home/ubuntu/docker-compose.yml <<-TEMPLATE
+${var.docker_compose_str}
+TEMPLATE
+
+# Write the systemd service that manages us bringing up the service
+cat > /etc/systemd/system/mmgis.service <<-TEMPLATE
+[Unit]
+Description=${var.description}
+After=${var.systemd_after_stage}
+[Service]
+Type=simple
+User=${var.user}
+ExecStart=/usr/bin/docker compose -f /home/ubuntu/docker-compose.yml up
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target
+TEMPLATE
+
+# Start the service.
+systemctl start mmgis
+
+
 EOF
   
 }

@@ -33,3 +33,4 @@ MMGIS-IAC/terraform/.terraform
 MMGIS-IAC/terraform/.terraform*
 MMGIS-IAC/terraform2/.terraform.lock.hcl
 MMGIS-IAC/terraform2/.terraform/modules/modules.json
+MMGIS-IAC/terraform2/.terraform.tfstate.lock.info
