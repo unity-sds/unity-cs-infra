@@ -23,12 +23,19 @@ resource "aws_security_group" "mmgis-sg" {
   tags = {
     Name = "${var.venue}-${var.project}-mmgis-sg"
   }
-  
+
   ingress {
-    from_port   = 22
-    to_port     = 22
+    from_port   = 8888
+    to_port     = 8888
     protocol    = "tcp"
-    cidr_blocks = ["137.78.80.226/32"]  # temporary for me
+    cidr_blocks = ["0.0.0.0/0"]  # TODO: CHANGE ME!
+  }
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # TODO: CHANGE ME!
   }
 
   egress {
