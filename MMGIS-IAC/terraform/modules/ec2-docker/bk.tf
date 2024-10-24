@@ -15,12 +15,12 @@ data "aws_ssm_parameter" "subnet_id" {
 }
 
 resource "aws_security_group" "allow_tls" {
-  name        = "allow_tls"
+  name        = "${var.venue}-${var.project}-allow_tls"
   description = "Allow TLS inbound traffic and all outbound traffic"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
 
   tags = {
-    Name = "allow_tls"
+    Name = "${var.venue}-${var.project}-allow_tls"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_instance" "unity_mmgis_instance" {
   instance_type = var.instance_type
 
   tags = {
-    Name = "unity-mmgis-instance-tf"
+    Name = "${var.venue}-${var.project}-unity-mmgis-instance-tf"
   }
 
   vpc_security_group_ids = [ aws_security_group.allow_tls.id ]
