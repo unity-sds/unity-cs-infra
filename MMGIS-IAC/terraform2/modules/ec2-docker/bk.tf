@@ -67,7 +67,7 @@ resource "aws_instance" "unity_mmgis_instance" {
   instance_type = var.instance_type
 
   tags = {
-    Name = "unity-mmgis-galen-instance-tf"
+    Name = "${var.venue}-${var.project}-mmgis"
   }
 
   vpc_security_group_ids = [ aws_security_group.mmgis-sg.id ]
@@ -88,23 +88,6 @@ sudo snap install amazon-ssm-agent --classic
 # Start the SSM Agent
 sudo systemctl enable amazon-ssm-agent
 sudo systemctl start amazon-ssm-agent
-
-#DEVICE=${local.block_device_path}
-#DEST=${var.persistent_volume_mount_path}
-#devpath=$(readlink -f $DEVICE)
-#
-#if [[ $(file -s $devpath) != *ext4* && -b $devpath ]]; then
-#    # Filesystem has not been created. Create it!
-#    mkfs -t ext4 $devpath
-#fi
-## add to fstab if not present
-#if ! egrep "^$devpath" /etc/fstab; then
-#  echo "$devpath $DEST ext4 defaults,nofail,noatime,nodiratime,barrier=0,data=writeback 0 2" | tee -a /etc/fstab > /dev/null
-#fi
-#mkdir -p $DEST
-#mount $DEST
-#chown ec2-user:ec2-user $DEST
-#chmod 0755 $DEST
 
 # Filesystem code is over
 
@@ -136,11 +119,6 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plug
 systemctl start docker.service
 usermod -a -G docker ubuntu
 
-#
-# DON'T NEED PYTHON??
-#
-#yum install -y python3-pip
-#python3 -m pip install docker-compose
 
 # Put the docker-compose.yml file at the root of our persistent volume
 cat > /home/ubuntu/docker-compose.yml <<-TEMPLATE
