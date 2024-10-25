@@ -90,7 +90,7 @@ variable "secret" {
 }
 variable "db_host" {
   description = "postgres db endpoint"
-  default = "db"
+  default = "mmgis.db"
 }
 variable "db_port" {
   description = "postgres db port"
