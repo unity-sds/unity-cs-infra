@@ -145,7 +145,7 @@ WantedBy=multi-user.target
 TEMPLATE
 
 # Start the service.
-systemctl start mmgis
+sudo systemctl start mmgis
 
 
 EOF
