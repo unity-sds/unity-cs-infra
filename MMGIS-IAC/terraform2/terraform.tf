@@ -69,7 +69,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${var.db_pass}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${var.db_user} -d ${var.db_name}"]
+      test: ["CMD-SHELL", "pg_isready -U ${var.db_user}"]
       interval: 10s
       retries: 5
       start_period: 30s
