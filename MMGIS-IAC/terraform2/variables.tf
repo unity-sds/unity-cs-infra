@@ -94,7 +94,7 @@ variable "db_host" {
 }
 variable "db_port" {
   description = "postgres db port"
-  default     = 5432
+  default     = 5433
 }
 variable "db_name" {
   description = "postgres db name"

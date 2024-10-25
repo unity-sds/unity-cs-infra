@@ -122,8 +122,8 @@ sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Start Docker and add user to docker group
-systemctl start docker.service
-usermod -a -G docker ubuntu
+sudo systemctl start docker.service
+sudo usermod -a -G docker ubuntu
 
 # Put the docker-compose.yml file at the root of our persistent volume
 cat > /home/ubuntu/docker-compose.yml <<-TEMPLATE
@@ -147,7 +147,6 @@ TEMPLATE
 # Start the service.
 sudo systemctl start mmgis
 
-
 EOF
-  
+
 }

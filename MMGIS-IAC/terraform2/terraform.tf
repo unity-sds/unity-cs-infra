@@ -21,15 +21,15 @@ services:
   mmgis:
     image: ghcr.io/nasa-ammos/mmgis:development
     depends_on:
-      mmgis.db:
-        condition: service_healthy
-        restart: true
+      - mmgis.db
     environment:
       SERVER                    : ${var.server}
       AUTH                      : none
       NODE_ENV                  : production
       DB_HOST                   : ${var.db_host}
-      DB_PORT                   : ${var.db_port}
+      DATABASE_HOST             : ${var.db_host}
+      DATABASE_PORT             : 5432
+      DB_PORT                   : 5432
       DB_NAME                   : ${var.db_name}
       DB_USER                   : ${var.db_user}
       PORT                      : ${var.app_listening_port}
@@ -61,26 +61,28 @@ services:
       DB_PASS                   : ${var.db_pass}
     ports:
       - 8888:8888
+    networks:
+      - app-network
     restart: always
     volumes:
       - /var/www/html/Missions/:/usr/src/app/Missions
   mmgis.db:
     image: postgis/postgis:16-3.4-alpine
     environment:
-      POSTGRES_PASSWORD: ${var.db_pass}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${var.db_user}"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
-    ports:
-      - 5432:5432
-    restart: on-failure
+      POSTGRES_USER     : ${var.db_user}    
+      POSTGRES_PASSWORD : ${var.db_pass}
     volumes:
       - mmgis-db:/var/lib/postgresql/data
+    ports:
+      - "${var.db_port}:5432"
+    networks:
+      - app-network
 volumes:
   mmgis-db:
+
+networks:
+  app-network:
+    driver: bridge
 EOF
 }
 
