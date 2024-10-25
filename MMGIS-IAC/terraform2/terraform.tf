@@ -21,7 +21,9 @@ services:
   mmgis:
     image: ghcr.io/nasa-ammos/mmgis:development
     depends_on:
-      - mmgis.db
+      mmgis.db:
+        condition: service_healthy
+        restart: true
     environment:
       SERVER                    : ${var.server}
       AUTH                      : none
@@ -59,12 +61,19 @@ services:
       DB_PASS                   : ${var.db_pass}
     ports:
       - 8888:8888
+    restart: always
     volumes:
       - /var/www/html/Missions/:/usr/src/app/Missions
   mmgis.db:
     image: postgis/postgis:16-3.4-alpine
     environment:
       POSTGRES_PASSWORD: ${var.db_pass}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${var.db_user}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     ports:
       - 5432:5432
     restart: on-failure
