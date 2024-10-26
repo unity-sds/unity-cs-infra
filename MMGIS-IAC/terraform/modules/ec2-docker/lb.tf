@@ -20,7 +20,7 @@ resource "aws_lb_target_group" "unity_mmgis_tg_tf" {
   }
 
   tags = {
-    Name = "unity_mmgis_tg_tf"
+    Name = "${var.venue}-${var.project}-mmgis-tg-tf"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_lb_target_group_attachment" "unity_mmgis_tg_attachment_tf" {
 
 # create alb
 resource "aws_lb" "unity-mmgis-lb-tf" {
-  name               = "unity-mmgis-lb-tf"
+  name               = "${var.venue}-${var.project}-mmgis-lb-tf"
   load_balancer_type = "network"
   internal           = true
   #security_groups    = [var.sg_id]
@@ -50,7 +50,7 @@ resource "aws_lb" "unity-mmgis-lb-tf" {
   #}
 
   tags = {
-    Name = "unity-mmgis-lb-tf"
+    Name = "${var.venue}-${var.project}-mmgis-lb-tf"
   }
 }
 
@@ -65,6 +65,6 @@ resource "aws_lb_listener" "unity_mmgis_lb_listener" {
   }
 
   tags = {
-    Name = "unity_mmgis_lb_listener"
+    Name = "${var.venue}-${var.project}-mmgis_lb_listener"
   }
 }

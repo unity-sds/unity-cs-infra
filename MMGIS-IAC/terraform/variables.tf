@@ -2,7 +2,7 @@
 variable "region" {
   description = "AWS region"
   type = string
-  default = "us-gov-west-1"
+  default = "us-west-2"
 }
 
 variable "profile" {
@@ -90,11 +90,11 @@ variable "secret" {
 }
 variable "db_host" {
   description = "postgres db endpoint"
-  default = "db"
+  default = "mmgis.db"
 }
 variable "db_port" {
   description = "postgres db port"
-  default     = 5432
+  default     = 5433
 }
 variable "db_name" {
   description = "postgres db name"
@@ -110,6 +110,10 @@ variable "db_pass" {
 variable "port" {
   description = "Port to run on"
   default = 3000
+}
+variable "app_listening_port" {
+  description = "Port to listen on"
+  default = 8888
 }
 variable "db_pool_max" {
   description = "Max number connections in the database's pool. CPUs * 4 is a good number"
@@ -170,8 +174,8 @@ variable "force_config_path" {
 }
 variable "leads" {
   description = "array of strings - default [] - when not using AUTH=csso, this is a list of usernames to be treated as leads (users with elevated permissions)"
-  type        = list(string)
-  default     = []
+  type        = string
+  default     = ""
 }
 variable "enable_mmgis_websockets" {
   description = "enables websockets so that clients can immediately respond to backend configuration changes"
