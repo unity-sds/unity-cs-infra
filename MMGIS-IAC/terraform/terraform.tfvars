@@ -1,4 +1,4 @@
-venue = "galen"
+venue = "galen3"
 project = "mmgisdev"
 deployment_name = "mmgis"
 mgmt_dns = ""
