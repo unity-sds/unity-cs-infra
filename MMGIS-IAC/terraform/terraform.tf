@@ -1,12 +1,3 @@
-provider "aws" {
-  region = var.region
-  profile = var.profile
-
-  default_tags {
-    tags = var.common_tags
-  }
-}
-
 data "aws_ssm_parameter" "vpc_id" {
   name = "/unity/account/network/vpc_id"
 }
