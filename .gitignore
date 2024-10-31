@@ -31,6 +31,7 @@ aws_role_create/role.txt
 
 MMGIS-IAC/terraform/.terraform
 MMGIS-IAC/terraform/.terraform*
-MMGIS-IAC/terraform2/.terraform.lock.hcl
-MMGIS-IAC/terraform2/.terraform/modules/modules.json
-MMGIS-IAC/terraform2/.terraform.tfstate.lock.info
+MMGIS-IAC/terraform/.terraform.lock.hcl
+MMGIS-IAC/terraform/.terraform/modules/modules.json
+MMGIS-IAC/terraform/.terraform.tfstate.lock.info
+MMGIS-IAC/terraform/modules/ec2-docker/.terraform.lock.hcl
