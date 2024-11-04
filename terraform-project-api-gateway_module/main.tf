@@ -7,13 +7,6 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   }
 }
 
-resource "aws_api_gateway_stage" "api-gateway-stage" {
-  deployment_id = aws_api_gateway_deployment.api-gateway-deployment.id
-  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  stage_name    = "default"
-}
-
-
 # REST API Gateway root level OPTIONS method (to allow deployment with at least one method)
 resource "aws_api_gateway_method" "root_level_options_method" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
@@ -24,10 +17,10 @@ resource "aws_api_gateway_method" "root_level_options_method" {
 
 # REST API Gateway root level GET method mock integration
 resource "aws_api_gateway_integration" "root_level_get_method_mock_integration" {
-  rest_api_id          = aws_api_gateway_rest_api.rest_api.id
-  resource_id          = aws_api_gateway_rest_api.rest_api.root_resource_id
-  http_method          = aws_api_gateway_method.root_level_options_method.http_method
-  type                 = "MOCK"
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  resource_id = aws_api_gateway_rest_api.rest_api.root_resource_id
+  http_method = aws_api_gateway_method.root_level_options_method.http_method
+  type        = "MOCK"
 }
 
 # REST API ID SSM Param for other resources to modify rest api
@@ -53,19 +46,19 @@ resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
 }
 
 resource "aws_ssm_parameter" "invoke_role_arn" {
-  name  = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
+  name      = var.ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn
   overwrite = true
-  type  = "String"
-  value = aws_iam_role.iam_for_lambda_auth.arn
+  type      = "String"
+  value     = aws_iam_role.iam_for_lambda_auth.arn
 }
 
 # Unity shared services account id
-data "aws_ssm_parameter" "shared_service_account_id"{
+data "aws_ssm_parameter" "shared_service_account_id" {
   name = var.ssm_account_id
 }
 
 # Unity shared services account region
-data "aws_ssm_parameter" "shared_service_region"{
+data "aws_ssm_parameter" "shared_service_region" {
   name = var.ssm_region
 }
 
@@ -79,9 +72,17 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_pool_id"
   name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
 }
 
-# Unity CS Common Lambda Authorizer Allowed Cognito User Groups List (Command Seperated)
+# Unity CS Common Lambda Authorizer Allowed Cognito User Groups List (Comma Seperated)
 data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
   name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
+}
+
+# Unity Management Console NLB
+data "aws_lb" "unity_mc_nlb" {
+  tags = {
+    "Proj"  = var.project
+    "Venue" = var.venue
+  }
 }
 
 # IAM Policy Document for Assume Role
@@ -99,10 +100,10 @@ data "aws_iam_policy_document" "assume_role" {
 # IAM Policy Document for Inline Policy
 data "aws_iam_policy_document" "inline_policy" {
   statement {
-    actions   = ["logs:CreateLogGroup",
+    actions = ["logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "lambda:InvokeFunction"]
+    "lambda:InvokeFunction"]
     resources = ["*"]
   }
 }
@@ -118,8 +119,8 @@ resource "aws_iam_role" "iam_for_lambda_auth" {
   inline_policy {
     name   = "unity-cs-lambda-auth-inline-policy"
     policy = data.aws_iam_policy_document.inline_policy.json
-  } 
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+  }
+  assume_role_policy   = data.aws_iam_policy_document.assume_role.json
   permissions_boundary = data.aws_iam_policy.mcp_operator_policy.arn
 }
 
@@ -130,12 +131,12 @@ resource "aws_lambda_function" "cs_common_lambda_auth" {
   role          = aws_iam_role.iam_for_lambda_auth.arn
   handler       = "index.handler"
   runtime       = "nodejs20.x"
-  depends_on = [null_resource.download_lambda_zip]
+  depends_on    = [null_resource.download_lambda_zip]
 
   environment {
     variables = {
       COGNITO_CLIENT_ID_LIST = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_client_id_list.value
-      COGNITO_USER_POOL_ID = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_user_pool_id.value
+      COGNITO_USER_POOL_ID   = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_user_pool_id.value
       COGNITO_GROUPS_ALLOWED = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_user_groups_list.value
     }
   }
@@ -143,13 +144,13 @@ resource "aws_lambda_function" "cs_common_lambda_auth" {
 
 # Unity CS Common Auth Lambda Authorizer (in API Gateway)
 resource "aws_api_gateway_authorizer" "unity_cs_common_authorizer" {
-  name                              = "Unity_CS_Common_Authorizer"
-  rest_api_id                       = aws_api_gateway_rest_api.rest_api.id
-  authorizer_uri                    = aws_lambda_function.cs_common_lambda_auth.invoke_arn
-  authorizer_credentials            = aws_iam_role.iam_for_lambda_auth.arn
-  authorizer_result_ttl_in_seconds  = 0
-  identity_source                   = "method.request.header.Authorization"
-depends_on = [aws_lambda_function.cs_common_lambda_auth, aws_api_gateway_rest_api.rest_api]
+  name                             = "Unity_CS_Common_Authorizer"
+  rest_api_id                      = aws_api_gateway_rest_api.rest_api.id
+  authorizer_uri                   = aws_lambda_function.cs_common_lambda_auth.invoke_arn
+  authorizer_credentials           = aws_iam_role.iam_for_lambda_auth.arn
+  authorizer_result_ttl_in_seconds = 0
+  identity_source                  = "method.request.header.Authorization"
+  depends_on                       = [aws_lambda_function.cs_common_lambda_auth, aws_api_gateway_rest_api.rest_api]
 }
 
 data "aws_region" "current" {}
@@ -159,20 +160,10 @@ data "aws_caller_identity" "current" {}
 resource "aws_api_gateway_deployment" "api-gateway-deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   stage_name  = var.rest_api_stage
-  depends_on = [aws_api_gateway_integration.root_level_get_method_mock_integration]
+  depends_on  = [aws_api_gateway_integration.root_level_get_method_mock_integration]
 }
-
-
-resource "aws_ssm_parameter" "api_gateway_uri" {
-  name = "/unity/cs/management/api-gateway/gateway-uri"
-  overwrite = true
-  type = "String"
-  value = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
-}
-
 
 # Management Console Health Check API Integration Code
-
 resource "aws_api_gateway_resource" "rest_api_resource_management_path" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
@@ -191,10 +182,55 @@ resource "aws_api_gateway_resource" "rest_api_resource_health_checks_path" {
   path_part   = "health_checks"
 }
 
-resource "aws_api_gateway_method" "rest_api_method_for_project_proxy_resource_method" {
+resource "aws_api_gateway_method" "rest_api_method_for_health_check_method" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   resource_id   = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
   http_method   = "GET"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.unity_cs_common_authorizer.id
+}
+
+resource "aws_api_gateway_vpc_link" "rest_api_health_check_vpc_link" {
+  name        = "mc-nlb-vpc-link-${var.project}-${var.venue}"
+  description = "mc-nlb-vpc-link-${var.project}-${var.venue}"
+  target_arns = [data.aws_lb.unity_mc_nlb.arn]
+}
+
+resource "aws_api_gateway_integration" "rest_api_integration_for_health_check" {
+  rest_api_id             = aws_api_gateway_rest_api.rest_api.id
+  resource_id             = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
+  http_method             = aws_api_gateway_method.rest_api_method_for_health_check_method.http_method
+  type                    = "HTTP"
+  uri                     = format("%s://%s:%s", "http", data.aws_lb.unity_mc_nlb.dns_name, "8080/api/health_checks")
+  integration_http_method = "GET"
+  passthrough_behavior    = "WHEN_NO_TEMPLATES"
+  content_handling        = "CONVERT_TO_TEXT"
+  connection_type         = "VPC_LINK"
+  connection_id           = aws_api_gateway_vpc_link.rest_api_health_check_vpc_link.id
+}
+
+resource "aws_api_gateway_method_response" "response_200" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  resource_id = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
+  http_method = aws_api_gateway_method.rest_api_method_for_health_check_method.http_method
+  status_code = "200"
+
+  depends_on = [aws_api_gateway_integration.rest_api_integration_for_health_check]
+}
+
+resource "aws_api_gateway_integration_response" "api_gateway_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  resource_id = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
+  http_method = aws_api_gateway_method.rest_api_method_for_health_check_method.http_method
+  status_code = aws_api_gateway_method_response.response_200.status_code
+
+  depends_on = [aws_api_gateway_integration.rest_api_integration_for_health_check]
+}
+
+resource "aws_api_gateway_stage" "api_gateway_stage" {
+  deployment_id = aws_api_gateway_deployment.api-gateway-deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  stage_name    = "default"
+
+  depends_on = [aws_api_gateway_integration.rest_api_integration_for_health_check]
 }

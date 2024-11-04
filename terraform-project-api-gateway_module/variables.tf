@@ -1,11 +1,17 @@
-variable "ssm_region" {
+variable "region" {
   type        = string
   description = "Region"
+  default     = "us-west-2"
+}
+
+variable "ssm_region" {
+  type        = string
+  description = "SSM Region"
   default     = "/unity/shared-services/aws/account/region"
 }
 
 variable "ssm_account_id"{
-  description = "Name of the SSM paramter for shared service account ID"
+  description = "Name of the SSM parameter for shared service account ID"
   type = string
   default = "/unity/shared-services/aws/account"
 }
@@ -13,6 +19,9 @@ variable "ssm_account_id"{
 variable "tags" {
   description = "AWS Tags"
   type = map(string)
+  default = {
+    Name = "Unity CS"
+  }
 }
 
 variable "deployment_name" {
