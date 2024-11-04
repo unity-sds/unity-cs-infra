@@ -1,3 +1,5 @@
+venue = "galen3"
+project = "mmgisdev"
 deployment_name = "mmgis"
 mgmt_dns = ""
 tags = { name = "mmgis" }

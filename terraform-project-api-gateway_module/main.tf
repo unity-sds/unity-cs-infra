@@ -41,7 +41,7 @@ resource "null_resource" "download_lambda_zip" {
 
 # CloudWatch Log Group for Unity CS Common Auth Lambda
 resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
-  name              = "/aws/lambda/${var.deployment_name}-${var.unity_cs_lambda_authorizer_function_name}"
+  name              = "/aws/lambda/${var.project}-${var.venue}-${var.unity_cs_lambda_authorizer_function_name}"
   retention_in_days = 14
 }
 
@@ -115,7 +115,7 @@ data "aws_iam_policy" "mcp_operator_policy" {
 
 # IAM Role for Lambda Authorizer
 resource "aws_iam_role" "iam_for_lambda_auth" {
-  name = "${var.deployment_name}-iam_for_lambda_auth"
+  name = "${var.project}-${var.venue}-iam_for_lambda_auth"
   inline_policy {
     name   = "unity-cs-lambda-auth-inline-policy"
     policy = data.aws_iam_policy_document.inline_policy.json
@@ -127,7 +127,7 @@ resource "aws_iam_role" "iam_for_lambda_auth" {
 # Unity CS Common Auth Lambda
 resource "aws_lambda_function" "cs_common_lambda_auth" {
   filename      = "ucs-common-lambda-auth.zip"
-  function_name = "${var.deployment_name}-${var.unity_cs_lambda_authorizer_function_name}"
+  function_name = "${var.project}-${var.venue}-${var.unity_cs_lambda_authorizer_function_name}"
   role          = aws_iam_role.iam_for_lambda_auth.arn
   handler       = "index.handler"
   runtime       = "nodejs20.x"
@@ -161,6 +161,13 @@ resource "aws_api_gateway_deployment" "api-gateway-deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   stage_name  = var.rest_api_stage
   depends_on  = [aws_api_gateway_integration.root_level_get_method_mock_integration]
+}
+
+resource "aws_ssm_parameter" "api_gateway_uri" {
+  name      = "/unity/cs/management/api-gateway/gateway-uri"
+  overwrite = true
+  type      = "String"
+  value     = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
 }
 
 # Management Console Health Check API Integration Code

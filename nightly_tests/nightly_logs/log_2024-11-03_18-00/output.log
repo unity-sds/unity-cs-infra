@@ -4,7 +4,7 @@ Existing deployment not found.  Continuing with deployment...
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
 Hit:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal InRelease
-Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+Hit:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease
 Hit:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease
 Hit:4 https://download.docker.com/linux/ubuntu focal InRelease
 Hit:5 https://apt.releases.hashicorp.com focal InRelease
@@ -14,27 +14,21 @@ Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
 Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
 Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
 Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
-Get:12 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 c-n-f Metadata [17.8 kB]
-Get:13 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
-Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe amd64 c-n-f Metadata [28.3 kB]
-Get:16 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
-Get:17 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [3237 kB]
-Get:18 http://security.ubuntu.com/ubuntu focal-security/main amd64 c-n-f Metadata [14.3 kB]
-Get:19 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1013 kB]
-Get:20 http://security.ubuntu.com/ubuntu focal-security/universe amd64 c-n-f Metadata [21.4 kB]
-Fetched 4620 kB in 16s (284 kB/s)
+Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
+Hit:14 http://security.ubuntu.com/ubuntu focal-security InRelease
+Fetched 33.8 kB in 7s (4646 B/s)
 Reading package lists...
 Building dependency tree...
 Reading state information...
-35 packages can be upgraded. Run 'apt list --upgradable' to see them.
+38 packages can be upgraded. Run 'apt list --upgradable' to see them.
 
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
 Reading package lists...
 Building dependency tree...
 Reading state information...
-python3-pip is already the newest version (20.0.2-5ubuntu1.10+esm2).
-0 upgraded, 0 newly installed, 0 to remove and 35 not upgraded.
+python3-pip is already the newest version (20.0.2-5ubuntu1.11+esm2).
+0 upgraded, 0 newly installed, 0 to remove and 38 not upgraded.
 RUN ARGUMENTS: 
   - Destroy stack at end of script? true
   - Run tests?                      true
@@ -158,19 +152,19 @@ populate_if_not_exists_ssm_param: /unity/account/network/certificate-arn ...
 }
 SSM param /unity/account/network/certificate-arn exists. Continuing...
 Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-28 ...
-Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-28 = ami-072024b2be782a185 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-28 = ami-020cb5866b5e21a51 ...
 {
     "Version": 1,
     "Tier": "Standard"
 }
 Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-29 ...
-Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-29 = ami-04f6a0ee958557055 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-29 = ami-081be5e531628c021 ...
 {
     "Version": 1,
     "Tier": "Standard"
 }
 Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-30 ...
-Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-30 = ami-0c15f691ece263cae ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-30 = ami-0598af94cecc73f18 ...
 {
     "Version": 1,
     "Tier": "Standard"
@@ -200,12 +194,17 @@ Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 .
     "Version": 1,
     "Tier": "Standard"
 }
-Repo Hash (Nightly Test):     [4ad21e7]
+Repo Hash (Nightly Test):     [6e75774]
 From https://github.com/unity-sds/unity-cs-infra
  * branch            main       -> FETCH_HEAD
-Already up to date.
+   6e75774..0a19fc6  main       -> origin/main
+Updating 6e75774..0a19fc6
+Fast-forward
+ aws_role_create/U-CS_Service_Policy.json     |   8 +-
+ aws_role_create/create_roles_and_policies.sh | 114 ++++++++++++++++-----------
+ 2 files changed, 74 insertions(+), 48 deletions(-)
 Already on 'main'
-M	nightly_tests/nightly_logs/log_2024-10-06_18-00/output.log
+M	nightly_tests/nightly_logs/log_2024-11-02_18-00/output.log
 Your branch is up to date with 'origin/main'.
 deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
 deploy.sh :: PROJECT_NAME: unity
@@ -249,7 +248,7 @@ unity-cs-monitoring-lambda     | 0.1
 unity-apigateway               | 0.4
 unity-proxy                    | 0.14
 {
-    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/d3641fe0-8510-11ef-a466-02bc1daf3e41"
+    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/b2fcfc40-9a50-11ef-801c-0ad632ff0b09"
 }
 Stack Name: [unity-management-console-unity-nightly]
 Waiting for Cloudformation Stack..........................................[0]
@@ -269,15 +268,16 @@ Waiting for Cloudformation Stack..........................................[260]
 Waiting for Cloudformation Stack..........................................[280]
 Waiting for Cloudformation Stack..........................................[300]
 Waiting for Cloudformation Stack..........................................[320]
+Waiting for Cloudformation Stack..........................................[340]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [340 seconds] - PASS
+Stack Creation Time: [360 seconds] - PASS
 Deploying Management Console...
-MANAGEMENT_CONSOLE_URL = HTTP://unity-nightly-httpd-alb-11911298.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
+MANAGEMENT_CONSOLE_URL = HTTP://unity-nightly-httpd-alb-460224461.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
 Checking if Docker is installed...
 Docker already installed [OK]
 Using default tag: latest
 latest: Pulling from selenium/standalone-chrome
-Digest: sha256:3e48c9040f1948ee07283c18b7efc2b1687ce8513e4d3aeb3e34fa6058a61abc
+Digest: sha256:005f7292b14fba7403dd2756771477cbd012ac989acc5e1060a355d4c2062457
 Status: Image is up to date for selenium/standalone-chrome:latest
 docker.io/selenium/standalone-chrome:latest
 Launching selenium docker...
@@ -286,13 +286,13 @@ Attempt 2 to reach Management Console via httpd -- Received HTTP response code 5
 Attempt 3 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
 Success! HTTP response code 200 received.
 Management Console Creation Time: 645 seconds
-Total Creation Time(SMM params, CloudFormation, MC): 1073 seconds
+Total Creation Time(SMM params, CloudFormation, MC): 1106 seconds
 Running Smoke Test
 Smoke test was successful. Continuing with bootstrap and tests.
 Running Selenium tests...
 Stopping Selenium docker container...
-521f9ba57018a52334fa99264ad05209ad64a3cab5e1737c6b1c2d66ecee6b03
+97a6fffe9ba415b9235f348627f7f1423bf03698f6ed2116a6aac020aff84259
 mv: cannot stat 'selenium_unity_images/*': No such file or directory
-Current date and time: Mon Oct  7 18:19:02 PDT 2024
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-09-29_18-00
-Pushing test results to nightly_logs/log_2024-10-07_18-00...
+Current date and time: Sun Nov  3 18:20:33 PST 2024
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-26_18-00
+Pushing test results to nightly_logs/log_2024-11-03_18-00...
