@@ -643,7 +643,7 @@ Resources:
         - Key: Component
           Value: Unity Management Console
         - Key: Name
-          Value: Unity ${Project}-${Venue} Management Console LB SG
+          Value: !Sub Unity ${Project}-${Venue} Management Console LB SG
         - Key: Proj
           Value: !Ref Project
         - Key: CreatedBy
