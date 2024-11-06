@@ -10,18 +10,16 @@ variable "ssm_region" {
   default     = "/unity/shared-services/aws/account/region"
 }
 
-variable "ssm_account_id"{
-  description = "Name of the SSM parameter for shared service account ID"
-  type = string
-  default = "/unity/shared-services/aws/account"
+
+variable "ssm_account_id" {
+  description = "Name of the SSM paramter for shared service account ID"
+  type        = string
+  default     = "/unity/shared-services/aws/account"
 }
 
 variable "tags" {
   description = "AWS Tags"
-  type = map(string)
-  default = {
-    Name = "Unity CS"
-  }
+  type        = map(string)
 }
 
 variable "deployment_name" {
@@ -30,14 +28,14 @@ variable "deployment_name" {
 }
 variable "project" {
   description = "The unity project its installed into"
-  type = string
-  default = "UnknownProject"
+  type        = string
+  default     = "UnknownProject"
 }
 
 variable "venue" {
   description = "The unity venue its installed into"
-  type = string
-  default = "UnknownVenue"
+  type        = string
+  default     = "UnknownVenue"
 }
 
 variable "unity_mc_nlb_name_prefix" {
@@ -48,8 +46,8 @@ variable "unity_mc_nlb_name_prefix" {
 
 variable "installprefix" {
   description = "The management console install prefix"
-  type = string
-  default = "UnknownPrefix"
+  type        = string
+  default     = "UnknownPrefix"
 }
 
 variable "rest_api_stage" {
