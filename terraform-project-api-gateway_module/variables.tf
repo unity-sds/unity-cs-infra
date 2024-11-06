@@ -40,6 +40,12 @@ variable "venue" {
   default = "UnknownVenue"
 }
 
+variable "unity_mc_nlb_name_prefix" {
+  description = "The unity management console NLB name prefix"
+  type = string
+  default = "unity-mc-nlb"
+}
+
 variable "installprefix" {
   description = "The management console install prefix"
   type = string

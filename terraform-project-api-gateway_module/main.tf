@@ -79,6 +79,8 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_groups_l
 
 # Unity Management Console NLB
 data "aws_lb" "unity_mc_nlb" {
+  name = format("%s-%s-%s", var.unity_mc_nlb_name_prefix, var.project, var.venue)
+
   tags = {
     "Proj"  = var.project
     "Venue" = var.venue
@@ -233,4 +235,8 @@ resource "aws_api_gateway_stage" "api_gateway_stage" {
   stage_name    = "default"
 
   depends_on = [aws_api_gateway_integration.rest_api_integration_for_health_check]
+}
+
+output "unity_venue_level_api_gateway_rest_api_id" {
+  value = aws_api_gateway_rest_api.rest_api.id
 }
