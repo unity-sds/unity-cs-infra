@@ -7,13 +7,6 @@ resource "aws_api_gateway_rest_api" "rest_api" {
   }
 }
 
-resource "aws_api_gateway_stage" "api-gateway-stage" {
-  deployment_id = aws_api_gateway_deployment.api-gateway-deployment.id
-  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
-  stage_name    = "default"
-}
-
-
 # REST API Gateway root level OPTIONS method (to allow deployment with at least one method)
 resource "aws_api_gateway_method" "root_level_options_method" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
@@ -79,9 +72,19 @@ data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_pool_id"
   name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
 }
 
-# Unity CS Common Lambda Authorizer Allowed Cognito User Groups List (Command Seperated)
+# Unity CS Common Lambda Authorizer Allowed Cognito User Groups List (Comma Seperated)
 data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
   name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
+}
+
+# Unity Management Console NLB
+data "aws_lb" "unity_mc_nlb" {
+  name = format("%s-%s-%s", var.unity_mc_nlb_name_prefix, var.project, var.venue)
+
+  tags = {
+    "Proj"  = var.project
+    "Venue" = var.venue
+  }
 }
 
 # IAM Policy Document for Assume Role
@@ -162,7 +165,6 @@ resource "aws_api_gateway_deployment" "api-gateway-deployment" {
   depends_on  = [aws_api_gateway_integration.root_level_get_method_mock_integration]
 }
 
-
 resource "aws_ssm_parameter" "api_gateway_uri" {
   name      = "/unity/cs/management/api-gateway/gateway-uri"
   overwrite = true
@@ -170,9 +172,7 @@ resource "aws_ssm_parameter" "api_gateway_uri" {
   value     = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
 }
 
-
 # Management Console Health Check API Integration Code
-
 resource "aws_api_gateway_resource" "rest_api_resource_management_path" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   parent_id   = aws_api_gateway_rest_api.rest_api.root_resource_id
@@ -191,10 +191,59 @@ resource "aws_api_gateway_resource" "rest_api_resource_health_checks_path" {
   path_part   = "health_checks"
 }
 
-resource "aws_api_gateway_method" "rest_api_method_for_project_proxy_resource_method" {
+resource "aws_api_gateway_method" "rest_api_method_for_health_check_method" {
   rest_api_id   = aws_api_gateway_rest_api.rest_api.id
   resource_id   = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
   http_method   = "GET"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.unity_cs_common_authorizer.id
+}
+
+resource "aws_api_gateway_vpc_link" "rest_api_health_check_vpc_link" {
+  name        = "mc-nlb-vpc-link-${var.project}-${var.venue}"
+  description = "mc-nlb-vpc-link-${var.project}-${var.venue}"
+  target_arns = [data.aws_lb.unity_mc_nlb.arn]
+}
+
+resource "aws_api_gateway_integration" "rest_api_integration_for_health_check" {
+  rest_api_id             = aws_api_gateway_rest_api.rest_api.id
+  resource_id             = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
+  http_method             = aws_api_gateway_method.rest_api_method_for_health_check_method.http_method
+  type                    = "HTTP"
+  uri                     = format("%s://%s:%s", "http", data.aws_lb.unity_mc_nlb.dns_name, "8080/api/health_checks")
+  integration_http_method = "GET"
+  passthrough_behavior    = "WHEN_NO_TEMPLATES"
+  content_handling        = "CONVERT_TO_TEXT"
+  connection_type         = "VPC_LINK"
+  connection_id           = aws_api_gateway_vpc_link.rest_api_health_check_vpc_link.id
+}
+
+resource "aws_api_gateway_method_response" "response_200" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  resource_id = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
+  http_method = aws_api_gateway_method.rest_api_method_for_health_check_method.http_method
+  status_code = "200"
+
+  depends_on = [aws_api_gateway_integration.rest_api_integration_for_health_check]
+}
+
+resource "aws_api_gateway_integration_response" "api_gateway_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.rest_api.id
+  resource_id = aws_api_gateway_resource.rest_api_resource_health_checks_path.id
+  http_method = aws_api_gateway_method.rest_api_method_for_health_check_method.http_method
+  status_code = aws_api_gateway_method_response.response_200.status_code
+
+  depends_on = [aws_api_gateway_integration.rest_api_integration_for_health_check]
+}
+
+resource "aws_api_gateway_stage" "api_gateway_stage" {
+  deployment_id = aws_api_gateway_deployment.api-gateway-deployment.id
+  rest_api_id   = aws_api_gateway_rest_api.rest_api.id
+  stage_name    = "default"
+
+  depends_on = [aws_api_gateway_integration.rest_api_integration_for_health_check]
+}
+
+output "unity_venue_level_api_gateway_rest_api_id" {
+  value = aws_api_gateway_rest_api.rest_api.id
 }

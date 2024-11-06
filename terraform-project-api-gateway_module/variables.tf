@@ -1,8 +1,15 @@
-variable "ssm_region" {
+variable "region" {
   type        = string
   description = "Region"
+  default     = "us-west-2"
+}
+
+variable "ssm_region" {
+  type        = string
+  description = "SSM Region"
   default     = "/unity/shared-services/aws/account/region"
 }
+
 
 variable "ssm_account_id" {
   description = "Name of the SSM paramter for shared service account ID"
@@ -29,6 +36,12 @@ variable "venue" {
   description = "The unity venue its installed into"
   type        = string
   default     = "UnknownVenue"
+}
+
+variable "unity_mc_nlb_name_prefix" {
+  description = "The unity management console NLB name prefix"
+  type = string
+  default = "unity-mc-nlb"
 }
 
 variable "installprefix" {
