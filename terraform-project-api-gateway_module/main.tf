@@ -169,7 +169,7 @@ resource "aws_ssm_parameter" "api_gateway_uri" {
   name      = "/unity/cs/management/api-gateway/gateway-uri"
   overwrite = true
   type      = "String"
-  value     = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api-gateway-stage.stage_name}"
+  value     = "https://${aws_api_gateway_rest_api.rest_api.id}.execute-api.${data.aws_ssm_parameter.shared_service_region.value}.amazonaws.com/${aws_api_gateway_stage.api_gateway_stage.stage_name}"
 }
 
 # Management Console Health Check API Integration Code
