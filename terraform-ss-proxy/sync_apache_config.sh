@@ -50,8 +50,8 @@ else
         sudo chmod 644 "${LOCAL_FILE}"
         sudo systemctl reload apache2
         echo "Apache configuration updated successfully"
-        rm "${TEMP_FILE}"
-        rm "${BACKUP_FILE}"
+        sudo rm "${TEMP_FILE}"
+        sudo rm "${BACKUP_FILE}"
     else
         echo "Apache configuration test failed. Reverting to original configuration..."
         sudo mv "${BACKUP_FILE}" "${LOCAL_FILE}"
