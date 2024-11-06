@@ -65,7 +65,7 @@ else
         echo "Apache configuration updated successfully"
         sudo rm "${TEMP_FILE}"
         sudo rm "${BACKUP_FILE}"
-        send_to_slack_and_exit "✅ Apache configuration updated successfully\nChanges made:\n\`\`\`${DIFF_OUTPUT}\`\`\`" 0
+        send_to_slack_and_exit "✅ Apache configuration updated successfully\nChanges made:\n${DIFF_OUTPUT}" 0
     else
         echo "Apache configuration test failed. Reverting to original configuration..."
         sudo mv "${BACKUP_FILE}" "${LOCAL_FILE}"
