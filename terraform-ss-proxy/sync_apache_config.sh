@@ -5,19 +5,28 @@ S3_BUCKET="ucs-ss-config"
 S3_FILE_PATH="unity-cs.conf"
 LOCAL_FILE="/etc/apache2/sites-enabled/unity-cs.conf"
 TEMP_FILE="/tmp/unity-cs.conf"
+SLACK_WEBHOOK="https://hooks.slack.com/triggers/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"
+
+# Function to send message to Slack and exit
+send_to_slack_and_exit() {
+    local message="$1"
+    local exit_code="$2"
+    curl -X POST -H 'Content-type: application/json' \
+        --data "{\"text\":\"$message\"}" \
+        "${SLACK_WEBHOOK}"
+    exit "$exit_code"
+}
 
 # Check if aws cli is installed
 if ! command -v aws &> /dev/null; then
     echo "AWS CLI is not installed. Please install it first."
-    exit 1
+    send_to_slack_and_exit "❌ Apache config sync failed: AWS CLI not installed" 1
 fi
 
 # Download the file from S3 to a temp location
-if aws s3 cp "s3://${S3_BUCKET}/${S3_FILE_PATH}" "${TEMP_FILE}"; then
-    echo "Successfully downloaded configuration from S3"
-else
+if ! aws s3 cp "s3://${S3_BUCKET}/${S3_FILE_PATH}" "${TEMP_FILE}"; then
     echo "Failed to download configuration from S3"
-    exit 1
+    send_to_slack_and_exit "❌ Apache config sync failed: Unable to download from S3" 1
 fi
 
 # Check if the local file exists
@@ -27,15 +36,19 @@ if [ ! -f "${LOCAL_FILE}" ]; then
     sudo chown root:root "${LOCAL_FILE}"
     sudo chmod 644 "${LOCAL_FILE}"
     sudo systemctl reload apache2
-    exit 0
+    send_to_slack_and_exit "✅ New Apache configuration created and applied" 0
 fi
 
 # Compare the files
 if diff "${TEMP_FILE}" "${LOCAL_FILE}" >/dev/null; then
     echo "No changes detected in configuration"
     rm "${TEMP_FILE}"
+    exit 0
 else
     echo "Changes detected in configuration. Testing new config..."
+    
+    # Generate diff for potential notification
+    DIFF_OUTPUT=$(diff "${TEMP_FILE}" "${LOCAL_FILE}" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/"/\\"/g')
     
     # Create a backup of the current config
     BACKUP_FILE="${LOCAL_FILE}.backup"
@@ -52,11 +65,12 @@ else
         echo "Apache configuration updated successfully"
         sudo rm "${TEMP_FILE}"
         sudo rm "${BACKUP_FILE}"
+        send_to_slack_and_exit "✅ Apache configuration updated successfully\nChanges made:\n\`\`\`${DIFF_OUTPUT}\`\`\`" 0
     else
         echo "Apache configuration test failed. Reverting to original configuration..."
         sudo mv "${BACKUP_FILE}" "${LOCAL_FILE}"
         rm "${TEMP_FILE}"
         echo "Kept original configuration file"
-        exit 1
+        send_to_slack_and_exit "❌ Apache configuration test failed. Original configuration kept." 1
     fi
-fi 
+fi
