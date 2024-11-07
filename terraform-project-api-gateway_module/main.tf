@@ -157,7 +157,7 @@ data "aws_caller_identity" "current" {}
 resource "aws_api_gateway_deployment" "api-gateway-deployment" {
   rest_api_id = aws_api_gateway_rest_api.rest_api.id
   stage_name  = var.rest_api_stage
-  depends_on  = [aws_api_gateway_integration.root_level_get_method_mock_integration]
+  depends_on  = [aws_api_gateway_integration.rest_api_integration_for_health_check]
 }
 
 resource "aws_ssm_parameter" "api_gateway_uri" {
