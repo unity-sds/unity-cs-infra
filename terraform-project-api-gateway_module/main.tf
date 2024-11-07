@@ -62,19 +62,14 @@ data "aws_ssm_parameter" "shared_service_region" {
   name = var.ssm_region
 }
 
-# Unity CS Common Lambda Authorizer Allowed Cognito Client ID List (Command Seperated)
-data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_client_id_list" {
-  name = var.ssm_param_api_gateway_cs_lambda_authorizer_cognito_client_id_list
-}
-
 # Unity CS Common Lambda Authorizer Allowed Cognito User Pool ID
 data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_pool_id" {
-  name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
+  name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/shared-services/cognito/user-pool-id"
 }
 
 # Unity CS Common Lambda Authorizer Allowed Cognito User Groups List (Comma Seperated)
 data "aws_ssm_parameter" "api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
-  name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
+  name = "arn:aws:ssm:${data.aws_ssm_parameter.shared_service_region.value}:${data.aws_ssm_parameter.shared_service_account_id.value}:parameter/unity/shared-services/cognito/default-user-groups"
 }
 
 # Unity Management Console NLB
@@ -137,7 +132,7 @@ resource "aws_lambda_function" "cs_common_lambda_auth" {
 
   environment {
     variables = {
-      COGNITO_CLIENT_ID_LIST = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_client_id_list.value
+      COGNITO_CLIENT_ID_LIST = "deprecated"
       COGNITO_USER_POOL_ID   = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_user_pool_id.value
       COGNITO_GROUPS_ALLOWED = data.aws_ssm_parameter.api_gateway_cs_lambda_authorizer_cognito_user_groups_list.value
     }

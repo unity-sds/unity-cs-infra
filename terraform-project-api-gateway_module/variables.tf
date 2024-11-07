@@ -74,24 +74,6 @@ variable "unity_cs_lambda_authorizer_zip_path" {
   default     = "https://github.com/unity-sds/unity-cs-auth-lambda/releases/download/1.0.3/unity-cs-lambda-auth-1.0.3.zip"
 }
 
-variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_client_id_list" {
-  type        = string
-  description = "SSM Param for Project Level API Gateway CS Lambda Authorizer Lambda Allowed Cognito Client ID List"
-  default     = "/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list"
-}
-
-variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_pool_id" {
-  type        = string
-  description = "SSM Param for Project Level API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Pool ID"
-  default     = "/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
-}
-
-variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
-  type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Groups List"
-  default     = "/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
-}
-
 variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {
   type        = string
   description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Invoke Role ARN"
