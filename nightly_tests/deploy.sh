@@ -89,7 +89,8 @@ config_content=$(format_config_file "$CONFIG_FILE")
 
 # Output the marketplace items table to both console and nightly_output.txt
 {
-    echo "Marketplace Items:"
+    echo "-----------------------------------------"
+    echo "Items that will auto-deploy on bootstrap:"
     echo "Marketplace Item                | Version"
     echo "--------------------------------+--------"
     echo "$config_content" | grep -E '^\s*-' | sed -E 's/^\s*-\s*name:\s*(.*)/\1/' | while read -r line; do
