@@ -6,4 +6,4 @@ MarketplaceItems:
   - name: unity-proxy
     version: 0.14
   - name: unity-ui
-    version: 0.1
+    version: 0.8.0
