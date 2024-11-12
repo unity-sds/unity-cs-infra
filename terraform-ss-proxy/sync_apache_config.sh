@@ -5,7 +5,7 @@ S3_BUCKET="ucs-ss-config"
 S3_FILE_PATH="unity-cs.conf"
 LOCAL_FILE="/etc/apache2/sites-enabled/unity-cs.conf"
 TEMP_FILE="/tmp/unity-cs.conf"
-SLACK_WEBHOOK="https://hooks.slack.com/triggers/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"
+SLACK_WEBHOOK=$(aws ssm get-parameter --name "/unity/shared-services/slack/apache-config-webhook-url" --with-decryption --query "Parameter.Value" --output text)
 
 # Function to send message to Slack and exit
 send_to_slack_and_exit() {
