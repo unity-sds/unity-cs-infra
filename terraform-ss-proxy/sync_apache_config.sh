@@ -68,9 +68,11 @@ else
         send_to_slack_and_exit "✅ Apache configuration updated successfully\nChanges made:\n${DIFF_OUTPUT}" 0
     else
         echo "Apache configuration test failed. Reverting to original configuration..."
+        # Capture the apache config test error
+        CONFIG_TEST_ERROR=$(sudo apache2ctl configtest 2>&1)
         sudo mv "${BACKUP_FILE}" "${LOCAL_FILE}"
         rm "${TEMP_FILE}"
         echo "Kept original configuration file"
-        send_to_slack_and_exit "❌ Apache configuration test failed. Original configuration kept." 1
+        send_to_slack_and_exit "❌ Apache configuration test failed. Original configuration kept.\n\nConfig Test Error:\n${CONFIG_TEST_ERROR}\n\nAttempted Changes:\n${DIFF_OUTPUT}" 1
     fi
 fi
