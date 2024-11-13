@@ -224,6 +224,63 @@ export SSM_MC_URL="/unity/${PROJECT_NAME}/${VENUE_NAME}/management/httpd/loadbal
 export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
 echo "MANAGEMENT_CONSOLE_URL = ${MANAGEMENT_CONSOLE_URL}"
 
+echo "Updating Apache configuration in S3..."
+
+# Extract host from URL (remove http:// and everything after first :)
+ALB_HOST=$(echo $MANAGEMENT_CONSOLE_URL | sed 's|^http://||' | cut -d':' -f1)
+
+# Create venue path from project and venue name
+VENUE_PATH="/${PROJECT_NAME}/${VENUE_NAME}/"
+
+# Create temporary file for Apache config block
+TEMP_CONFIG_FILE="/tmp/venue_config.txt"
+
+# Create the Apache configuration block
+cat << EOF > $TEMP_CONFIG_FILE
+
+    # ----------
+    # ${PROJECT_NAME}/${VENUE_NAME}
+    #
+    Define VENUE_ALB_HOST ${ALB_HOST}
+    Define VENUE_ALB_PORT 8080
+    Define VENUE_ALB_PATH ${VENUE_PATH}
+    RewriteEngine On
+    RewriteCond %{HTTP:Connection} Upgrade [NC]
+    RewriteCond %{HTTP:Upgrade} websocket [NC]
+    RewriteCond %{REQUEST_URI} "\${VENUE_ALB_PATH}"
+    RewriteRule \${VENUE_ALB_PATH}(.*) ws://\${VENUE_ALB_HOST}:\${VENUE_ALB_PORT}\${VENUE_ALB_PATH}\$1 [P,L] [END]
+    <Location "\${VENUE_ALB_PATH}">
+       ProxyPreserveHost on
+       AuthType openid-connect
+       Require valid-user
+
+       # Added to point to httpd within the venue account
+       ProxyPass "http://\${VENUE_ALB_HOST}:\${VENUE_ALB_PORT}\${VENUE_ALB_PATH}"
+       ProxyPassReverse "http://\${VENUE_ALB_HOST}:\${VENUE_ALB_PORT}\${VENUE_ALB_PATH}"
+       RequestHeader     set "X-Forwarded-Proto" expr=%{REQUEST_SCHEME}
+       RequestHeader     set "X-Forwarded-Host" "www.dev.mdps.mcp.nasa.gov:4443"
+    </Location>
+EOF
+
+# Download existing config, insert new block before </VirtualHost>, and upload back to S3
+TEMP_FULL_CONFIG="/tmp/unity-cs.conf"
+aws s3 cp s3://ucs-shared-services-apache-config-dev/unity-cs.conf $TEMP_FULL_CONFIG
+
+sed -i "/<\/VirtualHost>/e cat $TEMP_CONFIG_FILE" $TEMP_FULL_CONFIG
+
+
+# Upload updated config back to S3
+if aws s3 cp $TEMP_FULL_CONFIG s3://ucs-shared-services-apache-config-dev/unity-cs.conf; then
+    echo "Successfully updated Apache configuration in S3"
+else
+    echo "Failed to update Apache configuration in S3"
+    exit 1
+fi
+
+# Clean up temporary files
+rm $TEMP_CONFIG_FILE
+rm $TEMP_FULL_CONFIG
+
 if [[ "$RUN_TESTS" == "true" ]]; then
   echo "Checking if Docker is installed..."
   #
