@@ -1,11 +1,11 @@
-Repo Hash (Nightly Test):     [bc4ab08]
+Repo Hash (Nightly Test):     [58f0241]
 Deploying Cloudformation stack...
 Marketplace Items:
 Marketplace Item                | Version
 --------------------------------+--------
-unity-cs-monitoring-lambda     | 0.1
-unity-apigateway               | 0.4
-unity-proxy                    | 0.14
+unity-cs-monitoring-lambda      | 0.1
+unity-apigateway                | 0.4
+unity-proxy                     | 0.14
 Nightly Test in the (TODO FIXME) account
 Stack Name: [unity-management-console-unity-nightly]
 Stack Status (Final): [CREATE_COMPLETE]
@@ -26,12 +26,12 @@ test_selenium_mc.py::test_core_setup_save_btn FAILED                     [100%]
 _________________________ test_navigate_to_mc_console __________________________
 test_selenium_mc.py:59: in test_navigate_to_mc_console
     assert driver.current_url.lower() == expected_url.lower(), f"URL does not match the expected URL without credentials. Expected: {expected_url}, but got: {driver.current_url}"
-E   AssertionError: URL does not match the expected URL without credentials. Expected: HTTP://unity-nightly-httpd-alb-1626604119.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui/landing, but got: http://unity-nightly-httpd-alb-1626604119.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
+E   AssertionError: URL does not match the expected URL without credentials. Expected: HTTP://unity-nightly-httpd-alb-1215017343.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui/landing, but got: http://unity-nightly-httpd-alb-1215017343.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
 E   assert 'http://unity...management/ui' == 'http://unity...nt/ui/landing'
 E     
-E     - http://unity-nightly-httpd-alb-1626604119.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui/landing
+E     - http://unity-nightly-httpd-alb-1215017343.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui/landing
 E     ?                                                                                                       --------
-E     + http://unity-nightly-httpd-alb-1626604119.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
+E     + http://unity-nightly-httpd-alb-1215017343.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
 ________________________ test_bootstrap_process_status _________________________
 test_selenium_mc.py:77: in test_bootstrap_process_status
     bootstrap_status_element = WebDriverWait(driver, 10).until(
@@ -39,26 +39,26 @@ test_selenium_mc.py:77: in test_bootstrap_process_status
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x556b717cb10a <unknown>
-E   #1 0x556b712e6460 <unknown>
-E   #2 0x556b71332f96 <unknown>
-E   #3 0x556b71333221 <unknown>
-E   #4 0x556b713785d4 <unknown>
-E   #5 0x556b7135703d <unknown>
-E   #6 0x556b71375af6 <unknown>
-E   #7 0x556b71356db3 <unknown>
-E   #8 0x556b71325c10 <unknown>
-E   #9 0x556b71326bee <unknown>
-E   #10 0x556b7179739b <unknown>
-E   #11 0x556b7179b338 <unknown>
-E   #12 0x556b71784ebc <unknown>
-E   #13 0x556b7179beb7 <unknown>
-E   #14 0x556b7176a10f <unknown>
-E   #15 0x556b717b9828 <unknown>
-E   #16 0x556b717b99f0 <unknown>
-E   #17 0x556b717c9f86 <unknown>
-E   #18 0x7fb07217aa94 <unknown>
-E   #19 0x7fb072207a34 __clone
+E   #0 0x55f15749213a <unknown>
+E   #1 0x55f156fad460 <unknown>
+E   #2 0x55f156ff9f96 <unknown>
+E   #3 0x55f156ffa221 <unknown>
+E   #4 0x55f15703f5d4 <unknown>
+E   #5 0x55f15701e03d <unknown>
+E   #6 0x55f15703caf6 <unknown>
+E   #7 0x55f15701ddb3 <unknown>
+E   #8 0x55f156fecc10 <unknown>
+E   #9 0x55f156fedbee <unknown>
+E   #10 0x55f15745e3cb <unknown>
+E   #11 0x55f157462368 <unknown>
+E   #12 0x55f15744beec <unknown>
+E   #13 0x55f157462ee7 <unknown>
+E   #14 0x55f15743113f <unknown>
+E   #15 0x55f157480858 <unknown>
+E   #16 0x55f157480a20 <unknown>
+E   #17 0x55f157490fb6 <unknown>
+E   #18 0x7f9588055a94 <unknown>
+E   #19 0x7f95880e2a34 __clone
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:89: in test_bootstrap_process_status
@@ -71,26 +71,26 @@ test_selenium_mc.py:95: in test_initiate_core_setup
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x556b717cb10a <unknown>
-E   #1 0x556b712e6460 <unknown>
-E   #2 0x556b71332f96 <unknown>
-E   #3 0x556b71333221 <unknown>
-E   #4 0x556b713785d4 <unknown>
-E   #5 0x556b7135703d <unknown>
-E   #6 0x556b71375af6 <unknown>
-E   #7 0x556b71356db3 <unknown>
-E   #8 0x556b71325c10 <unknown>
-E   #9 0x556b71326bee <unknown>
-E   #10 0x556b7179739b <unknown>
-E   #11 0x556b7179b338 <unknown>
-E   #12 0x556b71784ebc <unknown>
-E   #13 0x556b7179beb7 <unknown>
-E   #14 0x556b7176a10f <unknown>
-E   #15 0x556b717b9828 <unknown>
-E   #16 0x556b717b99f0 <unknown>
-E   #17 0x556b717c9f86 <unknown>
-E   #18 0x7fb07217aa94 <unknown>
-E   #19 0x7fb072207a34 __clone
+E   #0 0x55f15749213a <unknown>
+E   #1 0x55f156fad460 <unknown>
+E   #2 0x55f156ff9f96 <unknown>
+E   #3 0x55f156ffa221 <unknown>
+E   #4 0x55f15703f5d4 <unknown>
+E   #5 0x55f15701e03d <unknown>
+E   #6 0x55f15703caf6 <unknown>
+E   #7 0x55f15701ddb3 <unknown>
+E   #8 0x55f156fecc10 <unknown>
+E   #9 0x55f156fedbee <unknown>
+E   #10 0x55f15745e3cb <unknown>
+E   #11 0x55f157462368 <unknown>
+E   #12 0x55f15744beec <unknown>
+E   #13 0x55f157462ee7 <unknown>
+E   #14 0x55f15743113f <unknown>
+E   #15 0x55f157480858 <unknown>
+E   #16 0x55f157480a20 <unknown>
+E   #17 0x55f157490fb6 <unknown>
+E   #18 0x7f9588055a94 <unknown>
+E   #19 0x7f95880e2a34 __clone
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:104: in test_initiate_core_setup
@@ -103,26 +103,26 @@ test_selenium_mc.py:116: in test_core_setup_save_btn
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x556b717cb10a <unknown>
-E   #1 0x556b712e6460 <unknown>
-E   #2 0x556b71332f96 <unknown>
-E   #3 0x556b71333221 <unknown>
-E   #4 0x556b713785d4 <unknown>
-E   #5 0x556b7135703d <unknown>
-E   #6 0x556b71375af6 <unknown>
-E   #7 0x556b71356db3 <unknown>
-E   #8 0x556b71325c10 <unknown>
-E   #9 0x556b71326bee <unknown>
-E   #10 0x556b7179739b <unknown>
-E   #11 0x556b7179b338 <unknown>
-E   #12 0x556b71784ebc <unknown>
-E   #13 0x556b7179beb7 <unknown>
-E   #14 0x556b7176a10f <unknown>
-E   #15 0x556b717b9828 <unknown>
-E   #16 0x556b717b99f0 <unknown>
-E   #17 0x556b717c9f86 <unknown>
-E   #18 0x7fb07217aa94 <unknown>
-E   #19 0x7fb072207a34 __clone
+E   #0 0x55f15749213a <unknown>
+E   #1 0x55f156fad460 <unknown>
+E   #2 0x55f156ff9f96 <unknown>
+E   #3 0x55f156ffa221 <unknown>
+E   #4 0x55f15703f5d4 <unknown>
+E   #5 0x55f15701e03d <unknown>
+E   #6 0x55f15703caf6 <unknown>
+E   #7 0x55f15701ddb3 <unknown>
+E   #8 0x55f156fecc10 <unknown>
+E   #9 0x55f156fedbee <unknown>
+E   #10 0x55f15745e3cb <unknown>
+E   #11 0x55f157462368 <unknown>
+E   #12 0x55f15744beec <unknown>
+E   #13 0x55f157462ee7 <unknown>
+E   #14 0x55f15743113f <unknown>
+E   #15 0x55f157480858 <unknown>
+E   #16 0x55f157480a20 <unknown>
+E   #17 0x55f157490fb6 <unknown>
+E   #18 0x7f9588055a94 <unknown>
+E   #19 0x7f95880e2a34 __clone
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:128: in test_core_setup_save_btn
@@ -133,4 +133,4 @@ FAILED test_selenium_mc.py::test_navigate_to_mc_console - AssertionError: URL...
 FAILED test_selenium_mc.py::test_bootstrap_process_status - Exception: Failed...
 FAILED test_selenium_mc.py::test_initiate_core_setup - Exception: Failed to n...
 FAILED test_selenium_mc.py::test_core_setup_save_btn - Exception: Failed to f...
-======================== 4 failed in 119.13s (0:01:59) =========================
+======================== 4 failed in 120.28s (0:02:00) =========================

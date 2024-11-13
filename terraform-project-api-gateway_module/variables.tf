@@ -1,8 +1,15 @@
-variable "ssm_region" {
+variable "region" {
   type        = string
   description = "Region"
+  default     = "us-west-2"
+}
+
+variable "ssm_region" {
+  type        = string
+  description = "SSM Region"
   default     = "/unity/shared-services/aws/account/region"
 }
+
 
 variable "ssm_account_id" {
   description = "Name of the SSM paramter for shared service account ID"
@@ -29,6 +36,12 @@ variable "venue" {
   description = "The unity venue its installed into"
   type        = string
   default     = "UnknownVenue"
+}
+
+variable "unity_mc_nlb_name_prefix" {
+  description = "The unity management console NLB name prefix"
+  type = string
+  default = "unity-mc-nlb"
 }
 
 variable "installprefix" {
@@ -59,24 +72,6 @@ variable "unity_cs_lambda_authorizer_zip_path" {
   type        = string
   description = "The URL of the CS Lambda Authorizer deployment ZIP file"
   default     = "https://github.com/unity-sds/unity-cs-auth-lambda/releases/download/1.0.3/unity-cs-lambda-auth-1.0.3.zip"
-}
-
-variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_client_id_list" {
-  type        = string
-  description = "SSM Param for Project Level API Gateway CS Lambda Authorizer Lambda Allowed Cognito Client ID List"
-  default     = "/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list"
-}
-
-variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_pool_id" {
-  type        = string
-  description = "SSM Param for Project Level API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Pool ID"
-  default     = "/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-pool-id"
-}
-
-variable "ssm_param_api_gateway_cs_lambda_authorizer_cognito_user_groups_list" {
-  type        = string
-  description = "SSM Param for API Gateway CS Lambda Authorizer Lambda Allowed Cognito User Groups List"
-  default     = "/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-user-groups-list"
 }
 
 variable "ssm_param_api_gateway_cs_lambda_authorizer_invoke_role_arn" {

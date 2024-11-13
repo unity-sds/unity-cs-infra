@@ -6,25 +6,20 @@ WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 Hit:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal InRelease
 Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
 Get:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
-Get:4 https://download.docker.com/linux/ubuntu focal InRelease [57.7 kB]
-Hit:5 https://apt.releases.hashicorp.com focal InRelease
+Hit:4 https://download.docker.com/linux/ubuntu focal InRelease
+Get:5 https://apt.releases.hashicorp.com focal InRelease [12.9 kB]
 Ign:6 https://apt.vector.dev stable InRelease
-Hit:7 https://apt.vector.dev stable Release
-Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
-Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
-Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
-Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
-Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
-Get:13 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3640 kB]
-Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/multiverse amd64 Packages [27.0 kB]
+Get:7 https://apt.vector.dev stable Release [26.0 kB]
+Get:8 https://apt.vector.dev stable Release.gpg [801 B]
+Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
+Get:10 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
+Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
+Get:12 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
+Get:13 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
+Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3673 kB]
+Get:15 https://apt.releases.hashicorp.com focal/main amd64 Packages [158 kB]
 Get:16 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
-Get:17 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [3272 kB]
-Get:18 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [3212 kB]
-Get:19 http://security.ubuntu.com/ubuntu focal-security/restricted Translation-en [449 kB]
-Get:20 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 c-n-f Metadata [548 B]
-Get:21 http://security.ubuntu.com/ubuntu focal-security/multiverse amd64 Packages [24.8 kB]
-Get:22 http://security.ubuntu.com/ubuntu focal-security/multiverse amd64 c-n-f Metadata [540 B]
-Fetched 11.1 MB in 24s (459 kB/s)
+Fetched 4288 kB in 7s (588 kB/s)
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -35,7 +30,7 @@ WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 Reading package lists...
 Building dependency tree...
 Reading state information...
-python3-pip is already the newest version (20.0.2-5ubuntu1.10+esm2).
+python3-pip is already the newest version (20.0.2-5ubuntu1.11+esm2).
 0 upgraded, 0 newly installed, 0 to remove and 38 not upgraded.
 RUN ARGUMENTS: 
   - Destroy stack at end of script? true
@@ -202,12 +197,12 @@ Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 .
     "Version": 1,
     "Tier": "Standard"
 }
-Repo Hash (Nightly Test):     [9602e71]
+Repo Hash (Nightly Test):     [58f0241]
 From https://github.com/unity-sds/unity-cs-infra
  * branch            main       -> FETCH_HEAD
 Already up to date.
 Already on 'main'
-M	nightly_tests/nightly_logs/log_2024-10-28_18-00/output.log
+M	nightly_tests/nightly_logs/log_2024-11-07_18-00/output.log
 Your branch is up to date with 'origin/main'.
 deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
 deploy.sh :: PROJECT_NAME: unity
@@ -247,11 +242,11 @@ Deploying Cloudformation stack...
 Marketplace Items:
 Marketplace Item                | Version
 --------------------------------+--------
-unity-cs-monitoring-lambda     | 0.1
-unity-apigateway               | 0.4
-unity-proxy                    | 0.14
+unity-cs-monitoring-lambda      | 0.1
+unity-apigateway                | 0.4
+unity-proxy                     | 0.14
 {
-    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/89f1c140-965a-11ef-af4a-0a413f9d3e8d"
+    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/83fad6f0-9e3e-11ef-9942-02d74ee6b785"
 }
 Stack Name: [unity-management-console-unity-nightly]
 Waiting for Cloudformation Stack..........................................[0]
@@ -272,48 +267,52 @@ Waiting for Cloudformation Stack..........................................[280]
 Waiting for Cloudformation Stack..........................................[300]
 Waiting for Cloudformation Stack..........................................[320]
 Waiting for Cloudformation Stack..........................................[340]
-Waiting for Cloudformation Stack..........................................[360]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [380 seconds] - PASS
+Stack Creation Time: [360 seconds] - PASS
 Deploying Management Console...
-MANAGEMENT_CONSOLE_URL = HTTP://unity-nightly-httpd-alb-422877304.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
+MANAGEMENT_CONSOLE_URL = HTTP://unity-nightly-httpd-alb-1215017343.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
 Checking if Docker is installed...
 Docker already installed [OK]
 Using default tag: latest
 latest: Pulling from selenium/standalone-chrome
-Digest: sha256:c9a4d4fd1ca19583c93d01555cd1656672022f77904d0251b04d34dbf2e91466
+Digest: sha256:005f7292b14fba7403dd2756771477cbd012ac989acc5e1060a355d4c2062457
 Status: Image is up to date for selenium/standalone-chrome:latest
 docker.io/selenium/standalone-chrome:latest
 Launching selenium docker...
 Attempt 1 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
 Attempt 2 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
 Attempt 3 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 4 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 5 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 6 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 7 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 8 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
 Success! HTTP response code 200 received.
-Management Console Creation Time: 645 seconds
-Total Creation Time(SMM params, CloudFormation, MC): 1148 seconds
+Management Console Creation Time: 995 seconds
+Total Creation Time(SMM params, CloudFormation, MC): 1449 seconds
 Running Smoke Test
 Smoke test was successful. Continuing with bootstrap and tests.
 Running Selenium tests...
 Stopping Selenium docker container...
-fcbb0156afcea327795afdd042c302397b6be6241a7407cf02bb534656558ee4
+1f73460975ac4ede7e0f852f38ecc1ede8044db9c6e8ab31d9985229cf1b6ebf
 mv: cannot stat 'selenium_unity_images/*': No such file or directory
-Current date and time: Tue Oct 29 18:21:14 PDT 2024
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-21_18-00
-Pushing test results to nightly_logs/log_2024-10-29_18-00...
-[main 70214bf] Add nightly output for 2024-10-29_18-00
- 4 files changed, 2462 insertions(+), 14 deletions(-)
- delete mode 100644 nightly_tests/nightly_logs/log_2024-10-21_18-00/output.log
- create mode 100644 nightly_tests/nightly_logs/log_2024-10-29_18-00/nightly_output_2024-10-29_18-00.txt
- create mode 100644 nightly_tests/nightly_logs/log_2024-10-29_18-00/output.log
+Current date and time: Fri Nov  8 18:26:18 PST 2024
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-31_18-00
+Pushing test results to nightly_logs/log_2024-11-08_18-00...
+[main 5aa3594] Add nightly output for 2024-11-08_18-00
+ 3 files changed, 1008 insertions(+), 747 deletions(-)
+ rename nightly_tests/nightly_logs/{log_2024-10-31_18-00 => log_2024-11-07_18-00}/output.log (66%)
+ rename nightly_tests/nightly_logs/{log_2024-10-31_18-00/nightly_output_2024-10-31_18-00.txt => log_2024-11-08_18-00/nightly_output_2024-11-08_18-00.txt} (60%)
+ create mode 100644 nightly_tests/nightly_logs/log_2024-11-08_18-00/output.log
 From https://github.com/unity-sds/unity-cs-infra
  * branch            main       -> FETCH_HEAD
 Already up to date.
 Already on 'main'
-M	nightly_tests/nightly_logs/log_2024-10-29_18-00/output.log
+M	nightly_tests/nightly_logs/log_2024-11-08_18-00/output.log
 Your branch is ahead of 'origin/main' by 1 commit.
   (use "git push" to publish your local commits)
 To https://github.com/unity-sds/unity-cs-infra.git
-   9602e71..70214bf  main -> main
+   58f0241..5aa3594  main -> main
 Destroying resources...
 destroy.sh :: PROJECT_NAME: unity
 destroy.sh :: VENUE_NAME: nightly
@@ -327,12 +326,12 @@ Initializing Terraform...
 Successfully configured the backend "s3"! Terraform will automatically
 use this backend unless the backend configuration changes.[0m
 [0m[1mInitializing provider plugins...[0m
-- Finding latest version of hashicorp/null...
 - Finding latest version of hashicorp/aws...
+- Finding latest version of hashicorp/null...
+- Installing hashicorp/aws v5.75.0...
+- Installed hashicorp/aws v5.75.0 (signed by HashiCorp)
 - Installing hashicorp/null v3.2.3...
 - Installed hashicorp/null v3.2.3 (signed by HashiCorp)
-- Installing hashicorp/aws v5.73.0...
-- Installed hashicorp/aws v5.73.0 (signed by HashiCorp)
 Terraform has created a lock file [1m.terraform.lock.hcl[0m to record the provider
 selections it made above. Include this file in your version control repository
 so that Terraform can guarantee to make the same selections by default when
@@ -348,63 +347,67 @@ If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.[0m
 Destroying resources...
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.null_resource.download_lambda_zip: Refreshing state... [id=5193992999707992401][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.null_resource.download_lambda_zip: Refreshing state... [id=4948522969981784333][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.ecs_execution_role: Refreshing state... [id=unity-nightlyecs_execution_role][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_stage.api-gateway-stage: Refreshing state... [id=ags-0phl569dwg-default][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.management_console_url: Refreshing state... [id=/unity/unity/nightly/component/management-console][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.ecs_sg: Refreshing state... [id=sg-0e892dd8643d3d164][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.api_gateway_rest_api_id_parameter: Refreshing state... [id=/unity/cs/routing/api-gateway/rest-api-id-2][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_cloudwatch_log_group.proxyloggroup: Refreshing state... [id=/ecs/unity-nightly-managementproxy][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.lambda_iam_role: Refreshing state... [id=unity-nightly-lambda_iam_role][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.ecs_mc_alb_ingress_sg_rule: Refreshing state... [id=sgr-0a6de6a5aeaaaaeab][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lambda_function.httpdlambda: Refreshing state... [id=unity-nightly-httpdproxymanagement][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.invoke_role_arn: Refreshing state... [id=/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-invoke-role-arn][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.ecs_task_role: Refreshing state... [id=unity-nightly-ecs_task_role][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.lambda_function_name: Refreshing state... [id=/unity/unity/nightly/cs/management/proxy/lambda-name][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.api_gateway_uri: Refreshing state... [id=/unity/cs/management/api-gateway/gateway-uri][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb.httpd_alb: Refreshing state... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/5e08fb15e5fefe71][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_config: Refreshing state... [id=/unity/unity/nightly/cs/management/proxy/configurations/010-management][0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_cloudwatch_event_target.invoke_lambda: Refreshing state... [id=unity-nightly-every_five_minutes-invoke_lambda_function][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_iam_role.iam_for_lambda_auth: Refreshing state... [id=unity-nightly-iam_for_lambda_auth][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_vpc_access_policy_attachment: Refreshing state... [id=unity-nightly-lambda_iam_role-20241030010900036200000001][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Refreshing state... [id=arn:aws:ecs:us-west-2:865428270474:service/unity-nightly-httpd-cluster/httpd-service][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.ecs_execution_role_policy: Refreshing state... [id=unity-nightlyecs_execution_role-20241030010900040300000002][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_management_path: Refreshing state... [id=82q2iv][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_method.root_level_options_method: Refreshing state... [id=agm-0phl569dwg-923odehtd8-OPTIONS][0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_policy.lambda_ssm_s3_policy: Refreshing state... [id=arn:aws:iam::865428270474:policy/unity-unity-nightly-cs-monitoring-lambda-policy][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_egress_rule.ecs_egress_sg_rule: Refreshing state... [id=sgr-05da2254e716827b1][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.ecs_ssm_role_policy: Refreshing state... [id=unity-nightly-ecs_task_role-20241030010900140900000005][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Refreshing state... [id=sg-01c8ef6ce6dbb9660][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb_target_group.httpd_tg: Refreshing state... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/ecaeee20f0800956][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_closevirtualhost: Refreshing state... [id=/unity/unity/nightly/cs/management/proxy/configurations/100-closevhost8080][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.alb_all_ingress_sg_rule: Refreshing state... [id=sgr-013262b04422eed7f][0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_lambda_function.unity_cs_monitoring_lambda: Refreshing state... [id=unity-unity-nightly-cs-monitoring-lambda][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.ecs_alb_ingress_sg_rule: Refreshing state... [id=sgr-0c594bc626b2f6eb4][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_openvirtualhost: Refreshing state... [id=/unity/unity/nightly/cs/management/proxy/configurations/001-openvhost8080][0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_role.lambda_execution_role: Refreshing state... [id=unity-unity-nightly-cs-monitoring-lambda-role][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_cloudwatch_log_group.cs_common_lambda_auth_log_group: Refreshing state... [id=/aws/lambda/unity-nightly-unity-cs-common-lambda-authorizer][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_policy.lambda_vpc_access_policy: Refreshing state... [id=arn:aws:iam::865428270474:policy/unity-nightly-lambda_vpc_access_policy][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb_listener.httpd_listener: Refreshing state... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:listener/app/unity-nightly-httpd-alb/5e08fb15e5fefe71/f468a92d93c5609a][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_method.rest_api_method_for_project_proxy_resource_method: Refreshing state... [id=agm-0phl569dwg-vigcda-GET][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.mgmt_endpoint: Refreshing state... [id=/unity/unity/nightly/management/httpd/loadbalancer-url][0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_role_policy_attachment.attach_ssm_s3_policy: Refreshing state... [id=unity-unity-nightly-cs-monitoring-lambda-role-20241030011627554400000001][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.ecs_alb_sg: Refreshing state... [id=sg-02c7614a32b46314d][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_authorizer.unity_cs_common_authorizer: Refreshing state... [id=33w3mu][0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_cloudwatch_event_rule.every_five_minutes: Refreshing state... [id=unity-nightly-every_five_minutes][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_policy.lambda_ecs_stop_task_policy: Refreshing state... [id=arn:aws:iam::865428270474:policy/unity-nightly-lambda_ecs_stop_task_policy][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_task_definition.httpd: Refreshing state... [id=httpd][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_lambda_function.cs_common_lambda_auth: Refreshing state... [id=unity-nightly-unity-cs-common-lambda-authorizer][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_cluster.httpd_cluster: Refreshing state... [id=arn:aws:ecs:us-west-2:865428270474:cluster/unity-nightly-httpd-cluster][0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_lambda_permission.allow_eventbridge: Refreshing state... [id=AllowExecutionFromEventBridge][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_egress_rule.ecs_alb_egress_sg_rule: Refreshing state... [id=sgr-08afdaf2b8977f891][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_rest_api.rest_api: Refreshing state... [id=0phl569dwg][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_base_policy_attachment: Refreshing state... [id=unity-nightly-lambda_iam_role-20241030010900055500000003][0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_stop_task_policy_attachment: Refreshing state... [id=unity-nightly-lambda_iam_role-20241030010900073600000004][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_health_checks_path: Refreshing state... [id=vigcda][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_api_path: Refreshing state... [id=6addfh][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_deployment.api-gateway-deployment: Refreshing state... [id=ejcddr][0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_integration.root_level_get_method_mock_integration: Refreshing state... [id=agi-0phl569dwg-923odehtd8-OPTIONS][0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.null_resource.download_lambda_zip: Refreshing state... [id=5899774016895198179][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.null_resource.download_lambda_zip: Refreshing state... [id=4065015297082287368][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration.rest_api_integration_for_health_check: Refreshing state... [id=agi-xkd6lccm2f-7pjrlm-GET][0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_role.lambda_execution_role: Refreshing state... [id=unity-unity-nightly-cs-monitoring-lambda-role][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_egress_rule.ecs_egress_sg_rule: Refreshing state... [id=sgr-0cdc0b36ab1aa2a87][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_task_definition.httpd: Refreshing state... [id=httpd][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.ecs_mc_alb_ingress_sg_rule: Refreshing state... [id=sgr-0a42609f1337d9410][0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_policy.lambda_ssm_s3_policy: Refreshing state... [id=arn:aws:iam::865428270474:policy/unity-unity-nightly-cs-monitoring-lambda-policy][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration_response.api_gateway_integration_response: Refreshing state... [id=agir-xkd6lccm2f-7pjrlm-GET-200][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_vpc_access_policy_attachment: Refreshing state... [id=unity-nightly-lambda_iam_role-20241109020755631400000003][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.alb_all_ingress_sg_rule: Refreshing state... [id=sgr-03beeeafad2742f13][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_cloudwatch_log_group.proxyloggroup: Refreshing state... [id=/ecs/unity-nightly-managementproxy][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_health_checks_path: Refreshing state... [id=7pjrlm][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.ecs_execution_role: Refreshing state... [id=unity-nightlyecs_execution_role][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.invoke_role_arn: Refreshing state... [id=/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-invoke-role-arn][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_stage.api_gateway_stage: Refreshing state... [id=ags-xkd6lccm2f-default][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.ecs_ssm_role_policy: Refreshing state... [id=unity-nightly-ecs_task_role-20241109020755748600000005][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_rest_api.rest_api: Refreshing state... [id=xkd6lccm2f][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration.root_level_get_method_mock_integration: Refreshing state... [id=agi-xkd6lccm2f-t0lc9dkgab-OPTIONS][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_cluster.httpd_cluster: Refreshing state... [id=arn:aws:ecs:us-west-2:865428270474:cluster/unity-nightly-httpd-cluster][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_policy.lambda_vpc_access_policy: Refreshing state... [id=arn:aws:iam::865428270474:policy/unity-nightly-lambda_vpc_access_policy][0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_lambda_function.unity_cs_monitoring_lambda: Refreshing state... [id=unity-unity-nightly-cs-monitoring-lambda][0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_cloudwatch_event_target.invoke_lambda: Refreshing state... [id=unity-nightly-every_five_minutes-invoke_lambda_function][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.api_gateway_uri: Refreshing state... [id=/unity/cs/management/api-gateway/gateway-uri][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb_listener.httpd_listener: Refreshing state... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:listener/app/unity-nightly-httpd-alb/a4d0b0417d25692a/a522e6204c4f9e21][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_authorizer.unity_cs_common_authorizer: Refreshing state... [id=ijqhkw][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method.rest_api_method_for_health_check_method: Refreshing state... [id=agm-xkd6lccm2f-7pjrlm-GET][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Refreshing state... [id=sg-0a695db8cdb47f404][0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_role_policy_attachment.attach_ssm_s3_policy: Refreshing state... [id=unity-unity-nightly-cs-monitoring-lambda-role-20241109021534364800000001][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_cloudwatch_log_group.cs_common_lambda_auth_log_group: Refreshing state... [id=/aws/lambda/unity-nightly-unity-cs-common-lambda-authorizer][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method_response.response_200: Refreshing state... [id=agmr-xkd6lccm2f-7pjrlm-GET-200][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_policy.lambda_ecs_stop_task_policy: Refreshing state... [id=arn:aws:iam::865428270474:policy/unity-nightly-lambda_ecs_stop_task_policy][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.api_gateway_rest_api_id_parameter: Refreshing state... [id=/unity/cs/routing/api-gateway/rest-api-id-2][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_closevirtualhost: Refreshing state... [id=/unity/unity/nightly/cs/management/proxy/configurations/100-closevhost8080][0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_cloudwatch_event_rule.every_five_minutes: Refreshing state... [id=unity-nightly-every_five_minutes][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb.httpd_alb: Refreshing state... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/a4d0b0417d25692a][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_stop_task_policy_attachment: Refreshing state... [id=unity-nightly-lambda_iam_role-20241109020755604400000001][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.mgmt_endpoint: Refreshing state... [id=/unity/unity/nightly/management/httpd/loadbalancer-url][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_iam_role.iam_for_lambda_auth: Refreshing state... [id=unity-nightly-iam_for_lambda_auth][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.ecs_execution_role_policy: Refreshing state... [id=unity-nightlyecs_execution_role-20241109020755720200000004][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_management_path: Refreshing state... [id=qlepgu][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_deployment.api-gateway-deployment: Refreshing state... [id=wa9eer][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_api_path: Refreshing state... [id=rf0occ][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_lambda_function.cs_common_lambda_auth: Refreshing state... [id=unity-nightly-unity-cs-common-lambda-authorizer][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_openvirtualhost: Refreshing state... [id=/unity/unity/nightly/cs/management/proxy/configurations/001-openvhost8080][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lambda_function.httpdlambda: Refreshing state... [id=unity-nightly-httpdproxymanagement][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_egress_rule.ecs_alb_egress_sg_rule: Refreshing state... [id=sgr-0ec34dff2124ed03b][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.ecs_task_role: Refreshing state... [id=unity-nightly-ecs_task_role][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.ecs_sg: Refreshing state... [id=sg-025d4edf0d5a3eeed][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_config: Refreshing state... [id=/unity/unity/nightly/cs/management/proxy/configurations/010-management][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.ecs_alb_ingress_sg_rule: Refreshing state... [id=sgr-0dcca2ba8a0324525][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.management_console_url: Refreshing state... [id=/unity/unity/nightly/component/management-console][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.ecs_alb_sg: Refreshing state... [id=sg-02da323bf1b38739b][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_base_policy_attachment: Refreshing state... [id=unity-nightly-lambda_iam_role-20241109020755605100000002][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb_target_group.httpd_tg: Refreshing state... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/503248196480dd54][0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_lambda_permission.allow_eventbridge: Refreshing state... [id=AllowExecutionFromEventBridge][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Refreshing state... [id=arn:aws:ecs:us-west-2:865428270474:service/unity-nightly-httpd-cluster/httpd-service][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method.root_level_options_method: Refreshing state... [id=agm-xkd6lccm2f-t0lc9dkgab-OPTIONS][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.lambda_iam_role: Refreshing state... [id=unity-nightly-lambda_iam_role][0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_vpc_link.rest_api_health_check_vpc_link: Refreshing state... [id=r2xjaa][0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.lambda_function_name: Refreshing state... [id=/unity/unity/nightly/cs/management/proxy/lambda-name][0m
 
 Terraform used the selected providers to generate the following execution
 plan. Resource actions are indicated with the following symbols:
@@ -412,117 +415,161 @@ plan. Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_authorizer.unity_cs_common_authorizer[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_authorizer.unity_cs_common_authorizer[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_api_gateway_authorizer" "unity_cs_common_authorizer" {
-      [31m-[0m[0m arn                              = "arn:aws:apigateway:us-west-2::/restapis/0phl569dwg/authorizers/33w3mu" [90m-> null[0m[0m
+      [31m-[0m[0m arn                              = "arn:aws:apigateway:us-west-2::/restapis/xkd6lccm2f/authorizers/ijqhkw" [90m-> null[0m[0m
       [31m-[0m[0m authorizer_credentials           = "arn:aws:iam::865428270474:role/unity-nightly-iam_for_lambda_auth" [90m-> null[0m[0m
       [31m-[0m[0m authorizer_result_ttl_in_seconds = 0 [90m-> null[0m[0m
       [31m-[0m[0m authorizer_uri                   = "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:865428270474:function:unity-nightly-unity-cs-common-lambda-authorizer/invocations" [90m-> null[0m[0m
-      [31m-[0m[0m id                               = "33w3mu" [90m-> null[0m[0m
+      [31m-[0m[0m id                               = "ijqhkw" [90m-> null[0m[0m
       [31m-[0m[0m identity_source                  = "method.request.header.Authorization" [90m-> null[0m[0m
       [31m-[0m[0m name                             = "Unity_CS_Common_Authorizer" [90m-> null[0m[0m
       [31m-[0m[0m provider_arns                    = [] [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id                      = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id                      = "xkd6lccm2f" [90m-> null[0m[0m
       [31m-[0m[0m type                             = "TOKEN" [90m-> null[0m[0m
         [90m# (1 unchanged attribute hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_deployment.api-gateway-deployment[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_deployment.api-gateway-deployment[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_api_gateway_deployment" "api-gateway-deployment" {
-      [31m-[0m[0m created_date  = "2024-10-30T01:17:58Z" [90m-> null[0m[0m
-      [31m-[0m[0m execution_arn = "arn:aws:execute-api:us-west-2:865428270474:0phl569dwg/dev" [90m-> null[0m[0m
-      [31m-[0m[0m id            = "ejcddr" [90m-> null[0m[0m
-      [31m-[0m[0m invoke_url    = "https://0phl569dwg.execute-api.us-west-2.amazonaws.com/dev" [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id   = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m created_date  = "2024-11-09T02:23:46Z" [90m-> null[0m[0m
+      [31m-[0m[0m execution_arn = "arn:aws:execute-api:us-west-2:865428270474:xkd6lccm2f/dev" [90m-> null[0m[0m
+      [31m-[0m[0m id            = "wa9eer" [90m-> null[0m[0m
+      [31m-[0m[0m invoke_url    = "https://xkd6lccm2f.execute-api.us-west-2.amazonaws.com/dev" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id   = "xkd6lccm2f" [90m-> null[0m[0m
       [31m-[0m[0m stage_name    = "dev" [90m-> null[0m[0m
         [90m# (1 unchanged attribute hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_integration.root_level_get_method_mock_integration[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_integration.rest_api_integration_for_health_check[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "aws_api_gateway_integration" "rest_api_integration_for_health_check" {
+      [31m-[0m[0m cache_key_parameters    = [] [90m-> null[0m[0m
+      [31m-[0m[0m cache_namespace         = "7pjrlm" [90m-> null[0m[0m
+      [31m-[0m[0m connection_id           = "r2xjaa" [90m-> null[0m[0m
+      [31m-[0m[0m connection_type         = "VPC_LINK" [90m-> null[0m[0m
+      [31m-[0m[0m content_handling        = "CONVERT_TO_TEXT" [90m-> null[0m[0m
+      [31m-[0m[0m http_method             = "GET" [90m-> null[0m[0m
+      [31m-[0m[0m id                      = "agi-xkd6lccm2f-7pjrlm-GET" [90m-> null[0m[0m
+      [31m-[0m[0m integration_http_method = "GET" [90m-> null[0m[0m
+      [31m-[0m[0m passthrough_behavior    = "WHEN_NO_TEMPLATES" [90m-> null[0m[0m
+      [31m-[0m[0m request_parameters      = {} [90m-> null[0m[0m
+      [31m-[0m[0m request_templates       = {} [90m-> null[0m[0m
+      [31m-[0m[0m resource_id             = "7pjrlm" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id             = "xkd6lccm2f" [90m-> null[0m[0m
+      [31m-[0m[0m timeout_milliseconds    = 29000 [90m-> null[0m[0m
+      [31m-[0m[0m type                    = "HTTP" [90m-> null[0m[0m
+      [31m-[0m[0m uri                     = "http://unity-mc-nlb-unity-nightly-af6384458c31fa55.elb.us-west-2.amazonaws.com:8080/api/health_checks" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_integration.root_level_get_method_mock_integration[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_api_gateway_integration" "root_level_get_method_mock_integration" {
       [31m-[0m[0m cache_key_parameters    = [] [90m-> null[0m[0m
-      [31m-[0m[0m cache_namespace         = "923odehtd8" [90m-> null[0m[0m
+      [31m-[0m[0m cache_namespace         = "t0lc9dkgab" [90m-> null[0m[0m
       [31m-[0m[0m connection_type         = "INTERNET" [90m-> null[0m[0m
       [31m-[0m[0m http_method             = "OPTIONS" [90m-> null[0m[0m
-      [31m-[0m[0m id                      = "agi-0phl569dwg-923odehtd8-OPTIONS" [90m-> null[0m[0m
+      [31m-[0m[0m id                      = "agi-xkd6lccm2f-t0lc9dkgab-OPTIONS" [90m-> null[0m[0m
       [31m-[0m[0m passthrough_behavior    = "WHEN_NO_MATCH" [90m-> null[0m[0m
       [31m-[0m[0m request_parameters      = {} [90m-> null[0m[0m
       [31m-[0m[0m request_templates       = {} [90m-> null[0m[0m
-      [31m-[0m[0m resource_id             = "923odehtd8" [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id             = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m resource_id             = "t0lc9dkgab" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id             = "xkd6lccm2f" [90m-> null[0m[0m
       [31m-[0m[0m timeout_milliseconds    = 29000 [90m-> null[0m[0m
       [31m-[0m[0m type                    = "MOCK" [90m-> null[0m[0m
         [90m# (5 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_method.rest_api_method_for_project_proxy_resource_method[0m will be [1m[31mdestroyed[0m
-[0m  [31m-[0m[0m resource "aws_api_gateway_method" "rest_api_method_for_project_proxy_resource_method" {
-      [31m-[0m[0m api_key_required     = false [90m-> null[0m[0m
-      [31m-[0m[0m authorization        = "CUSTOM" [90m-> null[0m[0m
-      [31m-[0m[0m authorization_scopes = [] [90m-> null[0m[0m
-      [31m-[0m[0m authorizer_id        = "33w3mu" [90m-> null[0m[0m
-      [31m-[0m[0m http_method          = "GET" [90m-> null[0m[0m
-      [31m-[0m[0m id                   = "agm-0phl569dwg-vigcda-GET" [90m-> null[0m[0m
-      [31m-[0m[0m request_models       = {} [90m-> null[0m[0m
-      [31m-[0m[0m request_parameters   = {} [90m-> null[0m[0m
-      [31m-[0m[0m resource_id          = "vigcda" [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id          = "0phl569dwg" [90m-> null[0m[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_integration_response.api_gateway_integration_response[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "aws_api_gateway_integration_response" "api_gateway_integration_response" {
+      [31m-[0m[0m http_method         = "GET" [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "agir-xkd6lccm2f-7pjrlm-GET-200" [90m-> null[0m[0m
+      [31m-[0m[0m resource_id         = "7pjrlm" [90m-> null[0m[0m
+      [31m-[0m[0m response_parameters = {} [90m-> null[0m[0m
+      [31m-[0m[0m response_templates  = {} [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id         = "xkd6lccm2f" [90m-> null[0m[0m
+      [31m-[0m[0m status_code         = "200" [90m-> null[0m[0m
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_method.root_level_options_method[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_method.rest_api_method_for_health_check_method[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "aws_api_gateway_method" "rest_api_method_for_health_check_method" {
+      [31m-[0m[0m api_key_required     = false [90m-> null[0m[0m
+      [31m-[0m[0m authorization        = "CUSTOM" [90m-> null[0m[0m
+      [31m-[0m[0m authorization_scopes = [] [90m-> null[0m[0m
+      [31m-[0m[0m authorizer_id        = "ijqhkw" [90m-> null[0m[0m
+      [31m-[0m[0m http_method          = "GET" [90m-> null[0m[0m
+      [31m-[0m[0m id                   = "agm-xkd6lccm2f-7pjrlm-GET" [90m-> null[0m[0m
+      [31m-[0m[0m request_models       = {} [90m-> null[0m[0m
+      [31m-[0m[0m request_parameters   = {} [90m-> null[0m[0m
+      [31m-[0m[0m resource_id          = "7pjrlm" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id          = "xkd6lccm2f" [90m-> null[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_method.root_level_options_method[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_api_gateway_method" "root_level_options_method" {
       [31m-[0m[0m api_key_required     = false [90m-> null[0m[0m
       [31m-[0m[0m authorization        = "NONE" [90m-> null[0m[0m
       [31m-[0m[0m authorization_scopes = [] [90m-> null[0m[0m
       [31m-[0m[0m http_method          = "OPTIONS" [90m-> null[0m[0m
-      [31m-[0m[0m id                   = "agm-0phl569dwg-923odehtd8-OPTIONS" [90m-> null[0m[0m
+      [31m-[0m[0m id                   = "agm-xkd6lccm2f-t0lc9dkgab-OPTIONS" [90m-> null[0m[0m
       [31m-[0m[0m request_models       = {} [90m-> null[0m[0m
       [31m-[0m[0m request_parameters   = {} [90m-> null[0m[0m
-      [31m-[0m[0m resource_id          = "923odehtd8" [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id          = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m resource_id          = "t0lc9dkgab" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id          = "xkd6lccm2f" [90m-> null[0m[0m
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_api_path[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_method_response.response_200[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "aws_api_gateway_method_response" "response_200" {
+      [31m-[0m[0m http_method         = "GET" [90m-> null[0m[0m
+      [31m-[0m[0m id                  = "agmr-xkd6lccm2f-7pjrlm-GET-200" [90m-> null[0m[0m
+      [31m-[0m[0m resource_id         = "7pjrlm" [90m-> null[0m[0m
+      [31m-[0m[0m response_models     = {} [90m-> null[0m[0m
+      [31m-[0m[0m response_parameters = {} [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id         = "xkd6lccm2f" [90m-> null[0m[0m
+      [31m-[0m[0m status_code         = "200" [90m-> null[0m[0m
+    }
+
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_api_path[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_api_gateway_resource" "rest_api_resource_api_path" {
-      [31m-[0m[0m id          = "6addfh" [90m-> null[0m[0m
-      [31m-[0m[0m parent_id   = "82q2iv" [90m-> null[0m[0m
+      [31m-[0m[0m id          = "rf0occ" [90m-> null[0m[0m
+      [31m-[0m[0m parent_id   = "qlepgu" [90m-> null[0m[0m
       [31m-[0m[0m path        = "/management/api" [90m-> null[0m[0m
       [31m-[0m[0m path_part   = "api" [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id = "xkd6lccm2f" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_health_checks_path[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_health_checks_path[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_api_gateway_resource" "rest_api_resource_health_checks_path" {
-      [31m-[0m[0m id          = "vigcda" [90m-> null[0m[0m
-      [31m-[0m[0m parent_id   = "6addfh" [90m-> null[0m[0m
+      [31m-[0m[0m id          = "7pjrlm" [90m-> null[0m[0m
+      [31m-[0m[0m parent_id   = "rf0occ" [90m-> null[0m[0m
       [31m-[0m[0m path        = "/management/api/health_checks" [90m-> null[0m[0m
       [31m-[0m[0m path_part   = "health_checks" [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id = "xkd6lccm2f" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_management_path[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_management_path[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_api_gateway_resource" "rest_api_resource_management_path" {
-      [31m-[0m[0m id          = "82q2iv" [90m-> null[0m[0m
-      [31m-[0m[0m parent_id   = "923odehtd8" [90m-> null[0m[0m
+      [31m-[0m[0m id          = "qlepgu" [90m-> null[0m[0m
+      [31m-[0m[0m parent_id   = "t0lc9dkgab" [90m-> null[0m[0m
       [31m-[0m[0m path        = "/management" [90m-> null[0m[0m
       [31m-[0m[0m path_part   = "management" [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id = "xkd6lccm2f" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_rest_api.rest_api[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_rest_api.rest_api[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_api_gateway_rest_api" "rest_api" {
       [31m-[0m[0m api_key_source               = "HEADER" [90m-> null[0m[0m
-      [31m-[0m[0m arn                          = "arn:aws:apigateway:us-west-2::/restapis/0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m arn                          = "arn:aws:apigateway:us-west-2::/restapis/xkd6lccm2f" [90m-> null[0m[0m
       [31m-[0m[0m binary_media_types           = [] [90m-> null[0m[0m
-      [31m-[0m[0m created_date                 = "2024-10-30T01:17:58Z" [90m-> null[0m[0m
+      [31m-[0m[0m created_date                 = "2024-11-09T02:17:05Z" [90m-> null[0m[0m
       [31m-[0m[0m description                  = "Unity unity-nightly Project REST API Gateway" [90m-> null[0m[0m
       [31m-[0m[0m disable_execute_api_endpoint = false [90m-> null[0m[0m
-      [31m-[0m[0m execution_arn                = "arn:aws:execute-api:us-west-2:865428270474:0phl569dwg" [90m-> null[0m[0m
-      [31m-[0m[0m id                           = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m execution_arn                = "arn:aws:execute-api:us-west-2:865428270474:xkd6lccm2f" [90m-> null[0m[0m
+      [31m-[0m[0m id                           = "xkd6lccm2f" [90m-> null[0m[0m
       [31m-[0m[0m name                         = "unity-unity-nightly-rest-api-gateway" [90m-> null[0m[0m
-      [31m-[0m[0m root_resource_id             = "923odehtd8" [90m-> null[0m[0m
+      [31m-[0m[0m root_resource_id             = "t0lc9dkgab" [90m-> null[0m[0m
       [31m-[0m[0m tags                         = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all                     = {} [90m-> null[0m[0m
         [90m# (2 unchanged attributes hidden)[0m[0m
@@ -535,15 +582,15 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_api_gateway_stage.api-gateway-stage[0m will be [1m[31mdestroyed[0m
-[0m  [31m-[0m[0m resource "aws_api_gateway_stage" "api-gateway-stage" {
-      [31m-[0m[0m arn                   = "arn:aws:apigateway:us-west-2::/restapis/0phl569dwg/stages/default" [90m-> null[0m[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_stage.api_gateway_stage[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "aws_api_gateway_stage" "api_gateway_stage" {
+      [31m-[0m[0m arn                   = "arn:aws:apigateway:us-west-2::/restapis/xkd6lccm2f/stages/default" [90m-> null[0m[0m
       [31m-[0m[0m cache_cluster_enabled = false [90m-> null[0m[0m
-      [31m-[0m[0m deployment_id         = "ejcddr" [90m-> null[0m[0m
-      [31m-[0m[0m execution_arn         = "arn:aws:execute-api:us-west-2:865428270474:0phl569dwg/default" [90m-> null[0m[0m
-      [31m-[0m[0m id                    = "ags-0phl569dwg-default" [90m-> null[0m[0m
-      [31m-[0m[0m invoke_url            = "https://0phl569dwg.execute-api.us-west-2.amazonaws.com/default" [90m-> null[0m[0m
-      [31m-[0m[0m rest_api_id           = "0phl569dwg" [90m-> null[0m[0m
+      [31m-[0m[0m deployment_id         = "wa9eer" [90m-> null[0m[0m
+      [31m-[0m[0m execution_arn         = "arn:aws:execute-api:us-west-2:865428270474:xkd6lccm2f/default" [90m-> null[0m[0m
+      [31m-[0m[0m id                    = "ags-xkd6lccm2f-default" [90m-> null[0m[0m
+      [31m-[0m[0m invoke_url            = "https://xkd6lccm2f.execute-api.us-west-2.amazonaws.com/default" [90m-> null[0m[0m
+      [31m-[0m[0m rest_api_id           = "xkd6lccm2f" [90m-> null[0m[0m
       [31m-[0m[0m stage_name            = "default" [90m-> null[0m[0m
       [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all              = {} [90m-> null[0m[0m
@@ -552,7 +599,20 @@ Terraform will perform the following actions:
         [90m# (5 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_cloudwatch_log_group.cs_common_lambda_auth_log_group[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_api_gateway_vpc_link.rest_api_health_check_vpc_link[0m will be [1m[31mdestroyed[0m
+[0m  [31m-[0m[0m resource "aws_api_gateway_vpc_link" "rest_api_health_check_vpc_link" {
+      [31m-[0m[0m arn         = "arn:aws:apigateway:us-west-2::/vpclinks/r2xjaa" [90m-> null[0m[0m
+      [31m-[0m[0m description = "mc-nlb-vpc-link-unity-nightly" [90m-> null[0m[0m
+      [31m-[0m[0m id          = "r2xjaa" [90m-> null[0m[0m
+      [31m-[0m[0m name        = "mc-nlb-vpc-link-unity-nightly" [90m-> null[0m[0m
+      [31m-[0m[0m tags        = {} [90m-> null[0m[0m
+      [31m-[0m[0m tags_all    = {} [90m-> null[0m[0m
+      [31m-[0m[0m target_arns = [
+          [31m-[0m[0m "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/net/unity-mc-nlb-unity-nightly/af6384458c31fa55",
+        ] [90m-> null[0m[0m
+    }
+
+[1m  # module.default-unity-apigateway-lNSsA.aws_cloudwatch_log_group.cs_common_lambda_auth_log_group[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_cloudwatch_log_group" "cs_common_lambda_auth_log_group" {
       [31m-[0m[0m arn               = "arn:aws:logs:us-west-2:865428270474:log-group:/aws/lambda/unity-nightly-unity-cs-common-lambda-authorizer" [90m-> null[0m[0m
       [31m-[0m[0m id                = "/aws/lambda/unity-nightly-unity-cs-common-lambda-authorizer" [90m-> null[0m[0m
@@ -565,7 +625,7 @@ Terraform will perform the following actions:
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_iam_role.iam_for_lambda_auth[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_iam_role.iam_for_lambda_auth[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role" "iam_for_lambda_auth" {
       [31m-[0m[0m arn                   = "arn:aws:iam::865428270474:role/unity-nightly-iam_for_lambda_auth" [90m-> null[0m[0m
       [31m-[0m[0m assume_role_policy    = jsonencode(
@@ -585,7 +645,7 @@ Terraform will perform the following actions:
               [31m-[0m[0m Version   = "2012-10-17"
             }
         ) [90m-> null[0m[0m
-      [31m-[0m[0m create_date           = "2024-10-30T01:17:58Z" [90m-> null[0m[0m
+      [31m-[0m[0m create_date           = "2024-11-09T02:17:04Z" [90m-> null[0m[0m
       [31m-[0m[0m force_detach_policies = false [90m-> null[0m[0m
       [31m-[0m[0m id                    = "unity-nightly-iam_for_lambda_auth" [90m-> null[0m[0m
       [31m-[0m[0m managed_policy_arns   = [] [90m-> null[0m[0m
@@ -595,7 +655,7 @@ Terraform will perform the following actions:
       [31m-[0m[0m permissions_boundary  = "arn:aws:iam::865428270474:policy/mcp-tenantOperator-AMI-APIG" [90m-> null[0m[0m
       [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all              = {} [90m-> null[0m[0m
-      [31m-[0m[0m unique_id             = "AROA4S74LNWFGHNIEQNEY" [90m-> null[0m[0m
+      [31m-[0m[0m unique_id             = "AROA4S74LNWFDPON6S2ZL" [90m-> null[0m[0m
         [90m# (2 unchanged attributes hidden)[0m[0m
 
       [31m-[0m[0m inline_policy {
@@ -620,7 +680,7 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_lambda_function.cs_common_lambda_auth[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_lambda_function.cs_common_lambda_auth[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_lambda_function" "cs_common_lambda_auth" {
       [31m-[0m[0m architectures                  = [
           [31m-[0m[0m "x86_64",
@@ -632,7 +692,7 @@ Terraform will perform the following actions:
       [31m-[0m[0m handler                        = "index.handler" [90m-> null[0m[0m
       [31m-[0m[0m id                             = "unity-nightly-unity-cs-common-lambda-authorizer" [90m-> null[0m[0m
       [31m-[0m[0m invoke_arn                     = "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:865428270474:function:unity-nightly-unity-cs-common-lambda-authorizer/invocations" [90m-> null[0m[0m
-      [31m-[0m[0m last_modified                  = "2024-10-30T01:18:07.909+0000" [90m-> null[0m[0m
+      [31m-[0m[0m last_modified                  = "2024-11-09T02:17:14.642+0000" [90m-> null[0m[0m
       [31m-[0m[0m layers                         = [] [90m-> null[0m[0m
       [31m-[0m[0m memory_size                    = 128 [90m-> null[0m[0m
       [31m-[0m[0m package_type                   = "Zip" [90m-> null[0m[0m
@@ -653,7 +713,7 @@ Terraform will perform the following actions:
 
       [31m-[0m[0m environment {
           [31m-[0m[0m variables = {
-              [31m-[0m[0m "COGNITO_CLIENT_ID_LIST" = (sensitive value)
+              [31m-[0m[0m "COGNITO_CLIENT_ID_LIST" = "deprecated"
               [31m-[0m[0m "COGNITO_GROUPS_ALLOWED" = (sensitive value)
               [31m-[0m[0m "COGNITO_USER_POOL_ID"   = (sensitive value)
             } [90m-> null[0m[0m
@@ -674,7 +734,7 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_ssm_parameter.api_gateway_rest_api_id_parameter[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_ssm_parameter.api_gateway_rest_api_id_parameter[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "api_gateway_rest_api_id_parameter" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/cs/routing/api-gateway/rest-api-id-2" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -690,7 +750,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_ssm_parameter.api_gateway_uri[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_ssm_parameter.api_gateway_uri[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "api_gateway_uri" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/cs/management/api-gateway/gateway-uri" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -706,7 +766,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.aws_ssm_parameter.invoke_role_arn[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.aws_ssm_parameter.invoke_role_arn[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "invoke_role_arn" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-invoke-role-arn" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -722,12 +782,12 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-apigateway-IJeLV.null_resource.download_lambda_zip[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-apigateway-lNSsA.null_resource.download_lambda_zip[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "null_resource" "download_lambda_zip" {
-      [31m-[0m[0m id = "4948522969981784333" [90m-> null[0m[0m
+      [31m-[0m[0m id = "4065015297082287368" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-cs-monitoring-lambda-eQqvX.aws_cloudwatch_event_rule.every_five_minutes[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-cs-monitoring-lambda-MspHz.aws_cloudwatch_event_rule.every_five_minutes[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_cloudwatch_event_rule" "every_five_minutes" {
       [31m-[0m[0m arn                 = "arn:aws:events:us-west-2:865428270474:rule/unity-nightly-every_five_minutes" [90m-> null[0m[0m
       [31m-[0m[0m event_bus_name      = "default" [90m-> null[0m[0m
@@ -742,7 +802,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-cs-monitoring-lambda-eQqvX.aws_cloudwatch_event_target.invoke_lambda[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-cs-monitoring-lambda-MspHz.aws_cloudwatch_event_target.invoke_lambda[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_cloudwatch_event_target" "invoke_lambda" {
       [31m-[0m[0m arn            = "arn:aws:lambda:us-west-2:865428270474:function:unity-unity-nightly-cs-monitoring-lambda" [90m-> null[0m[0m
       [31m-[0m[0m event_bus_name = "default" [90m-> null[0m[0m
@@ -753,7 +813,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_policy.lambda_ssm_s3_policy[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-cs-monitoring-lambda-MspHz.aws_iam_policy.lambda_ssm_s3_policy[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_policy" "lambda_ssm_s3_policy" {
       [31m-[0m[0m arn              = "arn:aws:iam::865428270474:policy/unity-unity-nightly-cs-monitoring-lambda-policy" [90m-> null[0m[0m
       [31m-[0m[0m attachment_count = 1 [90m-> null[0m[0m
@@ -786,13 +846,13 @@ Terraform will perform the following actions:
               [31m-[0m[0m Version   = "2012-10-17"
             }
         ) [90m-> null[0m[0m
-      [31m-[0m[0m policy_id        = "ANPA4S74LNWFFCILUDAV2" [90m-> null[0m[0m
+      [31m-[0m[0m policy_id        = "ANPA4S74LNWFDAN3HSOQE" [90m-> null[0m[0m
       [31m-[0m[0m tags             = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all         = {} [90m-> null[0m[0m
         [90m# (1 unchanged attribute hidden)[0m[0m
     }
 
-[1m  # module.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_role.lambda_execution_role[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-cs-monitoring-lambda-MspHz.aws_iam_role.lambda_execution_role[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role" "lambda_execution_role" {
       [31m-[0m[0m arn                   = "arn:aws:iam::865428270474:role/unity-unity-nightly-cs-monitoring-lambda-role" [90m-> null[0m[0m
       [31m-[0m[0m assume_role_policy    = jsonencode(
@@ -809,7 +869,7 @@ Terraform will perform the following actions:
               [31m-[0m[0m Version   = "2012-10-17"
             }
         ) [90m-> null[0m[0m
-      [31m-[0m[0m create_date           = "2024-10-30T01:16:26Z" [90m-> null[0m[0m
+      [31m-[0m[0m create_date           = "2024-11-09T02:15:33Z" [90m-> null[0m[0m
       [31m-[0m[0m force_detach_policies = false [90m-> null[0m[0m
       [31m-[0m[0m id                    = "unity-unity-nightly-cs-monitoring-lambda-role" [90m-> null[0m[0m
       [31m-[0m[0m managed_policy_arns   = [
@@ -821,30 +881,30 @@ Terraform will perform the following actions:
       [31m-[0m[0m permissions_boundary  = "arn:aws:iam::865428270474:policy/mcp-tenantOperator-AMI-APIG" [90m-> null[0m[0m
       [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all              = {} [90m-> null[0m[0m
-      [31m-[0m[0m unique_id             = "AROA4S74LNWFO5XFXRMDF" [90m-> null[0m[0m
+      [31m-[0m[0m unique_id             = "AROA4S74LNWFI344U3UYB" [90m-> null[0m[0m
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_role_policy_attachment.attach_ssm_s3_policy[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-cs-monitoring-lambda-MspHz.aws_iam_role_policy_attachment.attach_ssm_s3_policy[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role_policy_attachment" "attach_ssm_s3_policy" {
-      [31m-[0m[0m id         = "unity-unity-nightly-cs-monitoring-lambda-role-20241030011627554400000001" [90m-> null[0m[0m
+      [31m-[0m[0m id         = "unity-unity-nightly-cs-monitoring-lambda-role-20241109021534364800000001" [90m-> null[0m[0m
       [31m-[0m[0m policy_arn = "arn:aws:iam::865428270474:policy/unity-unity-nightly-cs-monitoring-lambda-policy" [90m-> null[0m[0m
       [31m-[0m[0m role       = "unity-unity-nightly-cs-monitoring-lambda-role" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-cs-monitoring-lambda-eQqvX.aws_lambda_function.unity_cs_monitoring_lambda[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-cs-monitoring-lambda-MspHz.aws_lambda_function.unity_cs_monitoring_lambda[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_lambda_function" "unity_cs_monitoring_lambda" {
       [31m-[0m[0m architectures                  = [
           [31m-[0m[0m "x86_64",
         ] [90m-> null[0m[0m
       [31m-[0m[0m arn                            = "arn:aws:lambda:us-west-2:865428270474:function:unity-unity-nightly-cs-monitoring-lambda" [90m-> null[0m[0m
       [31m-[0m[0m code_sha256                    = "o4yFvQ976RHf3G1ExiEJg2pTNaiWfKNl9n5QvhIBvxc=" [90m-> null[0m[0m
-      [31m-[0m[0m filename                       = ".terraform/modules/default-unity-cs-monitoring-lambda-eQqvX/unity-cs-monitoring-lambda.zip" [90m-> null[0m[0m
+      [31m-[0m[0m filename                       = ".terraform/modules/default-unity-cs-monitoring-lambda-MspHz/unity-cs-monitoring-lambda.zip" [90m-> null[0m[0m
       [31m-[0m[0m function_name                  = "unity-unity-nightly-cs-monitoring-lambda" [90m-> null[0m[0m
       [31m-[0m[0m handler                        = "lambda_function.lambda_handler" [90m-> null[0m[0m
       [31m-[0m[0m id                             = "unity-unity-nightly-cs-monitoring-lambda" [90m-> null[0m[0m
       [31m-[0m[0m invoke_arn                     = "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:865428270474:function:unity-unity-nightly-cs-monitoring-lambda/invocations" [90m-> null[0m[0m
-      [31m-[0m[0m last_modified                  = "2024-10-30T01:16:36.857+0000" [90m-> null[0m[0m
+      [31m-[0m[0m last_modified                  = "2024-11-09T02:15:42.853+0000" [90m-> null[0m[0m
       [31m-[0m[0m layers                         = [] [90m-> null[0m[0m
       [31m-[0m[0m memory_size                    = 128 [90m-> null[0m[0m
       [31m-[0m[0m package_type                   = "Zip" [90m-> null[0m[0m
@@ -885,7 +945,7 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.default-unity-cs-monitoring-lambda-eQqvX.aws_lambda_permission.allow_eventbridge[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-cs-monitoring-lambda-MspHz.aws_lambda_permission.allow_eventbridge[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_lambda_permission" "allow_eventbridge" {
       [31m-[0m[0m action              = "lambda:InvokeFunction" [90m-> null[0m[0m
       [31m-[0m[0m function_name       = "unity-unity-nightly-cs-monitoring-lambda" [90m-> null[0m[0m
@@ -896,12 +956,12 @@ Terraform will perform the following actions:
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-cs-monitoring-lambda-eQqvX.null_resource.download_lambda_zip[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-cs-monitoring-lambda-MspHz.null_resource.download_lambda_zip[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "null_resource" "download_lambda_zip" {
-      [31m-[0m[0m id = "5193992999707992401" [90m-> null[0m[0m
+      [31m-[0m[0m id = "5899774016895198179" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_cloudwatch_log_group.proxyloggroup[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_cloudwatch_log_group.proxyloggroup[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_cloudwatch_log_group" "proxyloggroup" {
       [31m-[0m[0m arn               = "arn:aws:logs:us-west-2:865428270474:log-group:/ecs/unity-nightly-managementproxy" [90m-> null[0m[0m
       [31m-[0m[0m id                = "/ecs/unity-nightly-managementproxy" [90m-> null[0m[0m
@@ -914,7 +974,7 @@ Terraform will perform the following actions:
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ecs_cluster.httpd_cluster[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ecs_cluster.httpd_cluster[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ecs_cluster" "httpd_cluster" {
       [31m-[0m[0m arn      = "arn:aws:ecs:us-west-2:865428270474:cluster/unity-nightly-httpd-cluster" [90m-> null[0m[0m
       [31m-[0m[0m id       = "arn:aws:ecs:us-west-2:865428270474:cluster/unity-nightly-httpd-cluster" [90m-> null[0m[0m
@@ -932,7 +992,7 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ecs_service" "httpd_service" {
       [31m-[0m[0m cluster                            = "arn:aws:ecs:us-west-2:865428270474:cluster/unity-nightly-httpd-cluster" [90m-> null[0m[0m
       [31m-[0m[0m deployment_maximum_percent         = 200 [90m-> null[0m[0m
@@ -954,7 +1014,7 @@ Terraform will perform the following actions:
       [31m-[0m[0m tags_all                           = {
           [31m-[0m[0m "Service" = "U-CS"
         } [90m-> null[0m[0m
-      [31m-[0m[0m task_definition                    = "arn:aws:ecs:us-west-2:865428270474:task-definition/httpd:291" [90m-> null[0m[0m
+      [31m-[0m[0m task_definition                    = "arn:aws:ecs:us-west-2:865428270474:task-definition/httpd:299" [90m-> null[0m[0m
       [31m-[0m[0m triggers                           = {} [90m-> null[0m[0m
       [31m-[0m[0m wait_for_steady_state              = false [90m-> null[0m[0m
 
@@ -970,14 +1030,14 @@ Terraform will perform the following actions:
       [31m-[0m[0m load_balancer {
           [31m-[0m[0m container_name   = "unity-nightly-httpd-task" [90m-> null[0m[0m
           [31m-[0m[0m container_port   = 8080 [90m-> null[0m[0m
-          [31m-[0m[0m target_group_arn = "arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/ecaeee20f0800956" [90m-> null[0m[0m
+          [31m-[0m[0m target_group_arn = "arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/503248196480dd54" [90m-> null[0m[0m
             [90m# (1 unchanged attribute hidden)[0m[0m
         }
 
       [31m-[0m[0m network_configuration {
           [31m-[0m[0m assign_public_ip = true [90m-> null[0m[0m
           [31m-[0m[0m security_groups  = [
-              [31m-[0m[0m "sg-0e892dd8643d3d164",
+              [31m-[0m[0m "sg-025d4edf0d5a3eeed",
             ] [90m-> null[0m[0m
           [31m-[0m[0m subnets          = [
               [31m-[0m[0m "subnet-01b0bbd950b0d1ac6",
@@ -986,9 +1046,9 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ecs_task_definition.httpd[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ecs_task_definition.httpd[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ecs_task_definition" "httpd" {
-      [31m-[0m[0m arn                      = "arn:aws:ecs:us-west-2:865428270474:task-definition/httpd:291" [90m-> null[0m[0m
+      [31m-[0m[0m arn                      = "arn:aws:ecs:us-west-2:865428270474:task-definition/httpd:299" [90m-> null[0m[0m
       [31m-[0m[0m arn_without_revision     = "arn:aws:ecs:us-west-2:865428270474:task-definition/httpd" [90m-> null[0m[0m
       [31m-[0m[0m container_definitions    = jsonencode(
             [
@@ -1037,7 +1097,7 @@ Terraform will perform the following actions:
       [31m-[0m[0m requires_compatibilities = [
           [31m-[0m[0m "FARGATE",
         ] [90m-> null[0m[0m
-      [31m-[0m[0m revision                 = 291 [90m-> null[0m[0m
+      [31m-[0m[0m revision                 = 299 [90m-> null[0m[0m
       [31m-[0m[0m skip_destroy             = false [90m-> null[0m[0m
       [31m-[0m[0m tags                     = {
           [31m-[0m[0m "Service" = "U-CS"
@@ -1050,7 +1110,7 @@ Terraform will perform the following actions:
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_policy.lambda_ecs_stop_task_policy[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_policy.lambda_ecs_stop_task_policy[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_policy" "lambda_ecs_stop_task_policy" {
       [31m-[0m[0m arn              = "arn:aws:iam::865428270474:policy/unity-nightly-lambda_ecs_stop_task_policy" [90m-> null[0m[0m
       [31m-[0m[0m attachment_count = 1 [90m-> null[0m[0m
@@ -1073,13 +1133,13 @@ Terraform will perform the following actions:
               [31m-[0m[0m Version   = "2012-10-17"
             }
         ) [90m-> null[0m[0m
-      [31m-[0m[0m policy_id        = "ANPA4S74LNWFE33WH667L" [90m-> null[0m[0m
+      [31m-[0m[0m policy_id        = "ANPA4S74LNWFADOSNQFUN" [90m-> null[0m[0m
       [31m-[0m[0m tags             = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all         = {} [90m-> null[0m[0m
         [90m# (1 unchanged attribute hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_policy.lambda_vpc_access_policy[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_policy.lambda_vpc_access_policy[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_policy" "lambda_vpc_access_policy" {
       [31m-[0m[0m arn              = "arn:aws:iam::865428270474:policy/unity-nightly-lambda_vpc_access_policy" [90m-> null[0m[0m
       [31m-[0m[0m attachment_count = 1 [90m-> null[0m[0m
@@ -1103,13 +1163,13 @@ Terraform will perform the following actions:
               [31m-[0m[0m Version   = "2012-10-17"
             }
         ) [90m-> null[0m[0m
-      [31m-[0m[0m policy_id        = "ANPA4S74LNWFCVAYJWFRJ" [90m-> null[0m[0m
+      [31m-[0m[0m policy_id        = "ANPA4S74LNWFHXMKS3LRE" [90m-> null[0m[0m
       [31m-[0m[0m tags             = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all         = {} [90m-> null[0m[0m
         [90m# (1 unchanged attribute hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_role.ecs_execution_role[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_role.ecs_execution_role[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role" "ecs_execution_role" {
       [31m-[0m[0m arn                   = "arn:aws:iam::865428270474:role/unity-nightlyecs_execution_role" [90m-> null[0m[0m
       [31m-[0m[0m assume_role_policy    = jsonencode(
@@ -1126,7 +1186,7 @@ Terraform will perform the following actions:
               [31m-[0m[0m Version   = "2012-10-17"
             }
         ) [90m-> null[0m[0m
-      [31m-[0m[0m create_date           = "2024-10-30T01:08:59Z" [90m-> null[0m[0m
+      [31m-[0m[0m create_date           = "2024-11-09T02:07:55Z" [90m-> null[0m[0m
       [31m-[0m[0m force_detach_policies = false [90m-> null[0m[0m
       [31m-[0m[0m id                    = "unity-nightlyecs_execution_role" [90m-> null[0m[0m
       [31m-[0m[0m managed_policy_arns   = [
@@ -1138,11 +1198,11 @@ Terraform will perform the following actions:
       [31m-[0m[0m permissions_boundary  = "arn:aws:iam::865428270474:policy/mcp-tenantOperator-AMI-APIG" [90m-> null[0m[0m
       [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all              = {} [90m-> null[0m[0m
-      [31m-[0m[0m unique_id             = "AROA4S74LNWFLPTUZM77T" [90m-> null[0m[0m
+      [31m-[0m[0m unique_id             = "AROA4S74LNWFMYYRXSEGL" [90m-> null[0m[0m
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_role.ecs_task_role[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_role.ecs_task_role[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role" "ecs_task_role" {
       [31m-[0m[0m arn                   = "arn:aws:iam::865428270474:role/unity-nightly-ecs_task_role" [90m-> null[0m[0m
       [31m-[0m[0m assume_role_policy    = jsonencode(
@@ -1159,7 +1219,7 @@ Terraform will perform the following actions:
               [31m-[0m[0m Version   = "2012-10-17"
             }
         ) [90m-> null[0m[0m
-      [31m-[0m[0m create_date           = "2024-10-30T01:08:59Z" [90m-> null[0m[0m
+      [31m-[0m[0m create_date           = "2024-11-09T02:07:55Z" [90m-> null[0m[0m
       [31m-[0m[0m force_detach_policies = false [90m-> null[0m[0m
       [31m-[0m[0m id                    = "unity-nightly-ecs_task_role" [90m-> null[0m[0m
       [31m-[0m[0m managed_policy_arns   = [
@@ -1171,11 +1231,11 @@ Terraform will perform the following actions:
       [31m-[0m[0m permissions_boundary  = "arn:aws:iam::865428270474:policy/mcp-tenantOperator-AMI-APIG" [90m-> null[0m[0m
       [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all              = {} [90m-> null[0m[0m
-      [31m-[0m[0m unique_id             = "AROA4S74LNWFK6BUBLV5E" [90m-> null[0m[0m
+      [31m-[0m[0m unique_id             = "AROA4S74LNWFCVBTFK6LP" [90m-> null[0m[0m
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_role.lambda_iam_role[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_role.lambda_iam_role[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role" "lambda_iam_role" {
       [31m-[0m[0m arn                   = "arn:aws:iam::865428270474:role/unity-nightly-lambda_iam_role" [90m-> null[0m[0m
       [31m-[0m[0m assume_role_policy    = jsonencode(
@@ -1192,7 +1252,7 @@ Terraform will perform the following actions:
               [31m-[0m[0m Version   = "2012-10-17"
             }
         ) [90m-> null[0m[0m
-      [31m-[0m[0m create_date           = "2024-10-30T01:08:59Z" [90m-> null[0m[0m
+      [31m-[0m[0m create_date           = "2024-11-09T02:07:55Z" [90m-> null[0m[0m
       [31m-[0m[0m force_detach_policies = false [90m-> null[0m[0m
       [31m-[0m[0m id                    = "unity-nightly-lambda_iam_role" [90m-> null[0m[0m
       [31m-[0m[0m managed_policy_arns   = [
@@ -1206,58 +1266,58 @@ Terraform will perform the following actions:
       [31m-[0m[0m permissions_boundary  = "arn:aws:iam::865428270474:policy/mcp-tenantOperator-AMI-APIG" [90m-> null[0m[0m
       [31m-[0m[0m tags                  = {} [90m-> null[0m[0m
       [31m-[0m[0m tags_all              = {} [90m-> null[0m[0m
-      [31m-[0m[0m unique_id             = "AROA4S74LNWFMH5HIKBRQ" [90m-> null[0m[0m
+      [31m-[0m[0m unique_id             = "AROA4S74LNWFEQC4PBXXB" [90m-> null[0m[0m
         [90m# (2 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.ecs_execution_role_policy[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.ecs_execution_role_policy[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role_policy_attachment" "ecs_execution_role_policy" {
-      [31m-[0m[0m id         = "unity-nightlyecs_execution_role-20241030010900040300000002" [90m-> null[0m[0m
+      [31m-[0m[0m id         = "unity-nightlyecs_execution_role-20241109020755720200000004" [90m-> null[0m[0m
       [31m-[0m[0m policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy" [90m-> null[0m[0m
       [31m-[0m[0m role       = "unity-nightlyecs_execution_role" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.ecs_ssm_role_policy[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.ecs_ssm_role_policy[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role_policy_attachment" "ecs_ssm_role_policy" {
-      [31m-[0m[0m id         = "unity-nightly-ecs_task_role-20241030010900140900000005" [90m-> null[0m[0m
+      [31m-[0m[0m id         = "unity-nightly-ecs_task_role-20241109020755748600000005" [90m-> null[0m[0m
       [31m-[0m[0m policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess" [90m-> null[0m[0m
       [31m-[0m[0m role       = "unity-nightly-ecs_task_role" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_base_policy_attachment[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_base_policy_attachment[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role_policy_attachment" "lambda_base_policy_attachment" {
-      [31m-[0m[0m id         = "unity-nightly-lambda_iam_role-20241030010900055500000003" [90m-> null[0m[0m
+      [31m-[0m[0m id         = "unity-nightly-lambda_iam_role-20241109020755605100000002" [90m-> null[0m[0m
       [31m-[0m[0m policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole" [90m-> null[0m[0m
       [31m-[0m[0m role       = "unity-nightly-lambda_iam_role" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_stop_task_policy_attachment[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_stop_task_policy_attachment[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role_policy_attachment" "lambda_stop_task_policy_attachment" {
-      [31m-[0m[0m id         = "unity-nightly-lambda_iam_role-20241030010900073600000004" [90m-> null[0m[0m
+      [31m-[0m[0m id         = "unity-nightly-lambda_iam_role-20241109020755604400000001" [90m-> null[0m[0m
       [31m-[0m[0m policy_arn = "arn:aws:iam::865428270474:policy/unity-nightly-lambda_ecs_stop_task_policy" [90m-> null[0m[0m
       [31m-[0m[0m role       = "unity-nightly-lambda_iam_role" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_vpc_access_policy_attachment[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_vpc_access_policy_attachment[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_iam_role_policy_attachment" "lambda_vpc_access_policy_attachment" {
-      [31m-[0m[0m id         = "unity-nightly-lambda_iam_role-20241030010900036200000001" [90m-> null[0m[0m
+      [31m-[0m[0m id         = "unity-nightly-lambda_iam_role-20241109020755631400000003" [90m-> null[0m[0m
       [31m-[0m[0m policy_arn = "arn:aws:iam::865428270474:policy/unity-nightly-lambda_vpc_access_policy" [90m-> null[0m[0m
       [31m-[0m[0m role       = "unity-nightly-lambda_iam_role" [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_lambda_function.httpdlambda[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_lambda_function.httpdlambda[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_lambda_function" "httpdlambda" {
       [31m-[0m[0m architectures                  = [
           [31m-[0m[0m "x86_64",
         ] [90m-> null[0m[0m
       [31m-[0m[0m arn                            = "arn:aws:lambda:us-west-2:865428270474:function:unity-nightly-httpdproxymanagement" [90m-> null[0m[0m
       [31m-[0m[0m code_sha256                    = "eFUx8dhh2JtcorJ/1+vHlS/cAehBGd6o5Kvf6EpZha4=" [90m-> null[0m[0m
-      [31m-[0m[0m filename                       = ".terraform/modules/default-unity-proxy-aXwWu/lambda.zip" [90m-> null[0m[0m
+      [31m-[0m[0m filename                       = ".terraform/modules/default-unity-proxy-tsXCz/lambda.zip" [90m-> null[0m[0m
       [31m-[0m[0m function_name                  = "unity-nightly-httpdproxymanagement" [90m-> null[0m[0m
       [31m-[0m[0m handler                        = "lambda.lambda_handler" [90m-> null[0m[0m
       [31m-[0m[0m id                             = "unity-nightly-httpdproxymanagement" [90m-> null[0m[0m
       [31m-[0m[0m invoke_arn                     = "arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:865428270474:function:unity-nightly-httpdproxymanagement/invocations" [90m-> null[0m[0m
-      [31m-[0m[0m last_modified                  = "2024-10-30T01:12:03.975+0000" [90m-> null[0m[0m
+      [31m-[0m[0m last_modified                  = "2024-11-09T02:11:09.470+0000" [90m-> null[0m[0m
       [31m-[0m[0m layers                         = [] [90m-> null[0m[0m
       [31m-[0m[0m memory_size                    = 128 [90m-> null[0m[0m
       [31m-[0m[0m package_type                   = "Zip" [90m-> null[0m[0m
@@ -1304,7 +1364,7 @@ Terraform will perform the following actions:
       [31m-[0m[0m vpc_config {
           [31m-[0m[0m ipv6_allowed_for_dual_stack = false [90m-> null[0m[0m
           [31m-[0m[0m security_group_ids          = [
-              [31m-[0m[0m "sg-01c8ef6ce6dbb9660",
+              [31m-[0m[0m "sg-0a695db8cdb47f404",
             ] [90m-> null[0m[0m
           [31m-[0m[0m subnet_ids                  = [
               [31m-[0m[0m "subnet-01b0bbd950b0d1ac6",
@@ -1314,13 +1374,13 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_lb.httpd_alb[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_lb.httpd_alb[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_lb" "httpd_alb" {
-      [31m-[0m[0m arn                                                          = "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/5e08fb15e5fefe71" [90m-> null[0m[0m
-      [31m-[0m[0m arn_suffix                                                   = "app/unity-nightly-httpd-alb/5e08fb15e5fefe71" [90m-> null[0m[0m
+      [31m-[0m[0m arn                                                          = "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/a4d0b0417d25692a" [90m-> null[0m[0m
+      [31m-[0m[0m arn_suffix                                                   = "app/unity-nightly-httpd-alb/a4d0b0417d25692a" [90m-> null[0m[0m
       [31m-[0m[0m client_keep_alive                                            = 3600 [90m-> null[0m[0m
       [31m-[0m[0m desync_mitigation_mode                                       = "defensive" [90m-> null[0m[0m
-      [31m-[0m[0m dns_name                                                     = "unity-nightly-httpd-alb-422877304.us-west-2.elb.amazonaws.com" [90m-> null[0m[0m
+      [31m-[0m[0m dns_name                                                     = "unity-nightly-httpd-alb-1215017343.us-west-2.elb.amazonaws.com" [90m-> null[0m[0m
       [31m-[0m[0m drop_invalid_header_fields                                   = false [90m-> null[0m[0m
       [31m-[0m[0m enable_cross_zone_load_balancing                             = true [90m-> null[0m[0m
       [31m-[0m[0m enable_deletion_protection                                   = false [90m-> null[0m[0m
@@ -1328,7 +1388,7 @@ Terraform will perform the following actions:
       [31m-[0m[0m enable_tls_version_and_cipher_suite_headers                  = false [90m-> null[0m[0m
       [31m-[0m[0m enable_waf_fail_open                                         = false [90m-> null[0m[0m
       [31m-[0m[0m enable_xff_client_port                                       = false [90m-> null[0m[0m
-      [31m-[0m[0m id                                                           = "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/5e08fb15e5fefe71" [90m-> null[0m[0m
+      [31m-[0m[0m id                                                           = "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/a4d0b0417d25692a" [90m-> null[0m[0m
       [31m-[0m[0m idle_timeout                                                 = 60 [90m-> null[0m[0m
       [31m-[0m[0m internal                                                     = false [90m-> null[0m[0m
       [31m-[0m[0m ip_address_type                                              = "ipv4" [90m-> null[0m[0m
@@ -1336,7 +1396,7 @@ Terraform will perform the following actions:
       [31m-[0m[0m name                                                         = "unity-nightly-httpd-alb" [90m-> null[0m[0m
       [31m-[0m[0m preserve_host_header                                         = true [90m-> null[0m[0m
       [31m-[0m[0m security_groups                                              = [
-          [31m-[0m[0m "sg-02c7614a32b46314d",
+          [31m-[0m[0m "sg-02da323bf1b38739b",
         ] [90m-> null[0m[0m
       [31m-[0m[0m subnets                                                      = [
           [31m-[0m[0m "subnet-0dec70bed8075feb3",
@@ -1373,11 +1433,11 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_lb_listener.httpd_listener[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_lb_listener.httpd_listener[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_lb_listener" "httpd_listener" {
-      [31m-[0m[0m arn               = "arn:aws:elasticloadbalancing:us-west-2:865428270474:listener/app/unity-nightly-httpd-alb/5e08fb15e5fefe71/f468a92d93c5609a" [90m-> null[0m[0m
-      [31m-[0m[0m id                = "arn:aws:elasticloadbalancing:us-west-2:865428270474:listener/app/unity-nightly-httpd-alb/5e08fb15e5fefe71/f468a92d93c5609a" [90m-> null[0m[0m
-      [31m-[0m[0m load_balancer_arn = "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/5e08fb15e5fefe71" [90m-> null[0m[0m
+      [31m-[0m[0m arn               = "arn:aws:elasticloadbalancing:us-west-2:865428270474:listener/app/unity-nightly-httpd-alb/a4d0b0417d25692a/a522e6204c4f9e21" [90m-> null[0m[0m
+      [31m-[0m[0m id                = "arn:aws:elasticloadbalancing:us-west-2:865428270474:listener/app/unity-nightly-httpd-alb/a4d0b0417d25692a/a522e6204c4f9e21" [90m-> null[0m[0m
+      [31m-[0m[0m load_balancer_arn = "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/a4d0b0417d25692a" [90m-> null[0m[0m
       [31m-[0m[0m port              = 8080 [90m-> null[0m[0m
       [31m-[0m[0m protocol          = "HTTP" [90m-> null[0m[0m
       [31m-[0m[0m tags              = {
@@ -1390,21 +1450,21 @@ Terraform will perform the following actions:
 
       [31m-[0m[0m default_action {
           [31m-[0m[0m order            = 1 [90m-> null[0m[0m
-          [31m-[0m[0m target_group_arn = "arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/ecaeee20f0800956" [90m-> null[0m[0m
+          [31m-[0m[0m target_group_arn = "arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/503248196480dd54" [90m-> null[0m[0m
           [31m-[0m[0m type             = "forward" [90m-> null[0m[0m
         }
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_lb_target_group.httpd_tg[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_lb_target_group.httpd_tg[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_lb_target_group" "httpd_tg" {
-      [31m-[0m[0m arn                                = "arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/ecaeee20f0800956" [90m-> null[0m[0m
-      [31m-[0m[0m arn_suffix                         = "targetgroup/unity-nightly-httpd-tg/ecaeee20f0800956" [90m-> null[0m[0m
+      [31m-[0m[0m arn                                = "arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/503248196480dd54" [90m-> null[0m[0m
+      [31m-[0m[0m arn_suffix                         = "targetgroup/unity-nightly-httpd-tg/503248196480dd54" [90m-> null[0m[0m
       [31m-[0m[0m deregistration_delay               = "300" [90m-> null[0m[0m
-      [31m-[0m[0m id                                 = "arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/ecaeee20f0800956" [90m-> null[0m[0m
+      [31m-[0m[0m id                                 = "arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/503248196480dd54" [90m-> null[0m[0m
       [31m-[0m[0m ip_address_type                    = "ipv4" [90m-> null[0m[0m
       [31m-[0m[0m lambda_multi_value_headers_enabled = false [90m-> null[0m[0m
       [31m-[0m[0m load_balancer_arns                 = [
-          [31m-[0m[0m "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/5e08fb15e5fefe71",
+          [31m-[0m[0m "arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/a4d0b0417d25692a",
         ] [90m-> null[0m[0m
       [31m-[0m[0m load_balancing_algorithm_type      = "round_robin" [90m-> null[0m[0m
       [31m-[0m[0m load_balancing_anomaly_mitigation  = "off" [90m-> null[0m[0m
@@ -1460,9 +1520,9 @@ Terraform will perform the following actions:
       [31m-[0m[0m target_health_state {}
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_security_group.ecs_alb_sg[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_security_group.ecs_alb_sg[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_security_group" "ecs_alb_sg" {
-      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group/sg-02c7614a32b46314d" [90m-> null[0m[0m
+      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group/sg-02da323bf1b38739b" [90m-> null[0m[0m
       [31m-[0m[0m description            = "Security group for ECS service ALB" [90m-> null[0m[0m
       [31m-[0m[0m egress                 = [
           [31m-[0m[0m {
@@ -1479,7 +1539,7 @@ Terraform will perform the following actions:
                 [90m# (1 unchanged attribute hidden)[0m[0m
             },
         ] [90m-> null[0m[0m
-      [31m-[0m[0m id                     = "sg-02c7614a32b46314d" [90m-> null[0m[0m
+      [31m-[0m[0m id                     = "sg-02da323bf1b38739b" [90m-> null[0m[0m
       [31m-[0m[0m ingress                = [
           [31m-[0m[0m {
               [31m-[0m[0m cidr_blocks      = [
@@ -1508,9 +1568,9 @@ Terraform will perform the following actions:
         [90m# (1 unchanged attribute hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_security_group.ecs_sg[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_security_group.ecs_sg[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_security_group" "ecs_sg" {
-      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group/sg-0e892dd8643d3d164" [90m-> null[0m[0m
+      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group/sg-025d4edf0d5a3eeed" [90m-> null[0m[0m
       [31m-[0m[0m description            = "Security group for ECS service" [90m-> null[0m[0m
       [31m-[0m[0m egress                 = [
           [31m-[0m[0m {
@@ -1527,7 +1587,7 @@ Terraform will perform the following actions:
                 [90m# (1 unchanged attribute hidden)[0m[0m
             },
         ] [90m-> null[0m[0m
-      [31m-[0m[0m id                     = "sg-0e892dd8643d3d164" [90m-> null[0m[0m
+      [31m-[0m[0m id                     = "sg-025d4edf0d5a3eeed" [90m-> null[0m[0m
       [31m-[0m[0m ingress                = [
           [31m-[0m[0m {
               [31m-[0m[0m cidr_blocks      = []
@@ -1536,7 +1596,7 @@ Terraform will perform the following actions:
               [31m-[0m[0m prefix_list_ids  = []
               [31m-[0m[0m protocol         = "tcp"
               [31m-[0m[0m security_groups  = [
-                  [31m-[0m[0m "sg-02c7614a32b46314d",
+                  [31m-[0m[0m "sg-02da323bf1b38739b",
                 ]
               [31m-[0m[0m self             = false
               [31m-[0m[0m to_port          = 8080
@@ -1556,9 +1616,9 @@ Terraform will perform the following actions:
         [90m# (1 unchanged attribute hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_security_group.lambda_sg[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_security_group.lambda_sg[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_security_group" "lambda_sg" {
-      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group/sg-01c8ef6ce6dbb9660" [90m-> null[0m[0m
+      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group/sg-0a695db8cdb47f404" [90m-> null[0m[0m
       [31m-[0m[0m description            = "Security group for httpd lambda service" [90m-> null[0m[0m
       [31m-[0m[0m egress                 = [
           [31m-[0m[0m {
@@ -1575,7 +1635,7 @@ Terraform will perform the following actions:
                 [90m# (1 unchanged attribute hidden)[0m[0m
             },
         ] [90m-> null[0m[0m
-      [31m-[0m[0m id                     = "sg-01c8ef6ce6dbb9660" [90m-> null[0m[0m
+      [31m-[0m[0m id                     = "sg-0a695db8cdb47f404" [90m-> null[0m[0m
       [31m-[0m[0m ingress                = [
           [31m-[0m[0m {
               [31m-[0m[0m cidr_blocks      = [
@@ -1604,7 +1664,7 @@ Terraform will perform the following actions:
         [90m# (1 unchanged attribute hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ssm_parameter.lambda_function_name[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ssm_parameter.lambda_function_name[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "lambda_function_name" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/unity/nightly/cs/management/proxy/lambda-name" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -1619,7 +1679,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ssm_parameter.management_console_url[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ssm_parameter.management_console_url[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "management_console_url" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/unity/nightly/component/management-console" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -1634,7 +1694,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_closevirtualhost[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_closevirtualhost[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "managementproxy_closevirtualhost" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/unity/nightly/cs/management/proxy/configurations/100-closevhost8080" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -1649,7 +1709,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_config[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_config[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "managementproxy_config" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/unity/nightly/cs/management/proxy/configurations/010-management" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -1664,7 +1724,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_openvirtualhost[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_openvirtualhost[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "managementproxy_openvirtualhost" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/unity/nightly/cs/management/proxy/configurations/001-openvhost8080" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -1679,7 +1739,7 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_ssm_parameter.mgmt_endpoint[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_ssm_parameter.mgmt_endpoint[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_ssm_parameter" "mgmt_endpoint" {
       [31m-[0m[0m arn             = "arn:aws:ssm:us-west-2:865428270474:parameter/unity/unity/nightly/management/httpd/loadbalancer-url" [90m-> null[0m[0m
       [31m-[0m[0m data_type       = "text" [90m-> null[0m[0m
@@ -1694,265 +1754,277 @@ Terraform will perform the following actions:
         [90m# (3 unchanged attributes hidden)[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_vpc_security_group_egress_rule.ecs_alb_egress_sg_rule[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_vpc_security_group_egress_rule.ecs_alb_egress_sg_rule[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_vpc_security_group_egress_rule" "ecs_alb_egress_sg_rule" {
-      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-08afdaf2b8977f891" [90m-> null[0m[0m
+      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-0ec34dff2124ed03b" [90m-> null[0m[0m
       [31m-[0m[0m cidr_ipv4              = "0.0.0.0/0" [90m-> null[0m[0m
       [31m-[0m[0m from_port              = 0 [90m-> null[0m[0m
-      [31m-[0m[0m id                     = "sgr-08afdaf2b8977f891" [90m-> null[0m[0m
+      [31m-[0m[0m id                     = "sgr-0ec34dff2124ed03b" [90m-> null[0m[0m
       [31m-[0m[0m ip_protocol            = "tcp" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_id      = "sg-02c7614a32b46314d" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_rule_id = "sgr-08afdaf2b8977f891" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_id      = "sg-02da323bf1b38739b" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_rule_id = "sgr-0ec34dff2124ed03b" [90m-> null[0m[0m
       [31m-[0m[0m tags_all               = {} [90m-> null[0m[0m
       [31m-[0m[0m to_port                = 65535 [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_vpc_security_group_egress_rule.ecs_egress_sg_rule[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_vpc_security_group_egress_rule.ecs_egress_sg_rule[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_vpc_security_group_egress_rule" "ecs_egress_sg_rule" {
-      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-05da2254e716827b1" [90m-> null[0m[0m
+      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-0cdc0b36ab1aa2a87" [90m-> null[0m[0m
       [31m-[0m[0m cidr_ipv4              = "0.0.0.0/0" [90m-> null[0m[0m
       [31m-[0m[0m from_port              = 0 [90m-> null[0m[0m
-      [31m-[0m[0m id                     = "sgr-05da2254e716827b1" [90m-> null[0m[0m
+      [31m-[0m[0m id                     = "sgr-0cdc0b36ab1aa2a87" [90m-> null[0m[0m
       [31m-[0m[0m ip_protocol            = "tcp" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_id      = "sg-0e892dd8643d3d164" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_rule_id = "sgr-05da2254e716827b1" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_id      = "sg-025d4edf0d5a3eeed" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_rule_id = "sgr-0cdc0b36ab1aa2a87" [90m-> null[0m[0m
       [31m-[0m[0m tags_all               = {} [90m-> null[0m[0m
       [31m-[0m[0m to_port                = 65535 [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.alb_all_ingress_sg_rule[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.alb_all_ingress_sg_rule[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_vpc_security_group_ingress_rule" "alb_all_ingress_sg_rule" {
-      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-013262b04422eed7f" [90m-> null[0m[0m
+      [31m-[0m[0m arn                    = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-03beeeafad2742f13" [90m-> null[0m[0m
       [31m-[0m[0m cidr_ipv4              = "0.0.0.0/0" [90m-> null[0m[0m
       [31m-[0m[0m from_port              = 8080 [90m-> null[0m[0m
-      [31m-[0m[0m id                     = "sgr-013262b04422eed7f" [90m-> null[0m[0m
+      [31m-[0m[0m id                     = "sgr-03beeeafad2742f13" [90m-> null[0m[0m
       [31m-[0m[0m ip_protocol            = "tcp" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_id      = "sg-02c7614a32b46314d" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_rule_id = "sgr-013262b04422eed7f" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_id      = "sg-02da323bf1b38739b" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_rule_id = "sgr-03beeeafad2742f13" [90m-> null[0m[0m
       [31m-[0m[0m tags_all               = {} [90m-> null[0m[0m
       [31m-[0m[0m to_port                = 8080 [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.ecs_alb_ingress_sg_rule[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.ecs_alb_ingress_sg_rule[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_vpc_security_group_ingress_rule" "ecs_alb_ingress_sg_rule" {
-      [31m-[0m[0m arn                          = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-0c594bc626b2f6eb4" [90m-> null[0m[0m
+      [31m-[0m[0m arn                          = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-0dcca2ba8a0324525" [90m-> null[0m[0m
       [31m-[0m[0m from_port                    = 8080 [90m-> null[0m[0m
-      [31m-[0m[0m id                           = "sgr-0c594bc626b2f6eb4" [90m-> null[0m[0m
+      [31m-[0m[0m id                           = "sgr-0dcca2ba8a0324525" [90m-> null[0m[0m
       [31m-[0m[0m ip_protocol                  = "tcp" [90m-> null[0m[0m
-      [31m-[0m[0m referenced_security_group_id = "sg-02c7614a32b46314d" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_id            = "sg-0e892dd8643d3d164" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_rule_id       = "sgr-0c594bc626b2f6eb4" [90m-> null[0m[0m
+      [31m-[0m[0m referenced_security_group_id = "sg-02da323bf1b38739b" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_id            = "sg-025d4edf0d5a3eeed" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_rule_id       = "sgr-0dcca2ba8a0324525" [90m-> null[0m[0m
       [31m-[0m[0m tags_all                     = {} [90m-> null[0m[0m
       [31m-[0m[0m to_port                      = 8080 [90m-> null[0m[0m
     }
 
-[1m  # module.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.ecs_mc_alb_ingress_sg_rule[0m will be [1m[31mdestroyed[0m
+[1m  # module.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.ecs_mc_alb_ingress_sg_rule[0m will be [1m[31mdestroyed[0m
 [0m  [31m-[0m[0m resource "aws_vpc_security_group_ingress_rule" "ecs_mc_alb_ingress_sg_rule" {
-      [31m-[0m[0m arn                          = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-0a6de6a5aeaaaaeab" [90m-> null[0m[0m
+      [31m-[0m[0m arn                          = "arn:aws:ec2:us-west-2:865428270474:security-group-rule/sgr-0a42609f1337d9410" [90m-> null[0m[0m
       [31m-[0m[0m from_port                    = 8080 [90m-> null[0m[0m
-      [31m-[0m[0m id                           = "sgr-0a6de6a5aeaaaaeab" [90m-> null[0m[0m
+      [31m-[0m[0m id                           = "sgr-0a42609f1337d9410" [90m-> null[0m[0m
       [31m-[0m[0m ip_protocol                  = "tcp" [90m-> null[0m[0m
-      [31m-[0m[0m referenced_security_group_id = "sg-0e892dd8643d3d164" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_id            = "sg-09cba3f49177abba9" [90m-> null[0m[0m
-      [31m-[0m[0m security_group_rule_id       = "sgr-0a6de6a5aeaaaaeab" [90m-> null[0m[0m
+      [31m-[0m[0m referenced_security_group_id = "sg-025d4edf0d5a3eeed" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_id            = "sg-05f7dafbe4bcd61f8" [90m-> null[0m[0m
+      [31m-[0m[0m security_group_rule_id       = "sgr-0a42609f1337d9410" [90m-> null[0m[0m
       [31m-[0m[0m tags_all                     = {} [90m-> null[0m[0m
       [31m-[0m[0m to_port                      = 8080 [90m-> null[0m[0m
     }
 
-[1mPlan:[0m 0 to add, 0 to change, 57 to destroy.
-[0m[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.invoke_role_arn: Destroying... [id=/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-invoke-role-arn][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_base_policy_attachment: Destroying... [id=unity-nightly-lambda_iam_role-20241030010900055500000003][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.api_gateway_rest_api_id_parameter: Destroying... [id=/unity/cs/routing/api-gateway/rest-api-id-2][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.alb_all_ingress_sg_rule: Destroying... [id=sgr-013262b04422eed7f][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_egress_rule.ecs_egress_sg_rule: Destroying... [id=sgr-05da2254e716827b1][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.api_gateway_uri: Destroying... [id=/unity/cs/management/api-gateway/gateway-uri][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.ecs_alb_ingress_sg_rule: Destroying... [id=sgr-0c594bc626b2f6eb4][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.ecs_ssm_role_policy: Destroying... [id=unity-nightly-ecs_task_role-20241030010900140900000005][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_cloudwatch_log_group.cs_common_lambda_auth_log_group: Destroying... [id=/aws/lambda/unity-nightly-unity-cs-common-lambda-authorizer][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_egress_rule.ecs_alb_egress_sg_rule: Destroying... [id=sgr-08afdaf2b8977f891][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_cloudwatch_log_group.cs_common_lambda_auth_log_group: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_method.rest_api_method_for_project_proxy_resource_method: Destroying... [id=agm-0phl569dwg-vigcda-GET][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.api_gateway_rest_api_id_parameter: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.api_gateway_uri: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.ecs_execution_role_policy: Destroying... [id=unity-nightlyecs_execution_role-20241030010900040300000002][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_vpc_access_policy_attachment: Destroying... [id=unity-nightly-lambda_iam_role-20241030010900036200000001][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_ssm_parameter.invoke_role_arn: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_cloudwatch_event_target.invoke_lambda: Destroying... [id=unity-nightly-every_five_minutes-invoke_lambda_function][0m[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_cloudwatch_event_target.invoke_lambda: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.ecs_mc_alb_ingress_sg_rule: Destroying... [id=sgr-0a6de6a5aeaaaaeab][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_method.rest_api_method_for_project_proxy_resource_method: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.management_console_url: Destroying... [id=/unity/unity/nightly/component/management-console][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.ecs_alb_ingress_sg_rule: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.mgmt_endpoint: Destroying... [id=/unity/unity/nightly/management/httpd/loadbalancer-url][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.management_console_url: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.lambda_function_name: Destroying... [id=/unity/unity/nightly/cs/management/proxy/lambda-name][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_egress_rule.ecs_alb_egress_sg_rule: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_lambda_permission.allow_eventbridge: Destroying... [id=AllowExecutionFromEventBridge][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_egress_rule.ecs_egress_sg_rule: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_stop_task_policy_attachment: Destroying... [id=unity-nightly-lambda_iam_role-20241030010900073600000004][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.mgmt_endpoint: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_stage.api-gateway-stage: Destroying... [id=ags-0phl569dwg-default][0m[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_lambda_permission.allow_eventbridge: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.lambda_function_name: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_authorizer.unity_cs_common_authorizer: Destroying... [id=33w3mu][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_health_checks_path: Destroying... [id=vigcda][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.alb_all_ingress_sg_rule: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_cloudwatch_event_rule.every_five_minutes: Destroying... [id=unity-nightly-every_five_minutes][0m[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_cloudwatch_event_rule.every_five_minutes: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_authorizer.unity_cs_common_authorizer: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_lambda_function.unity_cs_monitoring_lambda: Destroying... [id=unity-unity-nightly-cs-monitoring-lambda][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lambda_function.httpdlambda: Destroying... [id=unity-nightly-httpdproxymanagement][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.ecs_ssm_role_policy: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_lambda_function.cs_common_lambda_auth: Destroying... [id=unity-nightly-unity-cs-common-lambda-authorizer][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_health_checks_path: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_api_path: Destroying... [id=6addfh][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_vpc_security_group_ingress_rule.ecs_mc_alb_ingress_sg_rule: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_base_policy_attachment: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_api_path: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_management_path: Destroying... [id=82q2iv][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.ecs_execution_role_policy: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_vpc_access_policy_attachment: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_policy.lambda_vpc_access_policy: Destroying... [id=arn:aws:iam::865428270474:policy/unity-nightly-lambda_vpc_access_policy][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role_policy_attachment.lambda_stop_task_policy_attachment: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_policy.lambda_ecs_stop_task_policy: Destroying... [id=arn:aws:iam::865428270474:policy/unity-nightly-lambda_ecs_stop_task_policy][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_resource.rest_api_resource_management_path: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_lambda_function.cs_common_lambda_auth: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.null_resource.download_lambda_zip: Destroying... [id=4948522969981784333][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.null_resource.download_lambda_zip: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_iam_role.iam_for_lambda_auth: Destroying... [id=unity-nightly-iam_for_lambda_auth][0m[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_lambda_function.unity_cs_monitoring_lambda: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.null_resource.download_lambda_zip: Destroying... [id=5193992999707992401][0m[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.null_resource.download_lambda_zip: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_role_policy_attachment.attach_ssm_s3_policy: Destroying... [id=unity-unity-nightly-cs-monitoring-lambda-role-20241030011627554400000001][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lambda_function.httpdlambda: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_stage.api-gateway-stage: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Destroying... [id=arn:aws:ecs:us-west-2:865428270474:service/unity-nightly-httpd-cluster/httpd-service][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Destroying... [id=sg-01c8ef6ce6dbb9660][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.lambda_iam_role: Destroying... [id=unity-nightly-lambda_iam_role][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_deployment.api-gateway-deployment: Destroying... [id=ejcddr][0m[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_role_policy_attachment.attach_ssm_s3_policy: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_policy.lambda_ssm_s3_policy: Destroying... [id=arn:aws:iam::865428270474:policy/unity-unity-nightly-cs-monitoring-lambda-policy][0m[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_role.lambda_execution_role: Destroying... [id=unity-unity-nightly-cs-monitoring-lambda-role][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_policy.lambda_vpc_access_policy: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_policy.lambda_ecs_stop_task_policy: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_deployment.api-gateway-deployment: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_integration.root_level_get_method_mock_integration: Destroying... [id=agi-0phl569dwg-923odehtd8-OPTIONS][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.lambda_iam_role: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_integration.root_level_get_method_mock_integration: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_method.root_level_options_method: Destroying... [id=agm-0phl569dwg-923odehtd8-OPTIONS][0m[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_method.root_level_options_method: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_rest_api.rest_api: Destroying... [id=0phl569dwg][0m[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_role.lambda_execution_role: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-cs-monitoring-lambda-eQqvX.aws_iam_policy.lambda_ssm_s3_policy: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_iam_role.iam_for_lambda_auth: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-apigateway-IJeLV.aws_api_gateway_rest_api.rest_api: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 1m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 1m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 1m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 1m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 1m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 1m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 2m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 2m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 2m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 2m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 2m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 2m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 3m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 3m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 3m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 3m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 3m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 3m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 4m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 4m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 4m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 4m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 4m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 4m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 5m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 5m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 5m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 5m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Still destroying... [id=sg-01c8ef6ce6dbb9660, 5m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.lambda_sg: Destruction complete after 5m43s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m20s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m30s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m40s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m50s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 7m0s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_service.httpd_service: Destruction complete after 7m9s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_config: Destroying... [id=/unity/unity/nightly/cs/management/proxy/configurations/010-management][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb_listener.httpd_listener: Destroying... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:listener/app/unity-nightly-httpd-alb/5e08fb15e5fefe71/f468a92d93c5609a][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.ecs_sg: Destroying... [id=sg-0e892dd8643d3d164][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_task_definition.httpd: Destroying... [id=httpd][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_cluster.httpd_cluster: Destroying... [id=arn:aws:ecs:us-west-2:865428270474:cluster/unity-nightly-httpd-cluster][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_task_definition.httpd: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_cloudwatch_log_group.proxyloggroup: Destroying... [id=/ecs/unity-nightly-managementproxy][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.ecs_execution_role: Destroying... [id=unity-nightlyecs_execution_role][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.ecs_task_role: Destroying... [id=unity-nightly-ecs_task_role][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_config: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_closevirtualhost: Destroying... [id=/unity/unity/nightly/cs/management/proxy/configurations/100-closevhost8080][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ecs_cluster.httpd_cluster: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_cloudwatch_log_group.proxyloggroup: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb_listener.httpd_listener: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb.httpd_alb: Destroying... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/5e08fb15e5fefe71][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb_target_group.httpd_tg: Destroying... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/ecaeee20f0800956][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_closevirtualhost: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_openvirtualhost: Destroying... [id=/unity/unity/nightly/cs/management/proxy/configurations/001-openvhost8080][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_ssm_parameter.managementproxy_openvirtualhost: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb_target_group.httpd_tg: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.ecs_sg: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.ecs_execution_role: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_iam_role.ecs_task_role: Destruction complete after 0s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_lb.httpd_alb: Destruction complete after 1s[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.ecs_alb_sg: Destroying... [id=sg-02c7614a32b46314d][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.ecs_alb_sg: Still destroying... [id=sg-02c7614a32b46314d, 10s elapsed][0m[0m
-[0m[1mmodule.default-unity-proxy-aXwWu.aws_security_group.ecs_alb_sg: Destruction complete after 17s[0m
+[1mPlan:[0m 0 to add, 0 to change, 61 to destroy.
+[0m[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_lambda_permission.allow_eventbridge: Destroying... [id=AllowExecutionFromEventBridge][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_egress_rule.ecs_alb_egress_sg_rule: Destroying... [id=sgr-0ec34dff2124ed03b][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.invoke_role_arn: Destroying... [id=/unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-invoke-role-arn][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_cloudwatch_log_group.cs_common_lambda_auth_log_group: Destroying... [id=/aws/lambda/unity-nightly-unity-cs-common-lambda-authorizer][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.api_gateway_rest_api_id_parameter: Destroying... [id=/unity/cs/routing/api-gateway/rest-api-id-2][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.ecs_execution_role_policy: Destroying... [id=unity-nightlyecs_execution_role-20241109020755720200000004][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_egress_rule.ecs_egress_sg_rule: Destroying... [id=sgr-0cdc0b36ab1aa2a87][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.api_gateway_uri: Destroying... [id=/unity/cs/management/api-gateway/gateway-uri][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration_response.api_gateway_integration_response: Destroying... [id=agir-xkd6lccm2f-7pjrlm-GET-200][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_stop_task_policy_attachment: Destroying... [id=unity-nightly-lambda_iam_role-20241109020755604400000001][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_cloudwatch_log_group.cs_common_lambda_auth_log_group: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_base_policy_attachment: Destroying... [id=unity-nightly-lambda_iam_role-20241109020755605100000002][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_lambda_permission.allow_eventbridge: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration_response.api_gateway_integration_response: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_vpc_access_policy_attachment: Destroying... [id=unity-nightly-lambda_iam_role-20241109020755631400000003][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_cloudwatch_event_target.invoke_lambda: Destroying... [id=unity-nightly-every_five_minutes-invoke_lambda_function][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.invoke_role_arn: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.api_gateway_uri: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.lambda_function_name: Destroying... [id=/unity/unity/nightly/cs/management/proxy/lambda-name][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.ecs_ssm_role_policy: Destroying... [id=unity-nightly-ecs_task_role-20241109020755748600000005][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_ssm_parameter.api_gateway_rest_api_id_parameter: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration.root_level_get_method_mock_integration: Destroying... [id=agi-xkd6lccm2f-t0lc9dkgab-OPTIONS][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_cloudwatch_event_target.invoke_lambda: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.ecs_mc_alb_ingress_sg_rule: Destroying... [id=sgr-0a42609f1337d9410][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.lambda_function_name: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.management_console_url: Destroying... [id=/unity/unity/nightly/component/management-console][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration.root_level_get_method_mock_integration: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.mgmt_endpoint: Destroying... [id=/unity/unity/nightly/management/httpd/loadbalancer-url][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_egress_rule.ecs_alb_egress_sg_rule: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.management_console_url: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.ecs_alb_ingress_sg_rule: Destroying... [id=sgr-0dcca2ba8a0324525][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.alb_all_ingress_sg_rule: Destroying... [id=sgr-03beeeafad2742f13][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_egress_rule.ecs_egress_sg_rule: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.mgmt_endpoint: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method_response.response_200: Destroying... [id=agmr-xkd6lccm2f-7pjrlm-GET-200][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_stage.api_gateway_stage: Destroying... [id=ags-xkd6lccm2f-default][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method_response.response_200: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_cloudwatch_event_rule.every_five_minutes: Destroying... [id=unity-nightly-every_five_minutes][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_cloudwatch_event_rule.every_five_minutes: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_lambda_function.unity_cs_monitoring_lambda: Destroying... [id=unity-unity-nightly-cs-monitoring-lambda][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.ecs_mc_alb_ingress_sg_rule: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_stop_task_policy_attachment: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lambda_function.httpdlambda: Destroying... [id=unity-nightly-httpdproxymanagement][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method.root_level_options_method: Destroying... [id=agm-xkd6lccm2f-t0lc9dkgab-OPTIONS][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.ecs_execution_role_policy: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_policy.lambda_ecs_stop_task_policy: Destroying... [id=arn:aws:iam::865428270474:policy/unity-nightly-lambda_ecs_stop_task_policy][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.alb_all_ingress_sg_rule: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method.root_level_options_method: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_vpc_access_policy_attachment: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.lambda_base_policy_attachment: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_policy.lambda_vpc_access_policy: Destroying... [id=arn:aws:iam::865428270474:policy/unity-nightly-lambda_vpc_access_policy][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_vpc_security_group_ingress_rule.ecs_alb_ingress_sg_rule: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role_policy_attachment.ecs_ssm_role_policy: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_stage.api_gateway_stage: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_deployment.api-gateway-deployment: Destroying... [id=wa9eer][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_lambda_function.unity_cs_monitoring_lambda: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.null_resource.download_lambda_zip: Destroying... [id=5899774016895198179][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_role_policy_attachment.attach_ssm_s3_policy: Destroying... [id=unity-unity-nightly-cs-monitoring-lambda-role-20241109021534364800000001][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.null_resource.download_lambda_zip: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lambda_function.httpdlambda: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.lambda_iam_role: Destroying... [id=unity-nightly-lambda_iam_role][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Destroying... [id=sg-0a695db8cdb47f404][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Destroying... [id=arn:aws:ecs:us-west-2:865428270474:service/unity-nightly-httpd-cluster/httpd-service][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_role_policy_attachment.attach_ssm_s3_policy: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_role.lambda_execution_role: Destroying... [id=unity-unity-nightly-cs-monitoring-lambda-role][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_policy.lambda_ssm_s3_policy: Destroying... [id=arn:aws:iam::865428270474:policy/unity-unity-nightly-cs-monitoring-lambda-policy][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_policy.lambda_vpc_access_policy: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_policy.lambda_ecs_stop_task_policy: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_deployment.api-gateway-deployment: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration.rest_api_integration_for_health_check: Destroying... [id=agi-xkd6lccm2f-7pjrlm-GET][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_integration.rest_api_integration_for_health_check: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_vpc_link.rest_api_health_check_vpc_link: Destroying... [id=r2xjaa][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method.rest_api_method_for_health_check_method: Destroying... [id=agm-xkd6lccm2f-7pjrlm-GET][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_method.rest_api_method_for_health_check_method: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_health_checks_path: Destroying... [id=7pjrlm][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_authorizer.unity_cs_common_authorizer: Destroying... [id=ijqhkw][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_health_checks_path: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_api_path: Destroying... [id=rf0occ][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.lambda_iam_role: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_authorizer.unity_cs_common_authorizer: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_lambda_function.cs_common_lambda_auth: Destroying... [id=unity-nightly-unity-cs-common-lambda-authorizer][0m[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_policy.lambda_ssm_s3_policy: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-cs-monitoring-lambda-MspHz.aws_iam_role.lambda_execution_role: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_api_path: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_management_path: Destroying... [id=qlepgu][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_resource.rest_api_resource_management_path: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_rest_api.rest_api: Destroying... [id=xkd6lccm2f][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_rest_api.rest_api: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_lambda_function.cs_common_lambda_auth: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.null_resource.download_lambda_zip: Destroying... [id=4065015297082287368][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.null_resource.download_lambda_zip: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_iam_role.iam_for_lambda_auth: Destroying... [id=unity-nightly-iam_for_lambda_auth][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_iam_role.iam_for_lambda_auth: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 10s elapsed][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_vpc_link.rest_api_health_check_vpc_link: Still destroying... [id=r2xjaa, 10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 20s elapsed][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_vpc_link.rest_api_health_check_vpc_link: Still destroying... [id=r2xjaa, 20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 30s elapsed][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_vpc_link.rest_api_health_check_vpc_link: Still destroying... [id=r2xjaa, 30s elapsed][0m[0m
+[0m[1mmodule.default-unity-apigateway-lNSsA.aws_api_gateway_vpc_link.rest_api_health_check_vpc_link: Destruction complete after 35s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 1m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 1m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 1m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 1m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 1m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 1m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 1m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 2m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 2m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 2m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 2m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 2m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 2m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 2m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 3m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 3m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 3m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 3m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 3m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 3m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 3m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 4m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 4m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 4m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 4m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 4m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 4m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 4m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 5m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 5m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 5m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 5m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Still destroying... [id=sg-0a695db8cdb47f404, 5m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.lambda_sg: Destruction complete after 5m44s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 5m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m30s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m40s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 6m50s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Still destroying... [id=arn:aws:ecs:us-west-2:865428270474:serv...ty-nightly-httpd-cluster/httpd-service, 7m0s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_service.httpd_service: Destruction complete after 7m9s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_cluster.httpd_cluster: Destroying... [id=arn:aws:ecs:us-west-2:865428270474:cluster/unity-nightly-httpd-cluster][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_config: Destroying... [id=/unity/unity/nightly/cs/management/proxy/configurations/010-management][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb_listener.httpd_listener: Destroying... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:listener/app/unity-nightly-httpd-alb/a4d0b0417d25692a/a522e6204c4f9e21][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.ecs_sg: Destroying... [id=sg-025d4edf0d5a3eeed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_task_definition.httpd: Destroying... [id=httpd][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_task_definition.httpd: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_cloudwatch_log_group.proxyloggroup: Destroying... [id=/ecs/unity-nightly-managementproxy][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.ecs_task_role: Destroying... [id=unity-nightly-ecs_task_role][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.ecs_execution_role: Destroying... [id=unity-nightlyecs_execution_role][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_config: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_closevirtualhost: Destroying... [id=/unity/unity/nightly/cs/management/proxy/configurations/100-closevhost8080][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ecs_cluster.httpd_cluster: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb_listener.httpd_listener: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb_target_group.httpd_tg: Destroying... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:targetgroup/unity-nightly-httpd-tg/503248196480dd54][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb.httpd_alb: Destroying... [id=arn:aws:elasticloadbalancing:us-west-2:865428270474:loadbalancer/app/unity-nightly-httpd-alb/a4d0b0417d25692a][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_closevirtualhost: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_cloudwatch_log_group.proxyloggroup: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_openvirtualhost: Destroying... [id=/unity/unity/nightly/cs/management/proxy/configurations/001-openvhost8080][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_ssm_parameter.managementproxy_openvirtualhost: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb_target_group.httpd_tg: Destruction complete after 0s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.ecs_sg: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.ecs_execution_role: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_iam_role.ecs_task_role: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_lb.httpd_alb: Destruction complete after 1s[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.ecs_alb_sg: Destroying... [id=sg-02da323bf1b38739b][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.ecs_alb_sg: Still destroying... [id=sg-02da323bf1b38739b, 10s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.ecs_alb_sg: Still destroying... [id=sg-02da323bf1b38739b, 20s elapsed][0m[0m
+[0m[1mmodule.default-unity-proxy-tsXCz.aws_security_group.ecs_alb_sg: Destruction complete after 26s[0m
 [0m[1m[32m
-Destroy complete! Resources: 57 destroyed.
+Destroy complete! Resources: 61 destroyed.
 [0mDeleting DynamoDB table unity-nightly-terraform-state...
 {
     "TableDescription": {
@@ -1966,15 +2038,15 @@ Destroy complete! Resources: 57 destroyed.
         "TableSizeBytes": 0,
         "ItemCount": 0,
         "TableArn": "arn:aws:dynamodb:us-west-2:865428270474:table/unity-nightly-terraform-state",
-        "TableId": "e2890626-f031-49f0-b484-3296b44a905d",
+        "TableId": "d071db00-0cd5-469e-9e52-a51980b54730",
         "DeletionProtectionEnabled": false
     }
 }
 DynamoDB table unity-nightly-terraform-state was deleted successfully
 /home/ubuntu/unity-cs-infra/nightly_tests
 Terraform operations completed. Namespace directory and all Terraform files have been deleted.
-MC Teardown: Completed in 473 seconds
-Destroying cloudformation stack...
+MC Teardown: Completed in 483 seconds
+Destroying cloudformation stack [unity-management-console-unity-nightly]...
 Waiting for Cloudformation Stack Termination..............................[0]
 Waiting for Cloudformation Stack Termination..............................[20]
 Waiting for Cloudformation Stack Termination..............................[40]
@@ -1998,328 +2070,328 @@ Deleting SSM parameter: /unity/unity/nightly/cs/monitoring/s3/bucketName ...
 
  StackEvents: 
 
- EventId: 66593f50-965b-11ef-9d9b-0660af776a95,
+ EventId: 4eb6b620-9e3f-11ef-9039-0a6b4439473f,
  LogicalResourceId: unity-management-console-unity-nightly,
  ResourceType: AWS::CloudFormation::Stack,
- Timestamp: 2024-10-30T01:07:57.489000+00:00,
+ Timestamp: 2024-11-09T02:07:01.226000+00:00,
  ResourceStatus: CREATE_COMPLETE
 
 
- EventId: DeployerAutoScalingGroup-CREATE_COMPLETE-2024-10-30T01:07:56.178Z,
+ EventId: DeployerAutoScalingGroup-CREATE_COMPLETE-2024-11-09T02:07:00.045Z,
  LogicalResourceId: DeployerAutoScalingGroup,
  ResourceType: AWS::AutoScaling::AutoScalingGroup,
- Timestamp: 2024-10-30T01:07:56.178000+00:00,
+ Timestamp: 2024-11-09T02:07:00.045000+00:00,
  ResourceStatus: CREATE_COMPLETE,
 
 
- EventId: DeployerAutoScalingGroup-03b729cd-28e2-4124-8c6d-a55808c2380d,
+ EventId: DeployerAutoScalingGroup-802c1ffd-ac1e-48e0-b557-a230770a6e77,
  LogicalResourceId: DeployerAutoScalingGroup,
  ResourceType: AWS::AutoScaling::AutoScalingGroup,
- Timestamp: 2024-10-30T01:07:55.805000+00:00,
+ Timestamp: 2024-11-09T02:06:59.635000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
- ResourceStatusReason: Received SUCCESS signal with UniqueId i-0f4d6114c77f9b8be
+ ResourceStatusReason: Received SUCCESS signal with UniqueId i-03bdea5daa8bc6a88
 
 
- EventId: f63f6eb0-965a-11ef-8c48-060511802875,
+ EventId: InstanceProfile-CREATE_COMPLETE-2024-11-09T02:03:54.754Z,
+ LogicalResourceId: InstanceProfile,
+ ResourceType: AWS::IAM::InstanceProfile,
+ Timestamp: 2024-11-09T02:03:54.754000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: de1ce010-9e3e-11ef-9d5d-025a5a8c72b7,
  LogicalResourceId: unity-management-console-unity-nightly,
  ResourceType: AWS::CloudFormation::Stack,
- Timestamp: 2024-10-30T01:04:49.435000+00:00,
+ Timestamp: 2024-11-09T02:03:52.337000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Eventual consistency check initiated,
  DetailedStatus: CONFIGURATION_COMPLETE
 
 
- EventId: DeployerAutoScalingGroup-ea0cfd72-b561-4fa7-a2cc-ff8d17ac1b7e,
+ EventId: DeployerAutoScalingGroup-dcf597b1-4a81-44a3-a2cd-28875bc0e9f1,
  LogicalResourceId: DeployerAutoScalingGroup,
  ResourceType: AWS::AutoScaling::AutoScalingGroup,
- Timestamp: 2024-10-30T01:04:49.396000+00:00,
+ Timestamp: 2024-11-09T02:03:52.296000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Eventual consistency check initiated,
  DetailedStatus: CONFIGURATION_COMPLETE
 
 
- EventId: DeployerAutoScalingGroup-CREATE_IN_PROGRESS-2024-10-30T01:04:39.740Z,
+ EventId: DeployerAutoScalingGroup-CREATE_IN_PROGRESS-2024-11-09T02:03:43.092Z,
  LogicalResourceId: DeployerAutoScalingGroup,
  ResourceType: AWS::AutoScaling::AutoScalingGroup,
- Timestamp: 2024-10-30T01:04:39.740000+00:00,
+ Timestamp: 2024-11-09T02:03:43.092000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Resource creation Initiated,
 
 
- EventId: DeployerAutoScalingGroup-CREATE_IN_PROGRESS-2024-10-30T01:04:38.586Z,
+ EventId: DeployerAutoScalingGroup-CREATE_IN_PROGRESS-2024-11-09T02:03:41.772Z,
  LogicalResourceId: DeployerAutoScalingGroup,
  ResourceType: AWS::AutoScaling::AutoScalingGroup,
- Timestamp: 2024-10-30T01:04:38.586000+00:00,
+ Timestamp: 2024-11-09T02:03:41.772000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
 
 
- EventId: ManagmentConsoleLaunchTemplate-CREATE_COMPLETE-2024-10-30T01:04:37.717Z,
+ EventId: ManagmentConsoleLaunchTemplate-CREATE_COMPLETE-2024-11-09T02:03:40.890Z,
  LogicalResourceId: ManagmentConsoleLaunchTemplate,
  ResourceType: AWS::EC2::LaunchTemplate,
- Timestamp: 2024-10-30T01:04:37.717000+00:00,
+ Timestamp: 2024-11-09T02:03:40.890000+00:00,
  ResourceStatus: CREATE_COMPLETE,
 
 
- EventId: ManagmentConsoleLaunchTemplate-CREATE_IN_PROGRESS-2024-10-30T01:04:37.391Z,
+ EventId: ManagmentConsoleLaunchTemplate-CREATE_IN_PROGRESS-2024-11-09T02:03:40.579Z,
  LogicalResourceId: ManagmentConsoleLaunchTemplate,
  ResourceType: AWS::EC2::LaunchTemplate,
- Timestamp: 2024-10-30T01:04:37.391000+00:00,
+ Timestamp: 2024-11-09T02:03:40.579000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Resource creation Initiated,
 
 
- EventId: PrivateLoadBalancerListener-CREATE_COMPLETE-2024-10-30T01:04:36.867Z,
+ EventId: PrivateLoadBalancerListener-CREATE_COMPLETE-2024-11-09T02:03:40.090Z,
  LogicalResourceId: PrivateLoadBalancerListener,
  ResourceType: AWS::ElasticLoadBalancingV2::Listener,
- Timestamp: 2024-10-30T01:04:36.867000+00:00,
+ Timestamp: 2024-11-09T02:03:40.090000+00:00,
  ResourceStatus: CREATE_COMPLETE,
 
 
- EventId: PrivateLoadBalancerListener-CREATE_IN_PROGRESS-2024-10-30T01:04:36.577Z,
+ EventId: PrivateLoadBalancerListener-CREATE_IN_PROGRESS-2024-11-09T02:03:39.777Z,
  LogicalResourceId: PrivateLoadBalancerListener,
  ResourceType: AWS::ElasticLoadBalancingV2::Listener,
- Timestamp: 2024-10-30T01:04:36.577000+00:00,
+ Timestamp: 2024-11-09T02:03:39.777000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Resource creation Initiated,
 
 
- EventId: ManagmentConsoleLaunchTemplate-CREATE_IN_PROGRESS-2024-10-30T01:04:35.911Z,
+ EventId: ManagmentConsoleLaunchTemplate-CREATE_IN_PROGRESS-2024-11-09T02:03:38.999Z,
  LogicalResourceId: ManagmentConsoleLaunchTemplate,
  ResourceType: AWS::EC2::LaunchTemplate,
- Timestamp: 2024-10-30T01:04:35.911000+00:00,
+ Timestamp: 2024-11-09T02:03:38.999000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
 
 
- EventId: PrivateLoadBalancerListener-CREATE_IN_PROGRESS-2024-10-30T01:04:35.428Z,
+ EventId: PrivateLoadBalancerListener-CREATE_IN_PROGRESS-2024-11-09T02:03:38.573Z,
  LogicalResourceId: PrivateLoadBalancerListener,
  ResourceType: AWS::ElasticLoadBalancingV2::Listener,
- Timestamp: 2024-10-30T01:04:35.428000+00:00,
+ Timestamp: 2024-11-09T02:03:38.573000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
 
 
- EventId: PrivateNetworkLoadBalancer-CREATE_COMPLETE-2024-10-30T01:04:34.914Z,
+ EventId: PrivateNetworkLoadBalancer-CREATE_COMPLETE-2024-11-09T02:03:38.089Z,
  LogicalResourceId: PrivateNetworkLoadBalancer,
  ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
- Timestamp: 2024-10-30T01:04:34.914000+00:00,
+ Timestamp: 2024-11-09T02:03:38.089000+00:00,
  ResourceStatus: CREATE_COMPLETE,
 
 
- EventId: InstanceProfile-CREATE_COMPLETE-2024-10-30T01:04:20.789Z,
- LogicalResourceId: InstanceProfile,
- ResourceType: AWS::IAM::InstanceProfile,
- Timestamp: 2024-10-30T01:04:20.789000+00:00,
- ResourceStatus: CREATE_COMPLETE,
-
-
- EventId: RandomStringResource-CREATE_COMPLETE-2024-10-30T01:02:18.770Z,
+ EventId: RandomStringResource-CREATE_COMPLETE-2024-11-09T02:01:53.287Z,
  LogicalResourceId: RandomStringResource,
  ResourceType: AWS::CloudFormation::CustomResource,
- Timestamp: 2024-10-30T01:02:18.770000+00:00,
+ Timestamp: 2024-11-09T02:01:53.287000+00:00,
  ResourceStatus: CREATE_COMPLETE,
 
 
- EventId: RandomStringResource-CREATE_IN_PROGRESS-2024-10-30T01:02:18.599Z,
+ EventId: RandomStringResource-CREATE_IN_PROGRESS-2024-11-09T02:01:53.086Z,
  LogicalResourceId: RandomStringResource,
  ResourceType: AWS::CloudFormation::CustomResource,
- Timestamp: 2024-10-30T01:02:18.599000+00:00,
+ Timestamp: 2024-11-09T02:01:53.086000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Resource creation Initiated,
 
 
- EventId: RandomStringResource-CREATE_IN_PROGRESS-2024-10-30T01:02:16.703Z,
+ EventId: RandomStringResource-CREATE_IN_PROGRESS-2024-11-09T02:01:51.229Z,
  LogicalResourceId: RandomStringResource,
  ResourceType: AWS::CloudFormation::CustomResource,
- Timestamp: 2024-10-30T01:02:16.703000+00:00,
+ Timestamp: 2024-11-09T02:01:51.229000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
 
 
- EventId: RandomStringLambdaFunction-CREATE_COMPLETE-2024-10-30T01:02:16.114Z,
+ EventId: RandomStringLambdaFunction-CREATE_COMPLETE-2024-11-09T02:01:50.677Z,
  LogicalResourceId: RandomStringLambdaFunction,
  ResourceType: AWS::Lambda::Function,
- Timestamp: 2024-10-30T01:02:16.114000+00:00,
+ Timestamp: 2024-11-09T02:01:50.677000+00:00,
  ResourceStatus: CREATE_COMPLETE,
 
 
- EventId: RandomStringLambdaFunction-84d76bf9-179c-4568-9d0b-c113b6f0b7d3,
+ EventId: RandomStringLambdaFunction-ee0cf230-32e9-433e-9697-af06e158daf1,
  LogicalResourceId: RandomStringLambdaFunction,
  ResourceType: AWS::Lambda::Function,
- Timestamp: 2024-10-30T01:02:11.144000+00:00,
+ Timestamp: 2024-11-09T02:01:45.617000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Eventual consistency check initiated,
  DetailedStatus: CONFIGURATION_COMPLETE
 
 
- EventId: InstanceProfile-b0b7a9c2-a20e-4800-bd84-bd585bf962a7,
+ EventId: InstanceProfile-a8450c2c-f5e4-4686-82f3-808633f8777b,
  LogicalResourceId: InstanceProfile,
  ResourceType: AWS::IAM::InstanceProfile,
- Timestamp: 2024-10-30T01:02:10.869000+00:00,
+ Timestamp: 2024-11-09T02:01:44.891000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Eventual consistency check initiated,
  DetailedStatus: CONFIGURATION_COMPLETE
 
 
- EventId: RandomStringLambdaFunction-CREATE_IN_PROGRESS-2024-10-30T01:02:10.355Z,
+ EventId: RandomStringLambdaFunction-CREATE_IN_PROGRESS-2024-11-09T02:01:44.831Z,
  LogicalResourceId: RandomStringLambdaFunction,
  ResourceType: AWS::Lambda::Function,
- Timestamp: 2024-10-30T01:02:10.355000+00:00,
+ Timestamp: 2024-11-09T02:01:44.831000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Resource creation Initiated,
 
 
- EventId: InstanceProfile-CREATE_IN_PROGRESS-2024-10-30T01:02:10.268Z,
+ EventId: InstanceProfile-CREATE_IN_PROGRESS-2024-11-09T02:01:44.191Z,
  LogicalResourceId: InstanceProfile,
  ResourceType: AWS::IAM::InstanceProfile,
- Timestamp: 2024-10-30T01:02:10.268000+00:00,
+ Timestamp: 2024-11-09T02:01:44.191000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Resource creation Initiated,
 
 
- EventId: InstanceProfile-CREATE_IN_PROGRESS-2024-10-30T01:02:09.349Z,
+ EventId: InstanceProfile-CREATE_IN_PROGRESS-2024-11-09T02:01:43.248Z,
  LogicalResourceId: InstanceProfile,
  ResourceType: AWS::IAM::InstanceProfile,
- Timestamp: 2024-10-30T01:02:09.349000+00:00,
+ Timestamp: 2024-11-09T02:01:43.248000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
 
 
- EventId: InstanceRole-CREATE_COMPLETE-2024-10-30T01:02:08.899Z,
- LogicalResourceId: InstanceRole,
- ResourceType: AWS::IAM::Role,
- Timestamp: 2024-10-30T01:02:08.899000+00:00,
- ResourceStatus: CREATE_COMPLETE,
-
-
- EventId: RandomStringLambdaFunction-CREATE_IN_PROGRESS-2024-10-30T01:02:08.841Z,
+ EventId: RandomStringLambdaFunction-CREATE_IN_PROGRESS-2024-11-09T02:01:43.030Z,
  LogicalResourceId: RandomStringLambdaFunction,
  ResourceType: AWS::Lambda::Function,
- Timestamp: 2024-10-30T01:02:08.841000+00:00,
+ Timestamp: 2024-11-09T02:01:43.030000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
 
 
- EventId: LambdaExecutionRole-CREATE_COMPLETE-2024-10-30T01:02:07.828Z,
- LogicalResourceId: LambdaExecutionRole,
- ResourceType: AWS::IAM::Role,
- Timestamp: 2024-10-30T01:02:07.828000+00:00,
- ResourceStatus: CREATE_COMPLETE,
-
-
- EventId: ManagementConsoleSecurityGroup-CREATE_COMPLETE-2024-10-30T01:02:07.742Z,
- LogicalResourceId: ManagementConsoleSecurityGroup,
- ResourceType: AWS::EC2::SecurityGroup,
- Timestamp: 2024-10-30T01:02:07.742000+00:00,
- ResourceStatus: CREATE_COMPLETE,
-
-
- EventId: ManagementConsoleTargetGroup-CREATE_COMPLETE-2024-10-30T01:02:07.114Z,
- LogicalResourceId: ManagementConsoleTargetGroup,
- ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
- Timestamp: 2024-10-30T01:02:07.114000+00:00,
- ResourceStatus: CREATE_COMPLETE,
-
-
- EventId: PrivateNetworkLoadBalancer-CREATE_IN_PROGRESS-2024-10-30T01:02:02.327Z,
- LogicalResourceId: PrivateNetworkLoadBalancer,
- ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
- Timestamp: 2024-10-30T01:02:02.327000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
- ResourceStatusReason: Resource creation Initiated,
-
-
- EventId: ManagementConsoleSecurityGroup-CREATE_IN_PROGRESS-2024-10-30T01:02:01.713Z,
- LogicalResourceId: ManagementConsoleSecurityGroup,
- ResourceType: AWS::EC2::SecurityGroup,
- Timestamp: 2024-10-30T01:02:01.713000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
- ResourceStatusReason: Resource creation Initiated,
-
-
- EventId: PrivateNetworkLoadBalancer-CREATE_IN_PROGRESS-2024-10-30T01:01:59.531Z,
- LogicalResourceId: PrivateNetworkLoadBalancer,
- ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
- Timestamp: 2024-10-30T01:01:59.531000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
-
-
- EventId: ManagementConsoleSecurityGroup-CREATE_IN_PROGRESS-2024-10-30T01:01:59.526Z,
- LogicalResourceId: ManagementConsoleSecurityGroup,
- ResourceType: AWS::EC2::SecurityGroup,
- Timestamp: 2024-10-30T01:01:59.526000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
-
-
- EventId: NLBSecurityGroup-CREATE_COMPLETE-2024-10-30T01:01:58.812Z,
- LogicalResourceId: NLBSecurityGroup,
- ResourceType: AWS::EC2::SecurityGroup,
- Timestamp: 2024-10-30T01:01:58.812000+00:00,
- ResourceStatus: CREATE_COMPLETE,
-
-
- EventId: NLBSecurityGroup-CREATE_IN_PROGRESS-2024-10-30T01:01:52.979Z,
- LogicalResourceId: NLBSecurityGroup,
- ResourceType: AWS::EC2::SecurityGroup,
- Timestamp: 2024-10-30T01:01:52.979000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
- ResourceStatusReason: Resource creation Initiated,
-
-
- EventId: InstanceRole-CREATE_IN_PROGRESS-2024-10-30T01:01:52.839Z,
+ EventId: InstanceRole-CREATE_COMPLETE-2024-11-09T02:01:42.793Z,
  LogicalResourceId: InstanceRole,
  ResourceType: AWS::IAM::Role,
- Timestamp: 2024-10-30T01:01:52.839000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
- ResourceStatusReason: Resource creation Initiated,
+ Timestamp: 2024-11-09T02:01:42.793000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
 
 
- EventId: ManagementConsoleTargetGroup-CREATE_IN_PROGRESS-2024-10-30T01:01:51.699Z,
- LogicalResourceId: ManagementConsoleTargetGroup,
- ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
- Timestamp: 2024-10-30T01:01:51.699000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
- ResourceStatusReason: Resource creation Initiated,
-
-
- EventId: LambdaExecutionRole-CREATE_IN_PROGRESS-2024-10-30T01:01:51.672Z,
+ EventId: LambdaExecutionRole-CREATE_COMPLETE-2024-11-09T02:01:41.724Z,
  LogicalResourceId: LambdaExecutionRole,
  ResourceType: AWS::IAM::Role,
- Timestamp: 2024-10-30T01:01:51.672000+00:00,
+ Timestamp: 2024-11-09T02:01:41.724000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: ManagementConsoleSecurityGroup-CREATE_COMPLETE-2024-11-09T02:01:41.143Z,
+ LogicalResourceId: ManagementConsoleSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-11-09T02:01:41.143000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: ManagementConsoleTargetGroup-CREATE_COMPLETE-2024-11-09T02:01:40.815Z,
+ LogicalResourceId: ManagementConsoleTargetGroup,
+ ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
+ Timestamp: 2024-11-09T02:01:40.815000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: PrivateNetworkLoadBalancer-CREATE_IN_PROGRESS-2024-11-09T02:01:35.597Z,
+ LogicalResourceId: PrivateNetworkLoadBalancer,
+ ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
+ Timestamp: 2024-11-09T02:01:35.597000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: Resource creation Initiated,
 
 
- EventId: NLBSecurityGroup-CREATE_IN_PROGRESS-2024-10-30T01:01:50.701Z,
+ EventId: ManagementConsoleSecurityGroup-CREATE_IN_PROGRESS-2024-11-09T02:01:35.103Z,
+ LogicalResourceId: ManagementConsoleSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-11-09T02:01:35.103000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: PrivateNetworkLoadBalancer-CREATE_IN_PROGRESS-2024-11-09T02:01:32.935Z,
+ LogicalResourceId: PrivateNetworkLoadBalancer,
+ ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
+ Timestamp: 2024-11-09T02:01:32.935000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: ManagementConsoleSecurityGroup-CREATE_IN_PROGRESS-2024-11-09T02:01:32.909Z,
+ LogicalResourceId: ManagementConsoleSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-11-09T02:01:32.909000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: NLBSecurityGroup-CREATE_COMPLETE-2024-11-09T02:01:32.183Z,
  LogicalResourceId: NLBSecurityGroup,
  ResourceType: AWS::EC2::SecurityGroup,
- Timestamp: 2024-10-30T01:01:50.701000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
+ Timestamp: 2024-11-09T02:01:32.183000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
 
 
- EventId: ManagementConsoleTargetGroup-CREATE_IN_PROGRESS-2024-10-30T01:01:50.663Z,
- LogicalResourceId: ManagementConsoleTargetGroup,
- ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
- Timestamp: 2024-10-30T01:01:50.663000+00:00,
- ResourceStatus: CREATE_IN_PROGRESS,
-
-
- EventId: InstanceRole-CREATE_IN_PROGRESS-2024-10-30T01:01:50.649Z,
+ EventId: InstanceRole-CREATE_IN_PROGRESS-2024-11-09T02:01:26.623Z,
  LogicalResourceId: InstanceRole,
  ResourceType: AWS::IAM::Role,
- Timestamp: 2024-10-30T01:01:50.649000+00:00,
+ Timestamp: 2024-11-09T02:01:26.623000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
 
 
- EventId: LambdaExecutionRole-CREATE_IN_PROGRESS-2024-10-30T01:01:50.625Z,
+ EventId: NLBSecurityGroup-CREATE_IN_PROGRESS-2024-11-09T02:01:26.480Z,
+ LogicalResourceId: NLBSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-11-09T02:01:26.480000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: LambdaExecutionRole-CREATE_IN_PROGRESS-2024-11-09T02:01:25.504Z,
  LogicalResourceId: LambdaExecutionRole,
  ResourceType: AWS::IAM::Role,
- Timestamp: 2024-10-30T01:01:50.625000+00:00,
+ Timestamp: 2024-11-09T02:01:25.504000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: ManagementConsoleTargetGroup-CREATE_IN_PROGRESS-2024-11-09T02:01:25.335Z,
+ LogicalResourceId: ManagementConsoleTargetGroup,
+ ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
+ Timestamp: 2024-11-09T02:01:25.335000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: ManagementConsoleTargetGroup-CREATE_IN_PROGRESS-2024-11-09T02:01:24.280Z,
+ LogicalResourceId: ManagementConsoleTargetGroup,
+ ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
+ Timestamp: 2024-11-09T02:01:24.280000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
 
 
- EventId: 89f347e0-965a-11ef-af4a-0a413f9d3e8d,
+ EventId: NLBSecurityGroup-CREATE_IN_PROGRESS-2024-11-09T02:01:24.254Z,
+ LogicalResourceId: NLBSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-11-09T02:01:24.254000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: InstanceRole-CREATE_IN_PROGRESS-2024-11-09T02:01:24.243Z,
+ LogicalResourceId: InstanceRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-11-09T02:01:24.243000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: LambdaExecutionRole-CREATE_IN_PROGRESS-2024-11-09T02:01:24.206Z,
+ LogicalResourceId: LambdaExecutionRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-11-09T02:01:24.206000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: 83fd20e0-9e3e-11ef-9942-02d74ee6b785,
  LogicalResourceId: unity-management-console-unity-nightly,
  ResourceType: AWS::CloudFormation::Stack,
- Timestamp: 2024-10-30T01:01:47.820000+00:00,
+ Timestamp: 2024-11-09T02:01:21.253000+00:00,
  ResourceStatus: CREATE_IN_PROGRESS,
  ResourceStatusReason: User Initiated
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 14054  100    11  100 14043     56  72386 --:--:-- --:--:-- --:--:-- 72443
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 14098  100    11  100 14087     56  72613 --:--:-- --:--:-- --:--:-- 72670
 {"ok":true}

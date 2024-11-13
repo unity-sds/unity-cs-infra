@@ -5,18 +5,24 @@ WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
 Hit:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal InRelease
 Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
-Hit:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease
+Get:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
 Hit:4 https://download.docker.com/linux/ubuntu focal InRelease
-Hit:5 https://apt.releases.hashicorp.com focal InRelease
+Get:5 https://apt.releases.hashicorp.com focal InRelease [12.9 kB]
 Ign:6 https://apt.vector.dev stable InRelease
 Hit:7 https://apt.vector.dev stable Release
 Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
 Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
-Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
-Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
-Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
-Hit:14 http://security.ubuntu.com/ubuntu focal-security InRelease
-Fetched 162 kB in 13s (12.4 kB/s)
+Get:10 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3671 kB]
+Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
+Get:12 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1237 kB]
+Get:13 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
+Get:14 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
+Get:15 https://apt.releases.hashicorp.com focal/main amd64 Packages [158 kB]
+Get:17 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+Get:18 https://esm.ubuntu.com/apps/ubuntu focal-apps-security/main amd64 Packages [147 kB]
+Get:19 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [3302 kB]
+Get:20 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1014 kB]
+Fetched 9960 kB in 13s (745 kB/s)
 Reading package lists...
 Building dependency tree...
 Reading state information...
@@ -194,12 +200,17 @@ Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 .
     "Version": 1,
     "Tier": "Standard"
 }
-Repo Hash (Nightly Test):     [c25d05a]
+Repo Hash (Nightly Test):     [74aba1b]
 From https://github.com/unity-sds/unity-cs-infra
  * branch            main       -> FETCH_HEAD
-Already up to date.
+   74aba1b..175d89a  main       -> origin/main
+Updating 74aba1b..175d89a
+Fast-forward
+ nightly_tests/deploy.sh               | 3 ++-
+ nightly_tests/marketplace_config.yaml | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 Already on 'main'
-M	nightly_tests/nightly_logs/log_2024-11-01_18-00/output.log
+M	nightly_tests/nightly_logs/log_2024-11-11_18-00/output.log
 Your branch is up to date with 'origin/main'.
 deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
 deploy.sh :: PROJECT_NAME: unity
@@ -236,14 +247,16 @@ Creating SSM parameter : /unity/unity/nightly/cs/monitoring/s3/bucketName = unit
 }
 deploying INSTANCE TYPE: c6i.xlarge ...
 Deploying Cloudformation stack...
-Marketplace Items:
+-----------------------------------------
+Items that will auto-deploy on bootstrap:
 Marketplace Item                | Version
 --------------------------------+--------
-unity-cs-monitoring-lambda     | 0.1
-unity-apigateway               | 0.4
-unity-proxy                    | 0.14
+unity-cs-monitoring-lambda      | 0.1
+unity-apigateway                | 0.4
+unity-proxy                     | 0.14
+unity-ui                        | 0.8.0
 {
-    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/2a4695e0-997f-11ef-a464-027a4982941b"
+    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/31abc670-a163-11ef-9286-063a893940c7"
 }
 Stack Name: [unity-management-console-unity-nightly]
 Waiting for Cloudformation Stack..........................................[0]
@@ -264,12 +277,10 @@ Waiting for Cloudformation Stack..........................................[280]
 Waiting for Cloudformation Stack..........................................[300]
 Waiting for Cloudformation Stack..........................................[320]
 Waiting for Cloudformation Stack..........................................[340]
-Waiting for Cloudformation Stack..........................................[360]
-Waiting for Cloudformation Stack..........................................[380]
 Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [400 seconds] - PASS
+Stack Creation Time: [360 seconds] - PASS
 Deploying Management Console...
-MANAGEMENT_CONSOLE_URL = HTTP://unity-nightly-httpd-alb-637941394.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
+MANAGEMENT_CONSOLE_URL = HTTP://unity-nightly-httpd-alb-311291190.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
 Checking if Docker is installed...
 Docker already installed [OK]
 Using default tag: latest
@@ -281,15 +292,27 @@ Launching selenium docker...
 Attempt 1 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
 Attempt 2 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
 Attempt 3 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 4 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 5 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 6 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 7 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 8 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 9 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 10 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 11 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 12 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 13 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 14 to reach Management Console via httpd -- Received HTTP response code 503. Retrying in 10 seconds...
+Attempt 15 to reach Management Console via httpd -- Received HTTP response code 503. Retrying in 10 seconds...
 Success! HTTP response code 200 received.
-Management Console Creation Time: 645 seconds
-Total Creation Time(SMM params, CloudFormation, MC): 1154 seconds
+Management Console Creation Time: 1365 seconds
+Total Creation Time(SMM params, CloudFormation, MC): 1826 seconds
 Running Smoke Test
 Smoke test was successful. Continuing with bootstrap and tests.
 Running Selenium tests...
 Stopping Selenium docker container...
-d77e6210737264eda5c1c21f69bca8e1bfb2b5aae02e564866c92a79ca6207e9
+003f8eaba557dcb296d92d9b3a1d89b04255f85878af5da23dff3ea8f10617db
 mv: cannot stat 'selenium_unity_images/*': No such file or directory
-Current date and time: Sat Nov  2 18:21:19 PDT 2024
-Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-10-25_18-00
-Pushing test results to nightly_logs/log_2024-11-02_18-00...
+Current date and time: Tue Nov 12 18:32:35 PST 2024
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-11-04_18-00
+Pushing test results to nightly_logs/log_2024-11-12_18-00...

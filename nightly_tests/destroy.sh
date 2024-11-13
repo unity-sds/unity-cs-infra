@@ -162,8 +162,8 @@ EOF
 fi
 
 # Delete CloudFormation stack
-echo "Destroying cloudformation stack..."
-echo "Destroying cloudformation stack..." >> nightly_output.txt
+echo "Destroying cloudformation stack [${STACK_NAME}]..."
+echo "Destroying cloudformation stack [${STACK_NAME}]..." >> nightly_output.txt
 aws cloudformation delete-stack --stack-name ${STACK_NAME}
 
 STACK_STATUS=""
