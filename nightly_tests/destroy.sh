@@ -222,16 +222,22 @@ else
     START_MARKER="# ---------- BEGIN ${PROJECT_NAME}/${VENUE_NAME} ----------"
     END_MARKER="# ---------- END ${PROJECT_NAME}/${VENUE_NAME} ----------"
     
-    # Use sed to remove everything between and including the markers
-    sed -i "/^[[:space:]]*${START_MARKER}/,/^[[:space:]]*${END_MARKER}/d" $TEMP_CONFIG
+    # Check if the markers exist in the file
+    if grep -q "$START_MARKER" "$TEMP_CONFIG" && grep -q "$END_MARKER" "$TEMP_CONFIG"; then
+        # Use sed to remove everything between and including the markers
+        sed -i "/^[[:space:]]*${START_MARKER}/,/^[[:space:]]*${END_MARKER}/d" $TEMP_CONFIG
 
-    # Upload the modified config back to S3
-    if aws s3 cp $TEMP_CONFIG s3://shared-services-apache-config-dev/unity-cs.conf; then
-        echo "Successfully removed Apache configuration block from S3"
-        echo "Successfully removed Apache configuration block from S3" >> nightly_output.txt
+        # Upload the modified config back to S3
+        if aws s3 cp $TEMP_CONFIG s3://shared-services-apache-config-dev/unity-cs.conf; then
+            echo "Successfully removed Apache configuration block from S3"
+            echo "Successfully removed Apache configuration block from S3" >> nightly_output.txt
+        else
+            echo "Warning: Failed to upload modified Apache configuration to S3"
+            echo "Warning: Failed to upload modified Apache configuration to S3" >> nightly_output.txt
+        fi
     else
-        echo "Warning: Failed to upload modified Apache configuration to S3"
-        echo "Warning: Failed to upload modified Apache configuration to S3" >> nightly_output.txt
+        echo "No configuration block found for ${PROJECT_NAME}/${VENUE_NAME} - Skipping removal"
+        echo "No configuration block found for ${PROJECT_NAME}/${VENUE_NAME} - Skipping removal" >> nightly_output.txt
     fi
 
     # Clean up
