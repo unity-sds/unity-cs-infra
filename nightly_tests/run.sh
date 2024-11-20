@@ -225,21 +225,16 @@ echo "SSM Parameter Name: ${SSM_MC_URL}"
 
 # Get the raw SSM parameter value and print it
 RAW_SSM_VALUE=$(aws ssm get-parameter --name ${SSM_MC_URL} --query "Parameter.Value" --output text)
-echo "Raw SSM Value: ${RAW_SSM_VALUE}"
 
 export MANAGEMENT_CONSOLE_URL="${RAW_SSM_VALUE}"
 echo "Management Console URL: ${MANAGEMENT_CONSOLE_URL}"
 
 # Extract just the hostname with debug prints
-echo "Extracting hostname..."
 STEP1=$(echo $MANAGEMENT_CONSOLE_URL | sed 's|^http://||' | sed 's|^HTTP://||')
-echo "After removing http://: ${STEP1}"
 
 STEP2=$(echo $STEP1 | cut -d':' -f1)
-echo "After removing port: ${STEP2}"
 
 ALB_HOST=$(echo $STEP2 | cut -d'/' -f1)
-echo "Final ALB_HOST = ${ALB_HOST}"
 
 echo "Updating Apache configuration in S3..."
 
