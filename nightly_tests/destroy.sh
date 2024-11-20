@@ -224,8 +224,12 @@ else
     
     # Check if the markers exist in the file
     if grep -q "$START_MARKER" "$TEMP_CONFIG" && grep -q "$END_MARKER" "$TEMP_CONFIG"; then
+        # Escape special characters in the markers
+        ESCAPED_START=$(echo "$START_MARKER" | sed 's/[]\/$*.^[]/\\&/g')
+        ESCAPED_END=$(echo "$END_MARKER" | sed 's/[]\/$*.^[]/\\&/g')
+        
         # Use sed to remove everything between and including the markers
-        sed -i '/'$START_MARKER'/,/'$END_MARKER'/d' $TEMP_CONFIG
+        sed -i "/$ESCAPED_START/,/$ESCAPED_END/d" $TEMP_CONFIG
 
         # Upload the modified config back to S3
         if aws s3 cp $TEMP_CONFIG s3://ucs-shared-services-apache-config-dev/unity-cs.conf; then
