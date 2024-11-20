@@ -214,7 +214,7 @@ echo "Removing Apache configuration block from S3..."
 TEMP_CONFIG="/tmp/unity-cs.conf"
 
 # Download the current config
-if ! aws s3 cp s3://shared-services-apache-config-dev/unity-cs.conf $TEMP_CONFIG; then
+if ! aws s3 cp s3://ucs-shared-services-apache-config-dev/unity-cs.conf $TEMP_CONFIG; then
     echo "Warning: Could not download Apache configuration from S3"
     echo "Warning: Could not download Apache configuration from S3" >> nightly_output.txt
 else
