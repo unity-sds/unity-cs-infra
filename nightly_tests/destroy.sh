@@ -225,10 +225,10 @@ else
     # Check if the markers exist in the file
     if grep -q "$START_MARKER" "$TEMP_CONFIG" && grep -q "$END_MARKER" "$TEMP_CONFIG"; then
         # Use sed to remove everything between and including the markers
-        sed -i "/^[[:space:]]*${START_MARKER}/,/^[[:space:]]*${END_MARKER}/d" $TEMP_CONFIG
+        sed -i "/${START_MARKER}/,/${END_MARKER}/d" $TEMP_CONFIG
 
         # Upload the modified config back to S3
-        if aws s3 cp $TEMP_CONFIG s3://shared-services-apache-config-dev/unity-cs.conf; then
+        if aws s3 cp $TEMP_CONFIG s3://ucs-shared-services-apache-config-dev/unity-cs.conf; then
             echo "Successfully removed Apache configuration block from S3"
             echo "Successfully removed Apache configuration block from S3" >> nightly_output.txt
         else
