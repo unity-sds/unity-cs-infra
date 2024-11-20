@@ -244,10 +244,10 @@ VENUE_PATH="/${PROJECT_NAME}/${VENUE_NAME}/"
 # Create temporary file for Apache config block
 TEMP_CONFIG_FILE="/tmp/venue_config.txt"
 
-# Create the Apache configuration block
+# Create the Apache configuration block with markers
 cat << EOF > $TEMP_CONFIG_FILE
 
-    # ----------
+    # ---------- BEGIN ${PROJECT_NAME}/${VENUE_NAME} ----------
     # ${PROJECT_NAME}/${VENUE_NAME}
     #
     Define VENUE_ALB_HOST ${ALB_HOST}
@@ -269,6 +269,8 @@ cat << EOF > $TEMP_CONFIG_FILE
        RequestHeader     set "X-Forwarded-Proto" expr=%{REQUEST_SCHEME}
        RequestHeader     set "X-Forwarded-Host" "www.dev.mdps.mcp.nasa.gov:4443"
     </Location>
+    # ---------- END ${PROJECT_NAME}/${VENUE_NAME} ----------
+
 EOF
 
 # Download existing config, insert new block before </VirtualHost>, and upload back to S3

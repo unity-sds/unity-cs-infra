@@ -206,6 +206,38 @@ else
     echo "Stack Teardown: Failed with unknown status - [FAIL]"
 fi
 
+# Before running destroy_deployment_ssm_params.sh, remove Apache config block
+
+echo "Removing Apache configuration block from S3..."
+
+# Create temporary file for modified config
+TEMP_CONFIG="/tmp/unity-cs.conf"
+
+# Download the current config
+if ! aws s3 cp s3://shared-services-apache-config-dev/unity-cs.conf $TEMP_CONFIG; then
+    echo "Warning: Could not download Apache configuration from S3"
+    echo "Warning: Could not download Apache configuration from S3" >> nightly_output.txt
+else
+    # Remove the configuration block using sed
+    START_MARKER="# ---------- BEGIN ${PROJECT_NAME}/${VENUE_NAME} ----------"
+    END_MARKER="# ---------- END ${PROJECT_NAME}/${VENUE_NAME} ----------"
+    
+    # Use sed to remove everything between and including the markers
+    sed -i "/^[[:space:]]*${START_MARKER}/,/^[[:space:]]*${END_MARKER}/d" $TEMP_CONFIG
+
+    # Upload the modified config back to S3
+    if aws s3 cp $TEMP_CONFIG s3://shared-services-apache-config-dev/unity-cs.conf; then
+        echo "Successfully removed Apache configuration block from S3"
+        echo "Successfully removed Apache configuration block from S3" >> nightly_output.txt
+    else
+        echo "Warning: Failed to upload modified Apache configuration to S3"
+        echo "Warning: Failed to upload modified Apache configuration to S3" >> nightly_output.txt
+    fi
+
+    # Clean up
+    rm $TEMP_CONFIG
+fi
+
 # Run the destroy_deployment_ssm_params.sh script
 echo "Running destroy_deployment_ssm_params.sh script..."
 ./destroy_deployment_ssm_params.sh --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}"
