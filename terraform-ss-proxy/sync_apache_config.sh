@@ -1,7 +1,11 @@
 #!/bin/bash
 
+# Get environment from SSM
+export ENV_SSM_PARAM="/unity/account/venue"
+ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text)
+
 # Set variables
-S3_BUCKET="ucs-ss-config"
+S3_BUCKET="ucs-shared-services-apache-config-${ENVIRONMENT}"
 S3_FILE_PATH="unity-cs.conf"
 LOCAL_FILE="/etc/apache2/sites-enabled/unity-cs.conf"
 TEMP_FILE="/tmp/unity-cs.conf"
@@ -11,8 +15,9 @@ SLACK_WEBHOOK=$(aws ssm get-parameter --name "/unity/shared-services/slack/apach
 send_to_slack_and_exit() {
     local message="$1"
     local exit_code="$2"
+    local env_prefix="[Unity-venue-${ENVIRONMENT}] "
     curl -X POST -H 'Content-type: application/json' \
-        --data "{\"text\":\"$message\"}" \
+        --data "{\"text\":\"${env_prefix}${message}\"}" \
         "${SLACK_WEBHOOK}"
     exit "$exit_code"
 }

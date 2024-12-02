@@ -213,8 +213,16 @@ echo "Removing Apache configuration block from S3..."
 # Create temporary file for modified config
 TEMP_CONFIG="/tmp/unity-cs.conf"
 
+# Get environment from SSM
+export ENV_SSM_PARAM="/unity/account/venue"
+ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text)
+echo "Environment from SSM: ${ENVIRONMENT}"
+
+# Use environment in S3 bucket name
+S3_BUCKET="ucs-shared-services-apache-config-${ENVIRONMENT}"
+
 # Download the current config
-if ! aws s3 cp s3://ucs-shared-services-apache-config-dev/unity-cs.conf $TEMP_CONFIG; then
+if ! aws s3 cp s3://${S3_BUCKET}/unity-cs.conf $TEMP_CONFIG; then
     echo "Warning: Could not download Apache configuration from S3"
     echo "Warning: Could not download Apache configuration from S3" >> nightly_output.txt
 else
@@ -232,7 +240,7 @@ else
         sed -i "/$ESCAPED_START/,/$ESCAPED_END/d" $TEMP_CONFIG
 
         # Upload the modified config back to S3
-        if aws s3 cp $TEMP_CONFIG s3://ucs-shared-services-apache-config-dev/unity-cs.conf; then
+        if aws s3 cp $TEMP_CONFIG s3://${S3_BUCKET}/unity-cs.conf; then
             echo "Successfully removed Apache configuration block from S3"
             echo "Successfully removed Apache configuration block from S3" >> nightly_output.txt
         else
