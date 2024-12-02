@@ -273,15 +273,22 @@ cat << EOF > $TEMP_CONFIG_FILE
 
 EOF
 
-# Download existing config, insert new block before </VirtualHost>, and upload back to S3
-TEMP_FULL_CONFIG="/tmp/unity-cs.conf"
-aws s3 cp s3://ucs-shared-services-apache-config-dev/unity-cs.conf $TEMP_FULL_CONFIG
+# Get environment from SSM
+export ENV_SSM_PARAM="/unity/account/venue"
+ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text)
+echo "Environment from SSM: ${ENVIRONMENT}"
+
+# Use environment in S3 bucket name
+S3_BUCKET="ucs-shared-services-apache-config-${ENVIRONMENT}"
+
+# Update S3 commands to use dynamic bucket name
+aws s3 cp s3://${S3_BUCKET}/unity-cs.conf $TEMP_FULL_CONFIG
 
 sed -i "/<\/VirtualHost>/e cat $TEMP_CONFIG_FILE" $TEMP_FULL_CONFIG
 
 
 # Upload updated config back to S3
-if aws s3 cp $TEMP_FULL_CONFIG s3://ucs-shared-services-apache-config-dev/unity-cs.conf; then
+if aws s3 cp $TEMP_FULL_CONFIG s3://${S3_BUCKET}/unity-cs.conf; then
     echo "Successfully updated Apache configuration in S3"
 else
     echo "Failed to update Apache configuration in S3"
