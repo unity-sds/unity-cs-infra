@@ -570,3 +570,406 @@ mv: cannot stat 'selenium_unity_images/*': No such file or directory
 Current date and time: Wed Dec  4 19:00:41 PST 2024
 Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2024-11-26_18-00
 Pushing test results to nightly_logs/log_2024-12-04_18-00...
+[main 63a631b] Add nightly output for 2024-12-04_18-00
+ 3 files changed, 639 insertions(+), 516 deletions(-)
+ rename nightly_tests/nightly_logs/{log_2024-11-26_18-00/nightly_output_2024-11-26_18-00.txt => log_2024-12-04_18-00/nightly_output_2024-12-04_18-00.txt} (62%)
+ rename nightly_tests/nightly_logs/{log_2024-11-26_18-00 => log_2024-12-04_18-00}/output.log (59%)
+From https://github.com/unity-sds/unity-cs-infra
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Already on 'main'
+M	nightly_tests/nightly_logs/log_2024-12-04_18-00/output.log
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+To https://github.com/unity-sds/unity-cs-infra.git
+   8626df4..63a631b  main -> main
+Destroying resources...
+destroy.sh :: PROJECT_NAME: unity
+destroy.sh :: VENUE_NAME: nightly
+Terraform is already installed.
+Checking CloudFormation stack status...
+Current stack status: ROLLBACK_COMPLETE
+Destroying cloudformation stack [unity-management-console-unity-nightly]...
+Waiting for Cloudformation Stack Termination..............................[0]
+Waiting for Cloudformation Stack Termination..............................[20]
+
+An error occurred (ValidationError) when calling the DescribeStacks operation: Stack with id unity-management-console-unity-nightly does not exist
+Stack Teardown: Completed in 40s - [PASS]
+Running destroy_deployment_ssm_params.sh script...
+destroy_deployment_ssm_params.sh :: PROJECT_NAME: unity
+destroy_deployment_ssm_params.sh :: VENUE_NAME: nightly
+Deleting SSM parameter: /unity/unity/nightly/project-name ...
+Deleting SSM parameter: /unity/unity/nightly/venue-name ...
+Deleting SSM parameter: /unity/unity/nightly/deployment/status ...
+Deleting SSM parameter: /unity/unity/nightly/cs/monitoring/s3/bucketName ...
+
+ StackEvents: 
+
+ EventId: 6f40f8b0-b2ad-11ef-b264-0ada58aa3cc5,
+ LogicalResourceId: unity-management-console-unity-nightly,
+ ResourceType: AWS::CloudFormation::Stack,
+ Timestamp: 2024-12-05T02:05:43.728000+00:00,
+ ResourceStatus: ROLLBACK_COMPLETE
+
+
+ EventId: NLBSecurityGroup-DELETE_COMPLETE-2024-12-05T02:05:43.238Z,
+ LogicalResourceId: NLBSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:05:43.238000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: NLBSecurityGroup-DELETE_IN_PROGRESS-2024-12-05T02:05:42.147Z,
+ LogicalResourceId: NLBSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:05:42.147000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: PrivateNetworkLoadBalancer-DELETE_COMPLETE-2024-12-05T02:05:41.451Z,
+ LogicalResourceId: PrivateNetworkLoadBalancer,
+ ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
+ Timestamp: 2024-12-05T02:05:41.451000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: LambdaExecutionRole-DELETE_COMPLETE-2024-12-05T02:04:55.322Z,
+ LogicalResourceId: LambdaExecutionRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:04:55.322000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: InstanceRole-DELETE_COMPLETE-2024-12-05T02:04:51.858Z,
+ LogicalResourceId: InstanceRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:04:51.858000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: LambdaExecutionRole-DELETE_IN_PROGRESS-2024-12-05T02:04:46.494Z,
+ LogicalResourceId: LambdaExecutionRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:04:46.494000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: RandomStringLambdaFunction-DELETE_COMPLETE-2024-12-05T02:04:46.036Z,
+ LogicalResourceId: RandomStringLambdaFunction,
+ ResourceType: AWS::Lambda::Function,
+ Timestamp: 2024-12-05T02:04:46.036000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: RandomStringLambdaFunction-DELETE_IN_PROGRESS-2024-12-05T02:04:42.688Z,
+ LogicalResourceId: RandomStringLambdaFunction,
+ ResourceType: AWS::Lambda::Function,
+ Timestamp: 2024-12-05T02:04:42.688000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: RandomStringResource-DELETE_COMPLETE-2024-12-05T02:04:42.302Z,
+ LogicalResourceId: RandomStringResource,
+ ResourceType: AWS::CloudFormation::CustomResource,
+ Timestamp: 2024-12-05T02:04:42.302000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: InstanceRole-DELETE_IN_PROGRESS-2024-12-05T02:04:41.749Z,
+ LogicalResourceId: InstanceRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:04:41.749000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: ManagementConsoleSecurityGroup-DELETE_COMPLETE-2024-12-05T02:04:41.438Z,
+ LogicalResourceId: ManagementConsoleSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:04:41.438000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: InstanceProfile-DELETE_COMPLETE-2024-12-05T02:04:41.380Z,
+ LogicalResourceId: InstanceProfile,
+ ResourceType: AWS::IAM::InstanceProfile,
+ Timestamp: 2024-12-05T02:04:41.380000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: ManagementConsoleTargetGroup-DELETE_COMPLETE-2024-12-05T02:04:41.214Z,
+ LogicalResourceId: ManagementConsoleTargetGroup,
+ ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
+ Timestamp: 2024-12-05T02:04:41.214000+00:00,
+ ResourceStatus: DELETE_COMPLETE,
+
+
+ EventId: PrivateNetworkLoadBalancer-DELETE_IN_PROGRESS-2024-12-05T02:04:40.399Z,
+ LogicalResourceId: PrivateNetworkLoadBalancer,
+ ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
+ Timestamp: 2024-12-05T02:04:40.399000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: ManagementConsoleSecurityGroup-DELETE_IN_PROGRESS-2024-12-05T02:04:40.399Z,
+ LogicalResourceId: ManagementConsoleSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:04:40.399000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: InstanceProfile-DELETE_IN_PROGRESS-2024-12-05T02:04:40.394Z,
+ LogicalResourceId: InstanceProfile,
+ ResourceType: AWS::IAM::InstanceProfile,
+ Timestamp: 2024-12-05T02:04:40.394000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: ManagementConsoleTargetGroup-DELETE_IN_PROGRESS-2024-12-05T02:04:40.383Z,
+ LogicalResourceId: ManagementConsoleTargetGroup,
+ ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
+ Timestamp: 2024-12-05T02:04:40.383000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: RandomStringResource-DELETE_IN_PROGRESS-2024-12-05T02:04:40.357Z,
+ LogicalResourceId: RandomStringResource,
+ ResourceType: AWS::CloudFormation::CustomResource,
+ Timestamp: 2024-12-05T02:04:40.357000+00:00,
+ ResourceStatus: DELETE_IN_PROGRESS,
+
+
+ EventId: 37b6d4f0-b2ad-11ef-9aeb-0660af776a95,
+ LogicalResourceId: unity-management-console-unity-nightly,
+ ResourceType: AWS::CloudFormation::Stack,
+ Timestamp: 2024-12-05T02:04:10.548000+00:00,
+ ResourceStatus: ROLLBACK_IN_PROGRESS,
+ ResourceStatusReason: The following resource(s) failed to create: PrivateNetworkLoadBalancer. Rollback requested by user.
+
+
+ EventId: PrivateNetworkLoadBalancer-CREATE_FAILED-2024-12-05T02:04:10.173Z,
+ LogicalResourceId: PrivateNetworkLoadBalancer,
+ ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
+ Timestamp: 2024-12-05T02:04:10.173000+00:00,
+ ResourceStatus: CREATE_FAILED,
+ ResourceStatusReason: Resource handler returned message: 1 validation error detected: Value 'false' at 'enforceSecurityGroupInboundRulesOnPrivateLinkTraffic' failed to satisfy constraint: Member must satisfy enum value set: off, on (Service: ElasticLoadBalancingV2, Status Code: 400, Request ID: 8742c777-92c7-41cd-aaae-1fbac1c9602d) (RequestToken: fca57695-8976-c33a-23a8-d9c6360f260e, HandlerErrorCode: InvalidRequest),
+
+
+ EventId: InstanceProfile-CREATE_COMPLETE-2024-12-05T02:03:56.697Z,
+ LogicalResourceId: InstanceProfile,
+ ResourceType: AWS::IAM::InstanceProfile,
+ Timestamp: 2024-12-05T02:03:56.697000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: RandomStringResource-CREATE_COMPLETE-2024-12-05T02:01:55.300Z,
+ LogicalResourceId: RandomStringResource,
+ ResourceType: AWS::CloudFormation::CustomResource,
+ Timestamp: 2024-12-05T02:01:55.300000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: RandomStringResource-CREATE_IN_PROGRESS-2024-12-05T02:01:55.118Z,
+ LogicalResourceId: RandomStringResource,
+ ResourceType: AWS::CloudFormation::CustomResource,
+ Timestamp: 2024-12-05T02:01:55.118000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: RandomStringResource-CREATE_IN_PROGRESS-2024-12-05T02:01:53.279Z,
+ LogicalResourceId: RandomStringResource,
+ ResourceType: AWS::CloudFormation::CustomResource,
+ Timestamp: 2024-12-05T02:01:53.279000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: RandomStringLambdaFunction-CREATE_COMPLETE-2024-12-05T02:01:52.721Z,
+ LogicalResourceId: RandomStringLambdaFunction,
+ ResourceType: AWS::Lambda::Function,
+ Timestamp: 2024-12-05T02:01:52.721000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: RandomStringLambdaFunction-1411820c-a76d-4145-8846-3c16172d2443,
+ LogicalResourceId: RandomStringLambdaFunction,
+ ResourceType: AWS::Lambda::Function,
+ Timestamp: 2024-12-05T02:01:47.705000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Eventual consistency check initiated,
+ DetailedStatus: CONFIGURATION_COMPLETE
+
+
+ EventId: InstanceProfile-933ec51f-dc75-4e0c-ae2b-629546a0d900,
+ LogicalResourceId: InstanceProfile,
+ ResourceType: AWS::IAM::InstanceProfile,
+ Timestamp: 2024-12-05T02:01:46.759000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Eventual consistency check initiated,
+ DetailedStatus: CONFIGURATION_COMPLETE
+
+
+ EventId: RandomStringLambdaFunction-CREATE_IN_PROGRESS-2024-12-05T02:01:46.732Z,
+ LogicalResourceId: RandomStringLambdaFunction,
+ ResourceType: AWS::Lambda::Function,
+ Timestamp: 2024-12-05T02:01:46.732000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: InstanceProfile-CREATE_IN_PROGRESS-2024-12-05T02:01:46.200Z,
+ LogicalResourceId: InstanceProfile,
+ ResourceType: AWS::IAM::InstanceProfile,
+ Timestamp: 2024-12-05T02:01:46.200000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: InstanceProfile-CREATE_IN_PROGRESS-2024-12-05T02:01:45.371Z,
+ LogicalResourceId: InstanceProfile,
+ ResourceType: AWS::IAM::InstanceProfile,
+ Timestamp: 2024-12-05T02:01:45.371000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: RandomStringLambdaFunction-CREATE_IN_PROGRESS-2024-12-05T02:01:44.993Z,
+ LogicalResourceId: RandomStringLambdaFunction,
+ ResourceType: AWS::Lambda::Function,
+ Timestamp: 2024-12-05T02:01:44.993000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: InstanceRole-CREATE_COMPLETE-2024-12-05T02:01:44.896Z,
+ LogicalResourceId: InstanceRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:01:44.896000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: LambdaExecutionRole-CREATE_COMPLETE-2024-12-05T02:01:43.873Z,
+ LogicalResourceId: LambdaExecutionRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:01:43.873000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: ManagementConsoleSecurityGroup-CREATE_COMPLETE-2024-12-05T02:01:43.305Z,
+ LogicalResourceId: ManagementConsoleSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:01:43.305000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: ManagementConsoleTargetGroup-CREATE_COMPLETE-2024-12-05T02:01:42.821Z,
+ LogicalResourceId: ManagementConsoleTargetGroup,
+ ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
+ Timestamp: 2024-12-05T02:01:42.821000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: PrivateNetworkLoadBalancer-CREATE_IN_PROGRESS-2024-12-05T02:01:37.708Z,
+ LogicalResourceId: PrivateNetworkLoadBalancer,
+ ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
+ Timestamp: 2024-12-05T02:01:37.708000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: ManagementConsoleSecurityGroup-CREATE_IN_PROGRESS-2024-12-05T02:01:37.305Z,
+ LogicalResourceId: ManagementConsoleSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:01:37.305000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: ManagementConsoleSecurityGroup-CREATE_IN_PROGRESS-2024-12-05T02:01:35.119Z,
+ LogicalResourceId: ManagementConsoleSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:01:35.119000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: PrivateNetworkLoadBalancer-CREATE_IN_PROGRESS-2024-12-05T02:01:35.095Z,
+ LogicalResourceId: PrivateNetworkLoadBalancer,
+ ResourceType: AWS::ElasticLoadBalancingV2::LoadBalancer,
+ Timestamp: 2024-12-05T02:01:35.095000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: NLBSecurityGroup-CREATE_COMPLETE-2024-12-05T02:01:34.385Z,
+ LogicalResourceId: NLBSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:01:34.385000+00:00,
+ ResourceStatus: CREATE_COMPLETE,
+
+
+ EventId: InstanceRole-CREATE_IN_PROGRESS-2024-12-05T02:01:28.847Z,
+ LogicalResourceId: InstanceRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:01:28.847000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: NLBSecurityGroup-CREATE_IN_PROGRESS-2024-12-05T02:01:28.667Z,
+ LogicalResourceId: NLBSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:01:28.667000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: LambdaExecutionRole-CREATE_IN_PROGRESS-2024-12-05T02:01:27.623Z,
+ LogicalResourceId: LambdaExecutionRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:01:27.623000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: ManagementConsoleTargetGroup-CREATE_IN_PROGRESS-2024-12-05T02:01:27.410Z,
+ LogicalResourceId: ManagementConsoleTargetGroup,
+ ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
+ Timestamp: 2024-12-05T02:01:27.410000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: Resource creation Initiated,
+
+
+ EventId: NLBSecurityGroup-CREATE_IN_PROGRESS-2024-12-05T02:01:26.345Z,
+ LogicalResourceId: NLBSecurityGroup,
+ ResourceType: AWS::EC2::SecurityGroup,
+ Timestamp: 2024-12-05T02:01:26.345000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: InstanceRole-CREATE_IN_PROGRESS-2024-12-05T02:01:26.339Z,
+ LogicalResourceId: InstanceRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:01:26.339000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: LambdaExecutionRole-CREATE_IN_PROGRESS-2024-12-05T02:01:26.308Z,
+ LogicalResourceId: LambdaExecutionRole,
+ ResourceType: AWS::IAM::Role,
+ Timestamp: 2024-12-05T02:01:26.308000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: ManagementConsoleTargetGroup-CREATE_IN_PROGRESS-2024-12-05T02:01:26.285Z,
+ LogicalResourceId: ManagementConsoleTargetGroup,
+ ResourceType: AWS::ElasticLoadBalancingV2::TargetGroup,
+ Timestamp: 2024-12-05T02:01:26.285000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+
+
+ EventId: d3e95ce0-b2ac-11ef-95b2-026d93d0fc19,
+ LogicalResourceId: unity-management-console-unity-nightly,
+ ResourceType: AWS::CloudFormation::Stack,
+ Timestamp: 2024-12-05T02:01:23.209000+00:00,
+ ResourceStatus: CREATE_IN_PROGRESS,
+ ResourceStatusReason: User Initiated
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100 15052    0     0  100 15052      0  73424 --:--:-- --:--:-- --:--:-- 73067100 15063  100    11  100 15052     51  70336 --:--:-- --:--:-- --:--:-- 70060
+{"ok":true}
