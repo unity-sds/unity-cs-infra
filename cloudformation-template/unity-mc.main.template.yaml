@@ -695,7 +695,7 @@ Resources:
       Scheme: internal
       SecurityGroups:
         - !GetAtt NLBSecurityGroup.GroupId
-      EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic: off
+      EnforceSecurityGroupInboundRulesOnPrivateLinkTraffic: "off"
       Subnets:
         - !Ref PublicSubnetID1
         - !Ref PublicSubnetID2
