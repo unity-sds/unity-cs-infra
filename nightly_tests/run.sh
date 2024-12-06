@@ -219,10 +219,86 @@ aws cloudformation describe-stack-events --stack-name ${STACK_NAME} >> cloudform
 
 sleep 420
 
-# Get MC URL from SSM (Manamgement Console populates this value)
+# Get MC URL from SSM (Management Console populates this value)
 export SSM_MC_URL="/unity/${PROJECT_NAME}/${VENUE_NAME}/management/httpd/loadbalancer-url"
-export MANAGEMENT_CONSOLE_URL=$(aws ssm get-parameter --name ${SSM_MC_URL}  |grep '"Value":' |sed 's/^.*: "//' | sed 's/".*$//')
-echo "MANAGEMENT_CONSOLE_URL = ${MANAGEMENT_CONSOLE_URL}"
+echo "SSM Parameter Name: ${SSM_MC_URL}"
+
+# Get the raw SSM parameter value and print it
+RAW_SSM_VALUE=$(aws ssm get-parameter --name ${SSM_MC_URL} --query "Parameter.Value" --output text)
+
+export MANAGEMENT_CONSOLE_URL="${RAW_SSM_VALUE}"
+echo "Management Console URL: ${MANAGEMENT_CONSOLE_URL}"
+
+# Extract just the hostname with debug prints
+STEP1=$(echo $MANAGEMENT_CONSOLE_URL | sed 's|^http://||' | sed 's|^HTTP://||')
+
+STEP2=$(echo $STEP1 | cut -d':' -f1)
+
+ALB_HOST=$(echo $STEP2 | cut -d'/' -f1)
+
+echo "Updating Apache configuration in S3..."
+
+# Create venue path from project and venue name
+VENUE_PATH="/${PROJECT_NAME}/${VENUE_NAME}/"
+
+# Create temporary files
+TEMP_CONFIG_FILE="/tmp/venue_config.txt"
+TEMP_FULL_CONFIG="/tmp/unity-cs.conf"
+
+# Create the Apache configuration block with markers
+cat << EOF > $TEMP_CONFIG_FILE
+
+    # ---------- BEGIN ${PROJECT_NAME}/${VENUE_NAME} ----------
+    # ${PROJECT_NAME}/${VENUE_NAME}
+    #
+    Define VENUE_ALB_HOST ${ALB_HOST}
+    Define VENUE_ALB_PORT 8080
+    Define VENUE_ALB_PATH ${VENUE_PATH}
+    RewriteEngine On
+    RewriteCond %{HTTP:Connection} Upgrade [NC]
+    RewriteCond %{HTTP:Upgrade} websocket [NC]
+    RewriteCond %{REQUEST_URI} "\${VENUE_ALB_PATH}"
+    RewriteRule \${VENUE_ALB_PATH}(.*) ws://\${VENUE_ALB_HOST}:\${VENUE_ALB_PORT}\${VENUE_ALB_PATH}\$1 [P,L] [END]
+    <Location "\${VENUE_ALB_PATH}">
+       ProxyPreserveHost on
+       AuthType openid-connect
+       Require valid-user
+
+       # Added to point to httpd within the venue account
+       ProxyPass "http://\${VENUE_ALB_HOST}:\${VENUE_ALB_PORT}\${VENUE_ALB_PATH}"
+       ProxyPassReverse "http://\${VENUE_ALB_HOST}:\${VENUE_ALB_PORT}\${VENUE_ALB_PATH}"
+       RequestHeader     set "X-Forwarded-Proto" expr=%{REQUEST_SCHEME}
+       RequestHeader     set "X-Forwarded-Host" "www.dev.mdps.mcp.nasa.gov:4443"
+    </Location>
+    # ---------- END ${PROJECT_NAME}/${VENUE_NAME} ----------
+
+EOF
+
+# Get environment from SSM
+export ENV_SSM_PARAM="/unity/account/venue"
+ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text )
+echo "Environment from SSM: ${ENVIRONMENT}"
+
+# Use environment in S3 bucket name
+S3_BUCKET="ucs-shared-services-apache-config-${ENVIRONMENT}"
+
+# Download current config from S3
+aws s3 cp s3://${S3_BUCKET}/unity-cs.conf $TEMP_FULL_CONFIG
+
+# Insert new config before </VirtualHost>
+sed -i "/<\/VirtualHost>/e cat $TEMP_CONFIG_FILE" $TEMP_FULL_CONFIG
+
+# Upload updated config back to S3
+if aws s3 cp $TEMP_FULL_CONFIG s3://${S3_BUCKET}/unity-cs.conf; then
+    echo "Successfully updated Apache configuration in S3"
+else
+    echo "Failed to update Apache configuration in S3"
+    exit 1
+fi
+
+# Clean up temporary files
+rm $TEMP_CONFIG_FILE
+rm $TEMP_FULL_CONFIG
 
 if [[ "$RUN_TESTS" == "true" ]]; then
   echo "Checking if Docker is installed..."
