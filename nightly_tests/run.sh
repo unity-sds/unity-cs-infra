@@ -241,8 +241,9 @@ echo "Updating Apache configuration in S3..."
 # Create venue path from project and venue name
 VENUE_PATH="/${PROJECT_NAME}/${VENUE_NAME}/"
 
-# Create temporary file for Apache config block
+# Create temporary files
 TEMP_CONFIG_FILE="/tmp/venue_config.txt"
+TEMP_FULL_CONFIG="/tmp/unity-cs.conf"
 
 # Create the Apache configuration block with markers
 cat << EOF > $TEMP_CONFIG_FILE
@@ -275,17 +276,17 @@ EOF
 
 # Get environment from SSM
 export ENV_SSM_PARAM="/unity/account/venue"
-ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text)
+ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text )
 echo "Environment from SSM: ${ENVIRONMENT}"
 
 # Use environment in S3 bucket name
 S3_BUCKET="ucs-shared-services-apache-config-${ENVIRONMENT}"
 
-# Update S3 commands to use dynamic bucket name
+# Download current config from S3
 aws s3 cp s3://${S3_BUCKET}/unity-cs.conf $TEMP_FULL_CONFIG
 
+# Insert new config before </VirtualHost>
 sed -i "/<\/VirtualHost>/e cat $TEMP_CONFIG_FILE" $TEMP_FULL_CONFIG
-
 
 # Upload updated config back to S3
 if aws s3 cp $TEMP_FULL_CONFIG s3://${S3_BUCKET}/unity-cs.conf; then
