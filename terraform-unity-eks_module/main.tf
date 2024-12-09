@@ -358,11 +358,12 @@ module "eks" {
   vpc_id = data.aws_ssm_parameter.vpc_id.value
 
   #cluster_security_group_id = data.aws_ssm_parameter.cluster_sg.value
-  create_cluster_security_group = true
-  create_node_security_group    = true
-  create_iam_role               = false
-  enable_irsa                   = true
-  iam_role_arn                  = aws_iam_role.cluster_iam_role.arn
+  create_cluster_security_group         = true
+  create_node_security_group            = true
+  cluster_additional_security_group_ids = [aws_security_group.mc_ingress_sg.id]
+  create_iam_role                       = false
+  enable_irsa                           = true
+  iam_role_arn                          = aws_iam_role.cluster_iam_role.arn
   #node_security_group_id = data.aws_ssm_parameter.node_sg.value
 
   eks_managed_node_group_defaults = {
@@ -397,6 +398,19 @@ set -o xtrace
   }
 }
 
+resource "aws_security_group" "mc_ingress_sg" {
+  name        = "${var.project}-${var.venue}-mc-ingress-sg"
+  description = "SecurityGroup for management console ingress"
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
+}
+
+resource "aws_vpc_security_group_ingress_rule" "mc_ingress_rule" {
+  count                        = length(data.aws_security_groups.mc_sg) > 0 ? 1 : 0
+  security_group_id            = aws_security_group.mc_ingress_sg.id
+  description                  = "SecurityGroup ingress rule for management console"
+  ip_protocol                  = -1
+  referenced_security_group_id = data.aws_security_groups.mc_sg.ids[0]
+}
 
 # TODO: select default node group more intelligently, or remove concept altogether
 resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
