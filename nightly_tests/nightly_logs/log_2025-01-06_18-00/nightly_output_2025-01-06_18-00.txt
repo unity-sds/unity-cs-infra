@@ -1,4 +1,4 @@
-Repo Hash (Nightly Test):     [0f55f3c]
+Repo Hash (Nightly Test):     [b23969f]
 Deploying Cloudformation stack...
 -----------------------------------------
 Items that will auto-deploy on bootstrap:
@@ -10,8 +10,7 @@ unity-proxy                     | 0.14
 unity-ui                        | 0.8.0
 Nightly Test in the (TODO FIXME) account
 Stack Name: [unity-management-console-unity-nightly]
-Stack Status (Final): [CREATE_COMPLETE]
-Stack Creation Time: [360 seconds] - PASS
+Cloudformation Stack creation exceeded 2400 seconds - [FAIL]
 Deploying Management Console...
 ============================= test session starts ==============================
 platform linux -- Python 3.8.10, pytest-8.3.2, pluggy-1.5.0 -- /usr/bin/python3
@@ -26,14 +25,39 @@ test_selenium_mc.py::test_core_setup_save_btn FAILED                     [100%]
 
 =================================== FAILURES ===================================
 _________________________ test_navigate_to_mc_console __________________________
-test_selenium_mc.py:59: in test_navigate_to_mc_console
-    assert driver.current_url.lower() == expected_url.lower(), f"URL does not match the expected URL without credentials. Expected: {expected_url}, but got: {driver.current_url}"
-E   AssertionError: URL does not match the expected URL without credentials. Expected: HTTP://unity-nightly-httpd-alb-355670050.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui/landing, but got: http://unity-nightly-httpd-alb-355670050.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
-E   assert 'http://unity...management/ui' == 'http://unity...nt/ui/landing'
-E     
-E     - http://unity-nightly-httpd-alb-355670050.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui/landing
-E     ?                                                                                                      --------
-E     + http://unity-nightly-httpd-alb-355670050.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
+test_selenium_mc.py:56: in test_navigate_to_mc_console
+    driver.get(URL_WITHOUT_CRED)
+../../.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py:363: in get
+    self.execute(Command.GET, {"url": url})
+../../.local/lib/python3.8/site-packages/selenium/webdriver/remote/webdriver.py:354: in execute
+    self.error_handler.check_response(response)
+../../.local/lib/python3.8/site-packages/selenium/webdriver/remote/errorhandler.py:229: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.InvalidArgumentException: Message: invalid argument
+E     (Session info: chrome=131.0.6778.108)
+E   Stacktrace:
+E   #0 0x55938424834a <unknown>
+E   #1 0x559383d5e53d <unknown>
+E   #2 0x559383d4600f <unknown>
+E   #3 0x559383d44615 <unknown>
+E   #4 0x559383d44d3a <unknown>
+E   #5 0x559383d61009 <unknown>
+E   #6 0x559383df0b35 <unknown>
+E   #7 0x559383dd1462 <unknown>
+E   #8 0x559383defed7 <unknown>
+E   #9 0x559383dd1203 <unknown>
+E   #10 0x559383d9fcc0 <unknown>
+E   #11 0x559383da0c9e <unknown>
+E   #12 0x559384215d3b <unknown>
+E   #13 0x559384219cc2 <unknown>
+E   #14 0x559384202b6c <unknown>
+E   #15 0x55938421a837 <unknown>
+E   #16 0x5593841e810f <unknown>
+E   #17 0x5593842375a8 <unknown>
+E   #18 0x559384237770 <unknown>
+E   #19 0x5593842471c6 <unknown>
+E   #20 0x7ff382c87a94 <unknown>
+E   #21 0x7ff382d14a34 __clone
 ________________________ test_bootstrap_process_status _________________________
 test_selenium_mc.py:77: in test_bootstrap_process_status
     bootstrap_status_element = WebDriverWait(driver, 10).until(
@@ -41,26 +65,26 @@ test_selenium_mc.py:77: in test_bootstrap_process_status
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x559af578234a <unknown>
-E   #1 0x559af52986e0 <unknown>
-E   #2 0x559af52e73e6 <unknown>
-E   #3 0x559af52e7681 <unknown>
-E   #4 0x559af532cb04 <unknown>
-E   #5 0x559af530b48d <unknown>
-E   #6 0x559af5329ed7 <unknown>
-E   #7 0x559af530b203 <unknown>
-E   #8 0x559af52d9cc0 <unknown>
-E   #9 0x559af52dac9e <unknown>
-E   #10 0x559af574fd3b <unknown>
-E   #11 0x559af5753cc2 <unknown>
-E   #12 0x559af573cb6c <unknown>
-E   #13 0x559af5754837 <unknown>
-E   #14 0x559af572210f <unknown>
-E   #15 0x559af57715a8 <unknown>
-E   #16 0x559af5771770 <unknown>
-E   #17 0x559af57811c6 <unknown>
-E   #18 0x7f80cf859a94 <unknown>
-E   #19 0x7f80cf8e6a34 __clone
+E   #0 0x55938424834a <unknown>
+E   #1 0x559383d5e6e0 <unknown>
+E   #2 0x559383dad3e6 <unknown>
+E   #3 0x559383dad681 <unknown>
+E   #4 0x559383df2b04 <unknown>
+E   #5 0x559383dd148d <unknown>
+E   #6 0x559383defed7 <unknown>
+E   #7 0x559383dd1203 <unknown>
+E   #8 0x559383d9fcc0 <unknown>
+E   #9 0x559383da0c9e <unknown>
+E   #10 0x559384215d3b <unknown>
+E   #11 0x559384219cc2 <unknown>
+E   #12 0x559384202b6c <unknown>
+E   #13 0x55938421a837 <unknown>
+E   #14 0x5593841e810f <unknown>
+E   #15 0x5593842375a8 <unknown>
+E   #16 0x559384237770 <unknown>
+E   #17 0x5593842471c6 <unknown>
+E   #18 0x7ff382c87a94 <unknown>
+E   #19 0x7ff382d14a34 __clone
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:89: in test_bootstrap_process_status
@@ -73,26 +97,26 @@ test_selenium_mc.py:95: in test_initiate_core_setup
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x559af578234a <unknown>
-E   #1 0x559af52986e0 <unknown>
-E   #2 0x559af52e73e6 <unknown>
-E   #3 0x559af52e7681 <unknown>
-E   #4 0x559af532cb04 <unknown>
-E   #5 0x559af530b48d <unknown>
-E   #6 0x559af5329ed7 <unknown>
-E   #7 0x559af530b203 <unknown>
-E   #8 0x559af52d9cc0 <unknown>
-E   #9 0x559af52dac9e <unknown>
-E   #10 0x559af574fd3b <unknown>
-E   #11 0x559af5753cc2 <unknown>
-E   #12 0x559af573cb6c <unknown>
-E   #13 0x559af5754837 <unknown>
-E   #14 0x559af572210f <unknown>
-E   #15 0x559af57715a8 <unknown>
-E   #16 0x559af5771770 <unknown>
-E   #17 0x559af57811c6 <unknown>
-E   #18 0x7f80cf859a94 <unknown>
-E   #19 0x7f80cf8e6a34 __clone
+E   #0 0x55938424834a <unknown>
+E   #1 0x559383d5e6e0 <unknown>
+E   #2 0x559383dad3e6 <unknown>
+E   #3 0x559383dad681 <unknown>
+E   #4 0x559383df2b04 <unknown>
+E   #5 0x559383dd148d <unknown>
+E   #6 0x559383defed7 <unknown>
+E   #7 0x559383dd1203 <unknown>
+E   #8 0x559383d9fcc0 <unknown>
+E   #9 0x559383da0c9e <unknown>
+E   #10 0x559384215d3b <unknown>
+E   #11 0x559384219cc2 <unknown>
+E   #12 0x559384202b6c <unknown>
+E   #13 0x55938421a837 <unknown>
+E   #14 0x5593841e810f <unknown>
+E   #15 0x5593842375a8 <unknown>
+E   #16 0x559384237770 <unknown>
+E   #17 0x5593842471c6 <unknown>
+E   #18 0x7ff382c87a94 <unknown>
+E   #19 0x7ff382d14a34 __clone
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:104: in test_initiate_core_setup
@@ -105,34 +129,34 @@ test_selenium_mc.py:116: in test_core_setup_save_btn
     raise TimeoutException(message, screen, stacktrace)
 E   selenium.common.exceptions.TimeoutException: Message: 
 E   Stacktrace:
-E   #0 0x559af578234a <unknown>
-E   #1 0x559af52986e0 <unknown>
-E   #2 0x559af52e73e6 <unknown>
-E   #3 0x559af52e7681 <unknown>
-E   #4 0x559af532cb04 <unknown>
-E   #5 0x559af530b48d <unknown>
-E   #6 0x559af5329ed7 <unknown>
-E   #7 0x559af530b203 <unknown>
-E   #8 0x559af52d9cc0 <unknown>
-E   #9 0x559af52dac9e <unknown>
-E   #10 0x559af574fd3b <unknown>
-E   #11 0x559af5753cc2 <unknown>
-E   #12 0x559af573cb6c <unknown>
-E   #13 0x559af5754837 <unknown>
-E   #14 0x559af572210f <unknown>
-E   #15 0x559af57715a8 <unknown>
-E   #16 0x559af5771770 <unknown>
-E   #17 0x559af57811c6 <unknown>
-E   #18 0x7f80cf859a94 <unknown>
-E   #19 0x7f80cf8e6a34 __clone
+E   #0 0x55938424834a <unknown>
+E   #1 0x559383d5e6e0 <unknown>
+E   #2 0x559383dad3e6 <unknown>
+E   #3 0x559383dad681 <unknown>
+E   #4 0x559383df2b04 <unknown>
+E   #5 0x559383dd148d <unknown>
+E   #6 0x559383defed7 <unknown>
+E   #7 0x559383dd1203 <unknown>
+E   #8 0x559383d9fcc0 <unknown>
+E   #9 0x559383da0c9e <unknown>
+E   #10 0x559384215d3b <unknown>
+E   #11 0x559384219cc2 <unknown>
+E   #12 0x559384202b6c <unknown>
+E   #13 0x55938421a837 <unknown>
+E   #14 0x5593841e810f <unknown>
+E   #15 0x5593842375a8 <unknown>
+E   #16 0x559384237770 <unknown>
+E   #17 0x5593842471c6 <unknown>
+E   #18 0x7ff382c87a94 <unknown>
+E   #19 0x7ff382d14a34 __clone
 
 During handling of the above exception, another exception occurred:
 test_selenium_mc.py:128: in test_core_setup_save_btn
     raise Exception("Failed to find or click the core 'Save' button within the specified time.")
 E   Exception: Failed to find or click the core 'Save' button within the specified time.
 =========================== short test summary info ============================
-FAILED test_selenium_mc.py::test_navigate_to_mc_console - AssertionError: URL...
+FAILED test_selenium_mc.py::test_navigate_to_mc_console - selenium.common.exc...
 FAILED test_selenium_mc.py::test_bootstrap_process_status - Exception: Failed...
 FAILED test_selenium_mc.py::test_initiate_core_setup - Exception: Failed to n...
 FAILED test_selenium_mc.py::test_core_setup_save_btn - Exception: Failed to f...
-======================== 4 failed in 119.87s (0:01:59) =========================
+============================== 4 failed in 57.68s ==============================
