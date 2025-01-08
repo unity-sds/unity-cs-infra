@@ -19,73 +19,15 @@ data "aws_ssm_parameter" "private_subnet_id" {
   name = "/unity/shared-services/network/privatesubnet2"
 }
 
-# Create ALB security group
-# TODO: REMOVE this ALB securty group. 
-# Use ucs-httpd-alb-sec-group
-resource "aws_security_group" "alb_sg" {
-  #TODO: change this to the actual name
-  name        = "ucs-httpd-alb-sec-group2"
-  description = "Security group for shared services ALB"
-  vpc_id      = data.aws_ssm_parameter.vpc_id.value
-
-  # Incoming rules for ALB
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow HTTP from anywhere"
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow HTTPS from anywhere"
-  }
-
-  # Outgoing rule - allow all traffic
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    #TODO: change this to the actual name
-    Name = "ucs-httpd-alb-sec-group2"
-  }
+# Get existing security group
+data "aws_security_group" "httpd_sg" {
+  name = "shared-services-httpd-sg"
+  vpc_id = data.aws_ssm_parameter.vpc_id.value
 }
 
-# Create security group for HTTPD instance
-resource "aws_security_group" "httpd_sg" {
-  #TODO: change this to the actual name
-  name        = "shared-services-httpd-sg2"
-  description = "Security group for shared services HTTPD"
-  vpc_id      = data.aws_ssm_parameter.vpc_id.value
-
-  # Incoming rule for HTTPS
-  ingress {
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]
-  }
-
-  # Outgoing rule - allow all traffic
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    #TODO: change this to the actual name
-    Name = "shared-services-httpd-sg2"
-  }
+# Get venue from SSM Parameter Store
+data "aws_ssm_parameter" "venue" {
+  name = "/unity/account/venue"
 }
 
 # Create EC2 instance
@@ -94,8 +36,8 @@ resource "aws_instance" "httpd_instance" {
   instance_type = "t3.large"
   
   subnet_id                   = data.aws_ssm_parameter.private_subnet_id.value
-  vpc_security_group_ids     = [aws_security_group.httpd_sg.id]
-  iam_instance_profile       = "MCP-SSM-CloudWatch"
+  vpc_security_group_ids     = [data.aws_security_group.httpd_sg.id]
+  iam_instance_profile       = "U-CS_Service_Role"
   associate_public_ip_address = false
 
   user_data = <<-EOF
@@ -104,14 +46,18 @@ resource "aws_instance" "httpd_instance" {
               sudo su - ubuntu << 'USERDATA'
               echo "Starting Apache installation and configuration..."
 
+              # Clone unity-cs-infra repository
+              echo "Cloning unity-cs-infra repository..."
+              cd /home/ubuntu
+              git clone https://github.com/unity-sds/unity-cs-infra.git
+
               # Update package lists
               echo "Updating package lists..."
               sudo apt update
 
-              # Install Apache2 and OpenIDC module
-              echo "Installing Apache2 and OpenIDC module..."
-              sudo DEBIAN_FRONTEND=noninteractive apt install -y apache2
-              sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libapache2-mod-auth-openidc
+              # Install Apache2, OpenIDC module, and AWS CLI
+              echo "Installing Apache2, OpenIDC module, and AWS CLI..."
+              sudo DEBIAN_FRONTEND=noninteractive apt install -y apache2 libapache2-mod-auth-openidc awscli
 
               # Enable Apache modules
               echo "Enabling Apache modules..."
@@ -135,6 +81,27 @@ resource "aws_instance" "httpd_instance" {
               # Restart Apache to apply changes
               echo "Restarting Apache..."
               sudo systemctl restart apache2
+
+              # Create and set permissions for sync log file
+              echo "Setting up sync log file..."
+              sudo touch /var/log/sync_apache_config.log
+              sudo chown ubuntu:ubuntu /var/log/sync_apache_config.log
+              sudo chmod 644 /var/log/sync_apache_config.log
+
+              # Set up cron job with PATH
+              echo "Setting up cron job..."
+              SYSTEM_PATH=$(echo $PATH)
+              (crontab -l 2>/dev/null; echo "PATH=$SYSTEM_PATH") | crontab -
+              (crontab -l 2>/dev/null; echo "* * * * * ~/unity-cs-infra/terraform-ss-proxy/sync_apache_config.sh >> /var/log/sync_apache_config.log 2>&1") | crontab -
+
+              # Get venue from SSM and download Apache config
+              echo "Downloading Apache configuration..."
+              VENUE=$(aws ssm get-parameter --name "/unity/account/venue" --query "Parameter.Value" --output text)
+              sudo aws s3 cp "s3://ucs-shared-services-apache-config-$VENUE/unity-cs.conf" /etc/apache2/sites-enabled/
+
+              # Set proper permissions
+              sudo chown root:root /etc/apache2/sites-enabled/unity-cs.conf
+              sudo chmod 644 /etc/apache2/sites-enabled/unity-cs.conf
 
               echo "Installation and configuration complete!"
               USERDATA
