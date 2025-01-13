@@ -30,6 +30,11 @@ data "aws_ssm_parameter" "venue" {
   name = "/unity/account/venue"
 }
 
+# Get existing target group
+data "aws_lb_target_group" "httpd_tg" {
+  name = "ucs-httpd-tg"
+}
+
 # Create EC2 instance
 resource "aws_instance" "httpd_instance" {
   ami           = data.aws_ssm_parameter.ubuntu_ami.value
@@ -71,6 +76,10 @@ resource "aws_instance" "httpd_instance" {
               sudo a2enmod rewrite
               sudo a2enmod auth_openidc
 
+              # Remove default Apache site
+              sudo a2dissite 000-default.conf
+              sudo rm -f /etc/apache2/sites-enabled/000-default.conf
+
               # Generate self-signed SSL certificate
               echo "Generating self-signed SSL certificate..."
               sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
@@ -78,9 +87,18 @@ resource "aws_instance" "httpd_instance" {
                 -out /etc/ssl/certs/apache-selfsigned.crt \
                 -subj "/C=US/ST=CA/L=LA/O=Unity/OU=CS/CN=shared-services-httpd-unity-test/emailAddress=test@test.com"
 
-              # Restart Apache to apply changes
-              echo "Restarting Apache..."
-              sudo systemctl restart apache2
+              # Set proper permissions for SSL files
+              sudo chmod 600 /etc/ssl/private/apache-selfsigned.key
+              sudo chmod 644 /etc/ssl/certs/apache-selfsigned.crt
+
+              # Get venue from SSM and download Apache config
+              echo "Downloading Apache configuration..."
+              VENUE=$(aws ssm get-parameter --name "/unity/account/venue" --query "Parameter.Value" --output text)
+              sudo aws s3 cp "s3://ucs-shared-services-apache-config-$VENUE/unity-cs.conf" /etc/apache2/sites-enabled/
+
+              # Set proper permissions
+              sudo chown root:root /etc/apache2/sites-enabled/unity-cs.conf
+              sudo chmod 644 /etc/apache2/sites-enabled/unity-cs.conf
 
               # Create and set permissions for sync log file
               echo "Setting up sync log file..."
@@ -94,21 +112,25 @@ resource "aws_instance" "httpd_instance" {
               (crontab -l 2>/dev/null; echo "PATH=$SYSTEM_PATH") | crontab -
               (crontab -l 2>/dev/null; echo "* * * * * ~/unity-cs-infra/terraform-ss-proxy/sync_apache_config.sh >> /var/log/sync_apache_config.log 2>&1") | crontab -
 
-              # Get venue from SSM and download Apache config
-              echo "Downloading Apache configuration..."
-              VENUE=$(aws ssm get-parameter --name "/unity/account/venue" --query "Parameter.Value" --output text)
-              sudo aws s3 cp "s3://ucs-shared-services-apache-config-$VENUE/unity-cs.conf" /etc/apache2/sites-enabled/
+              # Final Apache restart after all configurations are in place
+              echo "Final Apache restart..."
+              sudo systemctl restart apache2
 
-              # Set proper permissions
-              sudo chown root:root /etc/apache2/sites-enabled/unity-cs.conf
-              sudo chmod 644 /etc/apache2/sites-enabled/unity-cs.conf
+              # Verify Apache is running
+              sudo systemctl status apache2
 
               echo "Installation and configuration complete!"
               USERDATA
               EOF
 
   tags = {
-    #TODO: change this to the actual name
     Name = "shared-services-httpd2"
   }
+}
+
+# Attach the EC2 instance to the target group
+resource "aws_lb_target_group_attachment" "httpd_tg_attachment" {
+  target_group_arn = data.aws_lb_target_group.httpd_tg.arn
+  target_id        = aws_instance.httpd_instance.id
+  port             = 443
 }
