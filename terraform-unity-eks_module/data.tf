@@ -32,10 +32,6 @@ data "aws_ssm_parameter" "eks_ami_1_29" {
   name = "/unity/account/eks/amis/aml2-eks-1-29"
 }
 
-data "aws_ssm_parameter" "eks_ami_1_28" {
-  name = "/unity/account/eks/amis/aml2-eks-1-28"
-}
-
 data "aws_iam_policy" "mcp_operator_policy" {
   name = "mcp-tenantOperator-AMI-APIG"
 }
