@@ -6,7 +6,6 @@ locals {
   ami_map = {
     "1.30"    = data.aws_ssm_parameter.eks_ami_1_30.value
     "1.29"    = data.aws_ssm_parameter.eks_ami_1_29.value
-    "1.28"    = data.aws_ssm_parameter.eks_ami_1_28.value
     "default" = "ami-0f4319b351ce92b6e"
   }
   #iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
