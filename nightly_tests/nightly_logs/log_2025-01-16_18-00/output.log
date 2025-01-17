@@ -1,0 +1,437 @@
+Checking for existing deployment for (project=unity, venue=nightly) ...
+Existing deployment not found.  Continuing with deployment...
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal InRelease
+Get:2 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+Get:3 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
+Get:4 https://download.docker.com/linux/ubuntu focal InRelease [57.7 kB]
+Get:5 https://apt.releases.hashicorp.com focal InRelease [12.9 kB]
+Ign:6 https://apt.vector.dev stable InRelease
+Hit:7 https://apt.vector.dev stable Release
+Get:8 https://esm.ubuntu.com/apps/ubuntu focal-apps-security InRelease [7565 B]
+Get:9 https://esm.ubuntu.com/apps/ubuntu focal-apps-updates InRelease [7456 B]
+Get:10 https://esm.ubuntu.com/infra/ubuntu focal-infra-security InRelease [7450 B]
+Get:11 https://esm.ubuntu.com/infra/ubuntu focal-infra-updates InRelease [7449 B]
+Get:12 https://esm.ubuntu.com/fips/ubuntu focal InRelease [3887 B]
+Get:13 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [3744 kB]
+Get:14 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1254 kB]
+Get:15 http://us-west-2.ec2.archive.ubuntu.com/ubuntu focal-updates/universe Translation-en [301 kB]
+Get:16 https://download.docker.com/linux/ubuntu focal/stable amd64 Packages [54.3 kB]
+Get:17 https://apt.releases.hashicorp.com focal/main amd64 Packages [165 kB]
+Get:19 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+Get:20 https://esm.ubuntu.com/apps/ubuntu focal-apps-security/main amd64 Packages [165 kB]
+Get:21 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [3366 kB]
+Get:22 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1031 kB]
+Get:23 http://security.ubuntu.com/ubuntu focal-security/universe Translation-en [218 kB]
+Fetched 10.8 MB in 19s (581 kB/s)
+Reading package lists...
+Building dependency tree...
+Reading state information...
+42 packages can be upgraded. Run 'apt list --upgradable' to see them.
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+python3-pip is already the newest version (20.0.2-5ubuntu1.11+esm2).
+0 upgraded, 0 newly installed, 0 to remove and 42 not upgraded.
+RUN ARGUMENTS: 
+  - Destroy stack at end of script? true
+  - Run tests?                      true
+  - Project Name:                   unity
+  - Venue Name:                     nightly
+  - MC Version:                     latest
+  - Config File:                    marketplace_config.yaml
+---------------------------------------------------------
+set_common_ssm_params.sh ...
+Deleting SSM parameter: /unity/cs/account/management-console/instancetype ...
+Creating SSM parameter : /unity/cs/account/management-console/instancetype = c6i.xlarge ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/cs/account/privilegedpolicyname ...
+Creating SSM parameter : /unity/cs/account/privilegedpolicyname = mcp-tenantOperator-AMI-APIG ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+populate_if_not_exists_ssm_param: /unity/cs/github/username ...
+{
+    "Parameter": {
+        "Name": "/unity/cs/github/username",
+        "Type": "String",
+        "Value": "galenatjpl",
+        "Version": 1,
+        "LastModifiedDate": "2024-03-14T10:17:02.563000-07:00",
+        "ARN": "arn:aws:ssm:us-west-2:865428270474:parameter/unity/cs/github/username",
+        "DataType": "text"
+    }
+}
+SSM param /unity/cs/github/username exists. Continuing...
+populate_if_not_exists_ssm_param: /unity/cs/github/useremail ...
+{
+    "Parameter": {
+        "Name": "/unity/cs/github/useremail",
+        "Type": "String",
+        "Value": "ghollins@jpl.nasa.gov",
+        "Version": 1,
+        "LastModifiedDate": "2024-03-14T10:18:03.925000-07:00",
+        "ARN": "arn:aws:ssm:us-west-2:865428270474:parameter/unity/cs/github/useremail",
+        "DataType": "text"
+    }
+}
+SSM param /unity/cs/github/useremail exists. Continuing...
+populate_if_not_exists_ssm_param: /unity/cs/githubtoken ...
+{
+    "Parameter": {
+        "Name": "/unity/cs/githubtoken",
+        "Type": "SecureString",
+        "Value": "AQICAHjoj1gDEZHOs04UzTAKNJ+G5CMuH+mytDycb/B0YahuDQHUyYDWCkbsnGuaE15hLxaHAAAAhzCBhAYJKoZIhvcNAQcGoHcwdQIBADBwBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDPANGK+6n3hL2UKdjQIBEIBDd/luW52ufeIVh8yKXPMl3AiVaS8i4ngZOhpdEQq068MTl7qQX9g5TUNgCf90M4KSsJrtJw8s4oV6jq81Yjo9qZQATQ==",
+        "Version": 3,
+        "LastModifiedDate": "2024-07-15T09:52:44.328000-07:00",
+        "ARN": "arn:aws:ssm:us-west-2:865428270474:parameter/unity/cs/githubtoken",
+        "DataType": "text"
+    }
+}
+SSM param /unity/cs/githubtoken exists. Continuing...
+populate_if_not_exists_ssm_param: /unity/ci/slack-web-hook-url ...
+{
+    "Parameter": {
+        "Name": "/unity/ci/slack-web-hook-url",
+        "Type": "String",
+        "Value": "https://hooks.slack.com/triggers/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",
+        "Version": 3,
+        "LastModifiedDate": "2024-07-17T11:21:59.742000-07:00",
+        "ARN": "arn:aws:ssm:us-west-2:865428270474:parameter/unity/ci/slack-web-hook-url",
+        "DataType": "text"
+    }
+}
+SSM param /unity/ci/slack-web-hook-url exists. Continuing...
+Deleting SSM parameter: /unity/account/network/vpc_id ...
+Creating SSM parameter : /unity/account/network/vpc_id = vpc-08eb1564c91214d03 ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/account/network/subnet_list ...
+Creating SSM parameter : /unity/account/network/subnet_list = { "public": ["subnet-0f0ccb6b8ac31519d", "subnet-0dec70bed8075feb3"], "private": ["subnet-01b0bbd950b0d1ac6", "subnet-098841c29a5041af9"] } ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/account/network/publicsubnet1 ...
+Creating SSM parameter : /unity/account/network/publicsubnet1 = subnet-0f0ccb6b8ac31519d ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/account/network/publicsubnet2 ...
+Creating SSM parameter : /unity/account/network/publicsubnet2 = subnet-0dec70bed8075feb3 ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/account/network/privatesubnet1 ...
+Creating SSM parameter : /unity/account/network/privatesubnet1 = subnet-01b0bbd950b0d1ac6 ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/account/network/privatesubnet2 ...
+Creating SSM parameter : /unity/account/network/privatesubnet2 = subnet-098841c29a5041af9 ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+populate_if_not_exists_ssm_param: /unity/account/network/certificate-arn ...
+{
+    "Parameter": {
+        "Name": "/unity/account/network/certificate-arn",
+        "Type": "String",
+        "Value": "foo",
+        "Version": 1,
+        "LastModifiedDate": "2024-09-03T10:39:19.764000-07:00",
+        "ARN": "arn:aws:ssm:us-west-2:865428270474:parameter/unity/account/network/certificate-arn",
+        "DataType": "text"
+    }
+}
+SSM param /unity/account/network/certificate-arn exists. Continuing...
+Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-29 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-29 = ami-0a3f2b3eda741dc3d ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/account/eks/amis/aml2-eks-1-30 ...
+Creating SSM parameter : /unity/account/eks/amis/aml2-eks-1-30 = ami-0427d1155f94f846e ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+populate_if_not_exists_ssm_param: /unity/shared-services/aws/account ...
+{
+    "Parameter": {
+        "Name": "/unity/shared-services/aws/account",
+        "Type": "String",
+        "Value": "237868187491",
+        "Version": 3,
+        "LastModifiedDate": "2024-07-02T09:20:21.092000-07:00",
+        "ARN": "arn:aws:ssm:us-west-2:865428270474:parameter/unity/shared-services/aws/account",
+        "DataType": "text"
+    }
+}
+SSM param /unity/shared-services/aws/account exists. Continuing...
+Deleting SSM parameter: /unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list ...
+Creating SSM parameter : /unity/cs/routing/venue-api-gateway/cs-lambda-authorizer-cognito-client-id-list = na ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/shared-services/aws/account/region ...
+Creating SSM parameter : /unity/shared-services/aws/account/region = us-west-2 ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Repo Hash (Nightly Test):     [a6e874b]
+From https://github.com/unity-sds/unity-cs-infra
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Already on 'main'
+M	nightly_tests/nightly_logs/log_2025-01-15_18-00/output.log
+Your branch is up to date with 'origin/main'.
+deploy.sh :: STACK_NAME: unity-management-console-unity-nightly
+deploy.sh :: PROJECT_NAME: unity
+deploy.sh :: VENUE_NAME: nightly
+set_deployment_ssm_params.sh :: PROJECT_NAME: unity
+set_deployment_ssm_params.sh :: VENUE_NAME: nightly
+Deleting SSM parameter: /unity/unity/nightly/project-name ...
+SSM param /unity/unity/nightly/project-name not found.  Not attempting a delete.
+Creating SSM parameter : /unity/unity/nightly/project-name = unity ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/unity/nightly/venue-name ...
+SSM param /unity/unity/nightly/venue-name not found.  Not attempting a delete.
+Creating SSM parameter : /unity/unity/nightly/venue-name = nightly ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/unity/nightly/deployment/status ...
+SSM param /unity/unity/nightly/deployment/status not found.  Not attempting a delete.
+Creating SSM parameter : /unity/unity/nightly/deployment/status = deploying ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+Deleting SSM parameter: /unity/unity/nightly/cs/monitoring/s3/bucketName ...
+SSM param /unity/unity/nightly/cs/monitoring/s3/bucketName not found.  Not attempting a delete.
+Creating SSM parameter : /unity/unity/nightly/cs/monitoring/s3/bucketName = unity-unity-nightly-bucket ...
+{
+    "Version": 1,
+    "Tier": "Standard"
+}
+deploying INSTANCE TYPE: c6i.xlarge ...
+Deploying Cloudformation stack...
+-----------------------------------------
+Items that will auto-deploy on bootstrap:
+Marketplace Item                | Version
+--------------------------------+--------
+unity-cs-monitoring-lambda      | 0.1
+unity-apigateway                | 0.4
+unity-proxy                     | 0.14
+unity-ui                        | 0.8.0
+{
+    "StackId": "arn:aws:cloudformation:us-west-2:865428270474:stack/unity-management-console-unity-nightly/f8346ef0-d476-11ef-bed6-02de2780f755"
+}
+Stack Name: [unity-management-console-unity-nightly]
+Waiting for Cloudformation Stack..........................................[0]
+Waiting for Cloudformation Stack..........................................[20]
+Waiting for Cloudformation Stack..........................................[40]
+Waiting for Cloudformation Stack..........................................[60]
+Waiting for Cloudformation Stack..........................................[80]
+Waiting for Cloudformation Stack..........................................[100]
+Waiting for Cloudformation Stack..........................................[120]
+Waiting for Cloudformation Stack..........................................[140]
+Waiting for Cloudformation Stack..........................................[160]
+Waiting for Cloudformation Stack..........................................[180]
+Waiting for Cloudformation Stack..........................................[200]
+Waiting for Cloudformation Stack..........................................[220]
+Waiting for Cloudformation Stack..........................................[240]
+Waiting for Cloudformation Stack..........................................[260]
+Waiting for Cloudformation Stack..........................................[280]
+Waiting for Cloudformation Stack..........................................[300]
+Stack Status (Final): [CREATE_COMPLETE]
+Stack Creation Time: [320 seconds] - PASS
+Deploying Management Console...
+SSM Parameter Name: /unity/unity/nightly/management/httpd/loadbalancer-url
+Management Console URL: HTTP://unity-nightly-httpd-alb-779346516.us-west-2.elb.amazonaws.com:8080/unity/nightly/management/ui
+Updating Apache configuration in S3...
+Environment from SSM: dev
+Completed 13.8 KiB/13.8 KiB (231.9 KiB/s) with 1 file(s) remainingdownload: s3://ucs-shared-services-apache-config-dev/unity-cs.conf to ../../../../tmp/unity-cs.conf
+Completed 14.8 KiB/14.8 KiB (145.1 KiB/s) with 1 file(s) remainingupload: ../../../../tmp/unity-cs.conf to s3://ucs-shared-services-apache-config-dev/unity-cs.conf
+Successfully updated Apache configuration in S3
+Checking if Docker is installed...
+Docker already installed [OK]
+Using default tag: latest
+latest: Pulling from selenium/standalone-chrome
+de44b265507a: Already exists
+2bd15bbb2a60: Pulling fs layer
+9a128b13f9b1: Pulling fs layer
+181410dbbb3c: Pulling fs layer
+aee6dd6c6c6c: Pulling fs layer
+da6d2e56f44d: Pulling fs layer
+a21cc67e5ca6: Pulling fs layer
+51609b3a85b2: Pulling fs layer
+e57bde81af92: Pulling fs layer
+062afa674fc9: Pulling fs layer
+399fe729a9db: Pulling fs layer
+d8733e6f38f7: Pulling fs layer
+6169491657bb: Pulling fs layer
+7379c61aae96: Pulling fs layer
+9b3a8119f04b: Pulling fs layer
+78c18c118ec2: Pulling fs layer
+3358d973117c: Pulling fs layer
+285d13ba8683: Pulling fs layer
+2a9add3cb738: Pulling fs layer
+c99eab470183: Pulling fs layer
+75218cf63b7f: Pulling fs layer
+97865d241f5d: Pulling fs layer
+abee27bc388c: Pulling fs layer
+a1a260078df9: Pulling fs layer
+cf5f3c60b1b1: Pulling fs layer
+dfdf3fefdca7: Pulling fs layer
+2d4f1ad69dd8: Pulling fs layer
+f82f91c08d9e: Pulling fs layer
+e6efd76e34ad: Pulling fs layer
+dde5bb742d09: Pulling fs layer
+49395c82e0a3: Pulling fs layer
+79d043091968: Pulling fs layer
+14cc79df554e: Pulling fs layer
+aee6dd6c6c6c: Waiting
+da6d2e56f44d: Waiting
+a21cc67e5ca6: Waiting
+51609b3a85b2: Waiting
+e57bde81af92: Waiting
+062afa674fc9: Waiting
+399fe729a9db: Waiting
+d8733e6f38f7: Waiting
+6169491657bb: Waiting
+7379c61aae96: Waiting
+9b3a8119f04b: Waiting
+78c18c118ec2: Waiting
+3358d973117c: Waiting
+285d13ba8683: Waiting
+2a9add3cb738: Waiting
+c99eab470183: Waiting
+75218cf63b7f: Waiting
+97865d241f5d: Waiting
+abee27bc388c: Waiting
+a1a260078df9: Waiting
+cf5f3c60b1b1: Waiting
+dfdf3fefdca7: Waiting
+2d4f1ad69dd8: Waiting
+f82f91c08d9e: Waiting
+e6efd76e34ad: Waiting
+dde5bb742d09: Waiting
+49395c82e0a3: Waiting
+79d043091968: Waiting
+14cc79df554e: Waiting
+181410dbbb3c: Verifying Checksum
+181410dbbb3c: Download complete
+aee6dd6c6c6c: Verifying Checksum
+aee6dd6c6c6c: Download complete
+da6d2e56f44d: Verifying Checksum
+da6d2e56f44d: Download complete
+a21cc67e5ca6: Verifying Checksum
+a21cc67e5ca6: Download complete
+51609b3a85b2: Verifying Checksum
+51609b3a85b2: Download complete
+e57bde81af92: Verifying Checksum
+e57bde81af92: Download complete
+062afa674fc9: Verifying Checksum
+062afa674fc9: Download complete
+399fe729a9db: Verifying Checksum
+399fe729a9db: Download complete
+9a128b13f9b1: Verifying Checksum
+9a128b13f9b1: Download complete
+d8733e6f38f7: Verifying Checksum
+d8733e6f38f7: Download complete
+7379c61aae96: Verifying Checksum
+7379c61aae96: Download complete
+2bd15bbb2a60: Verifying Checksum
+2bd15bbb2a60: Download complete
+9b3a8119f04b: Verifying Checksum
+9b3a8119f04b: Download complete
+78c18c118ec2: Verifying Checksum
+78c18c118ec2: Download complete
+6169491657bb: Verifying Checksum
+6169491657bb: Download complete
+2a9add3cb738: Verifying Checksum
+2a9add3cb738: Download complete
+285d13ba8683: Verifying Checksum
+285d13ba8683: Download complete
+c99eab470183: Verifying Checksum
+c99eab470183: Download complete
+75218cf63b7f: Verifying Checksum
+75218cf63b7f: Download complete
+abee27bc388c: Verifying Checksum
+abee27bc388c: Download complete
+a1a260078df9: Verifying Checksum
+a1a260078df9: Download complete
+cf5f3c60b1b1: Verifying Checksum
+cf5f3c60b1b1: Download complete
+dfdf3fefdca7: Verifying Checksum
+dfdf3fefdca7: Download complete
+2d4f1ad69dd8: Verifying Checksum
+2d4f1ad69dd8: Download complete
+f82f91c08d9e: Verifying Checksum
+f82f91c08d9e: Download complete
+e6efd76e34ad: Verifying Checksum
+e6efd76e34ad: Download complete
+3358d973117c: Verifying Checksum
+3358d973117c: Download complete
+dde5bb742d09: Verifying Checksum
+dde5bb742d09: Download complete
+49395c82e0a3: Verifying Checksum
+49395c82e0a3: Download complete
+79d043091968: Verifying Checksum
+79d043091968: Download complete
+14cc79df554e: Verifying Checksum
+14cc79df554e: Download complete
+97865d241f5d: Verifying Checksum
+97865d241f5d: Download complete
+failed to register layer: write /usr/lib/python3/dist-packages/pkg_resources/_vendor/typing_extensions.py: no space left on device
+Launching selenium docker...
+Attempt 1 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 2 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 3 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 4 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 5 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 6 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 7 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 8 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 9 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 10 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 11 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 12 to reach Management Console via httpd -- Received HTTP response code 504. Retrying in 10 seconds...
+Attempt 13 to reach Management Console via httpd -- Received HTTP response code 503. Retrying in 10 seconds...
+Attempt 14 to reach Management Console via httpd -- Received HTTP response code 503. Retrying in 10 seconds...
+Success! HTTP response code 200 received.
+Management Console Creation Time: 1312 seconds
+Total Creation Time(SMM params, CloudFormation, MC): 1735 seconds
+Running Smoke Test
+Smoke test was successful. Continuing with bootstrap and tests.
+Running Selenium tests...
+Stopping Selenium docker container...
+123d2b7dcb372071a10ce1a1d689a4fe52cde7fb58b447d56e59a1078ec85d4a
+mv: cannot stat 'selenium_unity_images/*': No such file or directory
+Current date and time: Thu Jan 16 18:31:02 PST 2025
+Deleting directory: /home/ubuntu/unity-cs-infra/nightly_tests/nightly_logs/log_2025-01-07_20-58
+Pushing test results to nightly_logs/log_2025-01-16_18-00...
