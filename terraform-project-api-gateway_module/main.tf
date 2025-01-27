@@ -212,7 +212,7 @@ resource "aws_api_gateway_integration" "rest_api_integration_for_health_check" {
   connection_type         = "VPC_LINK"
   connection_id           = aws_api_gateway_vpc_link.rest_api_health_check_vpc_link.id
 
-  depends_on              = [aws_api_gateway_integration.rest_api_health_check_vpc_link]
+  depends_on              = [aws_api_gateway_vpc_link.rest_api_health_check_vpc_link]
 }
 
 resource "aws_api_gateway_method_response" "response_200" {
