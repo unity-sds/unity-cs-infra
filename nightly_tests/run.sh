@@ -6,10 +6,11 @@ PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
 DEPLOYMENT_START_TIME=$(date +%s)
+MC_SHA=""
 CONFIG_FILE="marketplace_config.yaml"  # Set default config file
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--config-file <CONFIG_FILE>]"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
     exit 1
 }
 
@@ -60,6 +61,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --config-file)
             CONFIG_FILE="$2"
+            shift 2
+            ;;
+        --mc-sha)
+            MC_SHA="$2"
             shift 2
             ;;
         *)
@@ -135,10 +140,12 @@ echo "  - Run tests?                      $RUN_TESTS"
 echo "  - Project Name:                   $PROJECT_NAME"
 echo "  - Venue Name:                     $VENUE_NAME"
 echo "  - MC Version:                     $MC_VERSION"
+echo "  - MC SHA:                         $MC_SHA"
 echo "  - Config File:                    $CONFIG_FILE"
 
 echo "---------------------------------------------------------"
 
+export MC_SHA="${MC_SHA}"
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
 export GH_BRANCH=main
 TODAYS_DATE=$(date '+%F_%H-%M')
@@ -198,6 +205,7 @@ mkdir -p ${LOG_DIR}
 NIGHTLY_HASH=$(git rev-parse --short HEAD)
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]" >> nightly_output.txt
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
+echo "Management Console SHA:        [$MC_SHA]"
 
 ## update self (unity-cs-infra repository)
 git pull origin ${GH_BRANCH}
@@ -206,7 +214,7 @@ git checkout ${GH_BRANCH}
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE"
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA"
 
 echo "Deploying Management Console..." >> nightly_output.txt
 echo "Deploying Management Console..."

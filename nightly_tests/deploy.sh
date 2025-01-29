@@ -4,11 +4,12 @@ STACK_NAME=""
 PROJECT_NAME=""
 VENUE_NAME=""
 MC_VERSION="latest"
+MC_SHA=""
 CONFIG_FILE=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--config-file <CONFIG_FILE>]"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
     exit 1
 }
 
@@ -38,6 +39,10 @@ while [[ $# -gt 0 ]]; do
             MC_VERSION="$2"
             shift 2
             ;;
+        --mc-sha)
+            MC_SHA="$2"
+            shift 2
+            ;;
         --config-file)
             CONFIG_FILE="$2"
             shift 2
@@ -62,6 +67,7 @@ fi
 echo "deploy.sh :: STACK_NAME: ${STACK_NAME}"
 echo "deploy.sh :: PROJECT_NAME: ${PROJECT_NAME}"
 echo "deploy.sh :: VENUE_NAME: ${VENUE_NAME}"
+echo "deploy.sh :: MC_SHA: ${MC_SHA}"
 
 #
 # Create the SSM parameters required by this deployment
@@ -122,6 +128,7 @@ aws cloudformation create-stack \
     ParameterKey=Project,ParameterValue=${PROJECT_NAME} \
     ParameterKey=Venue,ParameterValue=${VENUE_NAME} \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
+    ParameterKey=MCSha,ParameterValue=${MC_SHA} \
     ParameterKey=MarketplaceItems,ParameterValue="${escaped_config_content}" \
   --tags Key=ServiceArea,Value=U-CS
 

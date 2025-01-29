@@ -15,6 +15,7 @@ Metadata:
           - Venue
           - GithubToken
           - MCVersion
+          - MCSha
       - Label:
           default: Network configuration
         Parameters:
@@ -52,6 +53,8 @@ Metadata:
         default: Github token with repo:read access.
       MCVersion:
         default: latest
+      MCSha:
+        default: ""
       Venue:
         default: Name of the venue being setup
       Project:
@@ -112,6 +115,12 @@ Parameters:
     Type: String
     Default: latest
     ConstraintDescription: The version of unity-sds/unity-management-console to install.
+
+  MCSha:
+    Description: Management Console Sha
+    Type: String
+    Default: ""
+    ConstraintDescription: A commit sha to build the Management Console from.
 
   Venue:
     Description: e.g. Dev, Test, Ops. See https://unity-sds.gitbook.io/docs/architecture/deployments-projects-and-venues
@@ -464,10 +473,36 @@ Resources:
           commands:
             01_install_management_console:
               command: !Sub |
-                set -ex \
-                && echo "running 01_install_management_console" \
-                && { if [ "${MCVersion}" = "latest" ]; then sudo -i -u ubuntu wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/latest/download/managementconsole.zip"; else sudo -i -u ubuntu wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip" ; fi } \
-                && sudo -i -u ubuntu unzip managementconsole.zip
+                #!/bin/bash
+                sudo -u ubuntu bash << 'EOFMC'
+                  set -ex
+                  echo "running 01_install_management_console"
+                  echo "requested sha: ${MCSha}"
+                  if [ "${MCSha}" != "" ]; then
+                    git clone https://github.com/unity-sds/unity-management-console.git
+                    cd unity-management-console
+                    git checkout ${MCSha}
+                    cd /home/ubuntu/
+                    wget https://go.dev/dl/go1.20.14.linux-amd64.tar.gz
+                    tar xfvz go1.20.14.linux-amd64.tar.gz
+                    export GOROOT=$(pwd)/go
+                    export GOPATH=$(pwd)/go/bin
+                    export PATH=$(pwd)/go/bin:$PATH
+                    cd /home/ubuntu/unity-management-console
+                    npm ci
+                    git clone https://github.com/unity-sds/unity-cs-infra.git workflowresources
+                    sudo apt-get install -y zip
+                    npm run package && npm run build-integration
+                    cd /home/ubuntu
+                    unzip unity-management-console/managementconsole.zip
+                  elif [ "${MCVersion}" = "latest" ]; then
+                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/latest/download/managementconsole.zip"
+                    unzip managementconsole.zip
+                  else
+                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
+                    unzip managementconsole.zip
+                  fi
+                EOFMC
               cwd: /home/ubuntu
             02_install_service:
               command: !Sub |
