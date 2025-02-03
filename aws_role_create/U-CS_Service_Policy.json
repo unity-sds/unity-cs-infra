@@ -111,6 +111,7 @@
                 "arn:aws:iam::*:oidc-provider/*",
                 "arn:aws:iam::*:policy/eksctl-*",
                 "arn:aws:iam::*:policy/unity-dev-*",
+                "arn:aws:iam::*:policy/*",
                 "arn:aws:iam::*:instance-profile/eksctl-*",
                 "arn:aws:ssm:*:*:parameter/*"
             ]
