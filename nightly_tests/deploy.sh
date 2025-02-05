@@ -126,13 +126,28 @@ process_config_file() {
         fi
 
         # Process MarketplaceItems
+        local yq_script='del(.ManagementConsole)'
+        
         if [ "$LATEST" = true ]; then
             # Set all versions to "latest" if --latest flag is present
-            yq eval 'del(.ManagementConsole) | .MarketplaceItems[].version = "latest"' "$1"
+            yq_script+=' | .MarketplaceItems[].version = "latest"'
         else
-            # Just return the MarketplaceItems section without ManagementConsole
-            yq eval 'del(.ManagementConsole) | .MarketplaceItems' "$1"
+            # Update specific versions if parameters are provided
+            if [ -n "$UNITY_CS_MONITORING_LAMBDA_VERSION" ]; then
+                yq_script+=' | (.MarketplaceItems[] | select(.name == "unity-cs-monitoring-lambda").version) = "'$UNITY_CS_MONITORING_LAMBDA_VERSION'"'
+            fi
+            if [ -n "$UNITY_APIGATEWAY_VERSION" ]; then
+                yq_script+=' | (.MarketplaceItems[] | select(.name == "unity-apigateway").version) = "'$UNITY_APIGATEWAY_VERSION'"'
+            fi
+            if [ -n "$UNITY_PROXY_VERSION" ]; then
+                yq_script+=' | (.MarketplaceItems[] | select(.name == "unity-proxy").version) = "'$UNITY_PROXY_VERSION'"'
+            fi
+            if [ -n "$UNITY_UI_VERSION" ]; then
+                yq_script+=' | (.MarketplaceItems[] | select(.name == "unity-ui").version) = "'$UNITY_UI_VERSION'"'
+            fi
         fi
+        
+        yq eval "$yq_script" "$1"
     else
         echo "[]"
     fi
