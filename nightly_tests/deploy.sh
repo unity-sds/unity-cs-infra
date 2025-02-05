@@ -7,10 +7,14 @@ MC_VERSION="latest"
 MC_SHA=""
 CONFIG_FILE=""
 LATEST=false
+UNITY_CS_MONITORING_LAMBDA_VERSION=""
+UNITY_APIGATEWAY_VERSION=""
+UNITY_PROXY_VERSION=""
+UNITY_UI_VERSION=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>] [--latest]"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>] [--latest] [--unity-cs-monitoring-lambda-version <VERSION>] [--unity-apigateway-version <VERSION>] [--unity-proxy-version <VERSION>] [--unity-ui-version <VERSION>]"
     exit 1
 }
 
@@ -51,6 +55,22 @@ while [[ $# -gt 0 ]]; do
         --latest)
             LATEST=true
             shift
+            ;;
+        --unity-cs-monitoring-lambda-version)
+            UNITY_CS_MONITORING_LAMBDA_VERSION="$2"
+            shift 2
+            ;;
+        --unity-apigateway-version)
+            UNITY_APIGATEWAY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-proxy-version)
+            UNITY_PROXY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-ui-version)
+            UNITY_UI_VERSION="$2"
+            shift 2
             ;;
         *)
             usage
@@ -135,6 +155,10 @@ aws cloudformation create-stack \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
     ParameterKey=MCSha,ParameterValue=${MC_SHA} \
     ParameterKey=MarketplaceItems,ParameterValue="${escaped_config_content}" \
+    ParameterKey=UnityCSMonitoringLambdaVersion,ParameterValue="${UNITY_CS_MONITORING_LAMBDA_VERSION}" \
+    ParameterKey=UnityAPIGatewayVersion,ParameterValue="${UNITY_APIGATEWAY_VERSION}" \
+    ParameterKey=UnityProxyVersion,ParameterValue="${UNITY_PROXY_VERSION}" \
+    ParameterKey=UnityUIVersion,ParameterValue="${UNITY_UI_VERSION}" \
   --tags Key=ServiceArea,Value=U-CS
 
 
