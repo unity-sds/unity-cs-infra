@@ -106,12 +106,27 @@ echo "Deploying Cloudformation stack..."
 # Function to parse and process config file
 process_config_file() {
     if [ -f "$1" ]; then
+        # Extract ManagementConsole values if present
+        if yq eval '.ManagementConsole' "$1" >/dev/null 2>&1; then
+            local mc_release=$(yq eval '.ManagementConsole.release' "$1")
+            local mc_sha=$(yq eval '.ManagementConsole.sha' "$1")
+            
+            # Update MC_VERSION and MC_SHA if values exist and no CLI override
+            if [ -n "$mc_release" ] && [ "$MC_VERSION" = "latest" ]; then
+                MC_VERSION="$mc_release"
+            fi
+            if [ -n "$mc_sha" ] && [ -z "$MC_SHA" ]; then
+                MC_SHA="$mc_sha"
+            fi
+        fi
+
+        # Process MarketplaceItems
         if [ "$LATEST" = true ]; then
             # Set all versions to "latest" if --latest flag is present
-            yq eval '.MarketplaceItems[].version = "latest"' "$1"
+            yq eval 'del(.ManagementConsole) | .MarketplaceItems[].version = "latest"' "$1"
         else
-            # Just return the MarketplaceItems section as-is
-            yq eval '.MarketplaceItems' "$1"
+            # Just return the MarketplaceItems section without ManagementConsole
+            yq eval 'del(.ManagementConsole) | .MarketplaceItems' "$1"
         fi
     else
         echo "[]"
@@ -120,6 +135,10 @@ process_config_file() {
 
 # Read and process the config file content
 config_content=$(process_config_file "$CONFIG_FILE")
+
+# Log the MC version and SHA being used
+echo "deploy.sh :: Using MC_VERSION: ${MC_VERSION}"
+[ -n "$MC_SHA" ] && echo "deploy.sh :: Using MC_SHA: ${MC_SHA}"
 
 # Output the marketplace items table to both console and nightly_output.txt
 {
