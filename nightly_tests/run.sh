@@ -8,10 +8,14 @@ MC_VERSION="latest"
 DEPLOYMENT_START_TIME=$(date +%s)
 MC_SHA=""
 LATEST="false"
+UNITY_CS_MONITORING_LAMBDA_VERSION=""
+UNITY_APIGATEWAY_VERSION=""
+UNITY_PROXY_VERSION=""
+UNITY_UI_VERSION=""
 CONFIG_FILE="marketplace_config.yaml"  # Set default config file
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>] [--latest]"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>] [--latest] [--unity-cs-monitoring-lambda-version <VERSION>] [--unity-apigateway-version <VERSION>] [--unity-proxy-version <VERSION>] [--unity-ui-version <VERSION>]"
     exit 1
 }
 
@@ -71,6 +75,22 @@ while [[ $# -gt 0 ]]; do
         --latest)
             LATEST="true"
             shift 1
+            ;;
+        --unity-cs-monitoring-lambda-version)
+            UNITY_CS_MONITORING_LAMBDA_VERSION="$2"
+            shift 2
+            ;;
+        --unity-apigateway-version)
+            UNITY_APIGATEWAY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-proxy-version)
+            UNITY_PROXY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-ui-version)
+            UNITY_UI_VERSION="$2"
+            shift 2
             ;;
         *)
             echo "Invalid option: $1" >&2
@@ -219,7 +239,7 @@ git checkout ${GH_BRANCH}
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" --latest "${LATEST}"
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" --latest "${LATEST}" ${UNITY_CS_MONITORING_LAMBDA_VERSION:+--unity-cs-monitoring-lambda-version "${UNITY_CS_MONITORING_LAMBDA_VERSION}"} ${UNITY_APIGATEWAY_VERSION:+--unity-apigateway-version "${UNITY_APIGATEWAY_VERSION}"} ${UNITY_PROXY_VERSION:+--unity-proxy-version "${UNITY_PROXY_VERSION}"} ${UNITY_UI_VERSION:+--unity-ui-version "${UNITY_UI_VERSION}"}
 
 echo "Deploying Management Console..." >> nightly_output.txt
 echo "Deploying Management Console..."
