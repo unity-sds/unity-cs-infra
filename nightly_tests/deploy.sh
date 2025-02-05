@@ -104,19 +104,28 @@ echo "Deploying Cloudformation stack..." >> nightly_output.txt
 echo "Deploying Cloudformation stack..."
 
 
-# Function to read and format the config file
-format_config_file() {
+# Install yq if not present
+if ! command -v yq &> /dev/null; then
+    brew install yq >/dev/null 2>&1
+fi
+
+# Function to parse and process config file
+process_config_file() {
     if [ -f "$1" ]; then
-        # Read the file and format it as a YAML string, preserving indentation
-        content=$(sed 's/^//' "$1")
-        echo "$content"
+        if [ "$LATEST" = true ]; then
+            # Set all versions to "latest" if --latest flag is present
+            yq eval '.MarketplaceItems[].version = "latest"' "$1"
+        else
+            # Just return the MarketplaceItems section as-is
+            yq eval '.MarketplaceItems' "$1"
+        fi
     else
         echo "[]"
     fi
 }
 
-# Read and format the config file content
-config_content=$(format_config_file "$CONFIG_FILE")
+# Read and process the config file content
+config_content=$(process_config_file "$CONFIG_FILE")
 
 # Output the marketplace items table to both console and nightly_output.txt
 {
