@@ -182,10 +182,6 @@ aws cloudformation create-stack \
     ParameterKey=MCVersion,ParameterValue=${MC_VERSION} \
     ParameterKey=MCSha,ParameterValue=${MC_SHA} \
     ParameterKey=MarketplaceItems,ParameterValue="${escaped_config_content}" \
-    ParameterKey=UnityCSMonitoringLambdaVersion,ParameterValue="${UNITY_CS_MONITORING_LAMBDA_VERSION}" \
-    ParameterKey=UnityAPIGatewayVersion,ParameterValue="${UNITY_APIGATEWAY_VERSION}" \
-    ParameterKey=UnityProxyVersion,ParameterValue="${UNITY_PROXY_VERSION}" \
-    ParameterKey=UnityUIVersion,ParameterValue="${UNITY_UI_VERSION}" \
   --tags Key=ServiceArea,Value=U-CS
 
 
