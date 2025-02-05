@@ -103,12 +103,6 @@ echo "deploying INSTANCE TYPE: ${MC_INSTANCETYPE_VAL} ..."
 echo "Deploying Cloudformation stack..." >> nightly_output.txt
 echo "Deploying Cloudformation stack..."
 
-
-# Install yq if not present
-if ! command -v yq &> /dev/null; then
-    brew install yq >/dev/null 2>&1
-fi
-
 # Function to parse and process config file
 process_config_file() {
     if [ -f "$1" ]; then
