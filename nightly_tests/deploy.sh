@@ -160,6 +160,12 @@ config_content=$(process_config_file "$CONFIG_FILE")
 echo "deploy.sh :: Using MC_VERSION: ${MC_VERSION}"
 [ -n "$MC_SHA" ] && echo "deploy.sh :: Using MC_SHA: ${MC_SHA}"
 
+# Print the full YAML configuration
+echo "Generated YAML Configuration:"
+echo "-----------------------------------------"
+echo "$config_content"
+echo "-----------------------------------------"
+
 # Output the marketplace items table to both console and nightly_output.txt
 {
     echo "-----------------------------------------"
