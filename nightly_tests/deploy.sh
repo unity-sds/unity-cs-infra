@@ -111,13 +111,18 @@ process_config_file() {
             local mc_release=$(yq eval '.ManagementConsole.release' "$1")
             local mc_sha=$(yq eval '.ManagementConsole.sha' "$1")
             
-            # Update MC_VERSION and MC_SHA if values exist and no CLI override
-            if [ -n "$mc_release" ] && [ "$MC_VERSION" = "latest" ]; then
+            # Update MC_VERSION only if --latest is not set and no CLI override
+            if [ "$LATEST" = false ] && [ -n "$mc_release" ] && [ "$MC_VERSION" = "latest" ]; then
                 MC_VERSION="$mc_release"
             fi
             if [ -n "$mc_sha" ] && [ -z "$MC_SHA" ]; then
                 MC_SHA="$mc_sha"
             fi
+        fi
+
+        # Force MC_VERSION to "latest" if --latest flag is set
+        if [ "$LATEST" = true ]; then
+            MC_VERSION="latest"
         fi
 
         # Process MarketplaceItems
