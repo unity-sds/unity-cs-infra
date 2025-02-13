@@ -1,3 +1,7 @@
+ManagementConsole:
+sha:
+release: 24.10-stable
+
 MarketplaceItems:
   - name: unity-cs-monitoring-lambda
     version: 0.1

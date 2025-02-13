@@ -4,7 +4,7 @@ DESTROY=""
 RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
-MC_VERSION="latest"
+MC_VERSION=""
 DEPLOYMENT_START_TIME=$(date +%s)
 MC_SHA=""
 LATEST="false"
@@ -172,7 +172,7 @@ echo "---------------------------------------------------------"
 
 export MC_SHA="${MC_SHA}"
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
-export GH_BRANCH=main
+export GH_BRANCH=mc-sha-wip
 TODAYS_DATE=$(date '+%F_%H-%M')
 LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
