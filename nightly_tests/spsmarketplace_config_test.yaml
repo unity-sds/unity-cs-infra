@@ -1,9 +1,0 @@
-MarketplaceItems:
-  - name: unity-cs-monitoring-lambda
-    version: 0.1
-  - name: unity-apigateway
-    version: 0.4
-  - name: unity-proxy
-    version: 0.13
-  - name: unity-ui
-    version: 0.8.0
