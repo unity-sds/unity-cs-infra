@@ -231,7 +231,7 @@ git checkout ${GH_BRANCH}
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" ${LATEST:+--latest "$LATEST"} ${MONITORING_LAMBDA_VERSION:+--unity-cs-monitoring-lambda-version "$MONITORING_LAMBDA_VERSION"}
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" ${LATEST:+--latest} ${MONITORING_LAMBDA_VERSION:+--unity-cs-monitoring-lambda-version "$MONITORING_LAMBDA_VERSION"}
 
 echo "Deploying Management Console..." >> nightly_output.txt
 echo "Deploying Management Console..."
