@@ -149,7 +149,6 @@ Parameters:
     Description: YAML string containing marketplace items
     Default: "[]"
 
-
 Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -473,7 +472,7 @@ Resources:
                   set -ex
                   echo "running 01_install_management_console"
                   echo "requested sha: ${MCSha}"
-                  if [ -n "${MCSha}" ]; then
+                  if [ "$MCSha" != "null" ] && [ -n "$MCSha" ]; then
                     # Build from specific commit
                     git clone https://github.com/unity-sds/unity-management-console.git
                     cd unity-management-console
