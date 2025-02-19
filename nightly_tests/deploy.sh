@@ -115,7 +115,7 @@ if [ -f "$CONFIG_FILE" ]; then
         echo "Items that will auto-deploy on bootstrap:"
         echo "Marketplace Item                | Version"
         echo "--------------------------------+--------"
-        yq eval '.[] | select(has("name")) | [.name, .version] | join(" | ")' "$CONFIG_FILE" | \
+        yq eval '.MarketplaceItems[] | [.name, .version] | join(" | ")' "$CONFIG_FILE" | \
         while IFS='|' read -r name version; do
             printf "%-31s |%s\n" "$name" "$version"
         done
