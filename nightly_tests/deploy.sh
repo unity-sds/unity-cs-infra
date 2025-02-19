@@ -9,6 +9,7 @@ CONFIG_FILE=""
 LATEST=false
 MONITORING_LAMBDA_VERSION=""
 APIGATEWAY_VERSION=""
+PROXY_VERSION=""
 
 # Function to display usage instructions
 usage() {
@@ -60,6 +61,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --unity-apigateway-version)
             APIGATEWAY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-proxy-version)
+            PROXY_VERSION="$2"
             shift 2
             ;;
         *)
@@ -117,6 +122,11 @@ if [ -f "$CONFIG_FILE" ]; then
     # Update apigateway version if specified
     if [ -n "$APIGATEWAY_VERSION" ]; then
         escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-apigateway") |= . * {"version": "'$APIGATEWAY_VERSION'"})' -)
+    fi
+
+    # Update proxy version if specified
+    if [ -n "$PROXY_VERSION" ]; then
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-proxy") |= . * {"version": "'$PROXY_VERSION'"})' -)
     fi
     
     # Output the marketplace items table
