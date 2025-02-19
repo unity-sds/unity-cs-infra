@@ -183,7 +183,7 @@ echo "  - Monitoring Lambda Version:      $MONITORING_LAMBDA_VERSION"
 echo "---------------------------------------------------------"
 
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
-export GH_BRANCH="main"
+export GH_BRANCH="520-dev"
 TODAYS_DATE=$(date '+%F_%H-%M')
 LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
