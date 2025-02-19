@@ -9,6 +9,7 @@ MC_VERSION="latest"
 DEPLOYMENT_START_TIME=$(date +%s)
 MC_SHA=""
 CONFIG_FILE="marketplace_config.yaml"  # Set default config file
+MONITORING_LAMBDA_VERSION=""
 # Function to display usage instructions
 usage() {
     echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--latest <true|false>] [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
@@ -71,6 +72,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --mc-sha)
             MC_SHA="$2"
+            shift 2
+            ;;
+        --unity-cs-monitoring-lambda-version)
+            MONITORING_LAMBDA_VERSION="$2"
             shift 2
             ;;
         *)
@@ -226,7 +231,7 @@ git checkout ${GH_BRANCH}
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" ${LATEST:+--latest "$LATEST"}
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" ${LATEST:+--latest "$LATEST"} ${MONITORING_LAMBDA_VERSION:+--unity-cs-monitoring-lambda-version "$MONITORING_LAMBDA_VERSION"}
 
 echo "Deploying Management Console..." >> nightly_output.txt
 echo "Deploying Management Console..."

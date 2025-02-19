@@ -7,6 +7,7 @@ MC_VERSION="latest"
 MC_SHA=""
 CONFIG_FILE=""
 LATEST=false
+MONITORING_LAMBDA_VERSION=""
 
 # Function to display usage instructions
 usage() {
@@ -51,6 +52,10 @@ while [[ $# -gt 0 ]]; do
         --latest)
             LATEST=true
             shift
+            ;;
+        --unity-cs-monitoring-lambda-version)
+            MONITORING_LAMBDA_VERSION="$2"
+            shift 2
             ;;
         *)
             usage
@@ -97,6 +102,11 @@ if [ -f "$CONFIG_FILE" ]; then
         escaped_config_content=$(yq eval '.[] |= select(has("version")) * {"version": "latest"} | del(.ManagementConsole)' "$CONFIG_FILE")
     else
         escaped_config_content=$(yq eval 'del(.ManagementConsole)' "$CONFIG_FILE")
+    fi
+
+    # Update monitoring lambda version if specified
+    if [ -n "$MONITORING_LAMBDA_VERSION" ]; then
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.[] |= select(.name == "unity-cs-monitoring-lambda").version = "'$MONITORING_LAMBDA_VERSION'"')
     fi
     
     # Output the marketplace items table
