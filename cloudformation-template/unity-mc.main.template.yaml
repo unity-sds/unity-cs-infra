@@ -113,8 +113,8 @@ Parameters:
   MCVersion:
     Description: Management Console Version
     Type: String
-    Default: latest
-    ConstraintDescription: The version of unity-sds/unity-management-console to install.
+    Default: ""
+    ConstraintDescription: The version tag of unity-sds/unity-management-console to install.
 
   MCSha:
     Description: Management Console Sha
@@ -149,11 +149,6 @@ Parameters:
     Description: YAML string containing marketplace items
     Default: "[]"
 
-Conditions:
-  IsLatestMCVersion:
-    Fn::Equals:
-      - !Ref MCVersion
-      - latest
 
 Resources:
   LambdaExecutionRole:
@@ -496,11 +491,6 @@ Resources:
                     npm run package && npm run build-integration
                     cd /home/ubuntu
                     unzip unity-management-console/managementconsole.zip
-                  elif [ "${MCVersion}" = "latest" ]; then
-                    # Get latest release
-                    LATEST_RELEASE=$(curl -s https://api.github.com/repos/unity-sds/unity-management-console/releases/latest | grep "tag_name" | cut -d '"' -f 4)
-                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/$LATEST_RELEASE/managementconsole.zip"
-                    unzip managementconsole.zip
                   else
                     # Get specific version
                     wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
