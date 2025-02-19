@@ -52,9 +52,9 @@ Metadata:
       GithubToken:
         default: Github token with repo:read access.
       MCVersion:
-        default: latest
+        default: "none"
       MCSha:
-        default: ""
+        default: "none"
       Venue:
         default: Name of the venue being setup
       Project:
@@ -113,15 +113,14 @@ Parameters:
   MCVersion:
     Description: Management Console Version
     Type: String
-    Default: ""
+    Default: "none" # Changed from empty string
     ConstraintDescription: The version tag of unity-sds/unity-management-console to install.
 
   MCSha:
     Description: Management Console Sha
     Type: String
-    Default: ""
+    Default: "none" # Changed from empty string
     ConstraintDescription: A commit sha to build the Management Console from.
-
   Venue:
     Description: e.g. Dev, Test, Ops. See https://unity-sds.gitbook.io/docs/architecture/deployments-projects-and-venues
     Type: String
@@ -474,11 +473,12 @@ Resources:
                   echo "requested sha: ${MCSha}"
                   
                   MCSHA="${MCSha}"
+                  MCVERSION="${MCVersion}"
                   
-                  if [ -z "$MCSHA" ]; then
-                    # Directly use MCVersion parameter from CloudFormation
-                    echo "Downloading version: ${MCVersion}"
-                    wget -q -O managementconsole.zip 'https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip'
+                  if [ "$MCSHA" = "none" ]; then
+                    # Use the specified version
+                    echo "Using version: $MCVERSION"
+                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/$MCVERSION/managementconsole.zip"
                     unzip managementconsole.zip
                   else
                     # Build from specific commit
