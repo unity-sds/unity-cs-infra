@@ -472,19 +472,16 @@ Resources:
                   echo "running 01_install_management_console"
                   echo "requested sha: ${MCSha}"
                   
-                  MCSHA="${MCSha}"
-                  MCVERSION="${MCVersion}"
-                  
-                  if [ "$MCSHA" = "none" ]; then
+                  if [ "${MCSha}" = "null" ]; then
                     # Use the specified version
-                    echo "Using version: $MCVERSION"
-                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/$MCVERSION/managementconsole.zip"
+                    echo "Using version: ${MCVersion}"
+                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
                     unzip managementconsole.zip
                   else
                     # Build from specific commit
                     git clone https://github.com/unity-sds/unity-management-console.git
                     cd unity-management-console
-                    git checkout "$MCSHA"
+                    git checkout "${MCSha}"
                     cd /home/ubuntu/
                     wget https://go.dev/dl/go1.20.14.linux-amd64.tar.gz
                     tar xfvz go1.20.14.linux-amd64.tar.gz

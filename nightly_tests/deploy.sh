@@ -3,8 +3,8 @@
 STACK_NAME=""
 PROJECT_NAME=""
 VENUE_NAME=""
-MC_VERSION="latest"
-MC_SHA=""
+MC_VERSION="null"
+MC_SHA="null"
 CONFIG_FILE=""
 LATEST=false
 MONITORING_LAMBDA_VERSION=""
@@ -110,11 +110,11 @@ if [ -f "$CONFIG_FILE" ]; then
     if yq eval '.ManagementConsole' "$CONFIG_FILE" &>/dev/null; then
         MC_SHA=$(yq eval '.ManagementConsole.sha // ""' "$CONFIG_FILE")
         if [ -z "$MC_SHA" ]; then
-            MC_SHA=""
+            MC_SHA="null"
         fi
         MC_VERSION=$(yq eval '.ManagementConsole.release' "$CONFIG_FILE")
     else
-        MC_SHA=""
+        MC_SHA="null"
     fi
     
     # Get YAML content without ManagementConsole block and update versions if --latest
