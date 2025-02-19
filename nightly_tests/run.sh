@@ -68,6 +68,7 @@ while [[ $# -gt 0 ]]; do
         --latest)
             LATEST=true
             MC_VERSION="latest"
+            MONITORING_LAMBDA_VERSION="latest"
             shift 1
             ;;
         --mc-sha)
