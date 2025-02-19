@@ -474,13 +474,13 @@ Resources:
                   echo "requested sha: ${MCSha}"
                   
                   # Store the sha in a variable so we can test it properly
-                  MC_SHA="${MCSha:-}"
+                  MCSHA="${MCSha}"
                   
-                  if [ -n "$MC_SHA" ] && [ "$MC_SHA" != "null" ]; then
+                  if [ -n "$MCSHA" ] && [ "$MCSHA" != "null" ]; then
                     # Build from specific commit
                     git clone https://github.com/unity-sds/unity-management-console.git
                     cd unity-management-console
-                    git checkout "$MC_SHA"
+                    git checkout "$MCSHA"
                     cd /home/ubuntu/
                     wget https://go.dev/dl/go1.20.14.linux-amd64.tar.gz
                     tar xfvz go1.20.14.linux-amd64.tar.gz
