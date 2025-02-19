@@ -475,9 +475,10 @@ Resources:
                   
                   MCSHA="${MCSha}"
                   
-                  if [ -z "$MCSHA" ] || [ "$MCSHA" = "null" ]; then
-                    # Use the specified version
-                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
+                  if [ -z "$MCSHA" ]; then
+                    # Directly use MCVersion parameter from CloudFormation
+                    echo "Downloading version: ${MCVersion}"
+                    wget -q -O managementconsole.zip 'https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip'
                     unzip managementconsole.zip
                   else
                     # Build from specific commit
