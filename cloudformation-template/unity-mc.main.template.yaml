@@ -495,9 +495,6 @@ Resources:
                     npm run package && npm run build-integration
                     cd /home/ubuntu
                     unzip unity-management-console/managementconsole.zip
-                  elif [ "${MCVersion}" = "latest" ]; then
-                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/latest/download/managementconsole.zip"
-                    unzip managementconsole.zip
                   else
                     wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
                     unzip managementconsole.zip
