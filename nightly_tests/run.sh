@@ -132,6 +132,12 @@ if ! grep -q selenium out.txt; then
     pip3 install selenium
 fi
 
+# Check if yq is installed
+if ! command -v yq &> /dev/null; then
+    echo "Installing yq..."
+    sudo snap install yq
+fi
+
 rm out.txt
 
 echo "RUN ARGUMENTS: "
