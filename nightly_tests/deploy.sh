@@ -103,54 +103,101 @@ echo "deploying INSTANCE TYPE: ${MC_INSTANCETYPE_VAL} ..."
 echo "Deploying Cloudformation stack..." >> nightly_output.txt
 echo "Deploying Cloudformation stack..."
 
-# Function to parse and process config file
+# Function to parse YAML
+function parse_yaml {
+   local prefix=$2
+   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+   sed -ne "s|^\($s\):|\1|" \
+        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+   awk -F$fs '{
+      indent = length($1)/2;
+      vname[indent] = $2;
+      for (i in vname) {if (i > indent) {delete vname[i]}}
+      if (length($3) > 0) {
+         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
+         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+      }
+   }'
+}
+
+# Function to process config file
 process_config_file() {
-    if [ -f "$1" ]; then
-        # Extract ManagementConsole values if present
-        if yq eval '.ManagementConsole' "$1" >/dev/null 2>&1; then
-            local mc_release=$(yq eval '.ManagementConsole.release' "$1")
-            local mc_sha=$(yq eval '.ManagementConsole.sha' "$1")
-            
-            # Update MC_VERSION only if --latest is not set and no CLI override
-            if [ "$LATEST" = false ] && [ -n "$mc_release" ] && [ "$MC_VERSION" = "latest" ]; then
-                MC_VERSION="$mc_release"
-            fi
-            if [ -n "$mc_sha" ] && [ -z "$MC_SHA" ]; then
-                MC_SHA="$mc_sha"
-            fi
-        fi
-
-        # Force MC_VERSION to "latest" if --latest flag is set
-        if [ "$LATEST" = true ]; then
-            MC_VERSION="latest"
-        fi
-
-        # Process MarketplaceItems
-        local yq_script='del(.ManagementConsole)'
-        
-        if [ "$LATEST" = true ]; then
-            # Set all versions to "latest" if --latest flag is present
-            yq_script+=' | .MarketplaceItems[].version = "latest"'
-        else
-            # Update specific versions if parameters are provided
-            if [ -n "$UNITY_CS_MONITORING_LAMBDA_VERSION" ]; then
-                yq_script+=' | (.MarketplaceItems[] | select(.name == "unity-cs-monitoring-lambda").version) = "'$UNITY_CS_MONITORING_LAMBDA_VERSION'"'
-            fi
-            if [ -n "$UNITY_APIGATEWAY_VERSION" ]; then
-                yq_script+=' | (.MarketplaceItems[] | select(.name == "unity-apigateway").version) = "'$UNITY_APIGATEWAY_VERSION'"'
-            fi
-            if [ -n "$UNITY_PROXY_VERSION" ]; then
-                yq_script+=' | (.MarketplaceItems[] | select(.name == "unity-proxy").version) = "'$UNITY_PROXY_VERSION'"'
-            fi
-            if [ -n "$UNITY_UI_VERSION" ]; then
-                yq_script+=' | (.MarketplaceItems[] | select(.name == "unity-ui").version) = "'$UNITY_UI_VERSION'"'
-            fi
-        fi
-        
-        yq eval "$yq_script" "$1"
-    else
+    if [ ! -f "$1" ]; then
         echo "[]"
+        return
     fi
+
+    # Create a temporary file for the processed output
+    local temp_file=$(mktemp)
+    
+    # Parse the YAML file and process its contents
+    eval $(parse_yaml "$1")
+    
+    # Extract ManagementConsole values if present
+    if [ -n "$ManagementConsole_release" ]; then
+        if [ "$LATEST" = false ] && [ -n "$ManagementConsole_release" ] && [ "$MC_VERSION" = "latest" ]; then
+            MC_VERSION="$ManagementConsole_release"
+        fi
+        if [ -n "$ManagementConsole_sha" ] && [ -z "$MC_SHA" ]; then
+            MC_SHA="$ManagementConsole_sha"
+        fi
+    fi
+
+    # Force MC_VERSION to "latest" if --latest flag is set
+    if [ "$LATEST" = true ]; then
+        MC_VERSION="latest"
+    fi
+
+    # Start building JSON array for MarketplaceItems
+    echo "[" > "$temp_file"
+    
+    # Process each marketplace item
+    local first_item=true
+    while IFS='=' read -r key value; do
+        if [[ $key =~ ^MarketplaceItems_[0-9]+_name ]]; then
+            local index=${key#MarketplaceItems_}
+            index=${index%_name}
+            local name=${value//\"/}
+            local version_key="MarketplaceItems_${index}_version"
+            local version=${!version_key:-latest}
+            
+            # Apply version overrides based on name
+            if [ "$LATEST" = true ]; then
+                version="latest"
+            else
+                case "$name" in
+                    "unity-cs-monitoring-lambda")
+                        [ -n "$UNITY_CS_MONITORING_LAMBDA_VERSION" ] && version="$UNITY_CS_MONITORING_LAMBDA_VERSION"
+                        ;;
+                    "unity-apigateway")
+                        [ -n "$UNITY_APIGATEWAY_VERSION" ] && version="$UNITY_APIGATEWAY_VERSION"
+                        ;;
+                    "unity-proxy")
+                        [ -n "$UNITY_PROXY_VERSION" ] && version="$UNITY_PROXY_VERSION"
+                        ;;
+                    "unity-ui")
+                        [ -n "$UNITY_UI_VERSION" ] && version="$UNITY_UI_VERSION"
+                        ;;
+                esac
+            fi
+            
+            # Add comma if not first item
+            [ "$first_item" = true ] || echo "," >> "$temp_file"
+            first_item=false
+            
+            # Write item to JSON
+            echo "  {" >> "$temp_file"
+            echo "    \"name\": \"$name\"," >> "$temp_file"
+            echo "    \"version\": \"$version\"" >> "$temp_file"
+            echo "  }" >> "$temp_file"
+        fi
+    done < <(parse_yaml "$1")
+    
+    echo "]" >> "$temp_file"
+    
+    cat "$temp_file"
+    rm -f "$temp_file"
 }
 
 # Read and process the config file content
