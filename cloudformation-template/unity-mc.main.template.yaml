@@ -473,10 +473,13 @@ Resources:
                   echo "running 01_install_management_console"
                   echo "requested sha: ${MCSha}"
                   
-                  # Store the sha in a variable so we can test it properly
                   MCSHA="${MCSha}"
                   
-                  if [ -n "$MCSHA" ] && [ "$MCSHA" != "null" ]; then
+                  if [ -z "$MCSHA" ] || [ "$MCSHA" = "null" ]; then
+                    # Use the specified version
+                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
+                    unzip managementconsole.zip
+                  else
                     # Build from specific commit
                     git clone https://github.com/unity-sds/unity-management-console.git
                     cd unity-management-console
@@ -494,10 +497,6 @@ Resources:
                     npm run package && npm run build-integration
                     cd /home/ubuntu
                     unzip unity-management-console/managementconsole.zip
-                  else
-                    # Use the specified version
-                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
-                    unzip managementconsole.zip
                   fi
                 EOFMC
               cwd: /home/ubuntu
