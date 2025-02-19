@@ -117,11 +117,11 @@ if [ -f "$CONFIG_FILE" ]; then
         MC_SHA="null"
     fi
     
-    # Get YAML content and update versions if --latest
+    # Get YAML content without ManagementConsole section and update versions if --latest
     if [ "$LATEST" = true ]; then
-        escaped_config_content=$(yq eval '. * {"MarketplaceItems": (.MarketplaceItems | map(. * {"version": "latest"}))}' "$CONFIG_FILE")
+        escaped_config_content=$(yq eval '.MarketplaceItems | map(. * {"version": "latest"})' "$CONFIG_FILE")
     else
-        escaped_config_content=$(yq eval '{"MarketplaceItems": .MarketplaceItems}' "$CONFIG_FILE")
+        escaped_config_content=$(yq eval '.MarketplaceItems' "$CONFIG_FILE")
     fi
 
     # Update monitoring lambda version if specified
