@@ -10,6 +10,7 @@ LATEST=false
 MONITORING_LAMBDA_VERSION=""
 APIGATEWAY_VERSION=""
 PROXY_VERSION=""
+UI_VERSION=""
 
 # Function to display usage instructions
 usage() {
@@ -65,6 +66,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --unity-proxy-version)
             PROXY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-ui-version)
+            UI_VERSION="$2"
             shift 2
             ;;
         *)
@@ -127,6 +132,11 @@ if [ -f "$CONFIG_FILE" ]; then
     # Update proxy version if specified
     if [ -n "$PROXY_VERSION" ]; then
         escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-proxy") |= . * {"version": "'$PROXY_VERSION'"})' -)
+    fi
+
+    # Update UI version if specified
+    if [ -n "$UI_VERSION" ]; then
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-ui") |= . * {"version": "'$UI_VERSION'"})' -)
     fi
     
     # Output the marketplace items table
