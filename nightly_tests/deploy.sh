@@ -84,35 +84,29 @@ echo "Deploying Cloudformation stack..." >> nightly_output.txt
 echo "Deploying Cloudformation stack..."
 
 
-# Function to read and format the config file
-format_config_file() {
-    if [ -f "$1" ]; then
-        # Read the file and format it as a YAML string, preserving indentation
-        content=$(sed 's/^//' "$1")
-        echo "$content"
-    else
-        echo "[]"
-    fi
-}
-
-# Read and format the config file content
-config_content=$(format_config_file "$CONFIG_FILE")
-
-# Output the marketplace items table to both console and nightly_output.txt
-{
-    echo "-----------------------------------------"
-    echo "Items that will auto-deploy on bootstrap:"
-    echo "Marketplace Item                | Version"
-    echo "--------------------------------+--------"
-    echo "$config_content" | grep -E '^\s*-' | sed -E 's/^\s*-\s*name:\s*(.*)/\1/' | while read -r line; do
-        name=$(echo "$line" | cut -d' ' -f1)
-        version=$(echo "$config_content" | grep -A1 "name: $name" | grep 'version:' | sed -E 's/^\s*version:\s*//')
-        printf "%-31s | %s\n" "$name" "$version"
-    done
-} | tee -a nightly_output.txt
+# Read and parse the config file using yq
+if [ -f "$CONFIG_FILE" ]; then
+    # Get raw YAML content
+    escaped_config_content=$(yq eval -r '.' "$CONFIG_FILE")
+    
+    # Output the marketplace items table
+    {
+        echo "-----------------------------------------"
+        echo "Items that will auto-deploy on bootstrap:"
+        echo "Marketplace Item                | Version"
+        echo "--------------------------------+--------"
+        yq eval '.[] | select(has("name")) | [.name, .version] | join(" | ")' "$CONFIG_FILE" | \
+        while IFS='|' read -r name version; do
+            printf "%-31s |%s\n" "$name" "$version"
+        done
+    } | tee -a nightly_output.txt
+else
+    echo "Config file not found: $CONFIG_FILE"
+    escaped_config_content="[]"
+fi
 
 # Escape any special characters in the config content
-escaped_config_content=$(echo "$config_content" | sed 's/"/\\"/g')
+escaped_config_content=$(echo "$escaped_config_content" | sed 's/"/\\"/g')
 
 
 
