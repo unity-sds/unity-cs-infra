@@ -119,29 +119,29 @@ if [ -f "$CONFIG_FILE" ]; then
     
     # Get YAML content without ManagementConsole section and update versions if --latest
     if [ "$LATEST" = true ]; then
-        escaped_config_content=$(yq eval '.MarketplaceItems | map(. * {"version": "latest"})' "$CONFIG_FILE")
+        escaped_config_content=$(yq eval '{"MarketplaceItems": (.MarketplaceItems | map(. * {"version": "latest"}))}' "$CONFIG_FILE")
     else
-        escaped_config_content=$(yq eval '.MarketplaceItems' "$CONFIG_FILE")
+        escaped_config_content=$(yq eval '{"MarketplaceItems": .MarketplaceItems}' "$CONFIG_FILE")
     fi
 
     # Update monitoring lambda version if specified
     if [ -n "$MONITORING_LAMBDA_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-cs-monitoring-lambda") |= . * {"version": "'$MONITORING_LAMBDA_VERSION'"})' -)
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-cs-monitoring-lambda") |= . * {"version": "'$MONITORING_LAMBDA_VERSION'"})' -)
     fi
 
     # Update apigateway version if specified
     if [ -n "$APIGATEWAY_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-apigateway") |= . * {"version": "'$APIGATEWAY_VERSION'"})' -)
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-apigateway") |= . * {"version": "'$APIGATEWAY_VERSION'"})' -)
     fi
 
     # Update proxy version if specified
     if [ -n "$PROXY_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-proxy") |= . * {"version": "'$PROXY_VERSION'"})' -)
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-proxy") |= . * {"version": "'$PROXY_VERSION'"})' -)
     fi
 
     # Update UI version if specified
     if [ -n "$UI_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-ui") |= . * {"version": "'$UI_VERSION'"})' -)
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-ui") |= . * {"version": "'$UI_VERSION'"})' -)
     fi
     
     # Output the marketplace items table
@@ -150,7 +150,7 @@ if [ -f "$CONFIG_FILE" ]; then
         echo "Items that will auto-deploy on bootstrap:"
         echo "Marketplace Item                | Version"
         echo "--------------------------------+--------"
-        yq eval '.[] | [.name, .version] | join(" | ")' <(echo "$escaped_config_content") | \
+        yq eval '.MarketplaceItems[] | [.name, .version] | join(" | ")' <(echo "$escaped_config_content") | \
         while IFS='|' read -r name version; do
             printf "%-31s |%s\n" "$name" "$version"
         done
