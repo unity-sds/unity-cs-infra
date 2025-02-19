@@ -167,6 +167,7 @@ echo "  - Venue Name:                     $VENUE_NAME"
 echo "  - MC Version:                     $MC_VERSION"
 echo "  - MC SHA:                         $MC_SHA"
 echo "  - Config File:                    $CONFIG_FILE"
+echo "  - Latest:                         $LATEST"
 
 echo "---------------------------------------------------------"
 
