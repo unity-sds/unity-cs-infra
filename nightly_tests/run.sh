@@ -182,9 +182,8 @@ echo "  - Monitoring Lambda Version:      $MONITORING_LAMBDA_VERSION"
 
 echo "---------------------------------------------------------"
 
-export MC_SHA="${MC_SHA}"
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
-export GH_BRANCH="520-dev"
+export GH_BRANCH="main"
 TODAYS_DATE=$(date '+%F_%H-%M')
 LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
@@ -242,6 +241,7 @@ mkdir -p ${LOG_DIR}
 NIGHTLY_HASH=$(git rev-parse --short HEAD)
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]" >> nightly_output.txt
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
+echo "Management Console Version:        [$MC_VERSION]"
 echo "Management Console SHA:        [$MC_SHA]"
 
 ## update self (unity-cs-infra repository)
