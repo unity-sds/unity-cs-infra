@@ -68,6 +68,7 @@ while [[ $# -gt 0 ]]; do
             case "$2" in
                 true)
                     LATEST=true
+                    MC_VERSION="latest"
                     ;;
                 false)
                     LATEST=false
