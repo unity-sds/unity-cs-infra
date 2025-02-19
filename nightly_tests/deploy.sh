@@ -99,14 +99,14 @@ if [ -f "$CONFIG_FILE" ]; then
     
     # Get YAML content without ManagementConsole block and update versions if --latest
     if [ "$LATEST" = true ]; then
-        escaped_config_content=$(yq eval '.[] |= select(has("version")) * {"version": "latest"} | del(.ManagementConsole)' "$CONFIG_FILE")
+        escaped_config_content=$(yq eval 'del(.ManagementConsole) | [.[] | select(has("version")) |= . * {"version": "latest"}]' "$CONFIG_FILE")
     else
         escaped_config_content=$(yq eval 'del(.ManagementConsole)' "$CONFIG_FILE")
     fi
 
     # Update monitoring lambda version if specified
     if [ -n "$MONITORING_LAMBDA_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.[] |= select(.name == "unity-cs-monitoring-lambda").version = "'$MONITORING_LAMBDA_VERSION'"')
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '[.[] | select(.name == "unity-cs-monitoring-lambda") |= . * {"version": "'$MONITORING_LAMBDA_VERSION'"}]')
     fi
     
     # Output the marketplace items table
