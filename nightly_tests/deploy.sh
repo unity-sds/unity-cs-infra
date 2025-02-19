@@ -92,8 +92,12 @@ if [ -f "$CONFIG_FILE" ]; then
         MC_VERSION=$(yq eval '.ManagementConsole.release' "$CONFIG_FILE")
     fi
     
-    # Get YAML content without ManagementConsole block
-    escaped_config_content=$(yq eval 'del(.ManagementConsole)' "$CONFIG_FILE")
+    # Get YAML content without ManagementConsole block and update versions if --latest
+    if [ "$LATEST" = true ]; then
+        escaped_config_content=$(yq eval '.[] |= select(has("version")) * {"version": "latest"} | del(.ManagementConsole)' "$CONFIG_FILE")
+    else
+        escaped_config_content=$(yq eval 'del(.ManagementConsole)' "$CONFIG_FILE")
+    fi
     
     # Output the marketplace items table
     {
