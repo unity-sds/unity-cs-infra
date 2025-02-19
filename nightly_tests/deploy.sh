@@ -8,6 +8,7 @@ MC_SHA=""
 CONFIG_FILE=""
 LATEST=false
 MONITORING_LAMBDA_VERSION=""
+APIGATEWAY_VERSION=""
 
 # Function to display usage instructions
 usage() {
@@ -55,6 +56,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --unity-cs-monitoring-lambda-version)
             MONITORING_LAMBDA_VERSION="$2"
+            shift 2
+            ;;
+        --unity-apigateway-version)
+            APIGATEWAY_VERSION="$2"
             shift 2
             ;;
         *)
@@ -107,6 +112,11 @@ if [ -f "$CONFIG_FILE" ]; then
     # Update monitoring lambda version if specified
     if [ -n "$MONITORING_LAMBDA_VERSION" ]; then
         escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-cs-monitoring-lambda") |= . * {"version": "'$MONITORING_LAMBDA_VERSION'"})' -)
+    fi
+
+    # Update apigateway version if specified
+    if [ -n "$APIGATEWAY_VERSION" ]; then
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-apigateway") |= . * {"version": "'$APIGATEWAY_VERSION'"})' -)
     fi
     
     # Output the marketplace items table
