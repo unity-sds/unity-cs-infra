@@ -144,6 +144,12 @@ if [ -f "$CONFIG_FILE" ]; then
         escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-ui") |= . * {"version": "'$UI_VERSION'"})' -)
     fi
     
+    # Log MC version/SHA before deployment
+    echo "Starting CloudFormation deployment with:"
+    echo "  - MC Version: ${MC_VERSION}"
+    echo "  - MC SHA: ${MC_SHA}"
+    echo ""
+
     # Output the marketplace items table
     {
         echo "-----------------------------------------"
