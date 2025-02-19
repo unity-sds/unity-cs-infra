@@ -478,7 +478,7 @@ Resources:
                   set -ex
                   echo "running 01_install_management_console"
                   echo "requested sha: ${MCSha}"
-                  if [ "${MCSha}" != "" ]; then
+                  if [ -n "${MCSha}" ]; then
                     git clone https://github.com/unity-sds/unity-management-console.git
                     cd unity-management-console
                     git checkout ${MCSha}
