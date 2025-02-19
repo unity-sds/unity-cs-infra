@@ -248,6 +248,12 @@ echo "Management Console SHA:        [$MC_SHA]"
 git pull origin ${GH_BRANCH}
 git checkout ${GH_BRANCH}
 
+# Log MC version/SHA before deployment
+echo "Starting CloudFormation deployment with:"
+echo "  - MC Version: ${MC_VERSION}"
+echo "  - MC SHA: ${MC_SHA}"
+echo ""
+
 #
 # Deploy the Management Console using CloudFormation
 #
