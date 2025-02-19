@@ -115,7 +115,7 @@ if [ -f "$CONFIG_FILE" ]; then
         echo "Items that will auto-deploy on bootstrap:"
         echo "Marketplace Item                | Version"
         echo "--------------------------------+--------"
-        yq eval '.MarketplaceItems[] | [.name, .version] | join(" | ")' "$CONFIG_FILE" | \
+        echo "$escaped_config_content" | yq eval '.[] | [.name, .version] | join(" | ")' - | \
         while IFS='|' read -r name version; do
             printf "%-31s |%s\n" "$name" "$version"
         done
