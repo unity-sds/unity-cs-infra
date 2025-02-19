@@ -126,22 +126,22 @@ if [ -f "$CONFIG_FILE" ]; then
 
     # Update monitoring lambda version if specified
     if [ -n "$MONITORING_LAMBDA_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'select(.name == "unity-cs-monitoring-lambda") |= . * {"version": "'$MONITORING_LAMBDA_VERSION'"}' -)
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-cs-monitoring-lambda") |= . * {"version": "'$MONITORING_LAMBDA_VERSION'"})' -)
     fi
 
     # Update apigateway version if specified
     if [ -n "$APIGATEWAY_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'select(.name == "unity-apigateway") |= . * {"version": "'$APIGATEWAY_VERSION'"}' -)
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-apigateway") |= . * {"version": "'$APIGATEWAY_VERSION'"})' -)
     fi
 
     # Update proxy version if specified
     if [ -n "$PROXY_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'select(.name == "unity-proxy") |= . * {"version": "'$PROXY_VERSION'"}' -)
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-proxy") |= . * {"version": "'$PROXY_VERSION'"})' -)
     fi
 
     # Update UI version if specified
     if [ -n "$UI_VERSION" ]; then
-        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'select(.name == "unity-ui") |= . * {"version": "'$UI_VERSION'"}' -)
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval 'map(select(.name == "unity-ui") |= . * {"version": "'$UI_VERSION'"})' -)
     fi
     
     # Output the marketplace items table
