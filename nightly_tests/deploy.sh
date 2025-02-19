@@ -6,7 +6,7 @@ VENUE_NAME=""
 MC_VERSION="latest"
 MC_SHA=""
 CONFIG_FILE=""
-LATEST=""
+LATEST=false
 
 # Function to display usage instructions
 usage() {
@@ -49,8 +49,8 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         --latest)
-            LATEST="$2"
-            shift 2
+            LATEST=true
+            shift 1
             ;;
         *)
             usage

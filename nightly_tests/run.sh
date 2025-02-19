@@ -4,7 +4,7 @@ DESTROY=""
 RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
-LATEST=""
+LATEST=false
 MC_VERSION="latest"
 DEPLOYMENT_START_TIME=$(date +%s)
 MC_SHA=""
@@ -65,20 +65,9 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         --latest)
-            case "$2" in
-                true)
-                    LATEST=true
-                    MC_VERSION="latest"
-                    ;;
-                false)
-                    LATEST=false
-                    ;;
-                *)
-                    echo "Invalid argument for --latest. Please specify 'true' or 'false'." >&2
-                    exit 1
-                    ;;
-            esac
-            shift 2
+            LATEST=true
+            MC_VERSION="latest"
+            shift 1
             ;;
         --mc-sha)
             MC_SHA="$2"
