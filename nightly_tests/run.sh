@@ -4,7 +4,7 @@ DESTROY=""
 RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
-LATEST=false
+LATEST=""
 MC_VERSION="null"
 DEPLOYMENT_START_TIME=$(date +%s)
 MC_SHA="null"
@@ -69,7 +69,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         --latest)
-            LATEST=true
+            LATEST="true"
             MC_VERSION="latest"
             MONITORING_LAMBDA_VERSION="latest"
             APIGATEWAY_VERSION="latest"
