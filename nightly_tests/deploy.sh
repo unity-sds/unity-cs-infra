@@ -163,6 +163,8 @@ fi
 # Escape any special characters in the config content
 escaped_config_content=$(echo "$escaped_config_content" | sed 's/"/\\"/g')
 
+echo "Configuration content that will be deployed:"
+echo "$escaped_config_content"
 
 
 # Modify the CloudFormation create-stack command
