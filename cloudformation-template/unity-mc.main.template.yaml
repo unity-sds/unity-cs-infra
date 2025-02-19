@@ -472,7 +472,7 @@ Resources:
                   set -ex
                   echo "running 01_install_management_console"
                   echo "requested sha: ${MCSha}"
-                  if [ "$MCSha" != "null" ] && [ -n "$MCSha" ]; then
+                  if [ -n "${!MCSha}" ]; then
                     # Build from specific commit
                     git clone https://github.com/unity-sds/unity-management-console.git
                     cd unity-management-console
@@ -492,7 +492,7 @@ Resources:
                     unzip unity-management-console/managementconsole.zip
                   else
                     # Get specific version
-                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
+                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${!MCVersion}/managementconsole.zip"
                     unzip managementconsole.zip
                   fi
                 EOFMC
