@@ -124,7 +124,7 @@ function parse_yaml {
 # Function to process config file
 process_config_file() {
     if [ ! -f "$1" ]; then
-        echo "[]"
+        echo '"[]"'
         return
     fi
 
