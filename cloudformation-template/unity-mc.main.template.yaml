@@ -472,11 +472,15 @@ Resources:
                   set -ex
                   echo "running 01_install_management_console"
                   echo "requested sha: ${MCSha}"
-                  if [ -n "${!MCSha}" ]; then
+                  
+                  # Store the sha in a variable so we can test it properly
+                  MC_SHA="${MCSha:-}"
+                  
+                  if [ -n "$MC_SHA" ] && [ "$MC_SHA" != "null" ]; then
                     # Build from specific commit
                     git clone https://github.com/unity-sds/unity-management-console.git
                     cd unity-management-console
-                    git checkout ${MCSha}
+                    git checkout "$MC_SHA"
                     cd /home/ubuntu/
                     wget https://go.dev/dl/go1.20.14.linux-amd64.tar.gz
                     tar xfvz go1.20.14.linux-amd64.tar.gz
@@ -491,8 +495,8 @@ Resources:
                     cd /home/ubuntu
                     unzip unity-management-console/managementconsole.zip
                   else
-                    # Get specific version
-                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${!MCVersion}/managementconsole.zip"
+                    # Use the specified version
+                    wget -q -O managementconsole.zip "https://github.com/unity-sds/unity-management-console/releases/download/${MCVersion}/managementconsole.zip"
                     unzip managementconsole.zip
                   fi
                 EOFMC
