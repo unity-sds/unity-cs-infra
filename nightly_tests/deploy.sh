@@ -86,6 +86,12 @@ echo "Deploying Cloudformation stack..."
 
 # Read and parse the config file using yq
 if [ -f "$CONFIG_FILE" ]; then
+    # Extract ManagementConsole values if present
+    if yq eval '.ManagementConsole' "$CONFIG_FILE" &>/dev/null; then
+        MC_SHA=$(yq eval '.ManagementConsole.sha' "$CONFIG_FILE")
+        MC_VERSION=$(yq eval '.ManagementConsole.release' "$CONFIG_FILE")
+    fi
+    
     # Get raw YAML content
     escaped_config_content=$(yq eval -r '.' "$CONFIG_FILE")
     
