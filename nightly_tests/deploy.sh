@@ -119,9 +119,9 @@ if [ -f "$CONFIG_FILE" ]; then
     
     # Get YAML content without ManagementConsole section and update versions if --latest
     if [ "$LATEST" = true ]; then
-        escaped_config_content=$(yq eval '.MarketplaceItems[] | select(.) * {"version": "latest"}' "$CONFIG_FILE")
+        escaped_config_content=$(yq eval '.MarketplaceItems | map(. * {"version": "latest"})' "$CONFIG_FILE")
     else
-        escaped_config_content=$(yq eval '.MarketplaceItems[]' "$CONFIG_FILE")
+        escaped_config_content=$(yq eval '.MarketplaceItems' "$CONFIG_FILE")
     fi
 
     # Update monitoring lambda version if specified
@@ -150,7 +150,7 @@ if [ -f "$CONFIG_FILE" ]; then
         echo "Items that will auto-deploy on bootstrap:"
         echo "Marketplace Item                | Version"
         echo "--------------------------------+--------"
-        echo "$escaped_config_content" | yq eval '.[] | [.name, .version] | join(" | ")' - | \
+        yq eval '.[] | [.name, .version] | join(" | ")' <(echo "$escaped_config_content") | \
         while IFS='|' read -r name version; do
             printf "%-31s |%s\n" "$name" "$version"
         done
