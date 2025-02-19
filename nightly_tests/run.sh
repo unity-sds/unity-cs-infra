@@ -239,7 +239,18 @@ git checkout ${GH_BRANCH}
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" --latest "${LATEST}" ${UNITY_CS_MONITORING_LAMBDA_VERSION:+--unity-cs-monitoring-lambda-version "${UNITY_CS_MONITORING_LAMBDA_VERSION}"} ${UNITY_APIGATEWAY_VERSION:+--unity-apigateway-version "${UNITY_APIGATEWAY_VERSION}"} ${UNITY_PROXY_VERSION:+--unity-proxy-version "${UNITY_PROXY_VERSION}"} ${UNITY_UI_VERSION:+--unity-ui-version "${UNITY_UI_VERSION}"}
+bash deploy.sh \
+  --stack-name "${STACK_NAME}" \
+  --project-name "${PROJECT_NAME}" \
+  --venue-name "${VENUE_NAME}" \
+  --mc-version "${MC_VERSION:=latest}" \
+  --config-file "${CONFIG_FILE}" \
+  --mc-sha "${MC_SHA}" \
+  --latest "${LATEST}" \
+  ${UNITY_CS_MONITORING_LAMBDA_VERSION:+--unity-cs-monitoring-lambda-version "${UNITY_CS_MONITORING_LAMBDA_VERSION}"} \
+  ${UNITY_APIGATEWAY_VERSION:+--unity-apigateway-version "${UNITY_APIGATEWAY_VERSION}"} \
+  ${UNITY_PROXY_VERSION:+--unity-proxy-version "${UNITY_PROXY_VERSION}"} \
+  ${UNITY_UI_VERSION:+--unity-ui-version "${UNITY_UI_VERSION}"}
 
 echo "Deploying Management Console..." >> nightly_output.txt
 echo "Deploying Management Console..."
