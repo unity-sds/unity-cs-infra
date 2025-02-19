@@ -246,7 +246,7 @@ bash deploy.sh \
   --mc-version "${MC_VERSION:=latest}" \
   --config-file "${CONFIG_FILE}" \
   --mc-sha "${MC_SHA}" \
-  --latest "${LATEST}" \
+  ${LATEST:+--latest} \
   ${UNITY_CS_MONITORING_LAMBDA_VERSION:+--unity-cs-monitoring-lambda-version "${UNITY_CS_MONITORING_LAMBDA_VERSION}"} \
   ${UNITY_APIGATEWAY_VERSION:+--unity-apigateway-version "${UNITY_APIGATEWAY_VERSION}"} \
   ${UNITY_PROXY_VERSION:+--unity-proxy-version "${UNITY_PROXY_VERSION}"} \
