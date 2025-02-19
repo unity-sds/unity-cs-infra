@@ -4,13 +4,14 @@ DESTROY=""
 RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
+LATEST=""
 MC_VERSION="latest"
 DEPLOYMENT_START_TIME=$(date +%s)
 MC_SHA=""
 CONFIG_FILE="marketplace_config.yaml"  # Set default config file
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--latest <true|false>] [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
     exit 1
 }
 
@@ -61,6 +62,21 @@ while [[ $# -gt 0 ]]; do
             ;;
         --config-file)
             CONFIG_FILE="$2"
+            shift 2
+            ;;
+        --latest)
+            case "$2" in
+                true)
+                    LATEST=true
+                    ;;
+                false)
+                    LATEST=false
+                    ;;
+                *)
+                    echo "Invalid argument for --latest. Please specify 'true' or 'false'." >&2
+                    exit 1
+                    ;;
+            esac
             shift 2
             ;;
         --mc-sha)
@@ -220,7 +236,7 @@ git checkout ${GH_BRANCH}
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA"
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" ${LATEST:+--latest "$LATEST"}
 
 echo "Deploying Management Console..." >> nightly_output.txt
 echo "Deploying Management Console..."

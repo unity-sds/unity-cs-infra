@@ -6,10 +6,11 @@ VENUE_NAME=""
 MC_VERSION="latest"
 MC_SHA=""
 CONFIG_FILE=""
+LATEST=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>] [--latest <true|false>]"
     exit 1
 }
 
@@ -45,6 +46,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --config-file)
             CONFIG_FILE="$2"
+            shift 2
+            ;;
+        --latest)
+            LATEST="$2"
             shift 2
             ;;
         *)
