@@ -4,13 +4,18 @@ DESTROY=""
 RUN_TESTS=""
 PROJECT_NAME=""
 VENUE_NAME=""
-MC_VERSION="latest"
+LATEST=""
+MC_VERSION="null"
 DEPLOYMENT_START_TIME=$(date +%s)
-MC_SHA=""
+MC_SHA="null"
 CONFIG_FILE="marketplace_config.yaml"  # Set default config file
+MONITORING_LAMBDA_VERSION=""
+APIGATEWAY_VERSION=""
+PROXY_VERSION=""
+UI_VERSION=""
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
+    echo "Usage: $0 --destroy <true|false> --run-tests <true|false> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--latest <true|false>] [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
     exit 1
 }
 
@@ -63,8 +68,33 @@ while [[ $# -gt 0 ]]; do
             CONFIG_FILE="$2"
             shift 2
             ;;
+        --latest)
+            LATEST="true"
+            MC_VERSION="latest"
+            MONITORING_LAMBDA_VERSION="latest"
+            APIGATEWAY_VERSION="latest"
+            PROXY_VERSION="latest"
+            UI_VERSION="latest"
+            shift 1
+            ;;
         --mc-sha)
             MC_SHA="$2"
+            shift 2
+            ;;
+        --unity-cs-monitoring-lambda-version)
+            MONITORING_LAMBDA_VERSION="$2"
+            shift 2
+            ;;
+        --unity-apigateway-version)
+            APIGATEWAY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-proxy-version)
+            PROXY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-ui-version)
+            UI_VERSION="$2"
             shift 2
             ;;
         *)
@@ -132,6 +162,12 @@ if ! grep -q selenium out.txt; then
     pip3 install selenium
 fi
 
+# Check if yq is installed
+if ! command -v yq &> /dev/null; then
+    echo "Installing yq..."
+    sudo snap install yq
+fi
+
 rm out.txt
 
 echo "RUN ARGUMENTS: "
@@ -145,9 +181,8 @@ echo "  - Config File:                    $CONFIG_FILE"
 
 echo "---------------------------------------------------------"
 
-export MC_SHA="${MC_SHA}"
 export STACK_NAME="unity-management-console-${PROJECT_NAME}-${VENUE_NAME}"
-export GH_BRANCH=main
+export GH_BRANCH="main"
 TODAYS_DATE=$(date '+%F_%H-%M')
 LOG_DIR=nightly_logs/log_${TODAYS_DATE}
 
@@ -205,6 +240,7 @@ mkdir -p ${LOG_DIR}
 NIGHTLY_HASH=$(git rev-parse --short HEAD)
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]" >> nightly_output.txt
 echo "Repo Hash (Nightly Test):     [$NIGHTLY_HASH]"
+echo "Management Console Version:        [$MC_VERSION]"
 echo "Management Console SHA:        [$MC_SHA]"
 
 ## update self (unity-cs-infra repository)
@@ -214,7 +250,7 @@ git checkout ${GH_BRANCH}
 #
 # Deploy the Management Console using CloudFormation
 #
-bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA"
+bash deploy.sh --stack-name "${STACK_NAME}" --project-name "${PROJECT_NAME}" --venue-name "${VENUE_NAME}" --mc-version "${MC_VERSION}" --config-file "$CONFIG_FILE" --mc-sha "$MC_SHA" ${LATEST:+--latest} ${MONITORING_LAMBDA_VERSION:+--unity-cs-monitoring-lambda-version "$MONITORING_LAMBDA_VERSION"} ${APIGATEWAY_VERSION:+--unity-apigateway-version "$APIGATEWAY_VERSION"} ${PROXY_VERSION:+--unity-proxy-version "$PROXY_VERSION"} ${UI_VERSION:+--unity-ui-version "$UI_VERSION"}
 
 echo "Deploying Management Console..." >> nightly_output.txt
 echo "Deploying Management Console..."

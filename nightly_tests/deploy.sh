@@ -3,13 +3,18 @@
 STACK_NAME=""
 PROJECT_NAME=""
 VENUE_NAME=""
-MC_VERSION="latest"
-MC_SHA=""
+MC_VERSION="null"
+MC_SHA="null"
 CONFIG_FILE=""
+LATEST=false
+MONITORING_LAMBDA_VERSION=""
+APIGATEWAY_VERSION=""
+PROXY_VERSION=""
+UI_VERSION=""
 
 # Function to display usage instructions
 usage() {
-    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>]"
+    echo "Usage: $0 --stack-name <cloudformation_stack_name> --project-name <PROJECT_NAME> --venue-name <VENUE_NAME> [--mc-version <MC_VERSION>] [--mc-sha <MC_SHA>] [--config-file <CONFIG_FILE>] [--latest]"
     exit 1
 }
 
@@ -47,6 +52,26 @@ while [[ $# -gt 0 ]]; do
             CONFIG_FILE="$2"
             shift 2
             ;;
+        --latest)
+            LATEST=true
+            shift
+            ;;
+        --unity-cs-monitoring-lambda-version)
+            MONITORING_LAMBDA_VERSION="$2"
+            shift 2
+            ;;
+        --unity-apigateway-version)
+            APIGATEWAY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-proxy-version)
+            PROXY_VERSION="$2"
+            shift 2
+            ;;
+        --unity-ui-version)
+            UI_VERSION="$2"
+            shift 2
+            ;;
         *)
             usage
             ;;
@@ -79,36 +104,70 @@ echo "Deploying Cloudformation stack..." >> nightly_output.txt
 echo "Deploying Cloudformation stack..."
 
 
-# Function to read and format the config file
-format_config_file() {
-    if [ -f "$1" ]; then
-        # Read the file and format it as a YAML string, preserving indentation
-        content=$(sed 's/^//' "$1")
-        echo "$content"
+# Read and parse the config file using yq
+if [ -f "$CONFIG_FILE" ]; then
+    # Extract ManagementConsole values if present
+    if yq eval '.ManagementConsole' "$CONFIG_FILE" &>/dev/null; then
+        MC_SHA=$(yq eval '.ManagementConsole.sha // ""' "$CONFIG_FILE")
+        if [ -z "$MC_SHA" ]; then
+            MC_SHA="null"
+        fi
+        MC_VERSION=$(yq eval '.ManagementConsole.release' "$CONFIG_FILE")
     else
-        echo "[]"
+        MC_SHA="null"
     fi
-}
+    
+    # Get YAML content without ManagementConsole section and update versions if --latest
+    if [ "$LATEST" = true ]; then
+        escaped_config_content=$(yq eval '{"MarketplaceItems": (.MarketplaceItems | map(. * {"version": "latest"}))}' "$CONFIG_FILE")
+    else
+        escaped_config_content=$(yq eval '{"MarketplaceItems": .MarketplaceItems}' "$CONFIG_FILE")
+    fi
 
-# Read and format the config file content
-config_content=$(format_config_file "$CONFIG_FILE")
+    # Update monitoring lambda version if specified
+    if [ -n "$MONITORING_LAMBDA_VERSION" ]; then
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-cs-monitoring-lambda") |= . * {"version": "'$MONITORING_LAMBDA_VERSION'"})' -)
+    fi
 
-# Output the marketplace items table to both console and nightly_output.txt
-{
-    echo "-----------------------------------------"
-    echo "Items that will auto-deploy on bootstrap:"
-    echo "Marketplace Item                | Version"
-    echo "--------------------------------+--------"
-    echo "$config_content" | grep -E '^\s*-' | sed -E 's/^\s*-\s*name:\s*(.*)/\1/' | while read -r line; do
-        name=$(echo "$line" | cut -d' ' -f1)
-        version=$(echo "$config_content" | grep -A1 "name: $name" | grep 'version:' | sed -E 's/^\s*version:\s*//')
-        printf "%-31s | %s\n" "$name" "$version"
-    done
-} | tee -a nightly_output.txt
+    # Update apigateway version if specified
+    if [ -n "$APIGATEWAY_VERSION" ]; then
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-apigateway") |= . * {"version": "'$APIGATEWAY_VERSION'"})' -)
+    fi
+
+    # Update proxy version if specified
+    if [ -n "$PROXY_VERSION" ]; then
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-proxy") |= . * {"version": "'$PROXY_VERSION'"})' -)
+    fi
+
+    # Update UI version if specified
+    if [ -n "$UI_VERSION" ]; then
+        escaped_config_content=$(echo "$escaped_config_content" | yq eval '.MarketplaceItems |= map(select(.name == "unity-ui") |= . * {"version": "'$UI_VERSION'"})' -)
+    fi
+    
+    # Log MC version/SHA before deployment
+    echo "Starting CloudFormation deployment with:"
+    echo "  - MC Version: ${MC_VERSION}"
+    echo "  - MC SHA: ${MC_SHA}"
+    echo ""
+
+    # Output the marketplace items table
+    {
+        echo "-----------------------------------------"
+        echo "Items that will auto-deploy on bootstrap:"
+        echo "Marketplace Item                | Version"
+        echo "--------------------------------+--------"
+        yq eval '.MarketplaceItems[] | [.name, .version] | join(" | ")' <(echo "$escaped_config_content") | \
+        while IFS='|' read -r name version; do
+            printf "%-31s |%s\n" "$name" "$version"
+        done
+    } | tee -a nightly_output.txt
+else
+    echo "Config file not found: $CONFIG_FILE"
+    escaped_config_content="[]"
+fi
 
 # Escape any special characters in the config content
-escaped_config_content=$(echo "$config_content" | sed 's/"/\\"/g')
-
+escaped_config_content=$(echo "$escaped_config_content" | sed 's/"/\\"/g')
 
 
 # Modify the CloudFormation create-stack command
