@@ -36,14 +36,6 @@ data "aws_iam_policy" "mcp_operator_policy" {
   name = "mcp-tenantOperator-AMI-APIG"
 }
 
-data "aws_iam_policy" "datalakekinesis" {
-  name = "DatalakeKinesisPolicy"
-}
-
-data "aws_iam_policy" "mcptools" {
-  name = "McpToolsAccessPolicy"
-}
-
 data "aws_iam_policy" "ebs_csi_policy" {
   name = "U-CS_Service_Policy"
 }
