@@ -62,16 +62,6 @@ resource "aws_iam_role_policy_attachment" "cloudwatch-agent" {
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
-resource "aws_iam_role_policy_attachment" "kinesis" {
-  role       = aws_iam_role.cluster_iam_role.name
-  policy_arn = data.aws_iam_policy.datalakekinesis.arn
-}
-
-resource "aws_iam_role_policy_attachment" "mcptools" {
-  role       = aws_iam_role.cluster_iam_role.name
-  policy_arn = data.aws_iam_policy.mcptools.arn
-}
-
 
 resource "aws_iam_role_policy_attachment" "node-policy" {
   role       = aws_iam_role.cluster_iam_role.name
