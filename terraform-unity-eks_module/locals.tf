@@ -4,11 +4,11 @@ locals {
   subnet_map   = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   #ami = "ami-0e3e9697a56f6ba66"
   ami_map = {
+    "1.31"    = data.aws_ssm_parameter.eks_ami_1_31.value
     "1.30"    = data.aws_ssm_parameter.eks_ami_1_30.value
     "1.29"    = data.aws_ssm_parameter.eks_ami_1_29.value
     "default" = "ami-0f4319b351ce92b6e"
   }
-  #iam_arn = data.aws_ssm_parameter.eks_iam_node_role.value
   mergednodegroups = { for name, ng in var.nodegroups :
     name => {
       use_name_prefix            = false

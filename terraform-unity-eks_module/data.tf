@@ -8,21 +8,9 @@ data "aws_ssm_parameter" "subnet_list" {
   name = "/unity/account/network/subnet_list"
 }
 
-#data "aws_ssm_parameter" "cluster_sg" {
-#  name = "/unity/account/eks/cluster_sg"
-#}
-#
-#data "aws_ssm_parameter" "node_sg" {
-#  name = "/unity/account/eks/node_sg"
-#}
-
-#data "aws_ssm_parameter" "eks_iam_node_role" {
-#  name = "/unity/account/eks/eks_iam_node_role"
-#}
-#
-#data "aws_ssm_parameter" "eks_iam_role" {
-#  name = "/unity/account/eks/eks_iam_role"
-#}
+data "aws_ssm_parameter" "eks_ami_1_31" {
+  name = "/mcp/amis/aml2-eks-1-31"
+}
 
 data "aws_ssm_parameter" "eks_ami_1_30" {
   name = "/unity/account/eks/amis/aml2-eks-1-30"
