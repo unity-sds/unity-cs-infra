@@ -337,6 +337,11 @@ module "eks" {
     }
     aws-ebs-csi-driver = {
       most_recent = true
+      configuration_values = jsonencode({
+        defaultStorageClass = {
+          enabled = true
+        }
+      })
     }
     aws-efs-csi-driver = {
       most_recent = true
@@ -736,27 +741,3 @@ resource "aws_iam_policy" "aws-load-balancer-controller-policy" {
     ]
   })
 }
-
-
-#module "irsa-ebs-csi" {
-#  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-#  version = "4.7.0"
-#
-#  create_role                   = false
-#  #role_name                     = "AmazonEKSTFEBSCSIRole-${module.eks.cluster_name}"
-#  role_name = "U-CS_Service_Role"
-#  provider_url                  = module.eks.oidc_provider
-#  role_policy_arns              = [data.aws_iam_policy.ebs_csi_policy.arn]
-#  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
-#}
-
-#resource "aws_eks_addon" "ebs-csi" {
-#  cluster_name             = module.eks.cluster_name
-#  addon_name               = "aws-ebs-csi-driver"
-#  addon_version            = "v1.20.0-eksbuild.1"
-#  service_account_role_arn = module.irsa-ebs-csi.iam_role_arn
-#  tags = {
-#    "eks_addon" = "ebs-csi"
-#    "terraform" = "true"
-#  }
-#}
