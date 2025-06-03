@@ -30,8 +30,7 @@ export ENV_SSM_PARAM="/unity/account/venue"
 ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text)
 
 # Default configuration variables (can be overridden with environment variables)
-# S3_BUCKET="${S3_BUCKET_NAME:-ucs-shared-services-apache-config-${ENVIRONMENT}}"
-S3_BUCKET_NAME="${S3_BUCKET_NAME:-ucs-shared-services-apache-config-dev-test}"
+S3_BUCKET_NAME="${S3_BUCKET_NAME:-ucs-shared-services-apache-config-${ENVIRONMENT}}"
 PERMISSION_BOUNDARY_ARN="arn:aws:iam::237868187491:policy/mcp-tenantOperator-AMI-APIG"
 AWS_REGION="${AWS_REGION:-us-west-2}"
 APACHE_HOST="${APACHE_HOST:-www.dev.mdps.mcp.nasa.gov}"
