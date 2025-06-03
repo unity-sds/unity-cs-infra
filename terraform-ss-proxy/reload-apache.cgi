@@ -27,8 +27,7 @@ echo "Content-type: application/json"
 echo ""
 CONFIG_TEST=$(sudo /usr/sbin/apachectl configtest 2>&1)
 if [[ "$CONFIG_TEST" != *"Syntax OK"* ]]; then
-    echo $CONFIG_TEST
-    send_to_slack "❌ Apache config sync failed: Failed Config Test"
+    send_to_slack "❌ Apache config sync failed: Failed Config Test: $CONFIG_TEST"
     logger -t "apache-reload" "Reload Failed: ${CONFIG_TEST}"
     echo '{"status":"error","message":"Failed to validate config"}'
 else
