@@ -2,6 +2,7 @@
 
 # Set variables
 S3_BUCKET="REPLACE_WITH_S3_BUCKET_NAME"
+ENVIRONMENT="REPLACE_WITH_ENVIRONMENT_NAME"
 LOCAL_FILE="/etc/apache2/sites-enabled/unity-cs.conf"
 TEMP_FILE="/tmp/unity-cs.conf"
 SLACK_WEBHOOK=$(aws ssm get-parameter --name "/unity/shared-services/slack/apache-config-webhook-url" --with-decryption --query "Parameter.Value" --output text)
@@ -9,7 +10,6 @@ SLACK_WEBHOOK=$(aws ssm get-parameter --name "/unity/shared-services/slack/apach
 # Function to send message to Slack and exit
 send_to_slack() {
     local message="$1"
-    local exit_code="$2"
     local env_prefix="[Unity-venue-${ENVIRONMENT}] "
     curl  --silent --output /dev/null -X POST -H 'Content-type: application/json' \
         --data "{\"text\":\"${env_prefix}${message}\"}" \
@@ -19,12 +19,17 @@ send_to_slack() {
 # Download files from S3
 aws s3 sync s3://${S3_BUCKET}/ /etc/apache2/venues.d/ --exclude "*" --include "*.conf" --quiet
 
+# Do short pause to to make sure
+sleep 2
+
 # Test the config
 echo "Content-type: application/json"
 echo ""
-CONFIG_TEST=$(sudo apache2ctl configtest 2>&1)
+CONFIG_TEST=$(sudo /usr/sbin/apachectl configtest 2>&1)
 if [[ "$CONFIG_TEST" != *"Syntax OK"* ]]; then
-    send_to_slack "❌ Apache config sync failed: Failed Config Test" 1
+    echo $CONFIG_TEST
+    send_to_slack "❌ Apache config sync failed: Failed Config Test"
+    echo "[$(date)] Reload Failed: ${CONFIG_TEST}" >> /var/log/apache2/reload.log
     echo '{"status":"error","message":"Failed to validate config"}'
 else
 
