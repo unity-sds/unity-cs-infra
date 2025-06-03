@@ -53,12 +53,14 @@ Before setting up the server, several elements need to be deployed in the SS ven
 The install script uses the following default variables (can be overridden via environment variables):
 
 ```bash
-S3_BUCKET_NAME="unity-cs-config-bucket"
+S3_BUCKET_NAME="ucs-shared-services-apache-config-dev-test"
 PERMISSION_BOUNDARY_ARN="arn:aws:iam::237868187491:policy/mcp-tenantOperator-AMI-APIG"
 AWS_REGION="us-west-2"
 APACHE_HOST="www.dev.mdps.mcp.nasa.gov"
 APACHE_PORT="4443"
 DEBOUNCE_DELAY="30"
+OIDC_CLIENT_ID="ee3duo3i707h93vki01ivja8o"
+COGNITO_USER_POOL_ID="us-west-2_yaOw3yj0z"
 ```
 
 To override defaults, export environment variables before running the script:
@@ -67,6 +69,21 @@ To override defaults, export environment variables before running the script:
 export S3_BUCKET_NAME="my-custom-bucket"
 export AWS_REGION="us-east-1"
 ./install.sh
+```
+
+### Install Options
+
+The install script supports the following options:
+
+```bash
+# Full installation (Apache + Terraform)
+./install.sh
+
+# Terraform infrastructure only (requires existing Apache config)
+./install.sh --terraform-only
+
+# Destroy Terraform infrastructure (cleanup)
+./install.sh --destroy-terraform
 ```
 
 ## Terraform Infrastructure
@@ -80,12 +97,12 @@ The installation script automatically sets up the required AWS infrastructure us
    - Content-based deduplication enabled
    - 14-day message retention
 
-2. **Lambda Function**: `apache-config-reload-trigger`
+2. **Lambda Function**: `ss-proxy-config-reload-trigger`
    - Handles both S3 events and SQS message processing
    - Implements debouncing logic to prevent rapid successive reloads
    - Makes HTTPS calls to Apache reload endpoint
 
-3. **IAM Role**: `apache-reload-lambda-role`
+3. **IAM Role**: `unity-cs-proxy-reload-lambda-role`
    - Includes required permissions for SQS, CloudWatch Logs
    - Uses the specified permission boundary ARN
 
@@ -93,7 +110,11 @@ The installation script automatically sets up the required AWS infrastructure us
    - Triggers Lambda on `.conf` file changes
    - Monitors `ObjectCreated:*` and `ObjectRemoved:*` events
 
-5. **SQS Event Source Mapping**
+5. **CloudWatch Log Group**: `/aws/lambda/ss-proxy-config-reload-trigger`
+   - Logs Lambda function execution and errors
+   - 14-day retention for troubleshooting
+
+6. **SQS Event Source Mapping**
    - Connects SQS queue to Lambda function
    - Batch size of 1 to maintain FIFO ordering
 
@@ -142,3 +163,22 @@ terraform destroy
 ### Debouncing
 
 The system implements a configurable debounce delay (default: 30 seconds) to prevent excessive Apache reloads when multiple configuration files are changed rapidly.
+
+## Cleanup
+
+### Destroying Infrastructure
+
+To remove all AWS infrastructure created by this setup:
+
+```bash
+./install.sh --destroy-terraform
+```
+
+This will:
+- Destroy the Lambda function and its execution role
+- Remove the SQS FIFO queue
+- Delete the CloudWatch log group
+- Remove S3 bucket notifications
+- Clean up all related AWS resources
+
+**Note**: This does not affect the Apache installation or configuration files on the EC2 instance.

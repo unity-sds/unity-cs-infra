@@ -117,7 +117,7 @@ async function handleSQSEvent(event) {
     
     for (const record of event.Records) {
         try {
-            const messageBody = JSON.parse(record.body);
+            const messageBody = record.body;
             console.log('Processing SQS message:', messageBody);
             
             // Implement debouncing by checking if there are newer messages in the queue

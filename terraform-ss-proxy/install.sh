@@ -2,16 +2,23 @@
 
 # Parse command line arguments
 TERRAFORM_ONLY=false
+DESTROY_TERRAFORM=false
 while [[ $# -gt 0 ]]; do
   case $1 in
     --terraform-only)
       TERRAFORM_ONLY=true
       shift
       ;;
+    --destroy-terraform)
+      DESTROY_TERRAFORM=true
+      TERRAFORM_ONLY=true
+      shift
+      ;;
     *)
       echo "Unknown option $1"
-      echo "Usage: $0 [--terraform-only]"
-      echo "  --terraform-only    Only run Terraform infrastructure setup"
+      echo "Usage: $0 [--terraform-only] [--destroy-terraform]"
+      echo "  --terraform-only     Only run Terraform infrastructure setup"
+      echo "  --destroy-terraform  Destroy Terraform infrastructure (implies --terraform-only)"
       exit 1
       ;;
   esac
@@ -36,7 +43,9 @@ echo "  APACHE_PORT: $APACHE_PORT"
 echo "  DEBOUNCE_DELAY: $DEBOUNCE_DELAY"
 echo ""
 
-if [ "$TERRAFORM_ONLY" = true ]; then
+if [ "$DESTROY_TERRAFORM" = true ]; then
+    echo "Running in Terraform destroy mode..."
+elif [ "$TERRAFORM_ONLY" = true ]; then
     echo "Running in Terraform-only mode..."
 else
     # Check if Terraform is installed
@@ -129,7 +138,7 @@ if [ "$TERRAFORM_ONLY" = false ]; then
     echo "Apache installation complete."
 fi
 
-# Generate a random token for Lambda (needed for both modes)
+# Generate a random token for Lambda (needed for both modes, except destroy)
 if [ "$TERRAFORM_ONLY" = false ]; then
     SECURE_TOKEN=$(openssl rand -hex 16)
     echo "Generated secure token: ${SECURE_TOKEN}"
@@ -139,7 +148,7 @@ if [ "$TERRAFORM_ONLY" = false ]; then
     # The sed command uses a different delimiter (#) to avoid issues if the token contains slashes.
     sudo sed -i "s#your_secure_token_here#${SECURE_TOKEN}#g" /etc/apache2/sites-enabled/unity-cs-main.conf
     echo "Apache configuration updated with secure token."
-else
+elif [ "$DESTROY_TERRAFORM" = false ]; then
     # Pull the token from /etc/apache2/sites-enabled/unity-cs-main.conf if it exists
     if [ -f "/etc/apache2/sites-enabled/unity-cs-main.conf" ]; then
         SECURE_TOKEN=$(sudo grep -oP "X-Reload-Token.*?'\K[^']+" /etc/apache2/sites-enabled/unity-cs-main.conf 2>/dev/null || echo "")
@@ -155,21 +164,36 @@ else
     fi
 fi
 
-# Run Terraform to create AWS infrastructure
-echo "Setting up AWS infrastructure with Terraform..."
+# Run Terraform
 cd "$(dirname "$0")"
 
-# Initialize and apply Terraform
+# Initialize Terraform
 terraform init
 
-terraform apply -auto-approve \
-  -var="s3_bucket_name=${S3_BUCKET_NAME}" \
-  -var="permission_boundary_arn=${PERMISSION_BOUNDARY_ARN}" \
-  -var="reload_token=${SECURE_TOKEN}" \
-  -var="aws_region=${AWS_REGION}" \
-  -var="apache_host=${APACHE_HOST}" \
-  -var="apache_port=${APACHE_PORT}" \
-  -var="debounce_delay=${DEBOUNCE_DELAY}"
-
-echo "AWS infrastructure setup complete!"
-echo "Lambda function created and configured to monitor S3 bucket and process via SQS FIFO queue."
+if [ "$DESTROY_TERRAFORM" = true ]; then
+    echo "Destroying AWS infrastructure with Terraform..."
+    terraform destroy -auto-approve \
+      -var="s3_bucket_name=${S3_BUCKET_NAME}" \
+      -var="permission_boundary_arn=${PERMISSION_BOUNDARY_ARN}" \
+      -var="reload_token=dummy" \
+      -var="aws_region=${AWS_REGION}" \
+      -var="apache_host=${APACHE_HOST}" \
+      -var="apache_port=${APACHE_PORT}" \
+      -var="debounce_delay=${DEBOUNCE_DELAY}"
+    
+    echo "AWS infrastructure destruction complete!"
+    echo "Lambda function, SQS queue, and related resources have been removed."
+else
+    echo "Setting up AWS infrastructure with Terraform..."
+    terraform apply -auto-approve \
+      -var="s3_bucket_name=${S3_BUCKET_NAME}" \
+      -var="permission_boundary_arn=${PERMISSION_BOUNDARY_ARN}" \
+      -var="reload_token=${SECURE_TOKEN}" \
+      -var="aws_region=${AWS_REGION}" \
+      -var="apache_host=${APACHE_HOST}" \
+      -var="apache_port=${APACHE_PORT}" \
+      -var="debounce_delay=${DEBOUNCE_DELAY}"
+    
+    echo "AWS infrastructure setup complete!"
+    echo "Lambda function created and configured to monitor S3 bucket and process via SQS FIFO queue."
+fi

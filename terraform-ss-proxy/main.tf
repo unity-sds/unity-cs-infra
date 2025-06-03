@@ -161,7 +161,7 @@ resource "aws_lambda_function" "apache_reload_trigger" {
 
 # CloudWatch Log Group for Lambda
 resource "aws_cloudwatch_log_group" "lambda_logs" {
-  name              = "/aws/lambda/apache-config-reload-trigger"
+  name              = "/aws/lambda/ss-proxy-config-reload-trigger"
   retention_in_days = 14
 
   tags = {
