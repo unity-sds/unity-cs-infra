@@ -103,6 +103,7 @@ if [ "$TERRAFORM_ONLY" = false ]; then
     sudo sed -i "s/\${COGNITO_POOL_ID}/${COGNITO_USER_POOL_ID}/" /etc/apache2/sites-enabled/unity-cs-main.conf
     sudo sed -i "s/\${OIDC_CLIENT_ID}/${OIDC_CLIENT_ID}/" /etc/apache2/sites-enabled/unity-cs-main.conf
     sudo sed -i "s/\${OIDC_CLIENT_SECRET}/${CLIENT_SECRET}/" /etc/apache2/sites-enabled/unity-cs-main.conf
+    sudo sed -i "s/\${PORT_NUM}/${APACHE_PORT}/" /etc/apache2/sites-enabled/unity-cs-main.conf
 
     # Remove the default
     sudo rm /etc/apache2/sites-enabled/000-default.conf
