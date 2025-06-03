@@ -135,10 +135,6 @@ if [ "$TERRAFORM_ONLY" = false ]; then
     # Replace environment placeholder in CGI script
     sudo sed -i "s#REPLACE_WITH_ENVIRONMENT_NAME#${ENVIRONMENT}#g" /usr/lib/cgi-bin/reload-apache.cgi
     
-    # Create and set ownership of reload log file
-    sudo touch /var/log/apache2/reload.log
-    sudo chown www-data:www-data /var/log/apache2/reload.log
-    
     sudo chown www-data:www-data /usr/lib/cgi-bin/reload-apache.cgi
     sudo chmod 755 /usr/lib/cgi-bin/reload-apache.cgi
 

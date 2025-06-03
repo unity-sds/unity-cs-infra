@@ -29,12 +29,12 @@ CONFIG_TEST=$(sudo /usr/sbin/apachectl configtest 2>&1)
 if [[ "$CONFIG_TEST" != *"Syntax OK"* ]]; then
     echo $CONFIG_TEST
     send_to_slack "❌ Apache config sync failed: Failed Config Test"
-    echo "[$(date)] Reload Failed: ${CONFIG_TEST}" >> /var/log/apache2/reload.log
+    logger -t "apache-reload" "Reload Failed: ${CONFIG_TEST}"
     echo '{"status":"error","message":"Failed to validate config"}'
 else
 
     # Log the request for auditing
-    echo "[$(date)] Apache config reload requested" >> /var/log/apache2/reload.log
+    logger -t "apache-reload" "Apache config reload requested"
 
     # Execute the graceful reload
     RESULT=$(sudo /usr/sbin/apachectl graceful 2>&1)
