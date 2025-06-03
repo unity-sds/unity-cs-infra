@@ -59,7 +59,7 @@ PERMISSION_BOUNDARY_ARN="arn:aws:iam::237868187491:policy/mcp-tenantOperator-AMI
 AWS_REGION="us-west-2"
 APACHE_HOST="www.dev.mdps.mcp.nasa.gov"
 APACHE_PORT="4443"
-DEBOUNCE_DELAY="30"
+RELOAD_DELAY="15"
 OIDC_CLIENT_ID="ee3duo3i707h93vki01ivja8o"
 COGNITO_USER_POOL_ID="us-west-2_yaOw3yj0z"
 ```
@@ -186,9 +186,50 @@ terraform destroy
 4. **Processing**: Lambda processes SQS message after debounce delay
 5. **Apache Reload**: Lambda makes HTTPS call to reload Apache configuration
 
-### Debouncing
+### Reload Throttling
 
-The system implements a configurable debounce delay (default: 30 seconds) to prevent excessive Apache reloads when multiple configuration files are changed rapidly.
+The system implements intelligent throttling to ensure Apache configuration reloads are properly spaced while guaranteeing that every S3 event eventually triggers a reload.
+
+#### How Throttling Works
+
+1. **Time-Based Bucketing**: The system divides time into intervals (default: 15 seconds, configurable via `RELOAD_DELAY`)
+
+2. **Boundary Calculation**: When an S3 event occurs, the Lambda calculates the next time boundary:
+   ```
+   Current time: 14:32:07
+   Interval: 15 seconds  
+   Next boundary: 14:32:15 (rounded up to next 15-second mark)
+   ```
+
+3. **SQS Message Scheduling**: 
+   - Message is sent to SQS with `MessageDeduplicationId` = boundary timestamp
+   - `DelaySeconds` = time remaining until that boundary
+   - Multiple events targeting the same boundary are automatically deduplicated
+
+4. **Guaranteed Processing**: Each time window gets exactly one reload, but every S3 event is accounted for
+
+#### Example Timeline
+
+```
+14:32:07 - S3 event → SQS message for boundary 14:32:15 (8s delay)
+14:32:10 - S3 event → REJECTED (duplicate for same boundary)
+14:32:12 - S3 event → REJECTED (duplicate for same boundary)  
+14:32:15 - First message delivered → Apache reload triggered
+14:32:23 - S3 event → SQS message for boundary 14:32:30 (7s delay)
+14:32:30 - Second message delivered → Apache reload triggered
+```
+
+#### Configuration
+
+- **`RELOAD_DELAY`**: Time interval in seconds (default: 15)
+- **Lambda Timeout**: Should be set to 15 seconds  
+- **SQS FIFO**: Uses content-based deduplication with 5-minute window
+
+This approach ensures:
+- ✅ No more than one reload per interval
+- ✅ Every S3 event eventually triggers a reload  
+- ✅ No wasted Lambda execution time
+- ✅ Automatic deduplication of rapid changes
 
 ## Cleanup
 

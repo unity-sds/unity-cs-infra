@@ -1,5 +1,5 @@
 const https = require('https');
-const { SQSClient, SendMessageCommand, GetQueueAttributesCommand } = require('@aws-sdk/client-sqs');
+const { SQSClient, SendMessageCommand } = require('@aws-sdk/client-sqs');
 
 const sqs = new SQSClient({});
 
@@ -9,7 +9,7 @@ const APACHE_PORT = process.env.APACHE_PORT || '4443';
 const RELOAD_TOKEN = process.env.RELOAD_TOKEN;
 const RELOAD_PATH = '/reload-config';
 const SQS_QUEUE_URL = process.env.SQS_QUEUE_URL;
-const DEBOUNCE_DELAY = parseInt(process.env.DEBOUNCE_DELAY) || 30; // seconds
+const RELOAD_DELAY = parseInt(process.env.RELOAD_DELAY) || 15; // seconds
 
 exports.handler = async (event) => {
     console.log('Lambda triggered by event:', JSON.stringify(event, null, 2));
@@ -81,13 +81,18 @@ async function handleS3Event(event) {
     
     console.log(`Found ${relevantEvents.length} relevant config file changes`);
     
-    // Send a generic message to SQS to trigger the debounced reload
-    // Use a fixed message body for content-based deduplication
+    // Calculate next reload boundary (rounded up to next RELOAD_DELAY interval)
+    const now = Math.floor(Date.now() / 1000);
+    const nextBoundary = Math.ceil(now / RELOAD_DELAY) * RELOAD_DELAY;
+    const delaySeconds = Math.max(0, nextBoundary - now);
+    
+    // Send message with time-based deduplication to ensure proper throttling
     const sqsParams = {
         QueueUrl: SQS_QUEUE_URL,
-        MessageBody: 'S3 Config Changed', // Generic message for deduplication
-        MessageGroupId: 'apache-config-reload', // For FIFO queue
-        DelaySeconds: 0 // Send immediately to SQS
+        MessageBody: 'S3 Config Changed',
+        MessageGroupId: 'apache-config-reload',
+        MessageDeduplicationId: nextBoundary.toString(), // Time-based deduplication
+        DelaySeconds: delaySeconds // Delay until the boundary timestamp
     };
     
     try {
@@ -98,9 +103,11 @@ async function handleS3Event(event) {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                message: 'Config change notification sent to SQS',
+                message: `Config change notification sent to SQS for reload at ${new Date(nextBoundary * 1000).toISOString()}`,
                 messageId: result.MessageId,
-                eventsProcessed: relevantEvents.length
+                eventsProcessed: relevantEvents.length,
+                nextBoundary: nextBoundary,
+                delaySeconds: delaySeconds
             })
         };
     } catch (sqsError) {
@@ -112,7 +119,8 @@ async function handleS3Event(event) {
 async function handleSQSEvent(event) {
     console.log('Processing SQS event');
     
-    // Process all SQS messages (though typically there should be only one per invocation)
+    // Process the SQS message and trigger reload immediately
+    // The delay was already handled by SQS DelaySeconds
     const results = [];
     
     for (const record of event.Records) {
@@ -120,37 +128,7 @@ async function handleSQSEvent(event) {
             const messageBody = record.body;
             console.log('Processing SQS message:', messageBody);
             
-            // Implement debouncing by checking if there are newer messages in the queue
-            const shouldProceed = await checkIfShouldProceed();
-            
-            if (!shouldProceed) {
-                console.log('Skipping reload - newer messages detected in queue');
-                results.push({
-                    messageId: record.messageId,
-                    status: 'skipped',
-                    reason: 'newer_messages_pending'
-                });
-                continue;
-            }
-            
-            // Wait for the debounce period to allow any in-flight messages to arrive
-            console.log(`Waiting ${DEBOUNCE_DELAY} seconds for additional changes...`);
-            await new Promise(resolve => setTimeout(resolve, DEBOUNCE_DELAY * 1000));
-            
-            // Check again after waiting
-            const shouldProceedAfterWait = await checkIfShouldProceed();
-            
-            if (!shouldProceedAfterWait) {
-                console.log('Skipping reload after wait - newer messages detected');
-                results.push({
-                    messageId: record.messageId,
-                    status: 'skipped',
-                    reason: 'newer_messages_after_wait'
-                });
-                continue;
-            }
-            
-            // Proceed with Apache reload
+            // Trigger Apache reload immediately
             const reloadResult = await makeReloadRequest();
             console.log('Apache reload completed:', reloadResult);
             
@@ -179,33 +157,6 @@ async function handleSQSEvent(event) {
     };
 }
 
-async function checkIfShouldProceed() {
-    if (!SQS_QUEUE_URL) {
-        return true; // If no SQS configured, proceed
-    }
-    
-    try {
-        // Check if there are messages in the queue
-        const command = new GetQueueAttributesCommand({
-            QueueUrl: SQS_QUEUE_URL,
-            AttributeNames: ['ApproximateNumberOfMessages', 'ApproximateNumberOfMessagesNotVisible']
-        });
-        const queueAttributes = await sqs.send(command);
-        
-        const visibleMessages = parseInt(queueAttributes.Attributes.ApproximateNumberOfMessages) || 0;
-        const invisibleMessages = parseInt(queueAttributes.Attributes.ApproximateNumberOfMessagesNotVisible) || 0;
-        
-        console.log(`Queue status - Visible: ${visibleMessages}, In-flight: ${invisibleMessages}`);
-        
-        // If there are other visible messages, don't proceed (let the newer message handle it)
-        return visibleMessages === 0;
-        
-    } catch (error) {
-        console.error('Error checking queue status:', error);
-        // If we can't check the queue, proceed to be safe
-        return true;
-    }
-}
 
 function makeReloadRequest() {
     return new Promise((resolve, reject) => {
@@ -248,8 +199,8 @@ function makeReloadRequest() {
             reject(error);
         });
         
-        // Set timeout
-        req.setTimeout(30000, () => {
+        // Set timeout (shorter since lambda timeout is 15s)
+        req.setTimeout(10000, () => {
             req.destroy();
             reject(new Error('Request timeout'));
         });
