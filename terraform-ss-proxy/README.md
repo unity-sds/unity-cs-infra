@@ -201,35 +201,49 @@ The system implements intelligent throttling to ensure Apache configuration relo
    Next boundary: 14:32:15 (rounded up to next 15-second mark)
    ```
 
-3. **SQS Message Scheduling**: 
-   - Message is sent to SQS with `MessageDeduplicationId` = boundary timestamp
-   - `DelaySeconds` = time remaining until that boundary
-   - Multiple events targeting the same boundary are automatically deduplicated
+3. **SQS Message Queuing**: 
+   - Message is sent to SQS FIFO queue immediately (no DelaySeconds)
+   - `MessageDeduplicationId` = boundary timestamp for automatic deduplication
+   - Multiple events targeting the same boundary are automatically deduplicated by SQS
 
-4. **Guaranteed Processing**: Each time window gets exactly one reload, but every S3 event is accounted for
+4. **Lambda-Based Delay**: When the Lambda function receives an SQS message:
+   - It calculates the remaining time until the target boundary
+   - Waits (using setTimeout) until that exact boundary time
+   - Then triggers the Apache reload
+
+5. **Guaranteed Processing**: Each time window gets exactly one reload, but every S3 event is accounted for
 
 #### Example Timeline
 
 ```
-14:32:07 - S3 event → SQS message for boundary 14:32:15 (8s delay)
+14:32:07 - S3 event → SQS message for boundary 14:32:15 (queued immediately)
 14:32:10 - S3 event → REJECTED (duplicate for same boundary)
 14:32:12 - S3 event → REJECTED (duplicate for same boundary)  
-14:32:15 - First message delivered → Apache reload triggered
-14:32:23 - S3 event → SQS message for boundary 14:32:30 (7s delay)
-14:32:30 - Second message delivered → Apache reload triggered
+14:32:07 - Lambda receives message → waits 8 seconds → reload at 14:32:15
+14:32:23 - S3 event → SQS message for boundary 14:32:30 (queued immediately)
+14:32:23 - Lambda receives message → waits 7 seconds → reload at 14:32:30
 ```
+
+#### FIFO Queue Compatibility
+
+This approach is designed for **FIFO queue compatibility**:
+- **No DelaySeconds**: FIFO queues don't support DelaySeconds > 0
+- **Lambda-based timing**: Delay logic moved to Lambda function processing
+- **Consistent timing**: AWS Lambda timing is reliable across instances
+- **Order preservation**: FIFO guarantees maintain reload sequence
 
 #### Configuration
 
 - **`RELOAD_DELAY`**: Time interval in seconds (default: 15)
-- **Lambda Timeout**: Should be set to 15 seconds  
+- **Lambda Timeout**: Should be set to at least 30 seconds to handle delays
 - **SQS FIFO**: Uses content-based deduplication with 5-minute window
 
 This approach ensures:
 - ✅ No more than one reload per interval
 - ✅ Every S3 event eventually triggers a reload  
-- ✅ No wasted Lambda execution time
+- ✅ FIFO queue compatibility (no DelaySeconds restriction)
 - ✅ Automatic deduplication of rapid changes
+- ✅ Precise timing control within Lambda function
 
 ## Cleanup
 

@@ -35,7 +35,7 @@ PERMISSION_BOUNDARY_ARN="arn:aws:iam::237868187491:policy/mcp-tenantOperator-AMI
 AWS_REGION="${AWS_REGION:-us-west-2}"
 APACHE_HOST="${APACHE_HOST:-www.dev.mdps.mcp.nasa.gov}"
 APACHE_PORT="${APACHE_PORT:-4443}"
-DEBOUNCE_DELAY="${DEBOUNCE_DELAY:-30}"
+RELOAD_DELAY="${RELOAD_DELAY:-15}"
 OIDC_CLIENT_ID="${OIDC_CLIENT_ID:-ee3duo3i707h93vki01ivja8o}"
 COGNITO_USER_POOL_ID="${COGNITO_USER_POOL_ID:-us-west-2_yaOw3yj0z}"
 
@@ -197,7 +197,7 @@ if [ "$DESTROY_TERRAFORM" = true ]; then
       -var="aws_region=${AWS_REGION}" \
       -var="apache_host=${APACHE_HOST}" \
       -var="apache_port=${APACHE_PORT}" \
-      -var="debounce_delay=${DEBOUNCE_DELAY}"
+      -var="debounce_delay=${RELOAD_DELAY}"
     
     echo "AWS infrastructure destruction complete!"
     echo "Lambda function, SQS queue, and related resources have been removed."
@@ -210,7 +210,7 @@ else
       -var="aws_region=${AWS_REGION}" \
       -var="apache_host=${APACHE_HOST}" \
       -var="apache_port=${APACHE_PORT}" \
-      -var="debounce_delay=${DEBOUNCE_DELAY}"
+      -var="debounce_delay=${RELOAD_DELAY}"
     
     echo "AWS infrastructure setup complete!"
     echo "Lambda function created and configured to monitor S3 bucket and process via SQS FIFO queue."

@@ -145,7 +145,7 @@ resource "aws_lambda_function" "apache_reload_trigger" {
       APACHE_PORT      = var.apache_port
       RELOAD_TOKEN     = var.reload_token
       SQS_QUEUE_URL    = aws_sqs_queue.apache_reload_queue.url
-      DEBOUNCE_DELAY   = var.debounce_delay
+      RELOAD_DELAY     = var.debounce_delay
     }
   }
 

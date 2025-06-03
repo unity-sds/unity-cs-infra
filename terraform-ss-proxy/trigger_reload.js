@@ -9,7 +9,7 @@ const APACHE_PORT = process.env.APACHE_PORT || '4443';
 const RELOAD_TOKEN = process.env.RELOAD_TOKEN;
 const RELOAD_PATH = '/reload-config';
 const SQS_QUEUE_URL = process.env.SQS_QUEUE_URL;
-const RELOAD_DELAY = parseInt(process.env.RELOAD_DELAY) || 15; // seconds
+const RELOAD_DELAY = parseInt(process.env.RELOAD_DELAY) || 15; // seconds (for 15-second windows)
 
 exports.handler = async (event) => {
     console.log('Lambda triggered by event:', JSON.stringify(event, null, 2));
@@ -84,15 +84,18 @@ async function handleS3Event(event) {
     // Calculate next reload boundary (rounded up to next RELOAD_DELAY interval)
     const now = Math.floor(Date.now() / 1000);
     const nextBoundary = Math.ceil(now / RELOAD_DELAY) * RELOAD_DELAY;
-    const delaySeconds = Math.max(0, nextBoundary - now);
     
     // Send message with time-based deduplication to ensure proper throttling
+    // DelaySeconds removed for FIFO queue compatibility - delay logic moved to Lambda processing
     const sqsParams = {
         QueueUrl: SQS_QUEUE_URL,
-        MessageBody: 'S3 Config Changed',
+        MessageBody: JSON.stringify({
+            message: 'S3 Config Changed',
+            targetBoundary: nextBoundary,
+            timestamp: now
+        }),
         MessageGroupId: 'apache-config-reload',
-        MessageDeduplicationId: nextBoundary.toString(), // Time-based deduplication
-        DelaySeconds: delaySeconds // Delay until the boundary timestamp
+        MessageDeduplicationId: nextBoundary.toString() // Time-based deduplication
     };
     
     try {
@@ -107,7 +110,7 @@ async function handleS3Event(event) {
                 messageId: result.MessageId,
                 eventsProcessed: relevantEvents.length,
                 nextBoundary: nextBoundary,
-                delaySeconds: delaySeconds
+                note: 'Delay logic now handled in Lambda processing'
             })
         };
     } catch (sqsError) {
@@ -119,22 +122,35 @@ async function handleS3Event(event) {
 async function handleSQSEvent(event) {
     console.log('Processing SQS event');
     
-    // Process the SQS message and trigger reload immediately
-    // The delay was already handled by SQS DelaySeconds
     const results = [];
     
     for (const record of event.Records) {
         try {
-            const messageBody = record.body;
+            const messageBody = JSON.parse(record.body);
             console.log('Processing SQS message:', messageBody);
             
-            // Trigger Apache reload immediately
+            // Calculate delay until target boundary
+            const now = Math.floor(Date.now() / 1000);
+            const targetBoundary = messageBody.targetBoundary;
+            const delayUntilBoundary = Math.max(0, targetBoundary - now);
+            
+            console.log(`Target boundary: ${new Date(targetBoundary * 1000).toISOString()}, delay: ${delayUntilBoundary}s`);
+            
+            if (delayUntilBoundary > 0) {
+                console.log(`Waiting ${delayUntilBoundary} seconds until boundary...`);
+                await new Promise(resolve => setTimeout(resolve, delayUntilBoundary * 1000));
+            }
+            
+            // Trigger Apache reload at the boundary
             const reloadResult = await makeReloadRequest();
             console.log('Apache reload completed:', reloadResult);
             
             results.push({
                 messageId: record.messageId,
                 status: 'completed',
+                targetBoundary: targetBoundary,
+                actualReloadTime: Math.floor(Date.now() / 1000),
+                delayWaited: delayUntilBoundary,
                 reloadResult: reloadResult
             });
             
