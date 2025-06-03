@@ -29,16 +29,16 @@ done
 export ENV_SSM_PARAM="/unity/account/venue"
 ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text)
 
-# Default configuration variables
-# S3_BUCKET="ucs-shared-services-apache-config-${ENVIRONMENT}"
-S3_BUCKET_NAME="ucs-shared-services-apache-config-dev-test"
+# Default configuration variables (can be overridden with environment variables)
+# S3_BUCKET="${S3_BUCKET_NAME:-ucs-shared-services-apache-config-${ENVIRONMENT}}"
+S3_BUCKET_NAME="${S3_BUCKET_NAME:-ucs-shared-services-apache-config-dev-test}"
 PERMISSION_BOUNDARY_ARN="arn:aws:iam::237868187491:policy/mcp-tenantOperator-AMI-APIG"
-AWS_REGION="us-west-2"
-APACHE_HOST="www.dev.mdps.mcp.nasa.gov"
-APACHE_PORT="4443"
-DEBOUNCE_DELAY="30"
-OIDC_CLIENT_ID="ee3duo3i707h93vki01ivja8o"
-COGNITO_USER_POOL_ID="us-west-2_yaOw3yj0z"
+AWS_REGION="${AWS_REGION:-us-west-2}"
+APACHE_HOST="${APACHE_HOST:-www.dev.mdps.mcp.nasa.gov}"
+APACHE_PORT="${APACHE_PORT:-4443}"
+DEBOUNCE_DELAY="${DEBOUNCE_DELAY:-30}"
+OIDC_CLIENT_ID="${OIDC_CLIENT_ID:-ee3duo3i707h93vki01ivja8o}"
+COGNITO_USER_POOL_ID="${COGNITO_USER_POOL_ID:-us-west-2_yaOw3yj0z}"
 
 echo "Using configuration:"
 echo "  S3_BUCKET_NAME: $S3_BUCKET_NAME"
@@ -179,6 +179,9 @@ elif [ "$DESTROY_TERRAFORM" = false ]; then
         exit 1
     fi
 fi
+
+#Make sure apache is reloaded (in case we re-run)
+sudo apachectl graceful
 
 # Run Terraform
 cd "$(dirname "$0")"

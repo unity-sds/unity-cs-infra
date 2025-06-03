@@ -42,7 +42,8 @@ Before setting up the server, several elements need to be deployed in the SS ven
 1. SSH into your EC2 instance
 2. Clone this repository
 3. Navigate to the `terraform-ss-proxy` directory
-4. Run the installation script:
+4. **Configure parameters in install.sh** (see Configuration section below)
+5. Run the installation script:
 
 ```bash
 ./install.sh
@@ -50,7 +51,7 @@ Before setting up the server, several elements need to be deployed in the SS ven
 
 ### Configuration Variables
 
-The install script uses the following default variables (can be overridden via environment variables):
+**IMPORTANT**: Before running the installation, you must edit the configuration variables in `install.sh` to match your environment. The script uses the following default variables:
 
 ```bash
 S3_BUCKET_NAME="ucs-shared-services-apache-config-dev-test"
@@ -63,13 +64,38 @@ OIDC_CLIENT_ID="ee3duo3i707h93vki01ivja8o"
 COGNITO_USER_POOL_ID="us-west-2_yaOw3yj0z"
 ```
 
-To override defaults, export environment variables before running the script:
+**Required Steps**:
+1. Edit `install.sh` and update these variables for your environment
+2. Ensure the values match your AWS infrastructure and requirements
+
+Alternatively, you can override defaults by exporting environment variables before running the script:
 
 ```bash
 export S3_BUCKET_NAME="my-custom-bucket"
 export AWS_REGION="us-east-1"
 ./install.sh
 ```
+
+### Amazon Cognito Configuration
+
+**CRITICAL**: Before running the installation, you must configure your Amazon Cognito App Client with the correct callback URL.
+
+1. **Navigate to your Cognito User Pool** in the AWS Console
+2. **Go to App Clients** section
+3. **Edit your App Client** (the one specified in `OIDC_CLIENT_ID`)
+4. **Add the following to "Allowed callback URLs"**:
+   ```
+   https://{APACHE_HOST}:{APACHE_PORT}/unity/redirect-url
+   ```
+   
+   For example, with the default values:
+   ```
+   https://www.dev.mdps.mcp.nasa.gov:4443/unity/redirect-url
+   ```
+
+5. **Save the changes**
+
+**Note**: The callback URL must exactly match your `APACHE_HOST` and `APACHE_PORT` values, followed by `/unity/redirect-url`. If these don't match, authentication will fail.
 
 ### Install Options
 
