@@ -17,7 +17,7 @@ send_to_slack() {
 }
 
 # Download files from S3
-aws s3 sync s3://${S3_BUCKET}/ /etc/apache2/venues.d/ --exclude "*" --include "*.conf" --quiet
+aws s3 sync s3://${S3_BUCKET}/ /etc/apache2/venues.d/ --exclude "*" --include "*.conf" --delete --quiet
 
 # Do short pause to to make sure
 sleep 2
