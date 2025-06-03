@@ -24,7 +24,13 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+
+# Get environment from SSM
+export ENV_SSM_PARAM="/unity/account/venue"
+ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text)
+
 # Default configuration variables
+# S3_BUCKET="ucs-shared-services-apache-config-${ENVIRONMENT}"
 S3_BUCKET_NAME="ucs-shared-services-apache-config-dev-test"
 PERMISSION_BOUNDARY_ARN="arn:aws:iam::237868187491:policy/mcp-tenantOperator-AMI-APIG"
 AWS_REGION="us-west-2"
@@ -122,6 +128,10 @@ if [ "$TERRAFORM_ONLY" = false ]; then
     sudo mkdir -p /etc/apache2/venues.d/
     sudo chown www-data:www-data /etc/apache2/venues.d/
     sudo cp reload-apache.cgi /usr/lib/cgi-bin/reload-apache.cgi
+    
+    # Replace S3 bucket placeholder in CGI script
+    sudo sed -i "s#REPLACE_WITH_S3_BUCKET_NAME#${S3_BUCKET_NAME}#g" /usr/lib/cgi-bin/reload-apache.cgi
+    
     sudo chown www-data:www-data /usr/lib/cgi-bin/reload-apache.cgi
     sudo chmod 755 /usr/lib/cgi-bin/reload-apache.cgi
 
@@ -146,14 +156,16 @@ if [ "$TERRAFORM_ONLY" = false ]; then
 
     # Update the unity-cs-main.conf file with the new token
     # The sed command uses a different delimiter (#) to avoid issues if the token contains slashes.
-    sudo sed -i "s#your_secure_token_here#${SECURE_TOKEN}#g" /etc/apache2/sites-enabled/unity-cs-main.conf
+    sudo sed -i "s#REPLACE_WITH_SECURE_TOKEN#${SECURE_TOKEN}#g" /etc/apache2/sites-enabled/unity-cs-main.conf
     echo "Apache configuration updated with secure token."
 elif [ "$DESTROY_TERRAFORM" = false ]; then
     # Pull the token from /etc/apache2/sites-enabled/unity-cs-main.conf if it exists
     if [ -f "/etc/apache2/sites-enabled/unity-cs-main.conf" ]; then
-        SECURE_TOKEN=$(sudo grep -oP "X-Reload-Token.*?'\K[^']+" /etc/apache2/sites-enabled/unity-cs-main.conf 2>/dev/null || echo "")
+        # Extract token from SetEnvIf directive: SetEnvIf X-Reload-Token "^TOKEN_HERE$" valid_token
+        SECURE_TOKEN=$(sudo grep -oP 'SetEnvIf X-Reload-Token "\^\K[^$]+' /etc/apache2/sites-enabled/unity-cs-main.conf 2>/dev/null || echo "")
         if [ -z "$SECURE_TOKEN" ]; then
             echo "Error: Could not extract token from existing Apache config."
+            echo "Looking for: SetEnvIf X-Reload-Token \"^TOKEN\$\" valid_token"
             exit 1
         else
             echo "Using existing token from Apache configuration: ${SECURE_TOKEN}"

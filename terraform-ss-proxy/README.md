@@ -175,6 +175,7 @@ To remove all AWS infrastructure created by this setup:
 ```
 
 This will:
+
 - Destroy the Lambda function and its execution role
 - Remove the SQS FIFO queue
 - Delete the CloudWatch log group
@@ -182,3 +183,29 @@ This will:
 - Clean up all related AWS resources
 
 **Note**: This does not affect the Apache installation or configuration files on the EC2 instance.
+
+## Troubleshooting
+
+### 403 Forbidden on /reload-config
+
+If you get a 403 error when testing the reload endpoint, check:
+
+1. **Token Configuration**: Verify the token was properly replaced in the Apache config:
+   ```bash
+   sudo grep "X-Reload-Token" /etc/apache2/sites-enabled/unity-cs-main.conf
+   ```
+   It should show your actual token, not `REPLACE_WITH_SECURE_TOKEN`.
+
+2. **Test the endpoint manually**:
+   ```bash
+   # Get the token from the config
+   TOKEN=$(sudo grep -oP "X-Reload-Token.*?'\K[^']+" /etc/apache2/sites-enabled/unity-cs-main.conf)
+   
+   # Test the endpoint
+   curl -k -H "X-Reload-Token: $TOKEN" https://localhost:4443/reload-config
+   ```
+
+3. **Check Apache error logs**:
+   ```bash
+   sudo tail -f /var/log/apache2/error.log
+   ```

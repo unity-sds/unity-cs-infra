@@ -1,11 +1,7 @@
 #!/bin/bash
 
-# Get environment from SSM
-export ENV_SSM_PARAM="/unity/account/venue"
-ENVIRONMENT=$(aws ssm get-parameter --name ${ENV_SSM_PARAM} --query "Parameter.Value" --output text)
-
 # Set variables
-S3_BUCKET="ucs-shared-services-apache-config-${ENVIRONMENT}"
+S3_BUCKET="REPLACE_WITH_S3_BUCKET_NAME"
 LOCAL_FILE="/etc/apache2/sites-enabled/unity-cs.conf"
 TEMP_FILE="/tmp/unity-cs.conf"
 SLACK_WEBHOOK=$(aws ssm get-parameter --name "/unity/shared-services/slack/apache-config-webhook-url" --with-decryption --query "Parameter.Value" --output text)
