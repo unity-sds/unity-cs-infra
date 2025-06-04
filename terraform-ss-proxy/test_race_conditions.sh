@@ -157,7 +157,6 @@ verify_venues_dir() {
     
     if [ "$success" = true ]; then
         log "SUCCESS" "All files verified successfully! ✅"
-        return 0
     else
         log "ERROR" "File verification failed! ❌"
         
@@ -176,7 +175,6 @@ verify_venues_dir() {
             fi
         done
         
-        return 1
     fi
 }
 
@@ -300,7 +298,7 @@ main() {
     
     for test_num in $(seq 1 $test_count); do
         log "INFO" "=============================================="
-        log "INFO" "===       $test_num of $test_count         ==="
+        log "INFO" "===              $(printf '%4s' $test_num) of $(printf '%4s' $test_count)              ==="
         
         if run_race_test $test_num; then
             log "SUCCESS" "🎉 Test #$test_num PASSED"
