@@ -359,4 +359,4 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
 fi
 
 # Run main function
-main "${$1:-1}"
+main "${1:-1}"
