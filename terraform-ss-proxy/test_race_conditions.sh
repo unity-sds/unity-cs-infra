@@ -300,6 +300,7 @@ main() {
     
     for test_num in $(seq 1 $test_count); do
         log "INFO" "=============================================="
+        log "INFO" "===       $test_num of $test_count         ==="
         
         if run_race_test $test_num; then
             log "SUCCESS" "🎉 Test #$test_num PASSED"
@@ -358,4 +359,4 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
 fi
 
 # Run main function
-main "${1:-1}"
+main "${$1:-1}"
