@@ -4,8 +4,6 @@
 # Generates random config files and uploads them to S3 with random timing
 # Then verifies all files are present in /etc/apache2/venues.d/
 
-set -e
-
 # Configuration
 S3_BUCKET_NAME="${S3_BUCKET_NAME:-ucs-shared-services-apache-config-dev-test}"
 MIN_FILES="${MIN_FILES:-3}"
@@ -157,6 +155,7 @@ verify_venues_dir() {
     
     if [ "$success" = true ]; then
         log "SUCCESS" "All files verified successfully! ✅"
+        return 0
     else
         log "ERROR" "File verification failed! ❌"
         
@@ -175,6 +174,7 @@ verify_venues_dir() {
             fi
         done
         
+        return 1
     fi
 }
 
