@@ -65,9 +65,131 @@ else
         echo "Terraform is already installed: $(terraform version)"
     fi
 
-    # Install Apache2
+    # Install Apache2, but get a newer version if at least 2.4.53 is not available
+    echo "Checking Apache version requirements..."
+    
+    # First update package list
     sudo apt-get update
-    sudo apt-get install -y apache2
+    
+    # Check available version in apt
+    APT_VERSION=$(apt-cache policy apache2 | grep Candidate | awk '{print $2}' | cut -d'-' -f1 | cut -d':' -f2)
+    echo "Available Apache version in apt: $APT_VERSION"
+    
+    # Function to compare versions
+    version_ge() {
+        [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n1)" = "$2" ]
+    }
+    
+    REQUIRED_VERSION="2.4.53"
+    
+    # Check if apt version meets requirements
+    if version_ge "$APT_VERSION" "$REQUIRED_VERSION"; then
+        echo "Apt version ($APT_VERSION) meets requirements (>= $REQUIRED_VERSION). Installing from apt..."
+        sudo apt-get install -y apache2
+    else
+        echo "Apt version ($APT_VERSION) does not meet requirements (>= $REQUIRED_VERSION)."
+        echo "Installing Apache from source..."
+        
+        # Install build dependencies
+        sudo apt-get install -y build-essential libssl-dev libexpat1-dev libpcre3-dev libapr1-dev libaprutil1-dev
+        
+        # Create temp directory for build
+        BUILD_DIR=$(mktemp -d)
+        cd "$BUILD_DIR"
+        
+        # Get latest Apache version
+        echo "Downloading latest Apache source..."
+        LATEST_VERSION=$(curl -s https://downloads.apache.org/httpd/ | grep -oP 'httpd-\K[0-9.]+(?=\.tar\.gz)' | sort -V | tail -1)
+        echo "Latest Apache version available: $LATEST_VERSION"
+        
+        if [ -z "$LATEST_VERSION" ]; then
+            echo "Error: Could not determine latest Apache version"
+            exit 1
+        fi
+        
+        # Download and extract
+        wget "https://downloads.apache.org/httpd/httpd-${LATEST_VERSION}.tar.gz"
+        tar -xzf "httpd-${LATEST_VERSION}.tar.gz"
+        cd "httpd-${LATEST_VERSION}"
+        
+        # Configure, compile and install
+        ./configure --prefix=/usr/local/apache2 \
+                    --enable-ssl \
+                    --enable-so \
+                    --enable-rewrite \
+                    --enable-cgi \
+                    --enable-cgid \
+                    --enable-headers \
+                    --enable-ratelimit \
+                    --with-mpm=prefork
+        
+        make -j$(nproc)
+        sudo make install
+        
+        # Create systemd service file for custom Apache installation
+        sudo tee /etc/systemd/system/apache2.service > /dev/null <<EOF
+[Unit]
+Description=The Apache HTTP Server
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/apache2/bin/apachectl start
+ExecStop=/usr/local/apache2/bin/apachectl stop
+ExecReload=/usr/local/apache2/bin/apachectl graceful
+PIDFile=/usr/local/apache2/logs/httpd.pid
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+        
+        # Create necessary directories and symlinks for compatibility
+        sudo mkdir -p /etc/apache2/sites-enabled
+        sudo mkdir -p /etc/apache2/venues.d
+        sudo mkdir -p /var/www/html
+        sudo mkdir -p /usr/lib/cgi-bin
+        
+        # Create symlinks for commands
+        sudo ln -sf /usr/local/apache2/bin/apachectl /usr/sbin/apachectl
+        sudo ln -sf /usr/local/apache2/bin/httpd /usr/sbin/apache2
+        
+        # Create a2enmod script for module management
+        sudo tee /usr/sbin/a2enmod > /dev/null <<'SCRIPT'
+#!/bin/bash
+MODULE=$1
+if [ -z "$MODULE" ]; then
+    echo "Usage: a2enmod <module>"
+    exit 1
+fi
+
+# Enable module in httpd.conf
+CONF="/usr/local/apache2/conf/httpd.conf"
+case $MODULE in
+    rewrite|ssl|headers|cgi|cgid|ratelimit)
+        sudo sed -i "s/^#LoadModule ${MODULE}_module/LoadModule ${MODULE}_module/" "$CONF"
+        echo "Module $MODULE enabled"
+        ;;
+    *)
+        echo "Module $MODULE not recognized"
+        ;;
+esac
+SCRIPT
+        sudo chmod +x /usr/sbin/a2enmod
+        
+        # Update Apache config to include sites-enabled
+        echo "Include /etc/apache2/sites-enabled/*.conf" | sudo tee -a /usr/local/apache2/conf/httpd.conf
+        
+        # Enable and start service
+        sudo systemctl daemon-reload
+        sudo systemctl enable apache2
+        
+        # Clean up
+        cd /
+        rm -rf "$BUILD_DIR"
+        
+        echo "Apache ${LATEST_VERSION} installed from source successfully"
+    fi
 fi
 
 if [ "$TERRAFORM_ONLY" = false ]; then
