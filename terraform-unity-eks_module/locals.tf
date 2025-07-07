@@ -2,12 +2,11 @@ locals {
   common_tags  = {}
   cluster_name = var.deployment_name
   subnet_map   = jsondecode(data.aws_ssm_parameter.subnet_list.value)
-  #ami = "ami-0e3e9697a56f6ba66"
   ami_map = {
+    "1.32"    = data.aws_ssm_parameter.eks_ami_1_32.value
     "1.31"    = data.aws_ssm_parameter.eks_ami_1_31.value
     "1.30"    = data.aws_ssm_parameter.eks_ami_1_30.value
-    "1.29"    = data.aws_ssm_parameter.eks_ami_1_29.value
-    "default" = "ami-0f4319b351ce92b6e"
+    "default" = "ami-0741828961a03a9db"
   }
   mergednodegroups = { for name, ng in var.nodegroups :
     name => {
