@@ -375,12 +375,13 @@ module "eks" {
 }
 
 resource "aws_launch_template" "node_group_launch_template" {
+  count = contains(["1.31", "1.30"],var.cluster_version) ? 1 : 0
   image_id = "ami-0b5844d5df7e37795"
   name     = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
-  user_data = base64encode(<<EOT
-#!/bin/bash
-set -o xtrace
-/etc/eks/bootstrap.sh ${local.cluster_name}
+  user_data = base64encode(<<-EOT
+    #!/bin/bash
+    set -o xtrace
+    /etc/eks/bootstrap.sh ${local.cluster_name}
   EOT
   )
   tag_specifications {
@@ -409,6 +410,7 @@ resource "aws_vpc_security_group_ingress_rule" "mc_ingress_rule" {
 
 # TODO: select default node group more intelligently, or remove concept altogether
 resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
+  count = contains(["1.31", "1.30"],var.cluster_version) ? 1 : 0
   name  = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
   type  = "String"
   value = aws_launch_template.node_group_launch_template.name
