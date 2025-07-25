@@ -375,7 +375,7 @@ module "eks" {
 }
 
 resource "aws_launch_template" "node_group_launch_template" {
-  count = contains(["1.31", "1.30"],var.cluster_version) ? 1 : 0
+  count = contains(["1.31", "1.30"], var.cluster_version) ? 1 : 0
   image_id = "ami-0b5844d5df7e37795"
   name     = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
   user_data = base64encode(<<-EOT
