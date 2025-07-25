@@ -413,7 +413,7 @@ resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
   count = contains(["1.31", "1.30"],var.cluster_version) ? 1 : 0
   name  = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
   type  = "String"
-  value = aws_launch_template.node_group_launch_template.name
+  value = aws_launch_template.node_group_launch_template[0].name
 }
 
 resource "aws_ssm_parameter" "node_group_default_name" {
