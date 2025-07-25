@@ -42,7 +42,7 @@ locals {
             kind: NodeConfig
             spec:
               cluster:
-                name: ${module.eks.cluster_name}
+                name: ${local.cluster_name}
                 apiServerEndpoint: ${module.eks.cluster_endpoint}
                 cidr: ${module.eks.cluster_service_cidr}
               kubelet:
