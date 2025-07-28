@@ -48,7 +48,7 @@ locals {
                   shutdownGracePeriod: 30s
                   featureGates:
                     DisableKubeletCloudCredentialProviders: true
-          EOT
+            EOT
         }
       ]
       block_device_mappings = ng.block_device_mappings != null ? { for device_name, mapping in ng.block_device_mappings :
