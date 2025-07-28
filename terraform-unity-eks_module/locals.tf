@@ -43,8 +43,6 @@ locals {
             spec:
               cluster:
                 name: ${local.cluster_name}
-                apiServerEndpoint: ${module.eks.cluster_endpoint}
-                cidr: ${module.eks.cluster_service_cidr}
               kubelet:
                 config:
                   shutdownGracePeriod: 30s
