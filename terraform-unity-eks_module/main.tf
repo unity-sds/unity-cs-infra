@@ -403,7 +403,7 @@ module "eks_managed_node_group" {
       content_type = "application/node.eks.aws"
       content      = <<EOT
 ---
-apiVersion: node.eks.aws/v1alpha
+apiVersion: node.eks.aws/v1alpha1
 kind: NodeConfig
 spec:
   cluster:
