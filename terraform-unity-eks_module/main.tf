@@ -398,6 +398,8 @@ module "eks_managed_node_group" {
   metadata_options           = each.value.metadata_options
   tags                       = each.value.tags
   block_device_mappings      = each.value.block_device_mappings
+  cluster_service_ipv4_cidr  = data.aws_eks_cluster.cluster.kubernetes_network_config[0].service_ipv4_cidr
+  subnet_ids                 = data.aws_eks_cluster.cluster.vpc_config[0].subnet_ids
   cloudinit_pre_nodeadm = [
     {
       content_type = "application/node.eks.aws"
