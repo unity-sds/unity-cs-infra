@@ -37,6 +37,7 @@ locals {
         {
           content_type = "application/node.eks.aws"
           content      = <<-EOT
+          
             ---
             apiVersion: node.eks.aws/v1alpha
             kind: NodeConfig
