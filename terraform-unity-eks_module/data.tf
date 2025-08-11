@@ -1,5 +1,9 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_eks_cluster" "cluster" {
+  name = local.cluster_name
+}
+
 data "aws_ssm_parameter" "vpc_id" {
   name = "/unity/account/network/vpc_id"
 }
@@ -24,9 +28,9 @@ data "aws_iam_policy" "mcp_operator_policy" {
   name = "mcp-tenantOperator-AMI-APIG"
 }
 
-data "aws_iam_policy" "ebs_csi_policy" {
-  name = "U-CS_Service_Policy"
-}
+# data "aws_iam_policy" "ebs_csi_policy" {
+#   name = "U-CS_Service_Policy"
+# }
 
 data "aws_iam_policy" "aws-managed-load-balancer-policy" {
   arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"

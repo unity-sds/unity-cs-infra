@@ -33,25 +33,6 @@ locals {
         Component = "EKS EC2 Instance"
         Stack     = "EKS EC2 Instance"
       })
-      cloudinit_pre_nodeadm = [
-        {
-          content_type = "application/node.eks.aws"
-          content      = <<-EOT
-          
-            ---
-            apiVersion: node.eks.aws/v1alpha
-            kind: NodeConfig
-            spec:
-              cluster:
-                name: ${local.cluster_name}
-              kubelet:
-                config:
-                  shutdownGracePeriod: 30s
-                  featureGates:
-                    DisableKubeletCloudCredentialProviders: true
-            EOT
-        }
-      ]
       block_device_mappings = ng.block_device_mappings != null ? { for device_name, mapping in ng.block_device_mappings :
         device_name => {
           device_name = mapping.device_name
