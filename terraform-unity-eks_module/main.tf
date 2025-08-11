@@ -485,10 +485,11 @@ resource "helm_release" "aws-load-balancer-controller" {
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
   version    = "1.6.1"
-  namespace  = "kube-system"
+  # version    = "1.13.4"
+  namespace = "kube-system"
   set {
     name  = "clusterName"
-    value = module.eks.cluster_name
+    value = data.aws_eks_cluster.cluster.id
   }
   set {
     name  = "serviceAccount.create"
@@ -499,7 +500,7 @@ resource "helm_release" "aws-load-balancer-controller" {
     value = "aws-load-balancer-controller"
   }
 
-  depends_on = [module.eks.eks_managed_node_groups]
+  depends_on = [module.eks_managed_node_group]
 }
 
 resource "kubernetes_service_account" "aws-load-balancer-controller-service-account" {
