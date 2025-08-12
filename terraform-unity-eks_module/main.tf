@@ -375,7 +375,6 @@ module "eks" {
 }
 
 
-
 # module "eks_managed_node_group" {
 #   for_each = local.mergednodegroups
 
@@ -423,7 +422,8 @@ module "eks" {
 #   ]
 # }
 
-resource "aws_launch_template" "node_group_launch_template" {
+//add one of these for nodeadm, remove cloud one?
+resource "aws_launch_template" "node_group_launch_template_boot" {
   count    = contains(["1.31", "1.30"], var.cluster_version) ? 1 : 0
   image_id = "ami-0b5844d5df7e37795"
   name     = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
@@ -431,6 +431,35 @@ resource "aws_launch_template" "node_group_launch_template" {
     #!/bin/bash
     set -o xtrace
     /etc/eks/bootstrap.sh ${local.cluster_name}
+  EOT
+  )
+  tag_specifications {
+    resource_type = "instance"
+    tags = merge(local.common_tags, {
+      Name      = "${local.cluster_name} Node Group Node"
+      Component = "EKS EC2 Instance"
+      Stack     = "EKS EC2 Instance"
+    })
+  }
+}
+
+resource "aws_launch_template" "node_group_launch_template_nodeadm" {
+  count    = contains(["1.31", "1.30"], var.cluster_version) ? 0 : 1
+  image_id = local.ami_map["default"]
+  name     = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
+  user_data = base64encode(<<-EOT
+        ---
+        apiVersion: node.eks.aws/v1alpha1
+        kind: NodeConfig
+        spec:
+        cluster:
+          name: ${local.cluster_name}
+          cidr: ${data.aws_subnet.private_subnet.cidr_block}
+        kubelet:
+          config:
+            shutdownGracePeriod: 30s
+            featureGates:
+              DisableKubeletCloudCredentialProviders: true
   EOT
   )
   tag_specifications {
@@ -458,11 +487,18 @@ resource "aws_vpc_security_group_ingress_rule" "mc_ingress_rule" {
 }
 
 # TODO: select default node group more intelligently, or remove concept altogether
-resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
+resource "aws_ssm_parameter" "node_group_default_launch_template_name_boot" {
   count = contains(["1.31", "1.30"], var.cluster_version) ? 1 : 0
   name  = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
   type  = "String"
-  value = aws_launch_template.node_group_launch_template[0].name
+  value = aws_launch_template.node_group_launch_template_boot[0].name
+}
+
+resource "aws_ssm_parameter" "node_group_default_launch_template_name_nodeadm" {
+  count = contains(["1.31", "1.30"], var.cluster_version) ? 0 : 1
+  name  = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
+  type  = "String"
+  value = aws_launch_template.node_group_launch_template_nodeadm[0].name
 }
 
 resource "aws_ssm_parameter" "node_group_default_name" {
