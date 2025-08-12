@@ -28,6 +28,22 @@ locals {
         "http_put_response_hop_limit" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_put_response_hop_limit", null) : null
         "http_tokens" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_tokens", null) : null
       }
+      cloudinit_pre_nodeadm = [
+        {
+          content_type = "application/node.eks.aws"
+          content      = <<-EOT
+          ---
+          apiVersion: node.eks.aws/v1alpha1
+          kind: NodeConfig
+          spec:
+          cluster:
+            name: ${local.cluster_name}
+          kubelet:
+            config:
+              shutdownGracePeriod: 30s
+          EOT
+        }
+      ]
       tags = merge(local.common_tags, {
         Name      = "${local.cluster_name} Node Group Node"
         Component = "EKS EC2 Instance"

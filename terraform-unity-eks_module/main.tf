@@ -366,7 +366,7 @@ module "eks" {
     iam_role_arn   = aws_iam_role.cluster_iam_role.arn
   }
 
-  //eks_managed_node_groups = local.mergednodegroups
+  eks_managed_node_groups = local.mergednodegroups
 
   aws_auth_roles                  = var.aws_auth_roles
   cluster_endpoint_private_access = true
@@ -376,52 +376,52 @@ module "eks" {
 
 
 
-module "eks_managed_node_group" {
-  for_each = local.mergednodegroups
+# module "eks_managed_node_group" {
+#   for_each = local.mergednodegroups
 
-  source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
-  version = "~> 20.11.0"
+#   source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
+#   version = "~> 20.11.0"
 
-  cluster_name = data.aws_eks_cluster.cluster.id
+#   cluster_name = data.aws_eks_cluster.cluster.id
 
-  use_name_prefix            = each.value.use_name_prefix
-  create_iam_role            = each.value.create_iam_role
-  min_size                   = each.value.min_size
-  max_size                   = each.value.max_size
-  desired_size               = each.value.desired_size
-  ami_id                     = each.value.ami_id
-  instance_types             = each.value.instance_types
-  capacity_type              = each.value.capacity_type
-  iam_role_arn               = each.value.iam_role_arn
-  enable_bootstrap_user_data = each.value.enable_bootstrap_user_data
-  pre_bootstrap_user_data    = each.value.pre_bootstrap_user_data
-  metadata_options           = each.value.metadata_options
-  tags                       = each.value.tags
-  block_device_mappings      = each.value.block_device_mappings
-  cluster_service_ipv4_cidr  = data.aws_eks_cluster.cluster.kubernetes_network_config[0].service_ipv4_cidr
-  subnet_ids                 = data.aws_eks_cluster.cluster.vpc_config[0].subnet_ids
-  cloudinit_pre_nodeadm = [
-    {
-      content_type = "application/node.eks.aws"
-      content      = <<EOT
----
-apiVersion: node.eks.aws/v1alpha1
-kind: NodeConfig
-spec:
-  cluster:
-    name: ${data.aws_eks_cluster.cluster.id}
-    apiServerEndpoint: ${data.aws_eks_cluster.cluster.endpoint}
-    certificateAuthority: ${data.aws_eks_cluster.cluster.certificate_authority[0].data}
-    cidr: ${data.aws_eks_cluster.cluster.kubernetes_network_config[0].service_ipv4_cidr}
-  kubelet:
-    config:
-      shutdownGracePeriod: 30s
-      featureGates:
-        DisableKubeletCloudCredentialProviders: true
-EOT
-    }
-  ]
-}
+#   use_name_prefix            = each.value.use_name_prefix
+#   create_iam_role            = each.value.create_iam_role
+#   min_size                   = each.value.min_size
+#   max_size                   = each.value.max_size
+#   desired_size               = each.value.desired_size
+#   ami_id                     = each.value.ami_id
+#   instance_types             = each.value.instance_types
+#   capacity_type              = each.value.capacity_type
+#   iam_role_arn               = each.value.iam_role_arn
+#   enable_bootstrap_user_data = each.value.enable_bootstrap_user_data
+#   pre_bootstrap_user_data    = each.value.pre_bootstrap_user_data
+#   metadata_options           = each.value.metadata_options
+#   tags                       = each.value.tags
+#   block_device_mappings      = each.value.block_device_mappings
+#   cluster_service_ipv4_cidr  = data.aws_eks_cluster.cluster.kubernetes_network_config[0].service_ipv4_cidr
+#   subnet_ids                 = data.aws_eks_cluster.cluster.vpc_config[0].subnet_ids
+#   cloudinit_pre_nodeadm = [
+#     {
+#       content_type = "application/node.eks.aws"
+#       content      = <<EOT
+# ---
+# apiVersion: node.eks.aws/v1alpha1
+# kind: NodeConfig
+# spec:
+#   cluster:
+#     name: ${data.aws_eks_cluster.cluster.id}
+#     apiServerEndpoint: ${data.aws_eks_cluster.cluster.endpoint}
+#     certificateAuthority: ${data.aws_eks_cluster.cluster.certificate_authority[0].data}
+#     cidr: ${data.aws_eks_cluster.cluster.kubernetes_network_config[0].service_ipv4_cidr}
+#   kubelet:
+#     config:
+#       shutdownGracePeriod: 30s
+#       featureGates:
+#         DisableKubeletCloudCredentialProviders: true
+# EOT
+#     }
+#   ]
+# }
 
 resource "aws_launch_template" "node_group_launch_template" {
   count    = contains(["1.31", "1.30"], var.cluster_version) ? 1 : 0
@@ -500,7 +500,7 @@ resource "helm_release" "aws-load-balancer-controller" {
     value = "aws-load-balancer-controller"
   }
 
-  depends_on = [module.eks_managed_node_group]
+  depends_on = [module.eks]
 }
 
 resource "kubernetes_service_account" "aws-load-balancer-controller-service-account" {
