@@ -19,10 +19,10 @@ locals {
       instance_types             = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
       capacity_type              = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
       iam_role_arn               = ng.iam_role_arn != null ? ng.iam_role_arn : aws_iam_role.cluster_iam_role.arn
-      enable_bootstrap_user_data = true
-      pre_bootstrap_user_data    = <<-EOT
-            sudo sed -i 's/^net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf && sudo sysctl -p |true
-        EOT
+      # enable_bootstrap_user_data = true
+      # pre_bootstrap_user_data    = <<-EOT
+      #       sudo sed -i 's/^net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf && sudo sysctl -p |true
+      #   EOT
       metadata_options = {
         "http_endpoint" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_endpoint", null) : null
         "http_put_response_hop_limit" : ng.metadata_options != null ? lookup(ng.metadata_options, "http_put_response_hop_limit", null) : null
