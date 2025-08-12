@@ -61,3 +61,7 @@ data "aws_security_groups" "mc_sg" {
     ServiceArea = "cs"
   }
 }
+
+data "aws_subnet" "private_subnet" {
+  id = local.subnet_map["private"][0]
+}

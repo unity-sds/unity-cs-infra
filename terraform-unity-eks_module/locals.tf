@@ -32,15 +32,20 @@ locals {
         {
           content_type = "application/node.eks.aws"
           content      = <<-EOT
+
           ---
           apiVersion: node.eks.aws/v1alpha1
           kind: NodeConfig
           spec:
           cluster:
             name: ${local.cluster_name}
+            cidr: ${data.aws_subnet.private_subnet.cidr_block}
           kubelet:
             config:
               shutdownGracePeriod: 30s
+              featureGates:
+                DisableKubeletCloudCredentialProviders: true
+
           EOT
         }
       ]
