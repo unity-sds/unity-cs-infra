@@ -443,35 +443,6 @@ resource "aws_launch_template" "node_group_launch_template_boot" {
   }
 }
 
-resource "aws_launch_template" "node_group_launch_template_nodeadm" {
-  count    = contains(["1.31", "1.30"], var.cluster_version) ? 0 : 1
-  image_id = local.ami_map["default"]
-  name     = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
-  user_data = base64encode(<<-EOT
-        ---
-        apiVersion: node.eks.aws/v1alpha1
-        kind: NodeConfig
-        spec:
-        cluster:
-          name: ${local.cluster_name}
-          cidr: ${data.aws_subnet.private_subnet.cidr_block}
-        kubelet:
-          config:
-            shutdownGracePeriod: 30s
-            featureGates:
-              DisableKubeletCloudCredentialProviders: true
-  EOT
-  )
-  tag_specifications {
-    resource_type = "instance"
-    tags = merge(local.common_tags, {
-      Name      = "${local.cluster_name} Node Group Node"
-      Component = "EKS EC2 Instance"
-      Stack     = "EKS EC2 Instance"
-    })
-  }
-}
-
 resource "aws_security_group" "mc_ingress_sg" {
   name        = "${var.project}-${var.venue}-mc-ingress-sg"
   description = "SecurityGroup for management console ingress"
@@ -492,13 +463,6 @@ resource "aws_ssm_parameter" "node_group_default_launch_template_name_boot" {
   name  = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
   type  = "String"
   value = aws_launch_template.node_group_launch_template_boot[0].name
-}
-
-resource "aws_ssm_parameter" "node_group_default_launch_template_name_nodeadm" {
-  count = contains(["1.31", "1.30"], var.cluster_version) ? 0 : 1
-  name  = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
-  type  = "String"
-  value = aws_launch_template.node_group_launch_template_nodeadm[0].name
 }
 
 resource "aws_ssm_parameter" "node_group_default_name" {
