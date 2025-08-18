@@ -392,8 +392,6 @@ module "eks_managed_node_group" {
   instance_types             = each.value.instance_types
   capacity_type              = each.value.capacity_type
   iam_role_arn               = each.value.iam_role_arn
-  enable_bootstrap_user_data = each.value.enable_bootstrap_user_data
-  pre_bootstrap_user_data    = each.value.pre_bootstrap_user_data
   metadata_options           = each.value.metadata_options
   tags                       = each.value.tags
   block_device_mappings      = each.value.block_device_mappings
