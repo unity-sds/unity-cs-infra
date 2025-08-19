@@ -383,20 +383,20 @@ module "eks_managed_node_group" {
 
   cluster_name = data.aws_eks_cluster.cluster.id
 
-  use_name_prefix            = each.value.use_name_prefix
-  create_iam_role            = each.value.create_iam_role
-  min_size                   = each.value.min_size
-  max_size                   = each.value.max_size
-  desired_size               = each.value.desired_size
-  ami_id                     = each.value.ami_id
-  instance_types             = each.value.instance_types
-  capacity_type              = each.value.capacity_type
-  iam_role_arn               = each.value.iam_role_arn
-  metadata_options           = each.value.metadata_options
-  tags                       = each.value.tags
-  block_device_mappings      = each.value.block_device_mappings
-  cluster_service_ipv4_cidr  = data.aws_eks_cluster.cluster.kubernetes_network_config[0].service_ipv4_cidr
-  subnet_ids                 = data.aws_eks_cluster.cluster.vpc_config[0].subnet_ids
+  use_name_prefix           = each.value.use_name_prefix
+  create_iam_role           = each.value.create_iam_role
+  min_size                  = each.value.min_size
+  max_size                  = each.value.max_size
+  desired_size              = each.value.desired_size
+  ami_id                    = each.value.ami_id
+  instance_types            = each.value.instance_types
+  capacity_type             = each.value.capacity_type
+  iam_role_arn              = each.value.iam_role_arn
+  metadata_options          = each.value.metadata_options
+  tags                      = each.value.tags
+  block_device_mappings     = each.value.block_device_mappings
+  cluster_service_ipv4_cidr = data.aws_eks_cluster.cluster.kubernetes_network_config[0].service_ipv4_cidr
+  subnet_ids                = data.aws_eks_cluster.cluster.vpc_config[0].subnet_ids
   cloudinit_pre_nodeadm = [
     {
       content_type = "application/node.eks.aws"
