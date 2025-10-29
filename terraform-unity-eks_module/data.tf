@@ -9,27 +9,27 @@ data "aws_ssm_parameter" "subnet_list" {
 }
 
 data "aws_ssm_parameter" "eks_ami_1_32" {
-  name = "/mcp/amis/aml2023-eks-1-32"
+  name = "/smce/amis/aml2023-eks-1-32"
 }
 
 data "aws_ssm_parameter" "eks_ami_1_31" {
-  name = "/mcp/amis/aml2-eks-1-31"
+  name = "/smce/amis/aml2023-eks-1-31"
 }
 
 data "aws_ssm_parameter" "eks_ami_1_30" {
-  name = "/unity/account/eks/amis/aml2-eks-1-30"
+  name = "/smce/amis/aml2023-eks-1-30"
 }
 
 data "aws_iam_policy" "mcp_operator_policy" {
-  name = "mcp-tenantOperator-AMI-APIG"
+  name = "maap-spsdeploy"
 }
 
 data "aws_iam_policy" "ebs_csi_policy" {
-  name = "U-CS_Service_Policy"
+  name = "maap-spsdeploy"
 }
 
 data "aws_iam_policy" "aws-managed-load-balancer-policy" {
-  arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
+  arn = "arn:aws:iam::aws:policy/maap-spsdeploy"
 }
 
 data "aws_ebs_default_kms_key" "current" {}
