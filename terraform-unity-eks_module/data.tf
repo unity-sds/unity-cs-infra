@@ -21,15 +21,15 @@ data "aws_ssm_parameter" "eks_ami_1_30" {
 }
 
 data "aws_iam_policy" "mcp_operator_policy" {
-  name = "maap-spsdeploy"
+  name = "smce-tenantOperator-AMI-APIG"
 }
 
 data "aws_iam_policy" "ebs_csi_policy" {
-  name = "maap-spsdeploy"
+  name = "U-CS_Service_Policy"
 }
 
 data "aws_iam_policy" "aws-managed-load-balancer-policy" {
-  arn = "arn:aws:iam::aws:policy/maap-spsdeploy"
+  arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
 }
 
 data "aws_ebs_default_kms_key" "current" {}
