@@ -16,7 +16,7 @@ provider "aws" {
   shared_credentials_file = var.credentials
   profile = var.profile
 
-  ignore_tags {
+  ignore_tags = {
     key_prefixes = ["unity-cs-mcp"]
   }
 }
