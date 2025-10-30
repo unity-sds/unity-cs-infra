@@ -435,15 +435,15 @@ resource "helm_release" "aws-load-balancer-controller" {
   chart      = "aws-load-balancer-controller"
   version    = "1.6.1"
   namespace  = "kube-system"
-  set {
+  set = {
     name  = "clusterName"
     value = module.eks.cluster_name
   }
-  set {
+  set = {
     name  = "serviceAccount.create"
     value = "false"
   }
-  set {
+  set = {
     name  = "serviceAccount.name"
     value = "aws-load-balancer-controller"
   }
