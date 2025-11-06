@@ -3,10 +3,11 @@ locals {
   cluster_name = var.deployment_name
   subnet_map   = jsondecode(data.aws_ssm_parameter.subnet_list.value)
   ami_map = {
+    "1.33"    = data.aws_ssm_parameter.eks_ami_1_33.value
     "1.32"    = data.aws_ssm_parameter.eks_ami_1_32.value
     "1.31"    = data.aws_ssm_parameter.eks_ami_1_31.value
     "1.30"    = data.aws_ssm_parameter.eks_ami_1_30.value
-    "default" = "ami-0741828961a03a9db"
+    "default" = "ami-0fc0ea06df871b6d9"
   }
   mergednodegroups = { for name, ng in var.nodegroups :
     name => {

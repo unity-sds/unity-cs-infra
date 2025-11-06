@@ -8,6 +8,10 @@ data "aws_ssm_parameter" "subnet_list" {
   name = "/unity/account/network/subnet_list"
 }
 
+data "aws_ssm_parameter" "eks_ami_1_33" {
+  name = "/smce/amis/aml2023-eks-1-33"
+}
+
 data "aws_ssm_parameter" "eks_ami_1_32" {
   name = "/smce/amis/aml2023-eks-1-32"
 }

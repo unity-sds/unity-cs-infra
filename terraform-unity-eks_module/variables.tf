@@ -55,7 +55,7 @@ variable "aws_auth_roles" {
 
 variable "cluster_version" {
   type    = string
-  default = "1.31"
+  default = "1.33"
 }
 
 variable "project" {
