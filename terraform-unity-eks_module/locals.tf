@@ -19,7 +19,7 @@ locals {
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
       capacity_type  = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
-      iam_role_arn   = ng.iam_role_arn != null ? ng.iam_role_arn : aws_iam_role.cluster_iam_role.arn
+      iam_role_arn   = ng.iam_role_arn != null ? ng.iam_role_arn : data.aws_iam_role.cluster_iam_role.arn
       enable_bootstrap_user_data = false
       pre_bootstrap_user_data    = <<-EOT
         #!/bin/bash

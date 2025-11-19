@@ -5,5 +5,5 @@ output "eks" {
 
 output "cluster_iam_role" {
   description = "ARN of cluster iam role"
-  value       = aws_iam_role.cluster_iam_role.name
+  value       = data.aws_iam_role.cluster_iam_role.name
 }

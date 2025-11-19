@@ -85,12 +85,12 @@ module "eks" {
   cluster_additional_security_group_ids = [aws_security_group.mc_ingress_sg.id]
   create_iam_role                       = false
   enable_irsa                           = true
-  iam_role_arn                          = aws_iam_role.cluster_iam_role.arn
+  iam_role_arn                          = data.aws_iam_role.cluster_iam_role.arn
   #node_security_group_id = data.aws_ssm_parameter.node_sg.value
 
   eks_managed_node_group_defaults = {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
-    iam_role_arn   = aws_iam_role.cluster_iam_role.arn
+    iam_role_arn   = data.aws_iam_role.cluster_iam_role.arn
   }
 
   eks_managed_node_groups = local.mergednodegroups
