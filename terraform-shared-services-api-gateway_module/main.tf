@@ -107,7 +107,7 @@ data "aws_iam_policy_document" "inline_policy" {
 
 # The Policy for Permission Boundary
 data "aws_iam_policy" "mcp_operator_policy" {
-  name = "maap-spsdeploy"
+  name = "zsmce-tenantOperator-AMI-APIG"
 }
 
 # IAM Role for Lambda Authorizer
