@@ -13,14 +13,13 @@ locals {
     name => {
       use_name_prefix  = false
       create_iam_role  = false
-      min_size         = ng.min_size != null ? ng.min_size : 1
-      max_size         = ng.max_size != null ? ng.max_size : 10
-      desired_size     = ng.desired_size != null ? ng.desired_size : 3
-      ami_id           = ng.ami_id != null ? ng.ami_id : lookup(local.ami_map, var.cluster_version, local.ami_map["default"])
-      ami_type         = "AL2023_x86_64_STANDARD"
-      instance_types   = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
-      capacity_type    = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
-      iam_role_arn               = ng.iam_role_arn != null ? ng.iam_role_arn : aws_iam_role.cluster_iam_role.arn
+      min_size       = ng.min_size != null ? ng.min_size : 1
+      max_size       = ng.max_size != null ? ng.max_size : 10
+      desired_size   = ng.desired_size != null ? ng.desired_size : 3
+      ami_type       = "AL2023_x86_64_STANDARD"
+      instance_types = ng.instance_types != null ? ng.instance_types : ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
+      capacity_type  = ng.capacity_type != null ? ng.capacity_type : "ON_DEMAND"
+      iam_role_arn   = ng.iam_role_arn != null ? ng.iam_role_arn : aws_iam_role.cluster_iam_role.arn
       enable_bootstrap_user_data = false
       pre_bootstrap_user_data    = <<-EOT
         #!/bin/bash
