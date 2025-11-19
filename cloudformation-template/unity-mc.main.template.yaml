@@ -103,7 +103,7 @@ Parameters:
   PrivilegedPolicyName:
     Description: Name of an existing IAM policy which allows privileged access to AWS services.
     Type: String
-    Default: smce-tenantOperator-AMI-APIG
+    Default: zsmce-tenantOperator-AMI-APIG
 
   GithubToken:
     Description: Github PAT with repo:read access. Used to clone repositories from https://github.com/unity-sds

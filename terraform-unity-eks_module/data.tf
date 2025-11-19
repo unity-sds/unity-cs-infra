@@ -25,7 +25,7 @@ data "aws_ssm_parameter" "eks_ami_1_30" {
 }
 
 data "aws_iam_policy" "mcp_operator_policy" {
-  name = "smce-tenantOperator-AMI-APIG"
+  name = "zsmce-tenantOperator-AMI-APIG"
 }
 
 data "aws_iam_policy" "ebs_csi_policy" {

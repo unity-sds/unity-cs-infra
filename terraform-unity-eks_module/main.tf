@@ -466,7 +466,7 @@ resource "aws_iam_role" "aws-load-balancer-controller-role" {
   })
 
   managed_policy_arns  = [aws_iam_policy.aws-load-balancer-controller-policy.arn]
-  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/smce-tenantOperator-AMI-APIG"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/zsmce-tenantOperator-AMI-APIG"
 }
 
 resource "aws_iam_role_policy_attachment" "aws-load-balancer-policy-attachment" {
