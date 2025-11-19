@@ -1,48 +1,321 @@
-# Use existing IAM role instead of creating new one
-data "aws_iam_role" "cluster_iam_role" {
+resource "aws_iam_role" "cluster_iam_role" {
   name = "${local.cluster_name}-eks-node-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "eks.amazonaws.com" # or the appropriate AWS service
+        },
+      },
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "ec2.amazonaws.com" # or the appropriate AWS service
+        },
+      },
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "s3.amazonaws.com" # or the appropriate AWS service
+        },
+      },
+    ],
+  })
+
+  permissions_boundary = data.aws_iam_policy.mcp_operator_policy.arn
+
 }
 
-# Policy attachments commented out - role already has policies attached manually
-# resource "aws_iam_role_policy_attachment" "container-reg" {
-#   role       = data.aws_iam_role.cluster_iam_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-# }
+resource "aws_iam_role_policy_attachment" "container-reg" {
+  role       = aws_iam_role.cluster_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
 
-# resource "aws_iam_role_policy_attachment" "ebscsi" {
-#   role       = data.aws_iam_role.cluster_iam_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-# }
-# resource "aws_iam_role_policy_attachment" "eks-cni" {
-#   role       = data.aws_iam_role.cluster_iam_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-# }
-# resource "aws_iam_role_policy_attachment" "worker-node" {
-#   role       = data.aws_iam_role.cluster_iam_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
-# }
-# resource "aws_iam_role_policy_attachment" "ssm-automation" {
-#   role       = data.aws_iam_role.cluster_iam_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonSSMAutomationRole"
-# }
-# resource "aws_iam_role_policy_attachment" "ssm-managed-instance" {
-#   role       = data.aws_iam_role.cluster_iam_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-# }
-# resource "aws_iam_role_policy_attachment" "cloudwatch-agent" {
-#   role       = data.aws_iam_role.cluster_iam_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-# }
+resource "aws_iam_role_policy_attachment" "ebscsi" {
+  role       = aws_iam_role.cluster_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+}
+resource "aws_iam_role_policy_attachment" "eks-cni" {
+  role       = aws_iam_role.cluster_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+}
+resource "aws_iam_role_policy_attachment" "worker-node" {
+  role       = aws_iam_role.cluster_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+}
+resource "aws_iam_role_policy_attachment" "ssm-automation" {
+  role       = aws_iam_role.cluster_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonSSMAutomationRole"
+}
+resource "aws_iam_role_policy_attachment" "ssm-managed-instance" {
+  role       = aws_iam_role.cluster_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+resource "aws_iam_role_policy_attachment" "cloudwatch-agent" {
+  role       = aws_iam_role.cluster_iam_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
 
 
-# resource "aws_iam_role_policy_attachment" "node-policy" {
-#   role       = data.aws_iam_role.cluster_iam_role.name
-#   policy_arn = data.aws_iam_policy.custom_policy.arn
-# }
+resource "aws_iam_role_policy_attachment" "node-policy" {
+  role       = aws_iam_role.cluster_iam_role.name
+  policy_arn = aws_iam_policy.custom_policy.arn
+}
 
-# Use existing IAM policy instead of creating new one
-data "aws_iam_policy" "custom_policy" {
-  name = "${local.cluster_name}-eks-policy"
+resource "aws_iam_policy" "custom_policy" {
+  name        = "${local.cluster_name}-eks-policy" # Give a unique name to your policy
+  path        = "/"                                # Optionally, specify a path for the policy
+  description = "A custom policy that provides access to EC2, ECR, SNS, etc."
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "ec2:CreateTags",
+            "Resource": [
+                "arn:aws:ec2:*:*:volume/*",
+                "arn:aws:ec2:*:*:snapshot/*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "ec2:CreateAction": [
+                        "CreateVolume",
+                        "CreateSnapshot"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "ec2:CreateVolume",
+            "Resource": "*",
+            "Condition": {
+                "StringLike": {
+                    "aws:RequestTag/ebs.csi.aws.com/cluster": "true"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": "ec2:CreateVolume",
+            "Resource": "*",
+            "Condition": {
+                "StringLike": {
+                    "aws:RequestTag/CSIVolumeName": "*"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": "ec2:DeleteVolume",
+            "Resource": "*",
+            "Condition": {
+                "StringLike": {
+                    "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor4",
+            "Effect": "Allow",
+            "Action": "ec2:DeleteVolume",
+            "Resource": "*",
+            "Condition": {
+                "StringLike": {
+                    "ec2:ResourceTag/CSIVolumeName": "*"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor5",
+            "Effect": "Allow",
+            "Action": "ec2:DeleteVolume",
+            "Resource": "*",
+            "Condition": {
+                "StringLike": {
+                    "ec2:ResourceTag/kubernetes.io/created-for/pvc/name": "*"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor6",
+            "Effect": "Allow",
+            "Action": "ec2:DeleteSnapshot",
+            "Resource": "*",
+            "Condition": {
+                "StringLike": {
+                    "ec2:ResourceTag/CSIVolumeSnapshotName": "*"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor7",
+            "Effect": "Allow",
+            "Action": "ec2:DeleteSnapshot",
+            "Resource": "*",
+            "Condition": {
+                "StringLike": {
+                    "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
+                }
+            }
+        },
+        {
+            "Sid": "VisualEditor8",
+            "Effect": "Allow",
+            "Action": "ec2:CreateTags",
+            "Resource": "arn:aws:ec2:*:*:network-interface/*"
+        },
+        {
+            "Sid": "VisualEditor9",
+            "Effect": "Allow",
+            "Action": "ec2:DeleteTags",
+            "Resource": [
+                "arn:aws:ec2:*:*:volume/*",
+                "arn:aws:ec2:*:*:snapshot/*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor10",
+            "Effect": "Allow",
+            "Action": [
+                "sns:Publish",
+                "lambda:InvokeFunction",
+                "ssm:GetParameter"
+            ],
+            "Resource": [
+                "arn:aws:lambda:*:*:function:Automation*",
+                "arn:aws:sns:*:*:Automation*",
+                "arn:aws:ssm:*:*:parameter/AmazonCloudWatch-*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:GetRepositoryPolicy",
+                "ecr:DescribeRepositories",
+                "ecr:ListImages",
+                "ecr:DescribeImages",
+                "ecr:BatchGetImage",
+                "ecr:GetLifecyclePolicy",
+                "ecr:GetLifecyclePolicyPreview",
+                "ecr:ListTagsForResource",
+                "ecr:DescribeImageScanFindings"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor11",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeInstances",
+                "cloudwatch:PutMetricData",
+                "ec2:DescribeVolumesModifications",
+                "ec2:CreateImage",
+                "ec2:CopyImage",
+                "ssm:ListInstanceAssociations",
+                "ec2:DescribeSnapshots",
+                "ssm:GetParameter",
+                "ssm:UpdateAssociationStatus",
+                "logs:CreateLogStream",
+                "cloudformation:DescribeStackEvents",
+                "ec2:StartInstances",
+                "ssm:UpdateInstanceInformation",
+                "ec2:DescribeVolumes",
+                "cloudformation:UpdateStack",
+                "ec2:UnassignPrivateIpAddresses",
+                "ec2:DescribeRouteTables",
+                "ssm:PutComplianceItems",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetLifecyclePolicy",
+                "ec2:DetachVolume",
+                "sns:*",
+                "ec2:ModifyVolume",
+                "ecr:DescribeImageScanFindings",
+                "ec2:CreateTags",
+                "ec2:ModifyNetworkInterfaceAttribute",
+                "ecr:GetDownloadUrlForLayer",
+                "ec2:DeleteNetworkInterface",
+                "ec2messages:AcknowledgeMessage",
+                "ec2:RunInstances",
+                "ecr:GetAuthorizationToken",
+                "ssm:GetParameters",
+                "ec2:StopInstances",
+                "s3-object-lambda:*",
+                "ec2:AssignPrivateIpAddresses",
+                "logs:CreateLogGroup",
+                "cloudformation:DescribeStacks",
+                "ec2:CreateNetworkInterface",
+                "cloudformation:DeleteStack",
+                "ec2:DescribeInstanceTypes",
+                "ecr:BatchGetImage",
+                "ecr:DescribeImages",
+                "ec2messages:SendReply",
+                "eks:DescribeCluster",
+                "ec2:DescribeSubnets",
+                "ec2:AttachVolume",
+                "ec2:DeregisterImage",
+                "ec2:DeleteSnapshot",
+                "ssm:DescribeDocument",
+                "ec2:DeleteTags",
+                "ec2messages:GetEndpoint",
+                "logs:DescribeLogStreams",
+                "ssmmessages:OpenControlChannel",
+                "ec2messages:GetMessages",
+                "ecr:ListTagsForResource",
+                "ssm:PutConfigurePackageResult",
+                "ecr:ListImages",
+                "ssm:GetManifest",
+                "ec2messages:DeleteMessage",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2messages:FailMessage",
+                "ec2:DescribeAvailabilityZones",
+                "ssmmessages:OpenDataChannel",
+                "ec2:CreateSnapshot",
+                "ssm:GetDocument",
+                "ecr:DescribeRepositories",
+                "ec2:DescribeInstanceStatus",
+                "ssm:DescribeAssociation",
+                "ec2:TerminateInstances",
+                "ec2:DetachNetworkInterface",
+                "logs:DescribeLogGroups",
+                "ssm:GetDeployablePatchSnapshotForInstance",
+                "s3:*",
+                "ec2:DescribeTags",
+                "ecr:GetLifecyclePolicyPreview",
+                "ssmmessages:CreateControlChannel",
+                "logs:PutLogEvents",
+                "ec2:DescribeSecurityGroups",
+                "ssmmessages:CreateDataChannel",
+                "ec2:DescribeImages",
+                "ssm:PutInventory",
+                "cloudformation:CreateStack",
+                "ec2:DescribeVpcs",
+                "ssm:*",
+                "ec2:AttachNetworkInterface",
+                "ssm:ListAssociations",
+                "ssm:UpdateInstanceAssociationStatus",
+                "ecr:GetRepositoryPolicy"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 }
 
 module "eks" {
@@ -85,12 +358,12 @@ module "eks" {
   cluster_additional_security_group_ids = [aws_security_group.mc_ingress_sg.id]
   create_iam_role                       = false
   enable_irsa                           = true
-  iam_role_arn                          = data.aws_iam_role.cluster_iam_role.arn
+  iam_role_arn                          = aws_iam_role.cluster_iam_role.arn
   #node_security_group_id = data.aws_ssm_parameter.node_sg.value
 
   eks_managed_node_group_defaults = {
     instance_types = ["m6i.large", "m5.large", "m5n.large", "m5zn.large"]
-    iam_role_arn   = data.aws_iam_role.cluster_iam_role.arn
+    iam_role_arn   = aws_iam_role.cluster_iam_role.arn
   }
 
   eks_managed_node_groups = local.mergednodegroups
