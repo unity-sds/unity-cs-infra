@@ -20,7 +20,6 @@ variable "nodegroups" {
     desired_size               = optional(number)
     instance_types             = optional(list(string))
     capacity_type              = optional(string)
-    enable_bootstrap_user_data = optional(bool)
     metadata_options           = optional(map(any))
     block_device_mappings = optional(map(object({
       device_name = string
@@ -55,7 +54,7 @@ variable "aws_auth_roles" {
 
 variable "cluster_version" {
   type    = string
-  default = "1.31"
+  default = "1.33"
 }
 
 variable "project" {

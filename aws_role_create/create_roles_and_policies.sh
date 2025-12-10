@@ -45,7 +45,7 @@ if ! aws iam get-role --role-name ${ROLE_NAME} 2>/dev/null; then
     echo "Creating role ${ROLE_NAME}..."
     aws iam create-role \
         --role-name ${ROLE_NAME} \
-        --permissions-boundary arn:aws:iam::${ACCOUNT_NUMBER}:policy/mcp-tenantOperator-AMI-APIG \
+        --permissions-boundary arn:aws:iam::${ACCOUNT_NUMBER}:policy/zsmce-tenantOperator-AMI-APIG \
         --assume-role-policy-document file://U-CS_Service_Role_Trust_Policy.json
 else
     echo "Role ${ROLE_NAME} already exists."

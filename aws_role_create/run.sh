@@ -85,7 +85,7 @@ echo "Account Number: $ACCOUNT_NUMBER"
 
 ## Create the role to act as a service role
 #aws iam create-role --role-name U-CS-Service-Role-Test --permission-boundary arn:aws:iam::865428270474:policy/mcp-tenantOperator-AMI-APIG --output role.out
-aws iam create-role --role-name ${ROLE_NAME} --permissions-boundary arn:aws:iam::${ACCOUNT_NUMBER}:policy/mcp-tenantOperator-AMI-APIG --assume-role-policy-document file://U-CS_Service_Role_Trust_Policy.json --profile ${ACCOUNT_NAME} > role.txt
+aws iam create-role --role-name ${ROLE_NAME} --permissions-boundary arn:aws:iam::${ACCOUNT_NUMBER}:policy/zsmce-tenantOperator-AMI-APIG --assume-role-policy-document file://U-CS_Service_Role_Trust_Policy.json --profile ${ACCOUNT_NAME} > role.txt
 cat role.txt
 ROLE_ARN=$(cat role.txt|jq -r '.Role.Arn')
 echo "Role ARN: $ROLE_ARN"

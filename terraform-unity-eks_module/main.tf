@@ -374,25 +374,6 @@ module "eks" {
   tags                            = var.tags
 }
 
-resource "aws_launch_template" "node_group_launch_template" {
-  image_id = "ami-0e3e9697a56f6ba66"
-  name     = "eks-${local.cluster_name}-nodeGroup-launchTemplate"
-  user_data = base64encode(<<EOT
-#!/bin/bash
-set -o xtrace
-/etc/eks/bootstrap.sh ${local.cluster_name}
-  EOT
-  )
-  tag_specifications {
-    resource_type = "instance"
-    tags = merge(local.common_tags, {
-      Name      = "${local.cluster_name} Node Group Node"
-      Component = "EKS EC2 Instance"
-      Stack     = "EKS EC2 Instance"
-    })
-  }
-}
-
 resource "aws_security_group" "mc_ingress_sg" {
   name        = "${var.project}-${var.venue}-mc-ingress-sg"
   description = "SecurityGroup for management console ingress"
@@ -408,12 +389,6 @@ resource "aws_vpc_security_group_ingress_rule" "mc_ingress_rule" {
 }
 
 # TODO: select default node group more intelligently, or remove concept altogether
-resource "aws_ssm_parameter" "node_group_default_launch_template_name" {
-  name  = "/unity/extensions/eks/${local.cluster_name}/nodeGroups/default/launchTemplateName"
-  type  = "String"
-  value = aws_launch_template.node_group_launch_template.name
-}
-
 resource "aws_ssm_parameter" "node_group_default_name" {
   name = "/unity/extensions/eks/${var.deployment_name}/nodeGroups/default/name"
   type = "String"
@@ -435,18 +410,20 @@ resource "helm_release" "aws-load-balancer-controller" {
   chart      = "aws-load-balancer-controller"
   version    = "1.6.1"
   namespace  = "kube-system"
-  set {
-    name  = "clusterName"
-    value = module.eks.cluster_name
-  }
-  set {
-    name  = "serviceAccount.create"
-    value = "false"
-  }
-  set {
-    name  = "serviceAccount.name"
-    value = "aws-load-balancer-controller"
-  }
+  set = [
+    {
+      name  = "clusterName"
+      value = module.eks.cluster_name
+    },
+    {
+      name  = "serviceAccount.create"
+      value = "false"
+    },
+    {
+      name  = "serviceAccount.name"
+      value = "aws-load-balancer-controller"
+    }
+  ]
 
   depends_on = [module.eks.eks_managed_node_groups]
 }
@@ -489,7 +466,7 @@ resource "aws_iam_role" "aws-load-balancer-controller-role" {
   })
 
   managed_policy_arns  = [aws_iam_policy.aws-load-balancer-controller-policy.arn]
-  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/mcp-tenantOperator-AMI-APIG"
+  permissions_boundary = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/zsmce-tenantOperator-AMI-APIG"
 }
 
 resource "aws_iam_role_policy_attachment" "aws-load-balancer-policy-attachment" {

@@ -8,20 +8,24 @@ data "aws_ssm_parameter" "subnet_list" {
   name = "/unity/account/network/subnet_list"
 }
 
+data "aws_ssm_parameter" "eks_ami_1_33" {
+  name = "/smce/amis/aml2023-eks-1-33"
+}
+
 data "aws_ssm_parameter" "eks_ami_1_32" {
-  name = "/mcp/amis/aml2023-eks-1-32"
+  name = "/smce/amis/aml2023-eks-1-32"
 }
 
 data "aws_ssm_parameter" "eks_ami_1_31" {
-  name = "/mcp/amis/aml2-eks-1-31"
+  name = "/smce/amis/aml2023-eks-1-31"
 }
 
 data "aws_ssm_parameter" "eks_ami_1_30" {
-  name = "/unity/account/eks/amis/aml2-eks-1-30"
+  name = "/smce/amis/aml2023-eks-1-30"
 }
 
-data "aws_iam_policy" "mcp_operator_policy" {
-  name = "mcp-tenantOperator-AMI-APIG"
+data "aws_iam_policy" "smce_operator_policy" {
+  name = "zsmce-tenantOperator-AMI-APIG"
 }
 
 data "aws_iam_policy" "ebs_csi_policy" {
